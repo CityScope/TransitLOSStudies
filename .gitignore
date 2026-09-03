@@ -1,0 +1,56 @@
+# --- Python housekeeping ---
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+.pytest_cache/
+dist/
+build/
+
+# --- city_science_network: the study. Keep code, ignore data/results. ---
+/city_science_network/data/
+/city_science_network/figures/
+/city_science_network/logs/
+/city_science_network/fake_cache_dir/
+/city_science_network/combined_map.html
+/city_science_network/watchdog.sh
+/city_science_network/watchdog.log
+/city_science_network/docs/
+
+# Older/parallel study directories nested under city_science_network/ --
+# raw downloaded data and earlier one-off studies, not source.
+/city_science_network/boston_city/
+/city_science_network/boston_city_evolution/
+/city_science_network/census/
+/city_science_network/china/
+/city_science_network/streets/
+/city_science_network/taiwan/
+/city_science_network/worldpop/
+
+# Per-city directories: ignore everything except run.py (blanket-ignore
+# each city dir's contents, then whitelist run.py; this covers whatever
+# mix of raw data/results/backups accumulates there, not just the specific
+# subfolder names we've seen so far).
+/city_science_network/andorra/*
+!/city_science_network/andorra/run.py
+/city_science_network/beerseba/*
+!/city_science_network/beerseba/run.py
+/city_science_network/boston/*
+!/city_science_network/boston/run.py
+/city_science_network/concepcion/*
+!/city_science_network/concepcion/run.py
+/city_science_network/gipuzkoa/*
+!/city_science_network/gipuzkoa/run.py
+/city_science_network/guadalajara/*
+!/city_science_network/guadalajara/run.py
+/city_science_network/hamburg/*
+!/city_science_network/hamburg/run.py
+/city_science_network/san_francisco/*
+!/city_science_network/san_francisco/run.py
+/city_science_network/shanghai/*
+!/city_science_network/shanghai/run.py
+/city_science_network/taipei/*
+!/city_science_network/taipei/run.py
+/city_science_network/toronto/*
+!/city_science_network/toronto/run.py

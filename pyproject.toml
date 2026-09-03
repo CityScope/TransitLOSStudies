@@ -1,0 +1,11 @@
+[project]
+name = "transitlosstudies"
+version = "0.1.0"
+description = "Transit level-of-service studies -- a uv workspace, one member per study folder."
+requires-python = ">=3.11"
+
+[tool.uv.workspace]
+members = ["city_science_network"]
+
+[tool.uv]
+package = false
