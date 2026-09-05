@@ -12,6 +12,7 @@ build/
 /city_science_network/data/
 /city_science_network/figures/
 /city_science_network/logs/
+/city_science_network/*.log
 /city_science_network/fake_cache_dir/
 /city_science_network/combined_map.html
 /city_science_network/watchdog.sh
@@ -27,6 +28,13 @@ build/
 /city_science_network/streets/
 /city_science_network/taiwan/
 /city_science_network/worldpop/
+
+# Defensive: a stray root-level copy of these (not nested under
+# city_science_network/) can appear if a script is ever run with the wrong
+# cwd/root -- real 2026-09-03 incident, cleaned up once, never trackable.
+/census/
+/streets/
+/worldpop/
 
 # Per-city directories: ignore everything except run.py (blanket-ignore
 # each city dir's contents, then whitelist run.py; this covers whatever

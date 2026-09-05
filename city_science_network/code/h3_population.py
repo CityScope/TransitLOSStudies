@@ -17,9 +17,16 @@ packages (not custom logic of its own):
 The only logic that belongs to this study specifically is the population
 redistribution: touching a street is a *mandatory* condition for a hexagon
 to exist in the grid at all (and therefore to be drawn on the map), so cells
-with no street within range are dropped -- but their population is not
-discarded, it is moved to the **nearest** surviving street-touching cell, so
-`sum(population)` is exactly unchanged by the drop.
+with no street within range are dropped -- their population is moved to the
+**nearest** surviving street-touching cell, but only within a real distance
+cap (`max_reassign_dist_m`, 500m): a roadless cell further than that from any
+served cell has its population dropped outright rather than force-attached
+to a far-away cell it doesn't actually border. `sum(population)` is
+unchanged EXCEPT for this excluded remainder (logged) -- a deliberate,
+usually small reduction, not the unbounded pile-up the uncapped version
+allowed (2026-09-04 fix, live: Boston border hexagons up to ~467,737 people
+in a single ~2,200 m^2 cell, from far-away roadless donors all sharing the
+same nearest-but-still-very-far recipient).
 
 Nearest-neighbour, not proportional-to-the-whole-study-area (which is what
 this did before 2026-08-13): a global proportional split takes the people
@@ -33,6 +40,7 @@ within one cell's distance of the road that serves them.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import geopandas as gpd
@@ -42,7 +50,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import shapely
 from geohierarchy import Max, edges_to_h3_by_distance
-from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3
+from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast as worldpop_raster_to_h3
 from pycensus.countries.worldwide.worldpop.loader import _clip_to_aoi
 
 
@@ -257,7 +265,76 @@ def population_and_access_to_h3(
         Path(worldpop_tif).with_name(f"{Path(worldpop_tif).stem}_clipped_for_h3_{aoi_hash}.tif")
     )
     clipped_tif = _clip_to_aoi(worldpop_tif, aoi, clipped_tif, overwrite=False)
-    pop_h3 = worldpop_raster_to_h3(clipped_tif, resolution=resolution, value_col="population")
+
+    # Bug fix (2026-09-04, live user report -- large population circles
+    # still showing right at the AOI boundary even after the cell-level
+    # AOI filter below; confirmed live on Concepcion: 9 of the top 10
+    # highest-population h3 cells sit within ~22m of the AOI boundary
+    # line). `_clip_to_aoi` above is only ever a bounding-BOX crop (a cheap
+    # rectangular window read -- see its own docstring), never a polygon
+    # mask. `worldpop_raster_to_h3`'s resampling is real, area-weighted,
+    # mass-conserving math over whatever pixels the raster hands it -- for
+    # a hexagon straddling the AOI edge, that includes real population
+    # from pixels OUTSIDE the true polygon (the bbox crop kept them), which
+    # is exactly what inflated boundary cells even after cells outside the
+    # AOI were dropped (that filter only removes whole out-of-AOI cells --
+    # a KEPT cell that happens to straddle the edge still had its own
+    # population value computed from a mix of inside- and outside-AOI
+    # pixels). Masking the raster to the real, unpadded AOI polygon here --
+    # setting every pixel outside it to nodata, not just to the bbox's
+    # rectangular window -- ensures a straddling cell's resampled value
+    # only ever reflects the portion of it that's actually inside the AOI.
+    masked_tif = clipped_tif.replace("_clipped_for_h3_", "_masked_for_h3_")
+    if not os.path.isfile(masked_tif):
+        import rasterio
+        import rasterio.mask
+
+        with rasterio.open(clipped_tif) as _src:
+            _aoi_native = aoi_wgs84.to_crs(_src.crs) if _src.crs is not None else aoi_wgs84
+            _masked_data, _masked_transform = rasterio.mask.mask(
+                _src, _aoi_native.geometry, crop=False, nodata=0, filled=True
+            )
+            _profile = _src.profile.copy()
+            _profile.update(nodata=0)
+        with rasterio.open(masked_tif, "w", **_profile) as _dst:
+            _dst.write(_masked_data)
+    pop_h3 = worldpop_raster_to_h3(masked_tif, resolution=resolution, value_col="population")
+
+    # Bug fix (2026-09-04, live user report -- "all maps seem to have this
+    # boundary issue... you might be doing bbox to crop but not setting to
+    # 0/none all cells outside the AOI... use the real aoi without any
+    # buffer"). Confirmed: `_clip_to_aoi` only crops the raster to a padded
+    # bounding BOX (a cheap rectangular window read, not a polygon mask --
+    # see that function's own docstring), so every h3 cell resampled from
+    # it -- including ones geometrically outside this city's real AOI
+    # polygon but inside the padded rectangle -- keeps its real WorldPop
+    # population. Nothing downstream in this module ever re-filtered by the
+    # true polygon (only by street proximity), so a border cell just
+    # outside the intended study area could carry real population from
+    # neighbouring, out-of-scope territory. Filtered here, against the
+    # real (unpadded, unbuffered) AOI polygon -- the pad above is a
+    # processing-only concern (avoiding a truncated raster read), never
+    # what's actually counted.
+    import h3ronpy as _h3ronpy
+    import h3ronpy.vector as _h3v
+
+    _cell_ids = _h3ronpy.cells_parse(pop_h3["h3_cell"].to_list())
+    _latlng = _h3v.cells_to_coordinates(_cell_ids)
+    _centroids = gpd.GeoDataFrame(
+        {"h3_cell": pop_h3["h3_cell"].to_list()},
+        geometry=gpd.points_from_xy(np.asarray(_latlng["lng"]), np.asarray(_latlng["lat"])),
+        crs=4326,
+    )
+    _aoi_union = aoi_wgs84.geometry.union_all()
+    _within_aoi = set(_centroids.loc[_centroids.geometry.within(_aoi_union), "h3_cell"])
+    _n_before_aoi_filter = pop_h3.height
+    pop_h3 = pop_h3.filter(pl.col("h3_cell").is_in(_within_aoi))
+    print(
+        f"[h3_population] real-AOI polygon filter (no buffer): kept {pop_h3.height:,}/"
+        f"{_n_before_aoi_filter:,} cells",
+        flush=True,
+    )
+
     total_before = float(pop_h3["population"].sum())
 
     cells = pop_h3["h3_cell"].to_list()
@@ -456,6 +533,12 @@ def population_and_access_to_h3(
     kept = pop_h3.join(touching, on="h3_cell", how="semi")
     dropped = pop_h3.join(touching, on="h3_cell", how="anti").filter(pl.col("population") > 0)
     removed_total = float(dropped["population"].sum())
+    # Set below (2026-09-04 fix) when a roadless cell has no street-touching
+    # neighbour within `max_reassign_dist_m` -- its population is dropped,
+    # not force-attached to a far-away cell, so the conservation check a
+    # few lines down must expect the total to shrink by exactly this much
+    # rather than staying byte-for-byte unchanged.
+    excluded_total = 0.0
 
     if removed_total > 0.0 and not kept.is_empty():
         # Move each roadless cell's people to the nearest cell that does have
@@ -485,13 +568,55 @@ def population_and_access_to_h3(
 
         kept_cells = kept["h3_cell"].to_list()
         tree = cKDTree(_latlng(kept_cells))
-        _, nearest = tree.query(_latlng(dropped["h3_cell"].to_list()))
+        dist, nearest = tree.query(_latlng(dropped["h3_cell"].to_list()))
+
+        # Bug fix (2026-09-04, live user report -- Boston border cells
+        # showing populations in the hundreds of thousands inside a single
+        # ~2,200 m^2 hexagon, up to ~467,737 people/cell). The module's own
+        # docstring says this should keep a roadless cell's people "to
+        # within one cell's distance of the road that serves them" -- but
+        # nothing in the code actually enforced a distance limit: EVERY
+        # roadless cell, no matter how far from the served street network,
+        # got folded into its single globally-nearest street-touching cell.
+        # Cells beyond the edge of the real, connected street network (e.g.
+        # rural/water/unreachable fringe near the AOI boundary) could all
+        # share the same "nearest" recipient -- often itself a border cell,
+        # since that's what's geographically closest to a large swath of
+        # unserved land outside it -- so thousands of small, spread-out
+        # donor populations piled onto one tiny hexagon.
+        # `max_reassign_dist_m` caps this reassignment. A one-hexagon-width
+        # cap (~57m at res-11, tried 2026-09-04) turned out too tight in
+        # practice -- live on Concepcion, it dropped 96,424 people (8.7% of
+        # the city's population) as "unreachable", cells whose real street
+        # is just a bit further than one hexagon away in areas with sparser
+        # OSM street coverage than Andorra's. Explicit follow-up: "assign
+        # the nearest street up to 300m. But never do this with cells
+        # outside the aoi" -- 300m is generous enough to cover normal OSM
+        # coverage gaps without reintroducing the original far-away-donor
+        # pile-up bug (this is still a per-cell single-nearest-neighbour
+        # cap, nothing like the old fully-unbounded version), and the "never
+        # outside the aoi" half is already guaranteed upstream (`pop_h3` is
+        # filtered to the real AOI polygon before this function ever runs --
+        # see the real-AOI polygon filter above). A roadless cell further
+        # than 300m from any served cell has its population DROPPED (not
+        # force-attached to a far-away cell it doesn't actually border) --
+        # a deliberate, honest reduction in `sum(population)`, in exchange
+        # for never fabricating an impossible single-hexagon population
+        # again.
+        max_reassign_dist_m = 300.0
+        earth_radius_m = 6_371_000.0
+        max_reassign_dist_rad = max_reassign_dist_m / earth_radius_m
+        within_range = dist <= max_reassign_dist_rad
+
+        dropped_pop = dropped["population"].to_numpy().astype(float)
+        excluded_total = float(dropped_pop[~within_range].sum())
+        excluded_count = int((~within_range).sum())
 
         gained = (
             pl.DataFrame(
                 {
-                    "h3_cell": [kept_cells[i] for i in nearest],
-                    "_gained": dropped["population"].to_numpy().astype(float),
+                    "h3_cell": [kept_cells[i] for i in nearest[within_range]],
+                    "_gained": dropped_pop[within_range],
                 }
             )
             .group_by("h3_cell")
@@ -502,21 +627,34 @@ def population_and_access_to_h3(
             .with_columns((pl.col("population") + pl.col("_gained").fill_null(0.0)).alias("population"))
             .drop("_gained")
         )
+        moved_total = removed_total - excluded_total
         print(
-            f"[h3_population] moved {removed_total:,.0f} people from {dropped.height:,} roadless "
-            f"cells onto their nearest street-touching neighbour ({gained.height:,} recipients)",
+            f"[h3_population] moved {moved_total:,.0f} people from {int(within_range.sum()):,} roadless "
+            f"cells onto their nearest street-touching neighbour within {max_reassign_dist_m:.0f}m "
+            f"({gained.height:,} recipients); dropped {excluded_total:,.0f} people from {excluded_count:,} "
+            f"roadless cells with no street-touching neighbour that close (unreachable/rural fringe)",
             flush=True,
         )
 
     result = kept.join(access_h3, on="h3_cell", how="left")
 
     total_after = float(result["population"].sum()) if not result.is_empty() else 0.0
-    print(
-        f"[h3_population] population conserved: {total_before:,.2f} -> {total_after:,.2f} "
-        f"across {result.height:,} street-touching cells",
-        flush=True,
-    )
-    assert abs(total_before - total_after) < 1e-6 * max(total_before, 1.0), (
-        f"Population redistribution changed the total: {total_before} -> {total_after}"
+    expected_after = total_before - excluded_total
+    if excluded_total > 0.0:
+        print(
+            f"[h3_population] population conserved (minus {excluded_total:,.2f} intentionally "
+            f"dropped, see above): {total_before:,.2f} -> {total_after:,.2f} across "
+            f"{result.height:,} street-touching cells",
+            flush=True,
+        )
+    else:
+        print(
+            f"[h3_population] population conserved: {total_before:,.2f} -> {total_after:,.2f} "
+            f"across {result.height:,} street-touching cells",
+            flush=True,
+        )
+    assert abs(expected_after - total_after) < 1e-6 * max(total_before, 1.0), (
+        f"Population redistribution changed the total by more than the intentionally-dropped "
+        f"remainder: expected {expected_after} ({total_before} - {excluded_total} excluded), got {total_after}"
     )
     return result

@@ -56,6 +56,7 @@ Usage: `uv run python code/combined_map.py` from `city_science_network/`.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -95,6 +96,7 @@ from transitlos.map.build import (
     _stats_panel_html,
     _stats_panel_js,
 )
+from geohierarchy.maps.maplibre.render import _custom_select_js
 
 # (key, display_name, path-to-city-dir-relative-to-city_science_network/).
 # Derived from `code.city_config.CITY_CONFIGS` (the same roster
@@ -311,6 +313,29 @@ def _available_cities() -> list[dict]:
                 downloads_manifest = json.loads(downloads_manifest_path.read_text())
             except (json.JSONDecodeError, OSError):
                 pass
+        # 2026-09-05, explicit user request: "the zoom level used on map
+        # startup on each city is different but it should be the zoom level
+        # required for the global map to switch to that city if user zooms
+        # into the city" -- each city's own `map.html` already opens at its
+        # own `_finest_level_zoom`-computed value (see `geohierarchy.maps.
+        # maplibre.render`), which varies city to city (how many census
+        # levels a city has determines this). Before this, the overview
+        # map's zoom-in switch point was one FLAT `OVERVIEW_ZOOM_THRESHOLD`
+        # for every city, unrelated to that -- so crossing it swapped in a
+        # city map that immediately re-zoomed itself, a visible jump.
+        # Parsed directly out of that city's own already-built `map.html`
+        # (its `zoom: <N>` map-init literal) rather than recomputed here,
+        # so this can never drift out of sync with the page it's describing.
+        # `None` (regex miss -- an older/differently-shaped map.html) falls
+        # back to the flat threshold, unchanged from before.
+        city_switch_zoom = None
+        try:
+            html_text = map_path.read_text(encoding="utf-8", errors="ignore")
+            _m = re.search(r"zoom:\s*(\d+)", html_text)
+            if _m:
+                city_switch_zoom = int(_m.group(1))
+        except OSError:
+            pass
         out.append(
             {
                 "key": key,
@@ -318,6 +343,7 @@ def _available_cities() -> list[dict]:
                 # Relative path FROM combined_map.html (which lives at ROOT)
                 # to that city's map.html, for the iframe `src`.
                 "map_src": f"{rel_dir}/map.html",
+                "switch_zoom": city_switch_zoom,
                 # Same relative-to-ROOT convention, one level up from
                 # `map_src` -- the base the download panel's <a download>
                 # links are built from (`{base_path}/{scope}/downloads/...`).
@@ -398,6 +424,7 @@ _PAGE_TEMPLATE = """<!doctype html>
 </style>
 </head>
 <body>
+<!--CUSTOM_SELECT_JS-->
 <iframe id="cityIframe" src="{initial_src}"></iframe>
 <div id="overviewMap"></div>
 
@@ -650,7 +677,14 @@ function ensureOverviewMap() {{
       // path -- one behavior, two triggers.
       wrap.addEventListener('click', function(ev) {{
         ev.stopPropagation();
-        __overviewMap.flyTo({{center: c.center, zoom: OVERVIEW_ZOOM_THRESHOLD + 1, duration: 1200}});
+        // 2026-09-05 (explicit user request: the switch-in zoom should be
+        // "the zoom level required for the global map to switch to that
+        // city", i.e. THIS city's own `switch_zoom` -- parsed from its own
+        // `map.html`'s real startup zoom, see `_available_cities()` --
+        // rather than one flat threshold shared by every city, which
+        // caused a visible re-zoom jump the instant the iframe swapped in.
+        var targetZoom = (c.switch_zoom != null ? c.switch_zoom : OVERVIEW_ZOOM_THRESHOLD + 1);
+        __overviewMap.flyTo({{center: c.center, zoom: targetZoom, duration: 1200}});
       }});
       new maplibregl.Marker({{element: wrap, anchor: 'center'}}).setLngLat(c.center).addTo(__overviewMap);
     }});
@@ -660,11 +694,15 @@ function ensureOverviewMap() {{
   // -- "if user zooms to another city change automatically the city".
   __overviewMap.on('zoomend', function() {{
     if (__mode !== MODE_OVERVIEW) return;
-    if (__overviewMap.getZoom() > OVERVIEW_ZOOM_THRESHOLD) {{
-      var center = __overviewMap.getCenter();
-      var nearest = __nearestCity(center.lng, center.lat);
-      if (nearest) switchToCity(nearest.key);
-    }}
+    var center = __overviewMap.getCenter();
+    var nearest = __nearestCity(center.lng, center.lat);
+    if (!nearest) return;
+    // 2026-09-05: per-city threshold (see the click handler above for the
+    // full rationale) -- find the nearest city FIRST, then compare the
+    // current zoom against THAT city's own `switch_zoom`, not one flat
+    // value applied before knowing which city is even being zoomed into.
+    var threshold = (nearest.switch_zoom != null ? nearest.switch_zoom : OVERVIEW_ZOOM_THRESHOLD + 1) - 1;
+    if (__overviewMap.getZoom() > threshold) switchToCity(nearest.key);
   }});
   return __overviewMap;
 }}
@@ -699,13 +737,19 @@ function switchToCity(key) {{
   __updateStatsTabVisibility();
 }}
 
-function switchToOverview(fromLngLat) {{
+function switchToOverview(fromLngLat, fromCity) {{
   __mode = MODE_OVERVIEW;
   document.getElementById('cityIframe').style.display = 'none';
   var ov = ensureOverviewMap();
   document.getElementById('overviewMap').style.display = 'block';
   ov.resize();
-  if (fromLngLat) ov.jumpTo({{center: fromLngLat, zoom: OVERVIEW_ZOOM_THRESHOLD - 1}});
+  // 2026-09-05: land at the SAME per-city switch_zoom (minus a step) the
+  // city you just left uses, not one flat threshold -- `fromCity` (the
+  // city being exited, when known) is optional so the initial page-load
+  // call (`switchToOverview()`, no arguments at all) keeps the old flat
+  // fallback.
+  var landingZoom = (fromCity && fromCity.switch_zoom != null) ? fromCity.switch_zoom - 2 : OVERVIEW_ZOOM_THRESHOLD - 1;
+  if (fromLngLat) ov.jumpTo({{center: fromLngLat, zoom: landingZoom}});
   __updateStatsTabVisibility();
 }}
 
@@ -731,9 +775,15 @@ function __pollCityZoom() {{
       m.__combinedWiredFor = currentKey;
       m.on('zoomend', function() {{
         if (__mode !== MODE_CITY) return;
-        if (m.getZoom() <= OVERVIEW_ZOOM_THRESHOLD) {{
+        // 2026-09-05: exit at this SAME city's own switch_zoom (see the
+        // overview map's zoom-in handler above) rather than one flat
+        // threshold every city shared, so entering/leaving a city happens
+        // at the exact same zoom in both directions.
+        var thisCity = CITIES.find(function(cc) {{ return cc.key === currentKey; }});
+        var exitZoom = (thisCity && thisCity.switch_zoom != null) ? thisCity.switch_zoom - 1 : OVERVIEW_ZOOM_THRESHOLD;
+        if (m.getZoom() <= exitZoom) {{
           var c = m.getCenter();
-          switchToOverview([c.lng, c.lat]);
+          switchToOverview([c.lng, c.lat], thisCity);
         }}
       }});
     }}
@@ -1250,6 +1300,7 @@ def build_combined_map(out_path: Path | None = None) -> Path:
     # literals, CSS rules), which `.format()` would choke on.
     html = html.replace("<!--STATS_PANEL-->", stats_panel_block_html)
     html = html.replace("<!--DOWNLOAD_PANEL-->", download_panel_html)
+    html = html.replace("<!--CUSTOM_SELECT_JS-->", _custom_select_js())
     out_path = out_path or (ROOT / "combined_map.html")
     out_path.write_text(html)
     return out_path

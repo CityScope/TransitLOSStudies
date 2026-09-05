@@ -21,15 +21,15 @@ ROOT = CITY_DIR.parent
 if __name__ == "__main__":
     flags = parse_run_flags()
     if flags.dispatch(city_dir=CITY_DIR, config=CITY_CONFIGS["guadalajara"], params=GLOBAL_PARAMS,
-                       census_root=ROOT.parent / "census", default_tile_workers=4):
+                       census_root=ROOT / "census", default_tile_workers=4):
         raise SystemExit(0)
     run_city_study(
         city_dir=CITY_DIR,
         config=CITY_CONFIGS["guadalajara"],
         params=GLOBAL_PARAMS,
-        streets_root=ROOT.parent / "streets",
-        worldpop_root=ROOT.parent / "worldpop",
-        census_root=ROOT.parent / "census",
+        streets_root=ROOT / "streets",
+        worldpop_root=ROOT / "worldpop",
+        census_root=ROOT / "census",
         # Was explicitly False during an earlier debugging pass (a fix
         # needed a genuine end-to-end recompute); now that Guadalajara has
         # succeeded standalone, default to the universal reuse-cache

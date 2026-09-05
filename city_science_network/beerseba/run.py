@@ -21,15 +21,15 @@ ROOT = CITY_DIR.parent
 if __name__ == "__main__":
     flags = parse_run_flags()
     if flags.dispatch(city_dir=CITY_DIR, config=CITY_CONFIGS["beerseba"], params=GLOBAL_PARAMS,
-                       census_root=ROOT.parent / "census", default_tile_workers=4):
+                       census_root=ROOT / "census", default_tile_workers=4):
         raise SystemExit(0)
     run_city_study(
         city_dir=CITY_DIR,
         config=CITY_CONFIGS["beerseba"],
         params=GLOBAL_PARAMS,
-        streets_root=ROOT.parent / "streets",
-        worldpop_root=ROOT.parent / "worldpop",
-        census_root=ROOT.parent / "census",
+        streets_root=ROOT / "streets",
+        worldpop_root=ROOT / "worldpop",
+        census_root=ROOT / "census",
         reuse_cached_los=flags.reuse_cached_los,
         tile_workers=flags.tile_workers if flags.tile_workers is not None else 4,
     )

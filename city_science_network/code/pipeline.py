@@ -2433,6 +2433,62 @@ def _acs_interpolated_census_loader(aoi, states, level, cache_dir):
     return _interpolate_acs_to_dhc_blocks(acs_gdf, block_gdf)
 
 
+def _join_polygon_stats_lightweight(join_fn, h3_grid, *args, **kwargs):
+    """Run a `_join_census`/`_join_race`/`_join_jobs`-shaped join against a
+    lightweight (`h3_cell`+`population`-only) projection of `h3_grid`, then
+    merge the newly-added columns back onto the real (full-column)
+    `h3_grid`.
+
+    2026-09-05, real bug fix (live report: hexagonal density artifact at
+    H3 res-5 chunk boundaries). This replaces `_chunked_h3_grid_join`'s
+    per-chunk approach to these three joins: `_join_polygon_stats`
+    normalizes each census polygon's population share using only the h3
+    cells visible in whatever `h3_grid` it's given, so chunking it caused
+    any polygon straddling a chunk boundary to have its FULL real
+    population redistributed independently within EACH chunk that saw any
+    of its cells -- its true total counted once per chunk touched
+    (confirmed live: a 2-chunk-straddling polygon summed to ~2x its real
+    value).
+
+    The actual memory `_join_polygon_stats` needs scales with `h3_grid`'s
+    COLUMN count (it copies/holds the whole frame it's given), not with
+    the join computation itself -- that only ever reads `h3_cell`/
+    `population` internally, deriving each cell's centroid analytically
+    from `h3_cell` (`_h3_cell_centroids`), never a real geometry column.
+    So passing a `h3_cell`+`population`-only projection through the join
+    keeps peak memory bounded by that tiny projection's size regardless of
+    how many other worldpop/census columns the real `h3_grid` carries,
+    while staying exactly correct -- one single, global apportionment pass
+    over the whole grid, no chunk-boundary double counting at all.
+
+    Args:
+        join_fn: `_join_census`, `_join_race`, or `_join_jobs`.
+        h3_grid: The real, full-column grid. Never mutated in place except
+            for the new columns actually added.
+        *args, **kwargs: Forwarded to `join_fn` after the lightweight grid.
+
+    Returns:
+        `h3_grid` with every column `join_fn` added, merged in by index.
+    """
+    # Geometry column kept (not dropped): a single geometry column isn't
+    # the memory driver (the many extra worldpop/census attribute columns
+    # are), and dropping it would silently downgrade `light` from a
+    # `GeoDataFrame` to a plain `DataFrame` (losing `.crs`, which
+    # `_join_polygon_stats` reads) even though `light.geometry`'s actual
+    # VALUES are never used there (centroids are derived analytically from
+    # `h3_cell` -- see `_h3_cell_centroids`).
+    light_cols = ["h3_cell", "population"]
+    if h3_grid.geometry.name not in light_cols:
+        light_cols.append(h3_grid.geometry.name)
+    light = h3_grid[light_cols].copy()
+    before_cols = set(light.columns)
+    light = join_fn(light, *args, **kwargs)
+    new_cols = [c for c in light.columns if c not in before_cols]
+    for c in new_cols:
+        h3_grid[c] = light[c]
+    return h3_grid
+
+
 def _join_polygon_stats(
     h3_grid: gpd.GeoDataFrame,
     aoi: gpd.GeoDataFrame,
@@ -3944,7 +4000,7 @@ def _join_worldpop_global_schema(
         # a pixel's area genuinely overlapped them). See
         # `geohierarchy.raster_resample`/`pycensus...worldpop.h3` for the
         # conservation guarantee.
-        from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3
+        from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast as worldpop_raster_to_h3
         layer_h3 = worldpop_raster_to_h3(tif_path, resolution=resolution, value_col=feature)
         # Plain polars left-join, not the old pandas `.map()` on a
         # `.to_pandas().set_index(...)` Series -- see this function's
@@ -4140,7 +4196,7 @@ def _add_worldpop_gapfill(
         tif_path = download_worldpop_layer(aoi, year, feature, folder=str(cache_dir))
         # 2026-08-30: area-weighted, mass-conserving resample -- see the
         # matching comment in `_join_worldpop_global_schema` above.
-        from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3
+        from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast as worldpop_raster_to_h3
         layer_h3 = worldpop_raster_to_h3(tif_path, resolution=resolution, value_col=col)
         layer_series = layer_h3.to_pandas().set_index("h3_cell")[col]
         values = h3_grid["h3_cell"].map(layer_series).to_numpy(dtype=float)
@@ -4249,7 +4305,7 @@ def _add_worldpop_demographic_layers(
         tif_path = download_worldpop_layer(aoi, year, feature, folder=str(cache_dir))
         # 2026-08-30: area-weighted, mass-conserving resample -- see the
         # matching comment in `_join_worldpop_global_schema` above.
-        from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3
+        from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast as worldpop_raster_to_h3
         layer_h3 = worldpop_raster_to_h3(tif_path, resolution=resolution, value_col=col)
         layer_series = layer_h3.to_pandas().set_index("h3_cell")[col]
         values = h3_grid["h3_cell"].map(layer_series).to_numpy(dtype=float)
@@ -4363,6 +4419,135 @@ def _census_loader_and_levels_for_map(
     return None
 
 
+def _census_polygon_agg_chunked(
+    pts: gpd.GeoDataFrame,
+    pts_h3_cell,
+    census_gdf: gpd.GeoDataFrame,
+    chunk_h3_resolution: int,
+) -> pd.DataFrame:
+    """Memory-bounded equivalent of `_census_geometries_with_score`'s two
+    `add_vector_data` calls (population-weighted `level_of_service` mean +
+    area-weighted `population` sum).
+
+    2026-09-04, explicit user request (live Boston OOM, 3 attempts): "use
+    res 5 chunks... process each chunk completely independently... [for]
+    population, census, streets, etc. resampling." `isochrone_chunk_h3_resolution`
+    already chunked isochrones/the h3-grid-onto-census join/H3 resampling
+    (`_chunked_h3_grid_join`, `_resample_h3_chunked`,
+    `compute_node_access_chunked`) -- this was the one remaining whole-
+    metro-at-once stage, and the actual crash site in all three of Boston's
+    2026-09-04 attempts (confirmed live: identical `level_core_mask`
+    traceback location each time, right before this function's
+    `add_vector_data` calls).
+
+    `pts` (one row per POPULATED h3 cell) is the row-count-driven memory
+    cost -- millions of rows for a Boston-scale metro, vs. `census_gdf`'s
+    thousands of polygons even at "block" level. Partitioning `pts` by each
+    cell's `chunk_h3_resolution`-ancestor and processing one chunk's `pts`
+    subset against the SAME (small, unchunked) `census_gdf` at a time
+    bounds peak memory to one chunk's cell count.
+
+    Exact, not approximate, unlike `_join_polygon_stats_chunked`'s
+    boundary-polygon caveat -- both quantities are re-expressed as plain
+    sums before chunking:
+
+    - `level_of_service` (population-weighted mean over touching cells,
+      `intersection_mode="intersects"`) = `sum(level_of_service *
+      population) / sum(population)` over the matched cell set. Both the
+      numerator and denominator are linear sums over disjoint per-chunk
+      cell subsets (chunking partitions `pts` exactly, no cell counted
+      twice or skipped), so summing each chunk's own partial numerator/
+      denominator and dividing once at the end reproduces the EXACT same
+      ratio the unchunked single-pass `Mean(weight_column="population")`
+      would compute.
+    - `population` (`Sum(geoweighted=True)`, exact area-fraction weighting,
+      `intersection_mode="exact"`) is already a plain sum per polygon --
+      each row's own area-fraction contribution doesn't depend on which
+      other rows are present, so summing per-chunk partial sums is exact
+      by the same linearity argument regardless of geoweighting.
+
+    Returns a DataFrame with columns `_geo_idx`, `level_of_service`,
+    `_h3_fallback_population` -- the same shape the unchunked path's own
+    `agg_result` has, so the caller's merge/nearest-cell-fallback logic
+    downstream is unchanged either way.
+    """
+    from geohierarchy import GeoHierarchy
+    from geohierarchy.aggregation import Sum
+
+    chunk_ids = np.array([h3.cell_to_parent(c, chunk_h3_resolution) for c in pts_h3_cell])
+    census_mini = census_gdf[["_geo_idx", "geometry"]].copy()
+
+    wlos_parts: list[pd.DataFrame] = []
+    wpop_parts: list[pd.DataFrame] = []
+    exact_pop_parts: list[pd.DataFrame] = []
+    for parent in pd.unique(chunk_ids):
+        pts_chunk = pts.loc[chunk_ids == parent]
+        if pts_chunk.empty:
+            continue
+        pts_chunk = pts_chunk.copy()
+        pts_chunk["_weighted_los"] = pts_chunk["level_of_service"].to_numpy(dtype=float) * pts_chunk[
+            "population"
+        ].to_numpy(dtype=float)
+
+        hierarchy = GeoHierarchy(crs=census_gdf.crs)
+        hierarchy.add_level("_census_map_level", census_mini, id_col="_geo_idx")
+        hierarchy.add_vector_data(
+            pts_chunk,
+            level="_census_map_level",
+            columns=["_weighted_los", "population"],
+            agg={
+                "_weighted_los": Sum(geoweighted=False),
+                "population": Sum(geoweighted=False),
+            },
+            fill_null=0.0,
+            intersection_mode="intersects",
+        )
+        _hier_id_col = hierarchy.id_cols["_census_map_level"]
+        part = hierarchy["_census_map_level"][[_hier_id_col, "_weighted_los", "population"]]
+        wlos_parts.append(part[[_hier_id_col, "_weighted_los"]].rename(columns={_hier_id_col: "_geo_idx"}))
+        wpop_parts.append(
+            part[[_hier_id_col, "population"]].rename(columns={_hier_id_col: "_geo_idx", "population": "_wpop"})
+        )
+
+        hierarchy2 = GeoHierarchy(crs=census_gdf.crs)
+        hierarchy2.add_level("_census_map_level", census_mini, id_col="_geo_idx")
+        hierarchy2.add_vector_data(
+            pts_chunk,
+            level="_census_map_level",
+            columns=["population"],
+            agg={"population": Sum(geoweighted=True)},
+            fill_null=0.0,
+            intersection_mode="exact",
+        )
+        _hier_id_col2 = hierarchy2.id_cols["_census_map_level"]
+        exact_pop_parts.append(
+            hierarchy2["_census_map_level"][[_hier_id_col2, "population"]].rename(
+                columns={_hier_id_col2: "_geo_idx", "population": "_exact_pop"}
+            )
+        )
+
+    result = census_gdf[["_geo_idx"]].copy()
+    if wlos_parts:
+        wlos_total = pd.concat(wlos_parts, ignore_index=True).groupby("_geo_idx", as_index=False)["_weighted_los"].sum()
+        wpop_total = pd.concat(wpop_parts, ignore_index=True).groupby("_geo_idx", as_index=False)["_wpop"].sum()
+        exact_pop_total = pd.concat(exact_pop_parts, ignore_index=True).groupby("_geo_idx", as_index=False)["_exact_pop"].sum()
+        result = result.merge(wlos_total, on="_geo_idx", how="left")
+        result = result.merge(wpop_total, on="_geo_idx", how="left")
+        result = result.merge(exact_pop_total, on="_geo_idx", how="left")
+    else:
+        result["_weighted_los"] = np.nan
+        result["_wpop"] = np.nan
+        result["_exact_pop"] = np.nan
+    result["_weighted_los"] = result["_weighted_los"].fillna(0.0)
+    result["_wpop"] = result["_wpop"].fillna(0.0)
+    result["_exact_pop"] = result["_exact_pop"].fillna(0.0)
+    result["level_of_service"] = np.where(
+        result["_wpop"].to_numpy() > 0, result["_weighted_los"] / result["_wpop"].replace(0, np.nan), np.nan
+    )
+    result = result.rename(columns={"_exact_pop": "_h3_fallback_population"})
+    return result[["_geo_idx", "level_of_service", "_h3_fallback_population"]]
+
+
 def _census_geometries_with_score(
     h3_grid: gpd.GeoDataFrame,
     aoi: gpd.GeoDataFrame,
@@ -4371,6 +4556,7 @@ def _census_geometries_with_score(
     cache_dir: Path,
     country: str = "USA",
     census_module: str | None = None,
+    chunk_h3_resolution: Optional[int] = None,
 ) -> dict[str, gpd.GeoDataFrame]:
     """Aggregate `level_of_service`/`pop_density` onto real census polygons, per level.
 
@@ -4502,8 +4688,60 @@ def _census_geometries_with_score(
         # h3-cell join happens, so an exact (non-buffered) AOI clip here
         # cannot itself drop cells from the aggregation -- it only trims the
         # render geometry.
+        # Bug fix (2026-09-03, live user report -- Boston: a tiny border
+        # block reporting population in the tens of thousands, next to
+        # normal ~300-person interior blocks; explicit follow-up: "use for
+        # any population and anything the real aoi not the aoi with
+        # buffer... crop the geometries of the census by the aoi and do an
+        # area weighted resampling of all absolute columns"). Aggregation
+        # is against this real, unpadded AOI-clipped geometry (not a wider
+        # unclipped/padded one -- the real AOI is what should define the
+        # study area for population purposes; a buffer is only for
+        # avoiding a stop-cropping boundary effect elsewhere, not this).
+        # The border-inflation bug itself is fixed a few lines below by
+        # switching `population`'s aggregation to real area-fraction
+        # weighting (`intersection_mode="exact"`) instead of unweighted
+        # `intersects` membership, which is what let a hairline-thin
+        # boundary sliver (confirmed live: 202 Boston blocks with literal
+        # `area_m2 == 0` but nonzero population) inherit each merely-
+        # touching h3 cell's FULL population.
+        #
+        # That fixes the h3-DERIVED fallback population, but a REAL
+        # census-source population (joined by GEOID a few lines below, from
+        # `loader()`'s own columns -- already present on `census_gdf` before
+        # any clipping happens here) is a per-block constant, independent of
+        # geometry: it does NOT shrink just because this polygon's DISPLAY
+        # geometry gets clipped down to a small AOI-boundary fragment. A
+        # real block mostly outside the AOI, with only a sliver of its true
+        # extent overlapping, still reports its FULL population on that
+        # sliver otherwise (confirmed live: San Francisco blockgroup
+        # 060855046011, area_m2=3.0, population=1185 -> ~394M/km2).
+        # `_orig_area_m2` (this block's true area, from the cheap
+        # generous-pad bbox clip above, NOT the expensive full unclipped
+        # geometry -- Toronto's province-level polygon is 3.8M vertices
+        # before that clip; computing area on it directly here would
+        # reintroduce the exact perf problem that clip exists to avoid)
+        # is snapshotted now, before the real-AOI intersection shrinks
+        # `census_gdf.geometry`, so every absolute column can be scaled by
+        # the fraction of this block's true area that actually survives the
+        # clip -- applied a bit further down, once every absolute column
+        # (real census join, LODES jobs, DHC race, h3 fallback) exists.
+        census_gdf["_orig_area_m2"] = census_gdf.to_crs(census_gdf.estimate_utm_crs()).geometry.area
         _aoi_union = aoi.to_crs(census_gdf.crs).geometry.union_all()
         census_gdf["geometry"] = census_gdf.geometry.intersection(_aoi_union)
+        # Bug fix (2026-09-04, live: Boston's "tract" level crashed the new
+        # area-weighted population join with "df2 contains mixed geometry
+        # types"). A polygon clipped along just its boundary EDGE (not
+        # interior) by the intersection above can come back as a
+        # non-empty-but-degenerate LineString/GeometryCollection instead of
+        # a Polygon -- `~geometry.is_empty` doesn't catch this (it's
+        # genuinely non-empty, just zero-area and the wrong dimensionality).
+        # `gpd.overlay`'s exact-area-fraction join (used by the population
+        # aggregation below) can't handle a mix of Polygon and
+        # non-Polygon geometry in the same call. These slivers have no real
+        # area to represent anyway, so they're dropped here the same way a
+        # genuinely empty intersection already was.
+        census_gdf = census_gdf[census_gdf.geom_type.isin(("Polygon", "MultiPolygon"))]
         census_gdf = census_gdf[~census_gdf.geometry.is_empty].reset_index(drop=True)
         census_gdf["_geo_idx"] = census_gdf.index
 
@@ -4596,46 +4834,87 @@ def _census_geometries_with_score(
         # area-fraction weighting arises, it should be reintroduced with a
         # chunked/bounded-candidate strategy, not a flat `geoweighted=True`
         # over the whole grid again.
-        _t1 = _time.time()
-        hierarchy = GeoHierarchy(crs=census_gdf.crs)
-        hierarchy.add_level("_census_map_level", census_gdf[["_geo_idx", "geometry"]].copy(), id_col="_geo_idx")
-        print(f"[TIMING] {level}: add_level took {_time.time()-_t1:.1f}s")
-        _t2 = _time.time()
-        hierarchy.add_vector_data(
-            pts,
-            level="_census_map_level",
-            columns=["level_of_service", "population"],
-            agg={
-                "level_of_service": Mean(weight_column="population", geoweighted=False),
-                "population": Sum(geoweighted=False),
-            },
-            fill_null=None,
-            # Bug fix (2026-09-01, live user report -- Guadalajara: blocks
-            # showing 0 access despite the real hexagons underneath having
-            # real access scores). `geoweighted=False` above (correctly
-            # asking for NO area-fraction weighting) also silently defaulted
-            # `get_id_mapping`'s matching itself down to "centroid" mode --
-            # a hexagon only counts toward a polygon if its CENTROID falls
-            # inside it, not whether the hexagon's real shape overlaps the
-            # polygon at all. For a small/oddly-shaped block comparable in
-            # size to a single hexagon (exactly the case this function's own
-            # `unmatched`/nearest-cell fallback below was written to catch
-            # for polygons with ZERO matched cells) this silently dropped
-            # individual straddling hexagons from polygons that still had
-            # other matched cells, so the fallback never triggered but the
-            # population-weighted average was computed over the wrong
-            # (incomplete) set of cells. `intersection_mode="intersects"` is
-            # a real geometry-touches test -- same cost as "centroid" (an
-            # indexed `sjoin`, not `gpd.overlay`), just without the
-            # centroid substitution.
-            intersection_mode="intersects",
-        )
-        print(f"[TIMING] {level}: add_vector_data took {_time.time()-_t2:.1f}s, pts rows={len(pts)}")
-        _hier_id_col = hierarchy.id_cols["_census_map_level"]
-        agg_result = hierarchy["_census_map_level"][[_hier_id_col, "level_of_service", "population"]]
-        agg_result = agg_result.rename(
-            columns={_hier_id_col: "_geo_idx", "population": "_h3_fallback_population"}
-        )
+        if chunk_h3_resolution is not None:
+            # Memory-bounded path (2026-09-04, live Boston OOM x3 -- see
+            # `_census_polygon_agg_chunked`'s docstring for the full
+            # rationale/correctness argument). Mathematically exact, not an
+            # approximation of the unchunked path below -- both quantities
+            # are re-expressed as sums that are linear in `pts`'s rows, so
+            # chunking `pts` and combining per-chunk partial sums reproduces
+            # the identical result the single whole-grid `add_vector_data`
+            # calls below would.
+            _t1 = _time.time()
+            agg_result = _census_polygon_agg_chunked(
+                pts, h3_grid.loc[populated_mask, "h3_cell"], census_gdf, chunk_h3_resolution
+            )
+            print(f"[TIMING] {level}: chunked add_vector_data (level_of_service + population) took {_time.time()-_t1:.1f}s, pts rows={len(pts)}")
+        else:
+            _t1 = _time.time()
+            hierarchy = GeoHierarchy(crs=census_gdf.crs)
+            hierarchy.add_level(
+                "_census_map_level", census_gdf[["_geo_idx", "geometry"]].copy(), id_col="_geo_idx"
+            )
+            print(f"[TIMING] {level}: add_level took {_time.time()-_t1:.1f}s")
+            _t2 = _time.time()
+            hierarchy.add_vector_data(
+                pts,
+                level="_census_map_level",
+                columns=["level_of_service"],
+                agg={
+                    "level_of_service": Mean(weight_column="population", geoweighted=False),
+                },
+                fill_null=None,
+                # Bug fix (2026-09-01, live user report -- Guadalajara: blocks
+                # showing 0 access despite the real hexagons underneath having
+                # real access scores). `geoweighted=False` above (correctly
+                # asking for NO area-fraction weighting) also silently defaulted
+                # `get_id_mapping`'s matching itself down to "centroid" mode --
+                # a hexagon only counts toward a polygon if its CENTROID falls
+                # inside it, not whether the hexagon's real shape overlaps the
+                # polygon at all. For a small/oddly-shaped block comparable in
+                # size to a single hexagon (exactly the case this function's own
+                # `unmatched`/nearest-cell fallback below was written to catch
+                # for polygons with ZERO matched cells) this silently dropped
+                # individual straddling hexagons from polygons that still had
+                # other matched cells, so the fallback never triggered but the
+                # population-weighted average was computed over the wrong
+                # (incomplete) set of cells. `intersection_mode="intersects"` is
+                # a real geometry-touches test -- same cost as "centroid" (an
+                # indexed `sjoin`, not `gpd.overlay`), just without the
+                # centroid substitution. Kept for `level_of_service` (not an
+                # absolute/summed quantity -- see the area-weighted `population`
+                # join right below, added for exactly that distinction).
+                intersection_mode="intersects",
+            )
+            print(f"[TIMING] {level}: add_vector_data (level_of_service) took {_time.time()-_t2:.1f}s, pts rows={len(pts)}")
+            # Bug fix (2026-09-03, live user report -- Boston border-sliver
+            # population inflation; explicit follow-up: "do an area weighted
+            # resampling of all absolute columns"). `population` is an
+            # absolute/summed quantity, unlike `level_of_service` above --
+            # `intersection_mode="exact"` computes each matched h3 cell's real
+            # overlap-AREA FRACTION with this polygon and weights its
+            # contribution by that fraction, instead of counting every merely-
+            # touching cell's full population once. Real geometric overlay
+            # (`gpd.overlay`), not the cheap indexed `sjoin` the
+            # `level_of_service` join above uses -- a separate, smaller call
+            # (`columns=["population"]` only) rather than folding into the call
+            # above, since mixing an "exact" column into that call would force
+            # the same expensive path onto `level_of_service` too.
+            _t3 = _time.time()
+            hierarchy.add_vector_data(
+                pts,
+                level="_census_map_level",
+                columns=["population"],
+                agg={"population": Sum(geoweighted=True)},
+                fill_null=None,
+                intersection_mode="exact",
+            )
+            print(f"[TIMING] {level}: add_vector_data (population, area-weighted) took {_time.time()-_t3:.1f}s")
+            _hier_id_col = hierarchy.id_cols["_census_map_level"]
+            agg_result = hierarchy["_census_map_level"][[_hier_id_col, "level_of_service", "population"]]
+            agg_result = agg_result.rename(
+                columns={_hier_id_col: "_geo_idx", "population": "_h3_fallback_population"}
+            )
         grouped_index = agg_result.loc[agg_result["level_of_service"].notna(), "_geo_idx"]
 
         census_gdf = census_gdf.merge(agg_result, on="_geo_idx", how="left")
@@ -4828,6 +5107,44 @@ def _census_geometries_with_score(
         # own independent join path (distinct from `_join_census`'s h3-grid
         # path above), so it needs its own call.
         census_gdf = _rename_canonical_columns(census_gdf)
+        # Bug fix (2026-09-04, live: San Francisco blockgroup 060855046011,
+        # area_m2=3.0, population=1185 -> ~394M people/km2 -- explicit
+        # follow-up request: "do an area weighted resampling of all
+        # absolute columns"). Every ABSOLUTE column joined onto this
+        # polygon so far (real census-source population, LODES jobs, DHC
+        # race/gender/age counts, housing units, ...) is a per-block
+        # constant from `loader()`'s own data -- unrelated to the display
+        # geometry -- so none of it shrinks on its own just because this
+        # polygon got clipped down to a small AOI-boundary fragment above.
+        # Scaling every one by `_orig_area_m2`'s survival fraction
+        # apportions each block's attributes across its clipped pieces the
+        # standard dasymetric way (uniform-density assumption): a fragment
+        # keeping 10% of the block's true area gets 10% of its population/
+        # jobs/etc, and (population/area) -- true density -- comes out
+        # unchanged, exactly the "no free lunch, no over-count" behavior
+        # meant here. Must happen BEFORE `_add_pop_jobs_columns`/
+        # `_add_derived_density_columns` below, which derive `pop_density`/
+        # `jobs_density`/`pop_jobs_density`/etc from these same absolute
+        # columns and `area_m2` -- computing them from already-scaled
+        # absolutes (over the already-small clipped `area_m2`) is what
+        # makes the resulting density come out correctly UNCHANGED, instead
+        # of needing a second manual recompute here.
+        _orig_area = census_gdf["_orig_area_m2"].to_numpy(dtype=float)
+        _area_fraction = np.where(_orig_area > 0, census_gdf["area_m2"].to_numpy(dtype=float) / _orig_area, 1.0)
+        _area_fraction = np.clip(_area_fraction, 0.0, 1.0)
+        from transitlos.map.build import absolute_fields as _absolute_fields
+
+        _non_scalable = {
+            "GEOID", "_geo_idx", "geometry", "area_m2", "_orig_area_m2",
+            "level_of_service", "h3_cell", "equity_flag",
+        }
+        _scale_cols = [
+            c for c in _absolute_fields(list(census_gdf.columns))
+            if c not in _non_scalable and pd.api.types.is_numeric_dtype(census_gdf[c])
+        ]
+        for c in _scale_cols:
+            census_gdf[c] = census_gdf[c].to_numpy(dtype=float) * _area_fraction
+        census_gdf = census_gdf.drop(columns=["_orig_area_m2"])
         census_gdf = _add_share_columns(census_gdf)
         census_gdf = _add_pop_jobs_columns(census_gdf)
         census_gdf = _add_derived_density_columns(census_gdf)
@@ -5073,7 +5390,76 @@ def _resample_h3(h3_grid, target_resolution: int, sum_cols: list[str]) -> pl.Dat
             .otherwise(None)
             .alias(col)
         ).drop(f"_weighted_{col}", f"_weight_{col}")
+    resampled = _clamp_density_to_children_bounds(df, resampled, ["population"] + count_cols)
     return resampled
+
+
+def _clamp_density_to_children_bounds(
+    fine: pl.DataFrame, coarse: pl.DataFrame, count_cols: list[str]
+) -> pl.DataFrame:
+    """Clamp each coarse cell's count columns so their density stays within their children's density range.
+
+    2026-09-05, explicit user spec (live report: Boston's H3 res-5 tiles
+    showing anomalously high population/density right at the AOI
+    boundary): "when resampling count values... measure the max and min
+    density values... from all the raster or geometries that are parent or
+    influenced the value of each cell. If the cell density is away from
+    the max or min density set the nearest bound." A coarse (parent) H3
+    cell's count is a sum of its fine (child) cells' counts -- physically,
+    that sum's own density (`count / parent_area`) should never fall
+    outside the range of densities its own children actually had; if it
+    does, something about the resampling (e.g. only a fragment of the
+    parent's true area actually has data, so `count / parent_area`
+    underestimates OR the parent cell straddles a data-availability edge)
+    has distorted the figure, and this clamps it back into the physically
+    plausible range implied by the real children.
+
+    Args:
+        fine: The pre-resample (child-resolution) grid, with `h3_cell` and
+            every column in `count_cols`.
+        coarse: `h3_ops.resample`'s already-summed output, with `h3_cell`
+            and every column in `count_cols`.
+        count_cols: Additive/count-like column names to clamp (density has
+            no meaning for `level_of_service` or a rate column, so those
+            are left untouched).
+
+    Returns:
+        `coarse` with each `count_cols` entry clamped in place.
+    """
+    import h3ronpy
+
+    if coarse.is_empty() or not count_cols:
+        return coarse
+
+    fine_cells = fine["h3_cell"].to_list()
+    coarse_resolution = h3.get_resolution(coarse["h3_cell"][0])
+    fine_parent = pl.Series("_parent", [h3.cell_to_parent(c, coarse_resolution) for c in fine_cells])
+    fine_area = np.asarray(h3ronpy.cells_area_m2(h3ronpy.cells_parse(fine_cells)))
+    coarse_area = np.asarray(h3ronpy.cells_area_m2(h3ronpy.cells_parse(coarse["h3_cell"].to_list())))
+    coarse_area_map = dict(zip(coarse["h3_cell"].to_list(), coarse_area))
+
+    for col in count_cols:
+        if col not in fine.columns or col not in coarse.columns:
+            continue
+        fine_density = fine[col].cast(pl.Float64).to_numpy() / fine_area
+        bounds = (
+            pl.DataFrame({"_parent": fine_parent, "_density": fine_density})
+            .filter(pl.col("_density").is_finite())
+            .group_by("_parent")
+            .agg(pl.col("_density").min().alias("_dmin"), pl.col("_density").max().alias("_dmax"))
+        )
+        joined = coarse.select(["h3_cell", col]).join(bounds, left_on="h3_cell", right_on="_parent", how="left")
+        c_area = np.array([coarse_area_map[c] for c in joined["h3_cell"].to_list()], dtype=float)
+        cur_density = joined[col].cast(pl.Float64).to_numpy() / c_area
+        dmin = joined["_dmin"].cast(pl.Float64).to_numpy()
+        dmax = joined["_dmax"].cast(pl.Float64).to_numpy()
+        has_bounds = np.isfinite(dmin) & np.isfinite(dmax)
+        clamped_density = np.where(
+            has_bounds, np.clip(cur_density, dmin, dmax), cur_density
+        )
+        clamped_value = clamped_density * c_area
+        coarse = coarse.with_columns(pl.Series(col, clamped_value))
+    return coarse
 
 
 def _resample_h3_chunked(
@@ -5817,6 +6203,7 @@ def _finish_pipeline_stages(
         census_by_level = _census_geometries_with_score(
             h3_grid, aoi_gdf, config.census_states, MAP_CENSUS_LEVELS, census_dir,
             country=config.country, census_module=config.census_module,
+            chunk_h3_resolution=params.isochrone_chunk_h3_resolution,
         )
         _lap("map: census geometries + score aggregation")
 
@@ -6014,34 +6401,31 @@ def refresh_census_only(
         h3_grid = h3_grid.drop(columns=stale_census_cols)
 
     print(f"[pipeline:{config.key}] joining census attributes for country={config.country!r} ({len(params.census_levels)} levels)")
-    if params.isochrone_chunk_h3_resolution is not None:
-        h3_grid = _chunked_h3_grid_join(
-            _join_census, h3_grid, aoi_gdf, params.isochrone_chunk_h3_resolution,
-            config.census_states, params.census_levels, census_dir,
-            country=config.country, census_module=config.census_module,
-        )
-    else:
-        h3_grid = _join_census(
-            h3_grid, aoi_gdf, config.census_states, params.census_levels, census_dir,
-            country=config.country, census_module=config.census_module,
-        )
+    # Bug fix (2026-09-05, live report -- hexagonal density artifact at
+    # H3 res-5 tile/chunk boundaries): `_join_polygon_stats` (via
+    # `_join_census`) normalizes each census polygon's population share
+    # using ONLY the h3 cells visible in its current call -- when chunked,
+    # a polygon straddling a chunk boundary gets its FULL real population
+    # redistributed independently within EACH chunk that sees any of its
+    # cells, so its true total is counted once per chunk it touches
+    # (confirmed live: a 2-chunk-straddling polygon's population summed to
+    # ~2x its real value). This join was never the actual OOM crash site in
+    # this study (isochrones and the census-geometry map aggregation were,
+    # both separately and correctly chunked) -- always run it unchunked to
+    # avoid this real correctness bug, regardless of `isochrone_chunk_h3_resolution`.
+    h3_grid = _join_polygon_stats_lightweight(
+        _join_census, h3_grid, aoi_gdf, config.census_states, params.census_levels, census_dir,
+        country=config.country, census_module=config.census_module,
+    )
     print(f"[pipeline:{config.key}] joining decennial race/ethnicity attributes")
-    if params.isochrone_chunk_h3_resolution is not None:
-        h3_grid = _chunked_h3_grid_join(
-            _join_race, h3_grid, aoi_gdf, params.isochrone_chunk_h3_resolution,
-            config.census_states, census_dir, country=config.country,
-        )
-    else:
-        h3_grid = _join_race(h3_grid, aoi_gdf, config.census_states, census_dir, country=config.country)
+    # See the matching comment above `_join_census` a few lines up --
+    # same chunk-boundary double-counting bug, always run unchunked.
+    h3_grid = _join_polygon_stats_lightweight(_join_race, h3_grid, aoi_gdf, config.census_states, census_dir, country=config.country)
     print(f"[pipeline:{config.key}] joining LODES WAC jobs-by-workplace counts")
     try:
-        if params.isochrone_chunk_h3_resolution is not None:
-            h3_grid = _chunked_h3_grid_join(
-                _join_jobs, h3_grid, aoi_gdf, params.isochrone_chunk_h3_resolution,
-                config.census_states, census_dir, country=config.country,
-            )
-        else:
-            h3_grid = _join_jobs(h3_grid, aoi_gdf, config.census_states, census_dir, country=config.country)
+        # Same chunk-boundary double-counting bug as `_join_census`/
+        # `_join_race` above -- always run unchunked.
+        h3_grid = _join_polygon_stats_lightweight(_join_jobs, h3_grid, aoi_gdf, config.census_states, census_dir, country=config.country)
     except Exception as exc:  # pragma: no cover - LODES availability varies by state/year
         print(f"[pipeline] skipping LODES jobs join: {exc}")
     h3_grid = _rename_canonical_columns(h3_grid)
@@ -6160,6 +6544,7 @@ def rebuild_map_only(
         census_by_level = _census_geometries_with_score(
             h3_grid, aoi_gdf, config.census_states, MAP_CENSUS_LEVELS, census_dir,
             country=config.country, census_module=config.census_module,
+            chunk_h3_resolution=params.isochrone_chunk_h3_resolution,
         )
 
     from transitlos.map import build_city_map, build_route_lines
@@ -6249,6 +6634,7 @@ def rebuild_development_tiles_only(
     census_by_level = _census_geometries_with_score(
         h3_grid, aoi_gdf, config.census_states, MAP_CENSUS_LEVELS, census_dir,
         country=config.country, census_module=config.census_module,
+        chunk_h3_resolution=params.isochrone_chunk_h3_resolution,
     )
     development_gdf = development_gdf_for_map(census_by_level)
     if development_gdf is None:
@@ -6499,46 +6885,36 @@ def run_city_study(
     if config.uses_census:
         h3_grid = _add_h3_grid(pop_access_h3)
         print(f"[pipeline:{config.key}] joining census attributes for country={config.country!r} ({len(params.census_levels)} levels)")
-        # Opt-in memory-bounded chunking of the census/race/jobs joins (same
-        # `isochrone_chunk_h3_resolution` knob as isochrones/H3 resampling --
-        # see `StudyParams`'s docstring). `None` (every city not explicitly
-        # overridden) takes the original unchunked path, byte-for-byte
-        # unaffected.
-        if params.isochrone_chunk_h3_resolution is not None:
-            h3_grid = _chunked_h3_grid_join(
-                _join_census, h3_grid, aoi_gdf, params.isochrone_chunk_h3_resolution,
-                config.census_states, params.census_levels, census_dir,
-                country=config.country, census_module=config.census_module,
-            )
-        else:
-            h3_grid = _join_census(
-                h3_grid,
-                aoi_gdf,
-                config.census_states,
-                params.census_levels,
-                census_dir,
-                country=config.country,
-                census_module=config.census_module,
-            )
+        # Bug fix (2026-09-05, live report -- hexagonal density artifact at
+        # H3 res-5 tile/chunk boundaries): `_join_polygon_stats` normalizes
+        # each census polygon's population share using ONLY the h3 cells
+        # visible in its current call -- when chunked (the
+        # `isochrone_chunk_h3_resolution` knob), a polygon straddling a
+        # chunk boundary gets its FULL real population redistributed
+        # independently within EACH chunk that sees any of its cells, so
+        # its true total is counted once per chunk it touches (confirmed
+        # live: a 2-chunk-straddling polygon's population summed to ~2x its
+        # real value). This join was never the actual OOM crash site in
+        # this study (isochrones and the census-geometry map aggregation
+        # were, both separately and correctly chunked) -- always run it
+        # unchunked to avoid this real correctness bug.
+        h3_grid = _join_polygon_stats_lightweight(
+            _join_census,
+            h3_grid,
+            aoi_gdf,
+            config.census_states,
+            params.census_levels,
+            census_dir,
+            country=config.country,
+            census_module=config.census_module,
+        )
         _lap("census ACS join")
         print(f"[pipeline:{config.key}] joining decennial race/ethnicity attributes")
-        if params.isochrone_chunk_h3_resolution is not None:
-            h3_grid = _chunked_h3_grid_join(
-                _join_race, h3_grid, aoi_gdf, params.isochrone_chunk_h3_resolution,
-                config.census_states, census_dir, country=config.country,
-            )
-        else:
-            h3_grid = _join_race(h3_grid, aoi_gdf, config.census_states, census_dir, country=config.country)
+        h3_grid = _join_polygon_stats_lightweight(_join_race, h3_grid, aoi_gdf, config.census_states, census_dir, country=config.country)
         _lap("census DHC race join")
         print(f"[pipeline:{config.key}] joining LODES WAC jobs-by-workplace counts")
         try:
-            if params.isochrone_chunk_h3_resolution is not None:
-                h3_grid = _chunked_h3_grid_join(
-                    _join_jobs, h3_grid, aoi_gdf, params.isochrone_chunk_h3_resolution,
-                    config.census_states, census_dir, country=config.country,
-                )
-            else:
-                h3_grid = _join_jobs(h3_grid, aoi_gdf, config.census_states, census_dir, country=config.country)
+            h3_grid = _join_polygon_stats_lightweight(_join_jobs, h3_grid, aoi_gdf, config.census_states, census_dir, country=config.country)
         except Exception as exc:  # pragma: no cover - LODES availability varies by state/year
             print(f"[pipeline] skipping LODES jobs join: {exc}")
         _lap("LODES jobs join")

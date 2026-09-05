@@ -72,15 +72,15 @@ else:
 if __name__ == "__main__":
     flags = parse_run_flags()
     if flags.dispatch(city_dir=CITY_DIR, config=CITY_CONFIGS["shanghai"], params=SHANGHAI_PARAMS,
-                       census_root=ROOT.parent / "census", default_tile_workers=1):
+                       census_root=ROOT / "census", default_tile_workers=1):
         raise SystemExit(0)
     run_city_study(
         city_dir=CITY_DIR,
         config=CITY_CONFIGS["shanghai"],
         params=SHANGHAI_PARAMS,
-        streets_root=ROOT.parent / "streets",
-        worldpop_root=ROOT.parent / "worldpop",
-        census_root=ROOT.parent / "census",
+        streets_root=ROOT / "streets",
+        worldpop_root=ROOT / "worldpop",
+        census_root=ROOT / "census",
         reuse_cached_los=flags.reuse_cached_los,
         # Shanghai's metro grid (14-city Yangtze Delta megaregion, 13M+ res-11
         # h3 cells) OOM-killed the map-build stage twice live: once at the
