@@ -3464,6 +3464,22 @@ def _join_zensus_grid_population(
     grid["population"] = grid["population"].astype(float)
     grid["_zensus_idx"] = grid.index
 
+    # 2026-09-06 bug fix (live user report, Hamburg): real area-weighted
+    # overlap (`Sum(geoweighted=True)`) gives every H3 cell that so much as
+    # SLIVER-touches a real populated 100m Zensus square a nonzero share of
+    # its population -- including a neighboring cell that is genuinely
+    # unpopulated (a park, water, a road) but happens to share a few
+    # centimeters of boundary with a populated square due to ordinary
+    # geometry/reprojection precision, not a real population split. A small
+    # negative buffer on each Zensus square (shrinking a 100m square by 1m
+    # on every side, ~4% of its area) removes exactly these boundary-sliver
+    # artifacts while barely touching genuine substantial overlaps -- H3
+    # res-11 cells (~2,150 m2, smaller than one 100m square) that legitimately
+    # sit mostly inside a populated square keep almost all of their real
+    # overlap area, so their population share is essentially unchanged.
+    grid["geometry"] = grid.to_crs(grid.estimate_utm_crs()).geometry.buffer(-1.0).to_crs(grid.crs)
+    grid = grid[~grid.geometry.is_empty]
+
     hierarchy = GeoHierarchy(crs=h3_grid.crs)
     hierarchy.add_level(
         "_zensus_h3", h3_grid[["h3_cell", "geometry"]].copy(), id_col="h3_cell"
@@ -5435,8 +5451,27 @@ def _clamp_density_to_children_bounds(
     coarse_resolution = h3.get_resolution(coarse["h3_cell"][0])
     fine_parent = pl.Series("_parent", [h3.cell_to_parent(c, coarse_resolution) for c in fine_cells])
     fine_area = np.asarray(h3ronpy.cells_area_m2(h3ronpy.cells_parse(fine_cells)))
-    coarse_area = np.asarray(h3ronpy.cells_area_m2(h3ronpy.cells_parse(coarse["h3_cell"].to_list())))
-    coarse_area_map = dict(zip(coarse["h3_cell"].to_list(), coarse_area))
+    # 2026-09-06 bug fix: these H3 grids only ever contain occupied/populated
+    # cells, never a full tessellation -- a coarse cell's real children
+    # (`fine_parent`) typically cover only a fraction of its full geometric
+    # area (e.g. one res-7 cell here can have just 3 of its ~2401 possible
+    # res-11 children present). Comparing `count / full_geometric_area`
+    # against density bounds computed from each CHILD's own (much smaller,
+    # undiluted) area systematically floors the coarse density up to `dmin`
+    # for every sparse cell -- inflating population 2x+ across whole cities
+    # (confirmed on Concepcion: 1,071,925 -> 2,307,067, dragging the
+    # population-weighted median level_of_service from 0.95 down to 0.0).
+    # Using the SUM of the real children's own areas as the coarse area puts
+    # both sides of the comparison on the same basis the bounds were
+    # actually computed on.
+    effective_area = (
+        pl.DataFrame({"_parent": fine_parent, "_area": fine_area})
+        .group_by("_parent")
+        .agg(pl.col("_area").sum().alias("_effective_area"))
+    )
+    coarse_area_map = dict(zip(effective_area["_parent"].to_list(), effective_area["_effective_area"].to_list()))
+    full_area = np.asarray(h3ronpy.cells_area_m2(h3ronpy.cells_parse(coarse["h3_cell"].to_list())))
+    full_area_map = dict(zip(coarse["h3_cell"].to_list(), full_area))
 
     for col in count_cols:
         if col not in fine.columns or col not in coarse.columns:
@@ -5449,7 +5484,8 @@ def _clamp_density_to_children_bounds(
             .agg(pl.col("_density").min().alias("_dmin"), pl.col("_density").max().alias("_dmax"))
         )
         joined = coarse.select(["h3_cell", col]).join(bounds, left_on="h3_cell", right_on="_parent", how="left")
-        c_area = np.array([coarse_area_map[c] for c in joined["h3_cell"].to_list()], dtype=float)
+        cells = joined["h3_cell"].to_list()
+        c_area = np.array([coarse_area_map.get(c, full_area_map[c]) for c in cells], dtype=float)
         cur_density = joined[col].cast(pl.Float64).to_numpy() / c_area
         dmin = joined["_dmin"].cast(pl.Float64).to_numpy()
         dmax = joined["_dmax"].cast(pl.Float64).to_numpy()
@@ -6881,6 +6917,25 @@ def run_city_study(
             pop_access_checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
             pop_access_h3.write_parquet(pop_access_checkpoint_path)
             print(f"[pipeline:{config.key}] wrote pop_access_h3 checkpoint -> {pop_access_checkpoint_path}")
+
+    # 2026-09-06, explicit user request ("I want worldpop population column
+    # to appear on all maps... I see many count worldpop columns but not
+    # worldpop population"): `population` is already the raw WorldPop total
+    # headcount at this point (before any census join or country-specific
+    # override, e.g. Germany's Zensus grid replacing `population` further
+    # down) -- see `_worldpop_population_column`/`_add_worldpop_gapfill`'s
+    # docstring. It was deliberately never duplicated under a
+    # `worldpop_`-prefixed name because that seemed redundant with bare
+    # `population` -- but bare `population` is in `MAP_FIELD_EXCLUDE`
+    # (it's the default weight/denominator, not meant to itself be a
+    # selectable field), which is exactly why it never showed up in the
+    # map's "circle size by"/distribution dropdowns even though every other
+    # `worldpop_*` count column does. Snapshotting it here, under the
+    # `worldpop_` prefix already in `CENSUS_COLUMN_PREFIXES`, makes it flow
+    # through `_census_columns`'s `sum_cols` automatically -- resampled
+    # (summed) correctly at every resolution by `_resample_h3`, and exposed
+    # everywhere the other worldpop_* count columns already are.
+    pop_access_h3 = pop_access_h3.with_columns(pl.col("population").alias("worldpop_population"))
 
     if config.uses_census:
         h3_grid = _add_h3_grid(pop_access_h3)

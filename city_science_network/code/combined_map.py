@@ -329,11 +329,24 @@ def _available_cities() -> list[dict]:
         # `None` (regex miss -- an older/differently-shaped map.html) falls
         # back to the flat threshold, unchanged from before.
         city_switch_zoom = None
+        city_overview_exit_zoom = None
         try:
             html_text = map_path.read_text(encoding="utf-8", errors="ignore")
             _m = re.search(r"zoom:\s*(\d+)", html_text)
             if _m:
                 city_switch_zoom = int(_m.group(1))
+            # 2026-09-06, explicit user request: "Change to global map at a
+            # very low zoom level that covers aoi and much more area" --
+            # a SEPARATE, much lower threshold than `switch_zoom` (which is
+            # deliberately as zoomed-IN as the AOI allows, see
+            # `geohierarchy.maps.maplibre.render._bbox_fit_zoom`), so
+            # entering and leaving a city map happen at two different
+            # zooms instead of one flipping symmetrically. Parsed the same
+            # way as `switch_zoom`, from the `window.__overviewExitZoom`
+            # literal that render.py bakes into the same saved HTML.
+            _m2 = re.search(r"__overviewExitZoom\s*=\s*(\d+)", html_text)
+            if _m2:
+                city_overview_exit_zoom = int(_m2.group(1))
         except OSError:
             pass
         out.append(
@@ -344,6 +357,7 @@ def _available_cities() -> list[dict]:
                 # to that city's map.html, for the iframe `src`.
                 "map_src": f"{rel_dir}/map.html",
                 "switch_zoom": city_switch_zoom,
+                "overview_exit_zoom": city_overview_exit_zoom,
                 # Same relative-to-ROOT convention, one level up from
                 # `map_src` -- the base the download panel's <a download>
                 # links are built from (`{base_path}/{scope}/downloads/...`).
@@ -564,6 +578,14 @@ function __nearestCity(lon, lat) {{
   return best;
 }}
 
+function __maxSwitchZoom() {{
+  var m = OVERVIEW_ZOOM_THRESHOLD + 1;
+  for (var i = 0; i < CITIES.length; i++) {{
+    if (CITIES[i].switch_zoom != null && CITIES[i].switch_zoom > m) m = CITIES[i].switch_zoom;
+  }}
+  return m;
+}}
+
 function ensureOverviewMap() {{
   if (__overviewMap) return __overviewMap;
   var pts = [];
@@ -583,7 +605,15 @@ function ensureOverviewMap() {{
     style: 'https://tiles.openfreemap.org/styles/positron',
     center: pts.length ? pts[0].center : [0, 20],
     zoom: 2,
-    maxZoom: OVERVIEW_ZOOM_THRESHOLD + 2,
+    // 2026-09-06 bug fix: this used to be a flat `OVERVIEW_ZOOM_THRESHOLD + 2`
+    // (= 7), which was fine back when the city-switch threshold itself was
+    // that same flat constant. Since the per-city `switch_zoom` fix (see the
+    // big comment above `city_switch_zoom` in `_available_cities()`), the
+    // overview map needs to zoom in to each city's OWN switch_zoom (13 for
+    // every city today) before the switch fires -- with the old cap of 7,
+    // the overview map could never physically reach that zoom, so clicking
+    // or zooming into a city could never trigger `switchToCity` at all.
+    maxZoom: Math.max(OVERVIEW_ZOOM_THRESHOLD + 2, __maxSwitchZoom() + 1),
   }});
   __overviewMap.addControl(new maplibregl.NavigationControl(), 'top-right');
   // 2026-09-02 (explicit user request: "some circle depending of total
@@ -748,7 +778,7 @@ function switchToOverview(fromLngLat, fromCity) {{
   // city being exited, when known) is optional so the initial page-load
   // call (`switchToOverview()`, no arguments at all) keeps the old flat
   // fallback.
-  var landingZoom = (fromCity && fromCity.switch_zoom != null) ? fromCity.switch_zoom - 2 : OVERVIEW_ZOOM_THRESHOLD - 1;
+  var landingZoom = (fromCity && fromCity.overview_exit_zoom != null) ? fromCity.overview_exit_zoom : OVERVIEW_ZOOM_THRESHOLD - 1;
   if (fromLngLat) ov.jumpTo({{center: fromLngLat, zoom: landingZoom}});
   __updateStatsTabVisibility();
 }}
@@ -780,7 +810,7 @@ function __pollCityZoom() {{
         // threshold every city shared, so entering/leaving a city happens
         // at the exact same zoom in both directions.
         var thisCity = CITIES.find(function(cc) {{ return cc.key === currentKey; }});
-        var exitZoom = (thisCity && thisCity.switch_zoom != null) ? thisCity.switch_zoom - 1 : OVERVIEW_ZOOM_THRESHOLD;
+        var exitZoom = (thisCity && thisCity.overview_exit_zoom != null) ? thisCity.overview_exit_zoom : OVERVIEW_ZOOM_THRESHOLD;
         if (m.getZoom() <= exitZoom) {{
           var c = m.getCenter();
           switchToOverview([c.lng, c.lat], thisCity);
