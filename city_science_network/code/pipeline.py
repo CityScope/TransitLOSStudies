@@ -1209,13 +1209,22 @@ def development_density_column(gdf) -> str:
 # below do. `build.py` itself is shared across studies and stays untouched.
 # --------------------------------------------------------------------------
 
-# `population` is a raw headcount: on an h3 grid every cell has the same area,
-# so it says the same thing as `pop_density` but in a unit that stops being
-# comparable the moment the map switches resolution or draws census polygons
-# (which have wildly different areas). `pop_density` is the honest version of
-# the same variable and is what these selectors offer instead. `area_m2` is
-# grid bookkeeping, never an analysis variable.
-MAP_FIELD_EXCLUDE = frozenset({"population", "area_m2", "worldpop_population_map_source"})
+# `area_m2` is grid bookkeeping (never real census/WorldPop data), and
+# `worldpop_population_map_source` is an internal provenance flag column --
+# neither belongs in any analysis/dropdown selector.
+#
+# `population` USED to be excluded here too (a raw headcount reads the same
+# as `pop_density` on an h3 grid, where every cell has equal area, but stops
+# being comparable the moment the map switches resolution or draws census
+# polygons of wildly different areas) -- but per explicit user request
+# ("make sure all maps have a population column, a worldpop population
+# column, all other census and worldpop columns" -- 2026-09-07), every
+# count-type selector (circle-size, distribution, place-rank) must include
+# `population` again, alongside `worldpop_population` and every other real
+# count column. See `transitlos.map.build`'s `_numeric_field_candidates`/
+# `absolute_fields`, which is what actually builds the canonical
+# count-fields list every one of those selectors now shares.
+MAP_FIELD_EXCLUDE = frozenset({"area_m2", "worldpop_population_map_source"})
 
 
 def _map_field_rank(col: str) -> int:
@@ -1271,56 +1280,29 @@ def _order_map_fields(gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
 
 
 def _apply_map_field_policy() -> None:
-    """Teach `transitlos.map.build` to keep `population` out of the four selectors.
+    """Teach `transitlos.map.build` to keep bookkeeping columns out of the four selectors.
 
     Idempotent, and confined to this study package -- `build.py` is shared
     with the other city studies and a parallel effort, so nothing here edits
-    it. Two adjustments:
+    it directly. `_FIELD_EXCLUDE` gains `MAP_FIELD_EXCLUDE` (`area_m2`,
+    `worldpop_population_map_source`), which removes those two bookkeeping
+    columns from the ANOVA, regression, circle-size, opacity-by, and
+    distribution-tab lists.
 
-    1. `_FIELD_EXCLUDE` gains `MAP_FIELD_EXCLUDE`, which is what actually
-       removes `population`/`area_m2` from the ANOVA, regression,
-       circle-size and opacity-by lists.
-    2. The stats panel's own JavaScript weights every regression and ANOVA
-       by `window.__statsData[area].population`, but that payload only
-       carries the columns that made it into the (now population-less)
-       field list -- dropping the column would leave the panel weighting by
-       `undefined`. So `_stats_json_data` is wrapped to always ship
-       `population` as *data*, even though it is no longer offered as a
-       *choice*.
+    2026-09-07: this function used to ALSO exclude `population` and then
+    monkeypatch `_stats_json_data`/`_stats_count_fields` to sneak it back in
+    for weighting/distribution purposes specifically -- per explicit user
+    request ("make sure all maps have a population column... all other
+    census and worldpop columns"), `population` is a real count column like
+    any other now, so `MAP_FIELD_EXCLUDE` no longer names it and those two
+    compensating patches are gone; `transitlos.map.build`'s own canonical
+    count-fields list (`absolute_fields(_numeric_field_candidates(...))`)
+    already includes it, and every selector (circle-size, distribution,
+    place-rank) shares that same list.
     """
     from transitlos.map import build as _map_build
 
     _map_build._FIELD_EXCLUDE = set(_map_build._FIELD_EXCLUDE) | set(MAP_FIELD_EXCLUDE)
-
-    if getattr(_map_build, "_cs_transitlos_keeps_population_weights", False):
-        return
-    _original_stats_json_data = _map_build._stats_json_data
-
-    def _stats_json_data_with_weights(stats_by_area, fields):
-        return _original_stats_json_data(stats_by_area, list(dict.fromkeys(list(fields) + ["population"])))
-
-    _map_build._stats_json_data = _stats_json_data_with_weights
-
-    # `_FIELD_EXCLUDE` above is also what `_stats_field_candidates` (via
-    # `_numeric_field_candidates`) reads to build `_stats_count_fields` --
-    # the Distribution tab's "Distribute by"/"Compare with" dropdown
-    # options. That's collateral damage: excluding `population` there
-    # (unlike the four selectors this function's docstring names) leaves
-    # BOTH dropdowns with zero `<option>`s, so `distMainSelect.value` reads
-    # as `""`, `data[""]` is `undefined`, and the panel's weighted-access
-    # figure divides 0/0 -> NaN for every non-US city_science_network city. Restore
-    # `population` specifically to the distribution tab's own field list
-    # (it's the one dropdown that exists precisely to weight/bucket by a
-    # raw count, so excluding it defeats the tab's purpose) without
-    # touching the four-selector exclusion this function exists for.
-    _original_stats_count_fields = _map_build._stats_count_fields
-
-    def _stats_count_fields_keep_population(fields):
-        result = _original_stats_count_fields(fields)
-        return result if "population" in result else result + ["population"]
-
-    _map_build._stats_count_fields = _stats_count_fields_keep_population
-    _map_build._cs_transitlos_keeps_population_weights = True
 
     # 3. "Circle size by" default. The regression/ANOVA default is simply
     #    `regression_fields[0]`, so column order (`_order_map_fields`) already
@@ -2486,6 +2468,20 @@ def _join_polygon_stats_lightweight(join_fn, h3_grid, *args, **kwargs):
     new_cols = [c for c in light.columns if c not in before_cols]
     for c in new_cols:
         h3_grid[c] = light[c]
+    # 2026-09-07 bug fix (live Hamburg report: "destatis population column
+    # and worldpop population seem too similar" -- Germany's real 100m
+    # Zensus grid override never actually reached the final grid). `_join_census`'s
+    # Germany branch overwrites `population` IN PLACE (`_join_zensus_grid_population`
+    # replaces WorldPop's estimate with the real Zensus grid value on the
+    # SAME column name) -- but `new_cols` above only ever catches columns
+    # that didn't exist before the join, so an in-place modification to an
+    # already-existing column (`population`) was silently discarded here,
+    # leaving the real, full `h3_grid`'s `population` at its original
+    # pre-join (WorldPop) value even though the lightweight `light` frame's
+    # own `population` was correctly updated. Always copying `population`
+    # back (not just genuinely new columns) fixes this for Germany and
+    # costs nothing for every other country, where `join_fn` never touches it.
+    h3_grid["population"] = light["population"]
     return h3_grid
 
 
@@ -3638,13 +3634,25 @@ def _join_census(
             print(f"[pipeline] skipping Chile SII comunal jobs-by-workplace join: {exc}")
         return h3_grid
     if country == "DEU":
-        h3_grid = _join_polygon_stats(
-            h3_grid, aoi, states, GERMANY_ADMIN_LEVELS, cache_dir, _germany_census_loader, GERMANY_KEEP_COLUMNS, "destatis_"
-        )
+        # 2026-09-07 bug fix (live report -- "destatis population column and
+        # worldpop population seem too similar"): `_join_polygon_stats`
+        # apportions each admin polygon's real total down to h3 cells in
+        # proportion to `h3_grid["population"]` at the moment it runs (see
+        # that function's own `cell_population`/`poly_population` weighting)
+        # -- running the Zensus grid override FIRST means that weight is
+        # the REAL 100m grid population, not WorldPop's raw estimate, so
+        # `destatis_population`'s spatial pattern is disaggregated using the
+        # real official grid (and cells with zero real Zensus coverage get
+        # zero/near-zero apportioned `destatis_population`, not a
+        # WorldPop-driven guess) instead of just reproducing WorldPop's own
+        # density pattern rescaled to Destatis's total.
         try:
             h3_grid = _join_zensus_grid_population(h3_grid, aoi, cache_dir)
         except Exception as exc:  # pragma: no cover - network/data availability varies
             print(f"[pipeline] skipping Zensus grid population replacement: {exc}")
+        h3_grid = _join_polygon_stats(
+            h3_grid, aoi, states, GERMANY_ADMIN_LEVELS, cache_dir, _germany_census_loader, GERMANY_KEEP_COLUMNS, "destatis_"
+        )
         return h3_grid
     print(
         f"[pipeline] census join not yet supported for country={country!r} "
