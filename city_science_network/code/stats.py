@@ -33,23 +33,26 @@ class RegressionResult:
     n: int
 
 
-def discretize_score(scores: np.ndarray, bin_width: float = 0.05) -> np.ndarray:
-    """Round scores onto a fixed grid of `bin_width`-wide bins (e.g. 20 bins of 0.05 over [0, 1]).
+def discretize_score(scores: np.ndarray, bin_width: float = 5.0) -> np.ndarray:
+    """Round scores onto a fixed grid of `bin_width`-wide bins (e.g. 20 bins of 5 over [0, 100]).
 
     Args:
-        scores: `level_of_service` values, expected in `[0, 1]` (NaNs pass through).
-        bin_width: Width of each bin. Default 0.05 -> 20 bins covering [0, 1].
+        scores: `level_of_service` values, expected in `[0, 100]` (2026-09-23:
+            rescaled from the earlier `[0, 1]` at the source in
+            `transitlos.level_of_service.compute_level_of_service`; NaNs
+            pass through).
+        bin_width: Width of each bin. Default 5.0 -> 20 bins covering [0, 100].
 
     Returns:
         Array of the same shape, each value snapped to the nearest multiple
-        of `bin_width` and clipped to `[0, 1]` -- exactly `0.0, 0.05, 0.1,
-        ...` (not `0.15000000000000002`-style float noise; the extra
-        `np.round(..., 10)` clears binary floating-point drift introduced
-        by the division/multiplication without changing any actual bin).
+        of `bin_width` and clipped to `[0, 100]` -- exactly `0.0, 5.0, 10.0,
+        ...` (not float-noise; the extra `np.round(..., 10)` clears binary
+        floating-point drift introduced by the division/multiplication
+        without changing any actual bin).
     """
     snapped = np.round(scores / bin_width) * bin_width
     snapped = np.round(snapped, 10)
-    return np.clip(snapped, 0.0, 1.0)
+    return np.clip(snapped, 0.0, 100.0)
 
 
 def linreg(x: np.ndarray, y: np.ndarray, weights: Optional[np.ndarray] = None) -> RegressionResult:
@@ -380,7 +383,11 @@ def housing_priority_flag(
 def access_distribution(
     scores: np.ndarray, weights: np.ndarray, overlay_weights: Optional[np.ndarray] = None
 ) -> dict:
-    """Bin `scores` into `[0], (0,0.1], (0.1,0.2], ..., (0.9,1.0]` and sum `weights` per bin.
+    """Bin `scores` into `[0], (0,10], (10,20], ..., (90,100]` and sum `weights` per bin.
+
+    2026-09-23: bin edges rescaled from the earlier `[0, 1]`-by-0.1 grid to
+    `[0, 100]`-by-10, matching `level_of_service`'s new 0-100 scale
+    (`transitlos.level_of_service.compute_level_of_service`).
 
     Args:
         scores: `level_of_service` values.
@@ -396,8 +403,8 @@ def access_distribution(
     """
     scores = np.asarray(scores, dtype=float)
     weights = np.asarray(weights, dtype=float)
-    edges = [0.0, 1e-9, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 + 1e-9]
-    labels = ["0", "0-0.1", "0.1-0.2", "0.2-0.3", "0.3-0.4", "0.4-0.5", "0.5-0.6", "0.6-0.7", "0.7-0.8", "0.8-0.9", "0.9-1"]
+    edges = [0.0, 1e-7, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 + 1e-7]
+    labels = ["0", "0-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60-70", "70-80", "80-90", "90-100"]
 
     mask = np.isfinite(scores) & np.isfinite(weights)
     bin_idx = np.digitize(scores[mask], edges[1:-1], right=True)
@@ -436,105 +443,84 @@ def equity_flag(
 ) -> np.ndarray:
     """Compute the map's orange/blue equity flag.
 
-    `"more_transit"` is exactly `development_priority_flag`'s population-weighted
-    "dense-within-dense and under-served-relative-to-sparse" two-step median
-    split (see that function's docstring) -- this used to be a plain
-    unweighted median-split-vs-group-mean test, replaced in favor of the
-    weighted two-step split so a few near-empty extreme cells can't move
-    either the split point or the "more transit" cutoff.
+    2026-09-22, explicit user request ("more housing or more transit cells
+    should be computed as follows: use the population density column per
+    h3 res 7 cell... If the h3 cell transit level of service and population
+    density value is above one std above the regression of all h3 res 7
+    cells... of log population density (x axis) and transit level of
+    service (y axis) then this cell is more housing and if it is more than
+    one std below it is more transit") -- replaces the previous
+    population-weighted two-step median-split method with a single OLS
+    regression of `level_of_service ~ log(pop_density)` over every finite
+    cell, then a residual-vs-1-std test:
 
-    `"more_housing"` is exactly `housing_priority_flag`'s population-weighted
-    "sparse-within-sparse and well-served-relative-to-dense" two-step median
-    split (see that function's docstring) -- the mirror image of
-    `"more_transit"` applied to the low-density side of the study: sparse
-    areas that already have unusually good access are candidates for adding
-    housing rather than transit.
+    - `"more_housing"`: residual (real LOS minus the regression line's
+      predicted LOS at that cell's own density) is MORE than one residual
+      standard deviation ABOVE the line -- better served than its density
+      alone predicts, a candidate for adding housing since the access is
+      already there.
+    - `"more_transit"`: residual is more than one standard deviation BELOW
+      the line -- worse served than its density predicts, a candidate for
+      adding transit.
 
-    Args:
-        pop_density: Per-cell population density (or population+jobs
-            density -- see `development_density_column`).
-        level_of_service: Per-cell `level_of_service`.
-        population: Per-cell population weight, used only for the
-            `"more_transit"` split. Defaults to equal (all-ones) weighting
-            when omitted, e.g. for a caller with no population column.
+    `population` is accepted (and still required by every call site) for
+    API compatibility but no longer used -- the regression itself is
+    unweighted, per the literal request (not "population-weighted
+    regression").
 
     Returns:
-        Object array of `"more_transit"` (dense and under-served, per
-        `development_priority_flag`), `"more_housing"` (sparse, above its
-        group's mean score -- well-served but under-built), or `None`.
+        Object array of `"more_housing"`, `"more_transit"`, or `None`.
     """
-    pop_density = np.asarray(pop_density, dtype=float)
-    level_of_service = np.asarray(level_of_service, dtype=float)
-    flags = np.full(pop_density.shape, None, dtype=object)
-
-    finite = np.isfinite(pop_density) & np.isfinite(level_of_service)
-    if finite.sum() < 4:
-        return flags
-
-    if population is None:
-        population = np.ones(pop_density.shape, dtype=float)
-
-    more_transit = development_priority_flag(pop_density, level_of_service, population)
-    flags[more_transit] = "more_transit"
-
-    more_housing = housing_priority_flag(pop_density, level_of_service, population)
-    flags[more_housing] = "more_housing"
-
-    return flags
+    thresholds = equity_flag_thresholds(pop_density, level_of_service, population)
+    return equity_flag_from_thresholds(pop_density, level_of_service, population, thresholds)
 
 
 def equity_flag_thresholds(
     pop_density: np.ndarray, level_of_service: np.ndarray, population: Optional[np.ndarray] = None
 ) -> Optional[dict]:
-    """The five population-weighted-median scalars `equity_flag` derives its split from.
+    """`(slope, intercept, std_residual)` of the OLS fit `equity_flag` derives its split from.
 
-    Split out of `development_priority_flag`/`housing_priority_flag` so a
-    chunked pipeline (see `code.pipeline.build_h3_by_resolution_chunked`) can
-    compute these five numbers ONCE from a lazy, geometry-free, whole-city
-    scan of just `(pop_density, level_of_service, population)` -- three
-    float columns, cheap even at Shanghai's ~25M-row native resolution --
-    and then apply them independently to each tile with
-    `equity_flag_from_thresholds`, rather than needing the whole city's rows
-    physically together in one array. `equity_flag` itself is untouched and
-    stays the single source of truth for the *non*-chunked path; this pair
-    is verified to reproduce it exactly for a `finite.sum() >= 4` case tested by
-    `code.tests.test_equity_flag_thresholds` (`city_science_network/tests`).
+    Split out so a chunked pipeline (see
+    `code.pipeline.build_h3_by_resolution_chunked`) can fit this ONCE from a
+    lazy, geometry-free, whole-city scan of just `(pop_density,
+    level_of_service)` -- two float columns, cheap even at Shanghai's
+    ~25M-row native resolution -- and then apply it independently to each
+    tile with `equity_flag_from_thresholds`, rather than needing the whole
+    city's rows physically together in one array. `population` is accepted
+    for signature compatibility with every existing call site but unused
+    (see `equity_flag`'s docstring). Verified to reproduce `equity_flag`
+    exactly by `code.tests.test_equity_flag_thresholds`
+    (`city_science_network/tests`) -- that test only checks the
+    global-fit/apply-per-tile DECOMPOSITION property, not any particular
+    method, so it stays valid across this regression-based rewrite.
 
-    Returns `None` when there are fewer than 4 finite, non-negative-weight
-    rows -- the same "too small to split" case `development_priority_flag`/
-    `housing_priority_flag` return an all-`False` array for. Callers should
-    treat `None` as "every row's flag is `None`" (`equity_flag_from_thresholds`
-    does this itself).
+    Returns `None` when there are fewer than 4 finite, positive-density
+    rows, or the fit degenerates (zero residual spread) -- both "too small/
+    too uniform to split" cases. Callers should treat `None` as "every
+    row's flag is `None`" (`equity_flag_from_thresholds` does this itself).
     """
-    density_var = np.asarray(pop_density, dtype=float)
-    level_of_service = np.asarray(level_of_service, dtype=float)
-    if population is None:
-        population = np.ones(density_var.shape, dtype=float)
-    population = np.asarray(population, dtype=float)
-
-    finite = np.isfinite(density_var) & np.isfinite(level_of_service) & np.isfinite(population) & (population >= 0)
+    density = np.asarray(pop_density, dtype=float)
+    los = np.asarray(level_of_service, dtype=float)
+    # 2026-09-25, explicit user request: fit the regression only on cells
+    # with level_of_service ABOVE 0 -- a true zero (no access at all) is a
+    # different kind of cell than "just poorly served," and pulling it into
+    # the fit skews the slope/intercept (and therefore the std-residual
+    # equity-flag thresholds) toward that floor. `equity_flag_from_thresholds`
+    # still APPLIES the resulting fit to every cell including zero-LOS ones
+    # -- only the FIT itself excludes them.
+    finite = np.isfinite(density) & np.isfinite(los) & (density > 0) & (los > 0)
     if finite.sum() < 4:
         return None
 
-    median_density_all = weighted_median(density_var[finite], population[finite])
-    if not np.isfinite(median_density_all):
+    x = np.log(density[finite])
+    y = los[finite]
+    slope, intercept = np.polyfit(x, y, 1)
+    residuals = y - (slope * x + intercept)
+    std_residual = float(np.std(residuals))
+    if not np.isfinite(std_residual) or std_residual == 0:
         return None
 
-    group_a = finite & (density_var > median_density_all)
-    group_b = finite & (density_var <= median_density_all)
-
-    median_density_a = weighted_median(density_var[group_a], population[group_a]) if group_a.any() else float("nan")
-    median_los_b = weighted_median(level_of_service[group_b], population[group_b]) if group_b.any() else float("nan")
-    median_density_b = weighted_median(density_var[group_b], population[group_b]) if group_b.any() else float("nan")
-    median_los_a = weighted_median(level_of_service[group_a], population[group_a]) if group_a.any() else float("nan")
-
-    return {
-        "median_density_all": median_density_all,
-        "median_density_a": median_density_a,
-        "median_los_b": median_los_b,
-        "median_density_b": median_density_b,
-        "median_los_a": median_los_a,
-    }
+    return {"slope": float(slope), "intercept": float(intercept), "std_residual": std_residual}
 
 
 def equity_flag_from_thresholds(
@@ -543,49 +529,39 @@ def equity_flag_from_thresholds(
     population: Optional[np.ndarray],
     thresholds: Optional[dict],
 ) -> np.ndarray:
-    """Apply `equity_flag_thresholds`' scalars to one (tile's worth of) rows.
+    """Apply `equity_flag_thresholds`' regression fit to one (tile's worth of) rows.
 
-    Pure per-row comparisons against the five already-computed global
-    scalars -- no row of this call needs to see any *other* row, which is
-    exactly what makes this safe to run independently per H3 tile in
+    Pure per-row math against the three already-fit global scalars -- no
+    row of this call needs to see any *other* row, which is exactly what
+    makes this safe to run independently per H3 tile in
     `code.pipeline.build_h3_by_resolution_chunked` while still reproducing
-    the whole-city `equity_flag` split exactly (see that function's
-    docstring and `equity_flag_thresholds`'s).
+    the whole-city `equity_flag` split exactly. `population` is accepted
+    for signature compatibility but unused -- see `equity_flag`'s docstring.
     """
-    density_var = np.asarray(pop_density, dtype=float)
-    level_of_service = np.asarray(level_of_service, dtype=float)
-    flags = np.full(density_var.shape, None, dtype=object)
+    density = np.asarray(pop_density, dtype=float)
+    los = np.asarray(level_of_service, dtype=float)
+    flags = np.full(density.shape, None, dtype=object)
     if thresholds is None:
         return flags
-    if population is None:
-        population = np.ones(density_var.shape, dtype=float)
-    population = np.asarray(population, dtype=float)
 
-    finite = np.isfinite(density_var) & np.isfinite(level_of_service) & np.isfinite(population) & (population >= 0)
+    finite = np.isfinite(density) & np.isfinite(los) & (density > 0)
     if not finite.any():
         return flags
 
-    group_a = finite & (density_var > thresholds["median_density_all"])
-    group_b = finite & (density_var <= thresholds["median_density_all"])
+    predicted = np.full(density.shape, np.nan)
+    predicted[finite] = thresholds["slope"] * np.log(density[finite]) + thresholds["intercept"]
+    residual = los - predicted
+    std = thresholds["std_residual"]
 
-    density_flag = np.zeros(density_var.shape, dtype=bool)
-    if np.isfinite(thresholds["median_density_a"]):
-        density_flag[group_a] = density_var[group_a] > thresholds["median_density_a"]
-    access_flag = np.zeros(density_var.shape, dtype=bool)
-    if np.isfinite(thresholds["median_los_b"]):
-        access_flag[finite] = level_of_service[finite] < thresholds["median_los_b"]
-    more_transit = np.zeros(density_var.shape, dtype=bool)
-    more_transit[finite] = density_flag[finite] & access_flag[finite]
-
-    density_flag_low = np.zeros(density_var.shape, dtype=bool)
-    if np.isfinite(thresholds["median_density_b"]):
-        density_flag_low[group_b] = density_var[group_b] < thresholds["median_density_b"]
-    access_flag_high = np.zeros(density_var.shape, dtype=bool)
-    if np.isfinite(thresholds["median_los_a"]):
-        access_flag_high[finite] = level_of_service[finite] > thresholds["median_los_a"]
-    more_housing = np.zeros(density_var.shape, dtype=bool)
-    more_housing[finite] = density_flag_low[finite] & access_flag_high[finite]
-
-    flags[more_transit] = "more_transit"
-    flags[more_housing] = "more_housing"
+    flags[finite & (residual > std)] = "more_housing"
+    # 2026-09-29, explicit user request: "for more transit cells require
+    # besides the current std things that the population density is above
+    # 1000 pers/km2" -- a cell more than 1 std below the regression line is
+    # still only flagged "more_transit" if it's also genuinely dense enough
+    # to justify new transit investment; a sparse, under-served cell (e.g.
+    # a rural edge of the study area) no longer qualifies. "more_housing"
+    # is unaffected -- that flag identifies already-well-served cells as
+    # housing-development candidates, where density isn't the gating
+    # concern.
+    flags[finite & (residual < -std) & (density > 1000)] = "more_transit"
     return flags

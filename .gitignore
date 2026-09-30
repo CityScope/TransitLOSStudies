@@ -62,3 +62,12 @@ build/
 !/city_science_network/taipei/run.py
 /city_science_network/toronto/*
 !/city_science_network/toronto/run.py
+
+# --- usa_study: nationwide study. Keep code/main.py/prompt, ignore data. ---
+# `data/` holds per-state downloaded GTFS + every generated geoparquet
+# (hundreds of MB per state, fully regenerable by re-running main.py);
+# `osm_files/` holds downloaded Geofabrik .osm.pbf extracts (per state,
+# ~100-300MB each) -- same rationale, and re-downloading is cheap/cached
+# by `county_pipeline.get_state_pbf` on the target machine anyway.
+/usa_study/data/
+/usa_study/osm_files/

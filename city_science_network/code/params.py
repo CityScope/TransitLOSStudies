@@ -2,12 +2,14 @@
 
 Per the study's "standard parameters (same for all stops)" requirement, one
 fixed `StudyParams` instance is used for every city regardless of continent
--- this deliberately does *not* switch `region` per city, even though
-`transitlos.scoring.parameters.REGIONS` offers continent-specific literature
-defaults ("europe", "north_america", "global_south"). Using `region="global"`
-uniformly is an explicit simplifying assumption (flagged here, not buried),
-trading regional calibration accuracy for one comparable score scale across
-all six cities.
+-- this deliberately does *not* switch `region` per city. **2026-09-28**:
+`transitlos.scoring.parameters.REGIONS` no longer encodes genuine
+region-specific literature defaults at all -- the finalized scoring model
+(scoring.md Section 3.3) found no defensible region-specific override for
+any of its parameters, so every `REGIONS` key ("global", "europe",
+"north_america", "global_south") now maps to identical, universal values.
+Using `region="global"` uniformly therefore no longer trades away any real
+regional calibration accuracy; it is kept only for API-call-site stability.
 """
 
 from __future__ import annotations
@@ -25,7 +27,8 @@ class StudyParams:
         region: `transitlos.scoring.parameters.REGIONS` key used for every
             city's stop/LOS scoring. Fixed at `"global"` study-wide (see
             module docstring) so every city's `level_of_service` is on the same
-            scale -- never set per-city.
+            scale -- never set per-city. Kept for API-call-site stability
+            only; every `REGIONS` key now resolves to identical parameters.
         walk_distance_steps: Isochrone distance thresholds (meters) forwarded
             to `transitlos.level_of_service.compute_level_of_service`. The
             literature-standard bands are 400/800/1200m (TCRP 95 /

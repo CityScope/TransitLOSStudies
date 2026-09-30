@@ -518,7 +518,11 @@ var OVERVIEW_ZOOM_THRESHOLD = 5;
 // yet.
 function __scoreColor(v) {{
   if (v == null || isNaN(v)) return '#888';
-  v = Math.max(0, Math.min(1, v));
+  // 2026-09-25, explicit user request: level_of_service is a 0-100 scale
+  // (the 2026-09 rescale), not 0-1 -- this clamp/interpolation must match,
+  // or every real score (all >> 1) clamps to the same top-of-scale green
+  // regardless of its actual value.
+  v = Math.max(0, Math.min(100, v)) / 100;
   var stops = v < 0.5
     ? [[214, 47, 39], [255, 208, 66], v * 2]
     : [[255, 208, 66], [26, 152, 80], (v - 0.5) * 2];
@@ -556,7 +560,7 @@ function __applyOverviewMarkerScore(key, score) {{
   ref.circleEl.style.background = __scoreColor(score);
   var c = null;
   for (var i = 0; i < CITIES.length; i++) if (CITIES[i].key === key) c = CITIES[i];
-  ref.labelEl.textContent = (c ? c.display_name : key) + (score != null ? ' — ' + score.toFixed(2) : '');
+  ref.labelEl.textContent = (c ? c.display_name : key) + (score != null ? ' — ' + score.toFixed(1) : '');
 }}
 window.__onPlaceRankComputed = function(results) {{
   results.forEach(function(r) {{
@@ -693,7 +697,7 @@ function ensureOverviewMap() {{
       var label = document.createElement('div');
       label.className = 'overviewMarker';
       label.style.cssText = 'position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:3px;';
-      label.textContent = c.display_name + (score != null ? ' — ' + score.toFixed(2) : '');
+      label.textContent = c.display_name + (score != null ? ' — ' + score.toFixed(1) : '');
       wrap.appendChild(circle);
       wrap.appendChild(label);
       __overviewMarkerRefs[c.key] = {{circleEl: circle, labelEl: label}};

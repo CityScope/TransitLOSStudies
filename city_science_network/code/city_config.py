@@ -149,6 +149,27 @@ class CityConfig:
     # gap -- for a city where the census join already covers the whole AOI,
     # this is a no-op (no cell will ever have a null population to fill).
     census_worldpop_gapfill: bool = False
+    # 2026-09-29, explicit user request ("any hexagon... that touches the
+    # border of israel in beerseba should be deleted"): when True,
+    # `_filter_cells_touching_country_border` (pipeline.py) drops every h3
+    # cell whose geometry intersects the OSM/Nominatim-geocoded national
+    # boundary line of `border_country_geocode_name` -- a cell straddling
+    # (or exactly abutting) the line is dropped outright, not clipped to
+    # the in-country portion, since a fractional cell can't honestly carry
+    # a single equity flag/level_of_service value. Beersheba's AOI (a union
+    # of Negev-region localities near the West Bank/Gaza/Egypt frontiers)
+    # is the motivating case -- a border-touching cell there is politically
+    # sensitive to show at all, not just a data-quality nuisance. Runs
+    # after every census/WorldPop join (so the equity-flag regression and
+    # every downstream stat/map layer never sees these cells), gated
+    # separately from `census_worldpop_gapfill` since a future border city
+    # might need one flag without the other.
+    exclude_cells_touching_country_border: bool = False
+    # Nominatim geocode query for the border-clip above (`country`'s ISO
+    # code alone isn't a valid Nominatim query, so this is a separate plain-
+    # text field, not derived from `country`). Always set this explicitly
+    # whenever `exclude_cells_touching_country_border=True`.
+    border_country_geocode_name: str | None = None
 
     @property
     def uses_census(self) -> bool:
@@ -324,6 +345,10 @@ CITY_CONFIGS: dict[str, CityConfig] = {
         # villages CBS deliberately never surveys. See
         # `CityConfig.census_worldpop_gapfill`'s docstring.
         census_worldpop_gapfill=True,
+        # See `CityConfig.exclude_cells_touching_country_border`'s
+        # docstring -- explicit user request, 2026-09-29.
+        exclude_cells_touching_country_border=True,
+        border_country_geocode_name="Israel",
     ),
     "concepcion": CityConfig(
         key="concepcion",

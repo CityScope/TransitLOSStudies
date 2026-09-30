@@ -52,6 +52,7 @@ from .stats import (
     equity_flag_from_thresholds,
     equity_flag_thresholds,
     linreg,
+    weighted_mean,
     weighted_median,
     weighted_median_split_anova,
 )
@@ -548,18 +549,28 @@ SHARE_COLUMNS: dict[str, list[tuple[str, str]]] = {
     # -- WorldPop census-gap-fill age/sex breakdown (`worldpop_*` -- see
     # `CityConfig.census_worldpop_gapfill`/`_add_worldpop_gapfill`). Added
     # 2026-08-25 for Beersheba's real ~49%-by-area CBS coverage gap.
-    # Denominated over the existing bare `population` column (WorldPop
-    # `pop`-family, already covers the whole grid including gap cells) --
-    # NOT a new `worldpop_population` -- see `_add_worldpop_gapfill`'s
-    # docstring for why. `is_relative_field` (transitLOS/map/build.py)
+    # Denominated over WorldPop's own population (`pop`-family, already
+    # covers the whole grid including gap cells), NEVER the map-facing
+    # `population` column -- once `_finalize_population_columns` derives
+    # `population` fresh per-city (which can be `census_residents` or even
+    # `census_residents` + jobs for Boston/SF), using it here would silently
+    # divide a WorldPop numerator by a non-WorldPop, non-comparable
+    # denominator. `"population_worldpop"` (Hamburg's Zensus-replaces-
+    # `population` stash -- see `_join_zensus_grid_population`) is checked
+    # FIRST so Hamburg divides by its own real pre-replacement WorldPop
+    # figure rather than the Zensus count that has, by this point, already
+    # overwritten bare `population` in place; every other city falls
+    # through to bare `population`, which -- at the point `_add_share_columns`
+    # runs (before `_finalize_population_columns`) -- is still WorldPop's
+    # raw, un-rederived count. `is_relative_field` (transitLOS/map/build.py)
     # picks these up via the "share" name marker like every other share
     # here, so they surface correctly in the map's ANOVA/opacity dropdowns.
-    "worldpop_male_share": [("worldpop_malePopulation", "population")],
-    "worldpop_female_share": [("worldpop_femalePopulation", "population")],
-    "worldpop_children_share": [("worldpop_under18Population", "population")],
-    "worldpop_elderly_share": [("worldpop_over65Population", "population")],
-    "worldpop_adult_share": [("worldpop_adultPopulation", "population")],
-    "worldpop_urban_share": [("worldpop_urbanPopulation", "population")],
+    "worldpop_male_share": [("worldpop_malePopulation", "population_worldpop"), ("worldpop_malePopulation", "population")],
+    "worldpop_female_share": [("worldpop_femalePopulation", "population_worldpop"), ("worldpop_femalePopulation", "population")],
+    "worldpop_children_share": [("worldpop_under18Population", "population_worldpop"), ("worldpop_under18Population", "population")],
+    "worldpop_elderly_share": [("worldpop_over65Population", "population_worldpop"), ("worldpop_over65Population", "population")],
+    "worldpop_adult_share": [("worldpop_adultPopulation", "population_worldpop"), ("worldpop_adultPopulation", "population")],
+    "worldpop_urban_share": [("worldpop_urbanPopulation", "population_worldpop"), ("worldpop_urbanPopulation", "population")],
 
     # -- WorldPop `urbanPopulation` (added 2026-08-25, see
     # `pycensus.countries.worldwide.worldpop.loader`'s module docstring for
@@ -678,8 +689,8 @@ def _add_share_columns(gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     return gdf
 
 
-def _share_column_sources(gdf) -> dict[str, str]:
-    """`share_col_name -> numerator_col` for every real `SHARE_COLUMNS` entry present on `gdf`.
+def _share_column_sources(gdf) -> dict[str, tuple[str, str]]:
+    """`share_col_name -> (numerator_col, denominator_col)` for every real `SHARE_COLUMNS` entry present on `gdf`.
 
     Re-derives (rather than records at compute time) which numerator/
     denominator candidate `_add_share_columns` actually used for each share
@@ -695,15 +706,47 @@ def _share_column_sources(gdf) -> dict[str, str]:
     its own left on `gdf` (its raw source column is dropped once rescaled --
     see `_add_share_columns`), so those keep their own standalone row.
     """
-    out: dict[str, str] = {}
+    out: dict[str, tuple[str, str]] = {}
     for share_name, candidates in SHARE_COLUMNS.items():
         if share_name not in gdf.columns:
             continue
         for num_col, den_col in candidates:
             if num_col in gdf.columns and den_col in gdf.columns:
-                out[share_name] = num_col
+                out[share_name] = (num_col, den_col)
                 break
     return out
+
+
+def _write_census_metadata_json(
+    city_dir: Path,
+    stats_grid,
+    h3_by_resolution: dict,
+    census_by_level: Optional[dict],
+    country: Optional[str],
+    share_source_map: dict,
+) -> Path:
+    """Write `results/census_metadata.json`: one entry per real census/WorldPop column.
+
+    2026-09-22, explicit user request: every transit study should produce a
+    standalone `census_metadata.json` (name, source, country, total, mean,
+    share, share_column, native_levels, resampled_levels,
+    resampling_up_method, resampling_down_method, description) alongside
+    the same info already shown on the map's own "Metadata" tab -- reuses
+    `transitlos.map.build._column_metadata_rows` (the exact function that
+    builds that tab) so the file and the tab can never drift apart; this is
+    a second, cheap call over already-in-memory data (no recomputation of
+    anything expensive), not a separate code path.
+    """
+    from transitlos.map.build import _column_metadata_rows
+
+    rows = _column_metadata_rows(
+        stats_grid, share_source_map=share_source_map,
+        h3_by_resolution=h3_by_resolution, census_by_level=census_by_level, country=country,
+    )
+    out_path = Path(city_dir) / "results" / "census_metadata.json"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(rows, indent=2))
+    return out_path
 
 
 # --------------------------------------------------------------------------
@@ -733,6 +776,35 @@ def _share_column_sources(gdf) -> dict[str, str]:
 
 POP_JOBS_TOTAL_COLUMN = "pop_jobs_total"
 POP_JOBS_DENSITY_COLUMN = "pop_jobs_density"
+
+# `census_residents` / `worldpop_residents` (2026-09-23, explicit user
+# request): every city should carry two clearly-named, unambiguous
+# population columns -- the real census-source resident count
+# (`census_residents`, absent only for Shanghai, which has no real census
+# join at all) and WorldPop's own modeled count (`worldpop_residents`,
+# present everywhere). Both are materialized once, at the very end of grid
+# preparation (`_finalize_population_columns`/`_finalize_population_columns_polars`,
+# called from `prepare_grid_for_map`/`_prepare_grid_polars` and from
+# `_census_geometries_with_score`), from whatever `_census_population_column`/
+# `_worldpop_population_column` resolve to at that point -- see those two
+# functions' docstrings for exactly which source column each name means per
+# city/path. The map-facing `population` column is then (re)derived fresh
+# from these two per `WORLDPOP_ONLY_POPULATION_CITIES`/jobs-presence (see
+# `_finalize_population_columns`), so `population`'s meaning is never left
+# to whichever raw source happened to land in that name first.
+CENSUS_RESIDENTS_COLUMN = "census_residents"
+WORLDPOP_RESIDENTS_COLUMN = "worldpop_residents"
+
+# Cities where the map-facing `population` column should be a duplicate of
+# `worldpop_residents` rather than `census_residents`, even though a real
+# census join exists (Beersheba, Andorra) or doesn't (Shanghai, which would
+# fall back to WorldPop here regardless -- included for clarity/robustness,
+# not because it changes behavior). Every other `uses_census` city instead
+# gets `population = census_residents` (Boston/San Francisco additionally
+# add their jobs count -- see `_finalize_population_columns`), and every
+# non-`uses_census`, non-Shanghai-like WorldPop-only city (none exist today,
+# but the fallback below covers one anyway) gets `worldpop_residents` too.
+WORLDPOP_ONLY_POPULATION_CITIES = frozenset({"beerseba", "shanghai", "andorra"})
 
 # Checked in order; the first one present on the grid wins. `lodes_wac_*` is
 # what `pycensus.countries.usa.lodes_wac` produces; the rest are the plain names a non-US
@@ -827,6 +899,43 @@ def _global_schema_feature_names() -> frozenset[str]:
 _RENAME_EXCLUDED_CANONICAL_NAMES = frozenset({"population"})
 
 
+def _restore_population_prefix(gdf: gpd.GeoDataFrame, prefix: str) -> gpd.GeoDataFrame:
+    """Re-prefix a country census loader's `population` column right after loading it.
+
+    pyCensus's `apply_canonical_names` (added during its 2026-09 schema
+    redesign) now runs unconditionally inside every country loader's own
+    `load()`, renaming that source's population column down to the bare
+    canonical name `"population"` before this pipeline ever sees it --
+    directly at odds with the invariant documented just above
+    (`_RENAME_EXCLUDED_CANONICAL_NAMES`): this file reserves bare
+    `"population"` EXCLUSIVELY for WorldPop's own count, and expects every
+    census source's own population under its source-prefixed name (e.g.
+    `dhc_population`, `inegi_population`) so `SHARE_COLUMNS` denominators,
+    `_interpolate_acs_to_dhc_blocks`, and `DHC_KEEP_COLUMNS`/-equivalents
+    keep resolving it. Discovered live 2026-09-29 (`_interpolate_acs_to_
+    dhc_blocks` crashed with `KeyError: 'dhc_population'` once
+    `dhc.load()`'s real output was actually exercised end-to-end).
+
+    Call this immediately after EVERY country census loader's `.load(...)`
+    call, before the result reaches any other logic in this file -- fixing
+    it at this one boundary point per source, rather than renaming the
+    ~70 downstream `<prefix>_population` references, keeps every existing
+    consumer correct without touching them.
+
+    Args:
+        gdf: A country loader's raw `load()` return value.
+        prefix: That source's column prefix (e.g. `"dhc"`, `"inegi"`).
+
+    Returns:
+        `gdf` with `population` renamed to `f"{prefix}_population"`, or
+        `gdf` unchanged if it has no bare `population` column (e.g.
+        already prefixed, or empty) or already has the prefixed name.
+    """
+    if "population" in gdf.columns and f"{prefix}_population" not in gdf.columns:
+        gdf = gdf.rename(columns={"population": f"{prefix}_population"})
+    return gdf
+
+
 def _rename_canonical_columns(gdf):
     """Rename every prefixed column whose de-prefixed name is a real `global_schema.json` feature to that bare name.
 
@@ -900,18 +1009,29 @@ def _census_columns(gdf) -> list[str]:
 
 
 def _population_column(gdf) -> Optional[str]:
-    """Which column holds the resident headcount `pop_density` was built from.
+    """Which column holds the resident headcount `pop_density`/weighting was built from.
 
-    Since `_rename_canonical_columns` renames every country's census-join
-    `<prefix>population` to bare `population` immediately after that join,
-    the primary case is just the literal `"population"` column (checked
-    first). The prefixed fallbacks below stay as a safety net for any grid
-    that reaches this function *before* the rename step has run (or a future
-    census join site that forgets to call it) -- so a non-US city's
-    census-geometry map layer still computes real density/equity stats
-    instead of silently getting `pop_density=NaN` everywhere (the
-    stale-hardcoded-column-list anti-pattern IMPLEMENTING_A_COUNTRY.md warns
-    about).
+    NOTE (2026-09-23): despite the name, bare `"population"` is NEVER
+    renamed onto by `_rename_canonical_columns` (`"population"` is the one
+    name `_RENAME_EXCLUDED_CANONICAL_NAMES` deliberately excludes from that
+    rename -- see its own docstring). This function is the generic
+    "whatever headcount this grid currently has" lookup used BEFORE
+    `_finalize_population_columns` has run (weighting resamples, the
+    equity-flag split, `_add_pop_jobs_columns`'s no-op guard, ...): bare
+    `population` when present (WorldPop's raw count pre-census-join, or --
+    for Hamburg only -- the real Zensus grid count that replaces it in
+    place) is checked first, with a `<prefix>population` fallback for any
+    grid this runs on before a census join has landed at all (a non-US
+    city's census-geometry map layer, or a future census-join site that
+    forgets to call `_rename_canonical_columns`) -- so it still computes
+    real density/equity stats instead of silently getting `pop_density=NaN`
+    everywhere (the stale-hardcoded-column-list anti-pattern
+    IMPLEMENTING_A_COUNTRY.md warns about). After
+    `_finalize_population_columns` has run, bare `population` is instead the
+    per-city DERIVED map-facing figure (see that function's docstring) --
+    this function still resolves to it correctly since it's still the first
+    bare-name check, it just no longer means "raw WorldPop" once that step
+    has run.
     """
     for col in ("population", *(f"{prefix}population" for prefix in CENSUS_COLUMN_PREFIXES)):
         if col in gdf.columns:
@@ -963,12 +1083,36 @@ def _census_population_column(gdf) -> Optional[str]:
     `"population"` name entirely: that name is reserved for WorldPop's own
     count (see `_population_column`'s docstring / `_RENAME_EXCLUDED_CANONICAL_NAMES`),
     so `population_density` (item 4, CENSUS population specifically) must
-    never silently fall back to it. `worldpop_population` is never a real
-    column name (see `_add_worldpop_gapfill`'s docstring), so iterating
-    `CENSUS_COLUMN_PREFIXES` including `"worldpop_"` here is harmless -- that
-    combination never exists.
+    never silently fall back to it.
+
+    2026-09-22 bug fix: this docstring used to claim iterating
+    `CENSUS_COLUMN_PREFIXES` (which includes `"worldpop_"`, for
+    `_add_worldpop_gapfill`'s own `worldpop_malePopulation`-style columns)
+    was harmless here because `"worldpop_population"` (the one name that
+    prefix+`"population"` combination would produce) "is never a real
+    column name" -- true when written, but a real `worldpop_population`
+    column now exists on every map (added 2026-09-06, see that commit's
+    "I want worldpop population column to appear on all maps" request),
+    which made this function silently return WorldPop's OWN total as if it
+    were a real census count -- live-caught via the `worldpop_overestimation`/
+    `worldpop_underestimation` columns (see `_add_worldpop_outside_census_columns`)
+    coming out as a suspicious flat zero on Shanghai, a country with no real
+    census join at all. `"worldpop_"` is explicitly excluded from the
+    prefix scan now.
     """
+    # Hamburg special case: `_join_zensus_grid_population` replaces bare
+    # `population` IN PLACE with the real Destatis Zensus grid count (a
+    # strictly better census source than the admin-polygon `destatis_population`
+    # coverage column that may also be present -- see that function's own
+    # docstring) and stashes the pre-replacement WorldPop value under
+    # `population_worldpop`. Whenever that stash exists, bare `population`
+    # IS the real census figure, so it must be returned here instead of (or
+    # in preference to) any `<prefix>population` column.
+    if "population_worldpop" in gdf.columns:
+        return "population"
     for prefix in CENSUS_COLUMN_PREFIXES:
+        if prefix == "worldpop_":
+            continue
         col = f"{prefix}population"
         if col in gdf.columns:
             return col
@@ -987,10 +1131,136 @@ def _worldpop_population_column(gdf) -> Optional[str]:
     `worldpop_population_map_source` (see that function's own comment) when
     bare `population` is already taken by a real census count.
     """
-    for col in ("population", "worldpop_population_map_source"):
+    for col in ("population_worldpop", "worldpop_population_map_source", "population"):
         if col in gdf.columns:
             return col
     return None
+
+
+def _finalize_population_columns(gdf, uses_census: bool, worldpop_only_population: bool = False):
+    """Materialize `census_residents`/`worldpop_residents` and (re)derive map-facing `population`.
+
+    Call this LAST, after every other population-derived column
+    (`_add_pop_jobs_columns`, `_add_derived_density_columns`,
+    `_add_worldpop_outside_census_columns`) has already run and read
+    whatever `_population_column`/`_census_population_column`/
+    `_worldpop_population_column` resolved to at that point -- this function
+    renames/overwrites those source columns, so anything reading them
+    afterwards would get the wrong (already-finalized) value.
+
+    - `worldpop_residents` = `_worldpop_population_column(gdf)`'s value
+      (always present). The old duplicate-under-another-name columns that
+      value used to live under (`population_worldpop` -- Hamburg's
+      pre-Zensus WorldPop stash; `worldpop_population_map_source` -- the
+      census-polygon path's WorldPop fallback aggregate) are dropped.
+    - `census_residents` = `_census_population_column(gdf)`'s value, when
+      `uses_census` and a real census source is present (absent for
+      Shanghai, and for any city whose census join happened to fail for
+      this AOI). The now-redundant source column (e.g. `cbs_population`,
+      `inegi_population`) is dropped, EXCEPT when that source was bare
+      `population` itself (Hamburg's Zensus-grid-replaces-`population`
+      special case), since bare `population` is about to be overwritten
+      below anyway.
+    - `population` (overwritten in place, always ends up present) =
+        - `worldpop_residents`, for `worldpop_only_population` cities
+          (Beersheba/Andorra by explicit user request) or any city with no
+          `census_residents` at all (Shanghai);
+        - `census_residents` + the jobs column's value, for a city with
+          both a real census and a jobs count (Boston/San Francisco) --
+          same nansum-preserving-the-one-real-side semantics as
+          `_add_pop_jobs_columns`, recomputed fresh rather than reused
+          verbatim since `pop_jobs_total` is defined from
+          `_population_column`'s pre-finalize value (WorldPop pre-census on
+          the h3 path), not `census_residents` specifically;
+        - `census_residents`, for every other `uses_census` city.
+      `pop_density` (the plain, pre-existing people-per-km2 column, not
+      `population_density`) is recomputed from this new value so it stays
+      consistent with what `population` now means.
+    """
+    worldpop_col = _worldpop_population_column(gdf)
+    if worldpop_col is not None:
+        gdf[WORLDPOP_RESIDENTS_COLUMN] = gdf[worldpop_col].astype(float)
+
+    census_col = _census_population_column(gdf) if uses_census else None
+    if census_col is not None:
+        gdf[CENSUS_RESIDENTS_COLUMN] = gdf[census_col].astype(float)
+        if census_col != "population":
+            gdf = gdf.drop(columns=[census_col])
+
+    jobs_col = jobs_column(gdf)
+    if CENSUS_RESIDENTS_COLUMN in gdf.columns and not worldpop_only_population:
+        if jobs_col is not None:
+            census_val = gdf[CENSUS_RESIDENTS_COLUMN].to_numpy(dtype=float)
+            jobs_val = gdf[jobs_col].to_numpy(dtype=float)
+            total = np.nansum(np.vstack([census_val, jobs_val]), axis=0)
+            total[np.isnan(census_val) & np.isnan(jobs_val)] = np.nan
+            new_population = total
+        else:
+            new_population = gdf[CENSUS_RESIDENTS_COLUMN].to_numpy(dtype=float)
+    elif WORLDPOP_RESIDENTS_COLUMN in gdf.columns:
+        new_population = gdf[WORLDPOP_RESIDENTS_COLUMN].to_numpy(dtype=float)
+    else:
+        new_population = None
+
+    if new_population is not None:
+        gdf["population"] = new_population
+        if "area_m2" in gdf.columns:
+            area_km2 = gdf["area_m2"].to_numpy(dtype=float) / 1e6
+            gdf["pop_density"] = gdf["population"].to_numpy(dtype=float) / np.where(area_km2 > 0, area_km2, np.nan)
+
+    drop_leftover = [
+        c for c in ("population_worldpop", "worldpop_population_map_source", "worldpop_population")
+        if c in gdf.columns
+    ]
+    if drop_leftover:
+        gdf = gdf.drop(columns=drop_leftover)
+    return gdf
+
+
+def _finalize_population_columns_polars(df: pl.DataFrame, uses_census: bool, worldpop_only_population: bool = False) -> pl.DataFrame:
+    """Polars mirror of `_finalize_population_columns` -- see that function's docstring."""
+    worldpop_col = _worldpop_population_column(df)
+    if worldpop_col is not None:
+        df = df.with_columns(pl.col(worldpop_col).cast(pl.Float64).alias(WORLDPOP_RESIDENTS_COLUMN))
+
+    census_col = _census_population_column(df) if uses_census else None
+    if census_col is not None:
+        df = df.with_columns(pl.col(census_col).cast(pl.Float64).alias(CENSUS_RESIDENTS_COLUMN))
+        if census_col != "population":
+            df = df.drop(census_col)
+
+    jobs_col = jobs_column(df)
+    new_population_expr = None
+    if CENSUS_RESIDENTS_COLUMN in df.columns and not worldpop_only_population:
+        if jobs_col is not None:
+            new_population_expr = (
+                pl.when(_nan_or_null(CENSUS_RESIDENTS_COLUMN) & _nan_or_null(jobs_col))
+                .then(None)
+                .otherwise(
+                    pl.when(_nan_or_null(CENSUS_RESIDENTS_COLUMN)).then(0.0).otherwise(pl.col(CENSUS_RESIDENTS_COLUMN))
+                    + pl.when(_nan_or_null(jobs_col)).then(0.0).otherwise(pl.col(jobs_col))
+                )
+            ).cast(pl.Float64)
+        else:
+            new_population_expr = pl.col(CENSUS_RESIDENTS_COLUMN).cast(pl.Float64)
+    elif WORLDPOP_RESIDENTS_COLUMN in df.columns:
+        new_population_expr = pl.col(WORLDPOP_RESIDENTS_COLUMN).cast(pl.Float64)
+
+    if new_population_expr is not None:
+        df = df.with_columns(new_population_expr.alias("population"))
+        if "area_m2" in df.columns:
+            safe_area = pl.Series(
+                "__safe_area_km2", np.where(df["area_m2"].cast(pl.Float64).to_numpy() / 1e6 > 0, df["area_m2"].cast(pl.Float64).to_numpy() / 1e6, np.nan)
+            )
+            df = df.with_columns((pl.col("population").cast(pl.Float64) / safe_area).alias("pop_density"))
+
+    drop_leftover = [
+        c for c in ("population_worldpop", "worldpop_population_map_source", "worldpop_population")
+        if c in df.columns
+    ]
+    if drop_leftover:
+        df = df.drop(drop_leftover)
+    return df
 
 
 # --------------------------------------------------------------------------
@@ -1069,6 +1339,63 @@ def _add_derived_density_columns(gdf):
     return gdf
 
 
+def _add_worldpop_outside_census_columns(gdf):
+    """Add `worldpop_overestimation`/`worldpop_underestimation` (absolute) and their `_share` ratios.
+
+    2026-09-22, explicit user request (original version): "add a new column
+    to distribution worldpop outside census with the population (resampled)
+    from worldpop per census polygon or h3 cell minus the census population
+    value and for the share value use the census population value but allow
+    negative or positive values... for anova and regression use this share
+    value for distribution use the subtraction just. This column should not
+    exist for maps only with worldpop data but no census." Later replaced,
+    verbatim: "Instead of worldpop outside census do two columns: worldpop
+    overestimation (more worldpop than census) and worldpop underestimation
+    (less worldpop than census population). Both column with absolute
+    values. And the relative version should be overestimation / worldpop
+    and underestimation / census." A no-op (`gdf` returned unchanged) unless
+    BOTH a real census-source population column (`_census_population_column`)
+    and WorldPop's own (`_worldpop_population_column`) are present -- a
+    WorldPop-only country (no census join at all) never has a
+    `_census_population_column`, so it never gets any of these four
+    columns, matching that request exactly. Same "recompute fresh after
+    every resample, from already-resampled absolute columns" pattern as
+    `_add_derived_density_columns`/`_add_pop_jobs_columns` (both plain
+    elementwise math over two additive columns, never itself resampled).
+
+    `worldpop_overestimation` = max(0, worldpop - census): how much MORE
+    WorldPop's raster estimate counted than the real census, floored at
+    zero (no `_RELATIVE_MARKERS` substring, so
+    `transitlos.map.build.is_relative_field` naturally routes it to
+    Distribution's absolute-fields list). `worldpop_underestimation` =
+    max(0, census - worldpop): how much FEWER WorldPop counted than the
+    real census, also floored at zero. Together they split the old signed
+    `worldpop_outside_census` difference into two always-nonnegative
+    magnitudes (one of the two is always exactly 0 for any given row).
+
+    `worldpop_overestimation_share`/`worldpop_underestimation_share` (the
+    `_share` suffix routes them to ANOVA/Regression/Opacity): the absolute
+    columns divided by WorldPop's own count and the real census count
+    respectively (NOT by each other's numerator's source, per the user's
+    "overestimation / worldpop and underestimation / census"), NaN where
+    the respective denominator is zero/missing -- same zero-denominator
+    convention as the old `worldpop_outside_census_share`.
+    """
+    census_col = _census_population_column(gdf)
+    worldpop_col = _worldpop_population_column(gdf)
+    if census_col is None or worldpop_col is None:
+        return gdf
+    census_pop = gdf[census_col].to_numpy(dtype=float)
+    worldpop_pop = gdf[worldpop_col].to_numpy(dtype=float)
+    overestimation = np.maximum(0.0, worldpop_pop - census_pop)
+    underestimation = np.maximum(0.0, census_pop - worldpop_pop)
+    gdf["worldpop_overestimation"] = overestimation
+    gdf["worldpop_underestimation"] = underestimation
+    gdf["worldpop_overestimation_share"] = overestimation / np.where(worldpop_pop != 0, worldpop_pop, np.nan)
+    gdf["worldpop_underestimation_share"] = underestimation / np.where(census_pop != 0, census_pop, np.nan)
+    return gdf
+
+
 def _add_derived_density_columns_polars(df: pl.DataFrame) -> pl.DataFrame:
     """Polars mirror of `_add_derived_density_columns`."""
     if "area_m2" in df.columns:
@@ -1118,6 +1445,31 @@ def _add_derived_density_columns_polars(df: pl.DataFrame) -> pl.DataFrame:
     if POP_JOBS_DENSITY_COLUMN in df.columns:
         df = df.with_columns(pl.col(POP_JOBS_DENSITY_COLUMN).alias("jobs_and_population_density"))
     return df
+
+
+def _add_worldpop_outside_census_columns_polars(df: pl.DataFrame) -> pl.DataFrame:
+    """Polars mirror of `_add_worldpop_outside_census_columns` -- see that function's docstring."""
+    census_col = _census_population_column(df)
+    worldpop_col = _worldpop_population_column(df)
+    if census_col is None or worldpop_col is None:
+        return df
+    census_f = pl.col(census_col).cast(pl.Float64)
+    worldpop_f = pl.col(worldpop_col).cast(pl.Float64)
+    overestimation = (worldpop_f - census_f).clip(lower_bound=0.0)
+    underestimation = (census_f - worldpop_f).clip(lower_bound=0.0)
+    return df.with_columns(
+        overestimation.alias("worldpop_overestimation"),
+        underestimation.alias("worldpop_underestimation"),
+    ).with_columns(
+        pl.when(worldpop_f != 0)
+        .then(pl.col("worldpop_overestimation") / worldpop_f)
+        .otherwise(None)
+        .alias("worldpop_overestimation_share"),
+        pl.when(census_f != 0)
+        .then(pl.col("worldpop_underestimation") / census_f)
+        .otherwise(None)
+        .alias("worldpop_underestimation_share"),
+    )
 
 
 def population_filter_column(gdf) -> Optional[str]:
@@ -1209,9 +1561,11 @@ def development_density_column(gdf) -> str:
 # below do. `build.py` itself is shared across studies and stays untouched.
 # --------------------------------------------------------------------------
 
-# `area_m2` is grid bookkeeping (never real census/WorldPop data), and
-# `worldpop_population_map_source` is an internal provenance flag column --
-# neither belongs in any analysis/dropdown selector.
+# `area_m2` is grid bookkeeping (never real census/WorldPop data), so it
+# doesn't belong in any analysis/dropdown selector. The old
+# `worldpop_population_map_source` provenance-flag column no longer exists
+# at all (see `_finalize_population_columns`: its value is now carried under
+# the real `worldpop_residents` column instead), so it's gone from this set.
 #
 # `population` USED to be excluded here too (a raw headcount reads the same
 # as `pop_density` on an h3 grid, where every cell has equal area, but stops
@@ -1220,11 +1574,15 @@ def development_density_column(gdf) -> str:
 # ("make sure all maps have a population column, a worldpop population
 # column, all other census and worldpop columns" -- 2026-09-07), every
 # count-type selector (circle-size, distribution, place-rank) must include
-# `population` again, alongside `worldpop_population` and every other real
-# count column. See `transitlos.map.build`'s `_numeric_field_candidates`/
-# `absolute_fields`, which is what actually builds the canonical
-# count-fields list every one of those selectors now shares.
-MAP_FIELD_EXCLUDE = frozenset({"area_m2", "worldpop_population_map_source"})
+# `population` again. 2026-09-23: `population` is now a clean, always-
+# derived column (see `_finalize_population_columns`) and `census_residents`/
+# `worldpop_residents` are real, independently useful count columns too, so
+# none of the three are excluded here -- all three are offered in every
+# count-type selector alongside every other real count column. See
+# `transitlos.map.build`'s `_numeric_field_candidates`/`absolute_fields`,
+# which is what actually builds the canonical count-fields list every one of
+# those selectors now shares.
+MAP_FIELD_EXCLUDE = frozenset({"area_m2"})
 
 
 def _map_field_rank(col: str) -> int:
@@ -1284,10 +1642,10 @@ def _apply_map_field_policy() -> None:
 
     Idempotent, and confined to this study package -- `build.py` is shared
     with the other city studies and a parallel effort, so nothing here edits
-    it directly. `_FIELD_EXCLUDE` gains `MAP_FIELD_EXCLUDE` (`area_m2`,
-    `worldpop_population_map_source`), which removes those two bookkeeping
-    columns from the ANOVA, regression, circle-size, opacity-by, and
-    distribution-tab lists.
+    it directly. `_FIELD_EXCLUDE` gains `MAP_FIELD_EXCLUDE` (just `area_m2`
+    as of 2026-09-23 -- see that constant's own comment), which removes that
+    bookkeeping column from the ANOVA, regression, circle-size, opacity-by,
+    and distribution-tab lists.
 
     2026-09-07: this function used to ALSO exclude `population` and then
     monkeypatch `_stats_json_data`/`_stats_count_fields` to sneak it back in
@@ -1334,7 +1692,7 @@ def _apply_map_field_policy() -> None:
     _map_build._control_panel_js = _control_panel_js_preferring_pop_jobs
 
 
-def prepare_grid_for_map(gdf: gpd.GeoDataFrame, uses_census: bool) -> gpd.GeoDataFrame:
+def prepare_grid_for_map(gdf: gpd.GeoDataFrame, uses_census: bool, worldpop_only_population: bool = False) -> gpd.GeoDataFrame:
     """Materialize share columns (census only) + population/jobs columns, relative first."""
     if "level_of_service" in gdf.columns:
         # Normalize negative zero. `discretize_score`'s round/clip can produce
@@ -1349,6 +1707,8 @@ def prepare_grid_for_map(gdf: gpd.GeoDataFrame, uses_census: bool) -> gpd.GeoDat
     # `_add_pop_jobs_columns` is a no-op when it doesn't.
     gdf = _add_pop_jobs_columns(gdf)
     gdf = _add_derived_density_columns(gdf)
+    gdf = _add_worldpop_outside_census_columns(gdf)
+    gdf = _finalize_population_columns(gdf, uses_census, worldpop_only_population)
     return _order_map_fields(gdf)
 
 
@@ -1529,7 +1889,8 @@ def _add_h3_columns_polars(df: pl.DataFrame) -> pl.DataFrame:
 
 
 def _prepare_grid_polars(
-    df: pl.DataFrame, uses_census: bool, equity_thresholds: Union[None, dict, str] = None
+    df: pl.DataFrame, uses_census: bool, equity_thresholds: Union[None, dict, str] = None,
+    worldpop_only_population: bool = False,
 ) -> pl.DataFrame:
     """Polars mirror of `prepare_grid_for_map` + `filter_populated` + `equity_flag`.
 
@@ -1560,6 +1921,8 @@ def _prepare_grid_polars(
         df = _add_share_columns_polars(df)
     df = _add_pop_jobs_columns_polars(df)
     df = _add_derived_density_columns_polars(df)
+    df = _add_worldpop_outside_census_columns_polars(df)
+    df = _finalize_population_columns_polars(df, uses_census, worldpop_only_population)
     df = _order_map_fields_polars(df)
     df = _filter_populated_polars(df)
     if equity_thresholds == "skip":
@@ -1576,7 +1939,7 @@ def _prepare_grid_polars(
 
 
 def build_h3_by_resolution(
-    h3_grid, params, uses_census: bool
+    h3_grid, params, uses_census: bool, worldpop_only_population: bool = False
 ) -> dict[int, gpd.GeoDataFrame]:
     """Build the `{resolution: grid}` map input, one entry per resolution the map needs.
 
@@ -1673,24 +2036,27 @@ def build_h3_by_resolution(
                 table = _add_h3_columns_polars(
                     _resample_h3(h3_grid, target_resolution=res, sum_cols=census_cols)
                 )
-            prepared = _prepare_grid_polars(table, uses_census)
+            prepared = _prepare_grid_polars(table, uses_census, worldpop_only_population=worldpop_only_population)
             by_resolution[res] = h3_grid_to_gdf(prepared)
             continue
 
         if res == params.h3_resolution:
-            grid = prepare_grid_for_map(h3_grid, uses_census)
+            grid = prepare_grid_for_map(h3_grid, uses_census, worldpop_only_population=worldpop_only_population)
         else:
             grid = prepare_grid_for_map(
-                _add_h3_grid(_resample_h3(h3_grid, target_resolution=res, sum_cols=census_cols)), uses_census
+                _add_h3_grid(_resample_h3(h3_grid, target_resolution=res, sum_cols=census_cols)), uses_census,
+                worldpop_only_population=worldpop_only_population,
             )
-        # Occupancy filter *before* `equity_flag`, so the flag's median split
-        # is taken over the cells the map actually draws rather than over a
-        # sea of empty ocean/forest cells that would drag the median to ~0.
+        # Occupancy filter *before* `equity_flag`, so its regression fit
+        # (log density vs level_of_service) is taken over the cells the map
+        # actually draws rather than over a sea of empty ocean/forest cells
+        # that would distort the fit.
         grid = filter_populated(grid)
         # Population+jobs density where jobs data exists, population density
-        # otherwise -- see `development_density_column`. Population weights
-        # feed the `"more_transit"` two-step weighted-median split inside
-        # `equity_flag` -- see `stats.development_priority_flag`.
+        # otherwise -- see `development_density_column`. `population` is
+        # accepted by `equity_flag` for signature compatibility but no
+        # longer used by its regression-based method -- see that function's
+        # own docstring (`code/stats.py`).
         pop_col = _population_column(grid)
         grid["equity_flag"] = equity_flag(
             grid[development_density_column(grid)].to_numpy(),
@@ -1712,6 +2078,7 @@ def _h3_tile_stage1_worker(
     census_cols: List[str],
     uses_census: bool,
     staging_dir: str,
+    worldpop_only_population: bool = False,
 ) -> Dict[int, str]:
     """Stage 1 of the chunked path: resample + derive columns for ONE tile, all resolutions, minus `equity_flag`.
 
@@ -1756,7 +2123,9 @@ def _h3_tile_stage1_worker(
             resampled = _add_h3_columns_polars(
                 _resample_h3(table, target_resolution=res, sum_cols=census_cols)
             )
-        prepared = _prepare_grid_polars(resampled, uses_census, equity_thresholds="skip")
+        prepared = _prepare_grid_polars(
+            resampled, uses_census, equity_thresholds="skip", worldpop_only_population=worldpop_only_population
+        )
         res_dir = Path(staging_dir) / f"res{res}"
         res_dir.mkdir(parents=True, exist_ok=True)
         out_path = str(res_dir / f"_staging_tile_{tile_id}.parquet")
@@ -1804,6 +2173,7 @@ def build_h3_by_resolution_chunked(
     uses_census: bool,
     output_dir: str,
     max_workers: Optional[int] = None,
+    worldpop_only_population: bool = False,
 ) -> Dict[int, List[str]]:
     """Chunked replacement for `build_h3_by_resolution`: never materializes a full-city grid.
 
@@ -1937,7 +2307,7 @@ def build_h3_by_resolution_chunked(
                 pool.submit(
                     _h3_tile_stage1_worker,
                     _to_ipc_bytes(table), tile_id, resolutions, params.h3_resolution,
-                    census_cols, uses_census, staging_dir,
+                    census_cols, uses_census, staging_dir, worldpop_only_population,
                 )
                 for tile_id, table in tile_items
             ]
@@ -1946,7 +2316,7 @@ def build_h3_by_resolution_chunked(
         stage1_results = [
             _h3_tile_stage1_worker(
                 _to_ipc_bytes(table), tile_id, resolutions, params.h3_resolution,
-                census_cols, uses_census, staging_dir,
+                census_cols, uses_census, staging_dir, worldpop_only_population,
             )
             for tile_id, table in tile_items
         ]
@@ -2050,8 +2420,23 @@ def _usa_map_census_loader(aoi, states, level, cache_dir):
     from pycensus.countries.usa import acs5, dhc
 
     if level == "block":
-        return dhc.load(aoi=aoi, states=states, level=level, cache_dir=str(cache_dir))
-    return acs5.load(aoi=aoi, states=states, level=level, cache_dir=str(cache_dir))
+        gdf = dhc.load(aoi=aoi, states=states, level=level, cache_dir=str(cache_dir))
+    else:
+        gdf = acs5.load(aoi=aoi, states=states, level=level, cache_dir=str(cache_dir))
+    # Guard, not a behavior change: pyCensus (2026-09-29) now tags every USA
+    # source load with `.attrs["native_level"]` (real per-source
+    # native-vs-resampled metadata, see `pycensus.geometry_levels.
+    # is_native_level`). This dispatch was ALREADY correct -- DHC for
+    # block, ACS5 for everything coarser -- so this assertion should never
+    # fire; it exists purely so a future edit that breaks the dispatch
+    # (e.g. accidentally routing "block" to acs5) fails loudly here rather
+    # than silently returning empty/wrong data.
+    assert gdf.attrs.get("native_level"), (
+        f"USA map census loader fetched '{level}' from a non-native source -- "
+        "this should always be a level that source natively publishes."
+    )
+    gdf = _restore_population_prefix(gdf, "dhc" if level == "block" else "acs5")
+    return gdf
 
 
 def _gtfs_dirs(gtfs_root: Path) -> list[str]:
@@ -2410,8 +2795,19 @@ def _acs_interpolated_census_loader(aoi, states, level, cache_dir):
     states_arg = list(states) if states else None
     acs_gdf = acs5.load(aoi=aoi, states=states_arg, level="blockgroup", cache_dir=str(cache_dir))
     block_gdf = dhc.load(aoi=aoi, states=states_arg, level="block", cache_dir=str(cache_dir))
+    # Same guard as `_usa_map_census_loader`: both fetches are already at
+    # each source's own native level (ACS5 blockgroup, DHC block) -- this
+    # function's whole point is interpolating ACS5 DOWN to real DHC
+    # blocks precisely because ACS5 has no native block-level data of its
+    # own to fetch instead, so this should never fire.
+    if not acs_gdf.empty:
+        assert acs_gdf.attrs.get("native_level"), "ACS5 blockgroup fetch was not native."
+    if not block_gdf.empty:
+        assert block_gdf.attrs.get("native_level"), "DHC block fetch was not native."
     if acs_gdf.empty or block_gdf.empty:
         return gpd.GeoDataFrame(columns=["GEOID", "geometry"], geometry="geometry", crs=4326)
+    acs_gdf = _restore_population_prefix(acs_gdf, "acs5")
+    block_gdf = _restore_population_prefix(block_gdf, "dhc")
     return _interpolate_acs_to_dhc_blocks(acs_gdf, block_gdf)
 
 
@@ -2749,9 +3145,10 @@ def _mexico_census_loader(aoi, states, level, cache_dir):
     """
     from pycensus.countries.mexico import inegi
 
-    return inegi.load(
+    gdf = inegi.load(
         aoi=aoi, states=states, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "mexico")
     )
+    return _restore_population_prefix(gdf, "inegi")
 
 
 # Euskadi (Basque Country) municipal population, via pycensus.euskadi --
@@ -2777,7 +3174,7 @@ def _euskadi_census_loader(aoi, states, level, cache_dir):
     """
     from pycensus.countries.euskadi import eustat
 
-    return eustat.load(aoi=aoi, level=level, cache_dir=str(cache_dir))
+    return _restore_population_prefix(eustat.load(aoi=aoi, level=level, cache_dir=str(cache_dir)), "eustat")
 
 
 # Spain (INE Padron, `pycensus.countries.spain.ine`, plus INE's Censo 2021
@@ -2844,7 +3241,9 @@ def _spain_census_loader(aoi, states, level, cache_dir):
     from pycensus.countries.spain import censo2021, ine
 
     data_dir = str(Path(cache_dir) / "spain")
-    result = ine.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=data_dir)
+    result = _restore_population_prefix(
+        ine.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=data_dir), "ine"
+    )
     try:
         extra = censo2021.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=data_dir)
         extra_cols = [c for c in extra.columns if c not in ("geometry",)]
@@ -3001,7 +3400,7 @@ def _israel_census_loader(aoi, states, level, cache_dir):
     """
     from pycensus.countries.israel import cbs
 
-    return cbs.load(aoi=aoi, level=level, cache_dir=str(cache_dir))
+    return _restore_population_prefix(cbs.load(aoi=aoi, level=level, cache_dir=str(cache_dir)), "cbs")
 
 
 # Canada (StatCan, `pycensus.countries.canada.statcan`) -- real, verified data
@@ -3080,7 +3479,8 @@ def _canada_census_loader(aoi, states, level, cache_dir):
     """
     from pycensus.countries.canada import statcan
 
-    return statcan.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "canada"))
+    gdf = statcan.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "canada"))
+    return _restore_population_prefix(gdf, "statcan")
 
 
 # Andorra (`pycensus.countries.andorra.estadisticaad`) -- real, live-verified
@@ -3131,7 +3531,8 @@ def _andorra_census_loader(aoi, states, level, cache_dir):
     """Adapt `pycensus.countries.andorra.estadisticaad.load`'s signature to `_join_polygon_stats`'s."""
     from pycensus.countries.andorra import estadisticaad
 
-    return estadisticaad.load(aoi=aoi, level=level, cache_dir=str(cache_dir))
+    gdf = estadisticaad.load(aoi=aoi, level=level, cache_dir=str(cache_dir))
+    return _restore_population_prefix(gdf, "estadisticaad")
 
 
 # Taiwan (MOI RIS, `pycensus.countries.taiwan.moi`) -- real, verified data
@@ -3185,7 +3586,8 @@ def _taiwan_census_loader(aoi, states, level, cache_dir):
     """Adapt `pycensus.countries.taiwan.moi.load`'s signature to `_join_polygon_stats`'s."""
     from pycensus.countries.taiwan import moi
 
-    return moi.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "taiwan"))
+    gdf = moi.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "taiwan"))
+    return _restore_population_prefix(gdf, "moi")
 
 
 # Chile (INE/DPA, `pycensus.countries.chile.ine`, prefix "ine_cl" -- distinct
@@ -3206,7 +3608,8 @@ def _chile_census_loader(aoi, states, level, cache_dir):
     """Adapt `pycensus.countries.chile.ine.load`'s signature to `_join_polygon_stats`'s."""
     from pycensus.countries.chile import ine
 
-    return ine.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "chile"))
+    gdf = ine.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "chile"))
+    return _restore_population_prefix(gdf, "ine_cl")
 
 
 # Chile Casen SAE comunal poverty (Ministerio de Desarrollo Social y Familia,
@@ -3333,9 +3736,10 @@ def _germany_census_loader(aoi, states, level, cache_dir):
     """Adapt `pycensus.countries.germany.destatis.load`'s signature to `_join_polygon_stats`'s."""
     from pycensus.countries.germany.destatis import loader as destatis_loader
 
-    return destatis_loader.load(
+    gdf = destatis_loader.load(
         aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "germany")
     )
+    return _restore_population_prefix(gdf, "destatis")
 
 
 # Native cell size of Destatis' Zensus 2022 population grid (see
@@ -4136,6 +4540,47 @@ CENSUS_WORLDPOP_GAPFILL_POPULATION_COLUMN: dict[str, str] = {
 }
 
 
+def _filter_cells_touching_country_border(
+    h3_grid: gpd.GeoDataFrame,
+    geocode_name: str,
+    cache_dir: Path,
+) -> gpd.GeoDataFrame:
+    """Drop every h3 cell whose geometry touches `geocode_name`'s national boundary line.
+
+    Opt-in (`CityConfig.exclude_cells_touching_country_border`) -- see that
+    flag's docstring for the motivating case (Beersheba, near the West
+    Bank/Gaza/Egypt frontiers). Geocodes the country once via
+    `_geocode_admin_polygon` (same Nominatim helper `resolve_core_boundary`
+    uses for non-US city-core boundaries), caching the polygon to
+    `cache_dir/country_boundary.gpkg` so a re-run never re-hits Nominatim.
+    A cell is dropped whenever it INTERSECTS the boundary LINE (the
+    country polygon's `.boundary`, not its interior) -- i.e. it straddles
+    or exactly abuts the border -- never clipped to its in-country portion,
+    since a fractional cell can't honestly carry one equity flag/
+    level_of_service value. Cells entirely inside or entirely outside the
+    country are both left untouched (the AOI itself already keeps this
+    pipeline from generating cells far outside the country in practice).
+    """
+    from .city_core import _geocode_admin_polygon
+
+    cache_path = cache_dir / "country_boundary.gpkg"
+    if cache_path.exists():
+        boundary_gdf = gpd.read_file(cache_path)
+    else:
+        boundary_gdf = _geocode_admin_polygon(geocode_name)
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        boundary_gdf.to_file(cache_path, driver="GPKG")
+
+    boundary_line = boundary_gdf.to_crs(h3_grid.crs).union_all().boundary
+    touches_border = h3_grid.geometry.intersects(boundary_line)
+    n_dropped = int(touches_border.sum())
+    print(
+        f"[pipeline] border clip ({geocode_name}): dropping {n_dropped} of {len(h3_grid)} "
+        "h3 cell(s) that touch the national border"
+    )
+    return h3_grid[~touches_border].reset_index(drop=True)
+
+
 def _add_worldpop_gapfill(
     h3_grid: gpd.GeoDataFrame,
     aoi: gpd.GeoDataFrame,
@@ -4581,6 +5026,7 @@ def _census_geometries_with_score(
     country: str = "USA",
     census_module: str | None = None,
     chunk_h3_resolution: Optional[int] = None,
+    worldpop_only_population: bool = False,
 ) -> dict[str, gpd.GeoDataFrame]:
     """Aggregate `level_of_service`/`pop_density` onto real census polygons, per level.
 
@@ -5120,6 +5566,15 @@ def _census_geometries_with_score(
             from pycensus.countries.usa import dhc
 
             dhc_gdf = dhc.load(aoi=aoi, states=states_arg, level=level, cache_dir=str(cache_dir))
+            # Same native-level guard as `_usa_map_census_loader`/`_join_race`
+            # (2026-09-29) -- DHC is native at every `MAP_CENSUS_LEVELS` entry
+            # this loop visits, so this should never fire; caught by the
+            # surrounding `try` like any other failure here, degrading to
+            # "no DHC data for this level" rather than crashing the study.
+            assert dhc_gdf.empty or dhc_gdf.attrs.get("native_level"), (
+                f"DHC fetch at level {level!r} was not native."
+            )
+            dhc_gdf = _restore_population_prefix(dhc_gdf, "dhc")
             dhc_cols = [c for c in DHC_KEEP_COLUMNS if c in dhc_gdf.columns]
             census_gdf = census_gdf.merge(dhc_gdf[["GEOID", *sorted(dhc_cols)]], on="GEOID", how="left")
         except Exception as exc:  # pragma: no cover - network/data availability varies
@@ -5172,6 +5627,8 @@ def _census_geometries_with_score(
         census_gdf = _add_share_columns(census_gdf)
         census_gdf = _add_pop_jobs_columns(census_gdf)
         census_gdf = _add_derived_density_columns(census_gdf)
+        census_gdf = _add_worldpop_outside_census_columns(census_gdf)
+        census_gdf = _finalize_population_columns(census_gdf, True, worldpop_only_population)
         census_gdf = _order_map_fields(census_gdf)
         # Same occupancy rule as the h3 grids (`filter_populated`): a census
         # polygon with people and/or jobs is drawn regardless of its access
@@ -5758,9 +6215,16 @@ def _median_access_by_weight_for_grid(grid, access: np.ndarray) -> dict[str, flo
         weights = pd.to_numeric(grid[col], errors="coerce").to_numpy(dtype=float)
         if weights.size != access.size:
             continue
-        median = weighted_median(access, weights)
-        if not np.isnan(median):
-            out[col] = median
+        # 2026-09-23, explicit user request (item 4): every cross-city
+        # ranking aggregate is now a weighted MEAN, not a median -- the
+        # JSON key names (`*_median_access*`) are left unchanged (renaming
+        # them means touching every `combined_map.py`/client-JS reader of
+        # this field, out of scope for this pass), but the *value* under
+        # them is a weighted mean as of this date. See `weighted_mean` in
+        # `code.stats`.
+        mean = weighted_mean(access, weights)
+        if not np.isnan(mean):
+            out[col] = mean
     return out
 
 
@@ -5812,8 +6276,12 @@ def write_city_summary(
     then just `{"metro": {}, "core": {}}`, which the stats-overview panel
     treats identically to "this city has no data for any column".
     """
-    metro_median = weighted_median(metro_access, metro_population)
-    core_median = weighted_median(core_access, core_population)
+    # 2026-09-23, explicit user request (item 4): population-weighted MEAN,
+    # not median (see `_median_access_by_weight_for_grid`'s matching note --
+    # the `metro_median`/`metro_median_access` names are kept as-is, the
+    # values are means now).
+    metro_median = weighted_mean(metro_access, metro_population)
+    core_median = weighted_mean(core_access, core_population)
     # `aoi_center`: cheap bounding-box center (not a real weighted
     # centroid -- `metro_grid` can be millions of rows, and this only
     # needs to be good enough to place one marker pin on the combined
@@ -6013,6 +6481,143 @@ def _tile_worker_cap(tile_workers: Optional[int]):
             os.environ["RAYON_NUM_THREADS"] = _orig_rayon
 
 
+def _map_inputs_checkpoint_dir(city_dir: Path) -> Path:
+    return Path(city_dir) / "results" / "map_inputs_checkpoint"
+
+
+def _write_map_inputs_checkpoint(
+    city_dir: Path,
+    h3_by_resolution: dict[int, gpd.GeoDataFrame],
+    census_by_level: Optional[dict[str, gpd.GeoDataFrame]],
+    routes_lines_gdf: gpd.GeoDataFrame,
+    stats_h3_resolution: int,
+    stats_core_mask,
+) -> None:
+    """Cache every expensive `rebuild_map_only` input so a pure style/HTML
+    change can skip straight to `build_city_map` (see `style_only=True`).
+
+    2026-09-22, explicit user request ("I dont want to recompute tiles if I
+    only want some minor color changes or map html style changes... right
+    now it seems it is not even with the map only flag"): `--map-only`
+    already skips the GTFS/network/isochrone/WorldPop/census-JOIN stages
+    (real, expensive, network-bound work), but it still re-does three
+    substantial CPU-bound stages from the cached `h3_grid.parquet` every
+    single time -- H3 resampling to every map resolution
+    (`build_h3_by_resolution`), population-weighted score aggregation onto
+    every real census polygon level (`_census_geometries_with_score`), and
+    rebuilding every GTFS route's line geometry (`build_route_lines`) --
+    none of which a style/color/HTML change needs at all, since none of
+    them depend on anything `build_city_map` doesn't already receive as a
+    plain argument. Caching their OUTPUT (not the H3 grid Parquet itself,
+    which is unchanged) as geoparquet lets a later `style_only=True` call
+    just read these files back (pure I/O, no resampling/aggregation/GTFS
+    parsing) and jump straight to HTML/tile generation.
+
+    Written by every real (non-style-only) `rebuild_map_only`/full-pipeline
+    call, so the NEXT `--style-only` call always has a fresh checkpoint --
+    if the underlying data changes (a real reprocess), the checkpoint gets
+    overwritten in the same run that changed it, never silently stale.
+
+    `stats_core_mask` (boolean array aligned with `h3_by_resolution[stats_h3_resolution]`)
+    is folded in as a `_stats_core` column on that resolution's own file
+    rather than a separate artifact -- one fewer thing to keep in sync.
+    """
+    out_dir = _map_inputs_checkpoint_dir(city_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for old in out_dir.glob("*.parquet"):
+        old.unlink()
+
+    for res, gdf in h3_by_resolution.items():
+        gdf = gdf.copy()
+        if res == stats_h3_resolution:
+            gdf["_stats_core"] = np.asarray(stats_core_mask, dtype=bool)
+        gdf.to_parquet(out_dir / f"h3_res{res}.parquet")
+
+    if census_by_level:
+        for level, gdf in census_by_level.items():
+            gdf.to_parquet(out_dir / f"census_{level}.parquet")
+
+    routes_lines_gdf.to_parquet(out_dir / "routes_lines.parquet")
+    (out_dir / "stats_h3_resolution.txt").write_text(str(stats_h3_resolution))
+
+
+def _read_map_inputs_checkpoint(
+    city_dir: Path,
+) -> Optional[tuple[dict[int, gpd.GeoDataFrame], Optional[dict[str, gpd.GeoDataFrame]], gpd.GeoDataFrame, gpd.GeoDataFrame, "np.ndarray"]]:
+    """Load `_write_map_inputs_checkpoint`'s output, or `None` if it doesn't exist yet.
+
+    Returns `(h3_by_resolution, census_by_level, stats_grid, stats_core_mask)`
+    -- `stats_grid`/`stats_core_mask` are just `h3_by_resolution[stats_h3_resolution]`
+    and its `_stats_core` column, split back out (that column is dropped
+    from the returned `h3_by_resolution` entry so it doesn't leak into the
+    map as a fake extra field).
+    """
+    out_dir = _map_inputs_checkpoint_dir(city_dir)
+    res_marker = out_dir / "stats_h3_resolution.txt"
+    if not res_marker.is_file():
+        return None
+
+    stats_h3_resolution = int(res_marker.read_text().strip())
+    h3_by_resolution: dict[int, gpd.GeoDataFrame] = {}
+    for p in sorted(out_dir.glob("h3_res*.parquet")):
+        res = int(p.stem.removeprefix("h3_res"))
+        h3_by_resolution[res] = gpd.read_parquet(p)
+
+    if stats_h3_resolution not in h3_by_resolution:
+        return None
+
+    stats_grid = h3_by_resolution[stats_h3_resolution]
+    if "_stats_core" not in stats_grid.columns:
+        return None
+    stats_core_mask = stats_grid["_stats_core"].to_numpy()
+    stats_grid = stats_grid.drop(columns=["_stats_core"])
+    h3_by_resolution[stats_h3_resolution] = stats_grid
+
+    census_by_level: Optional[dict[str, gpd.GeoDataFrame]] = None
+    census_paths = sorted(out_dir.glob("census_*.parquet"))
+    if census_paths:
+        census_by_level = {p.stem.removeprefix("census_"): gpd.read_parquet(p) for p in census_paths}
+
+    routes_path = out_dir / "routes_lines.parquet"
+    if not routes_path.is_file():
+        return None
+    routes_lines_gdf = gpd.read_parquet(routes_path)
+
+    return h3_by_resolution, census_by_level, stats_grid, routes_lines_gdf, stats_core_mask
+
+
+def _map_routes_gdf_for_display(routes_lines_gdf):
+    """Pick the route rows the MAP's own line layer + route/mode checkboxes should use.
+
+    Normally this is just the `has_real_shape` subset (2026-09-01
+    user-requested default: don't draw fabricated straight-line-between-
+    stops geometry on the map). But Andorra's GTFS feed
+    (`andorra/gtfs/ena_manual_reconstruction`, a manually reconstructed
+    feed with no `shapes.txt` at all) has ZERO routes with real shape
+    geometry -- filtering to `has_real_shape` there doesn't just hide a few
+    fabricated lines, it empties the route layer completely, which in turn
+    made `transitlos.map`'s `has_routes` check (derived from "is the passed
+    routes_gdf empty") hide the entire route/mode (bus/tram/rail) checkbox
+    UI, not merely the map lines -- a real, user-visible bug (checkboxes
+    "don't render at all" on Andorra, confirmed present on Boston, which
+    has real shapes.txt and hits the normal case fine).
+
+    The `has_real_shape` policy was never meant to cover "this whole feed
+    has no shape data" -- that's a data-completeness gap, not a
+    should-we-fabricate-a-line judgment call, and the fix that respects the
+    original request without regressing this case is: fall back to the
+    full (straight-line-geometry) route set only when filtering to real
+    shapes would leave nothing to draw at all. Any city with at least one
+    real-shape route keeps exactly the prior behavior byte-for-byte.
+    """
+    if "has_real_shape" not in routes_lines_gdf.columns:
+        return routes_lines_gdf
+    real_shape_gdf = routes_lines_gdf[routes_lines_gdf["has_real_shape"]]
+    if real_shape_gdf.empty and not routes_lines_gdf.empty:
+        return routes_lines_gdf
+    return real_shape_gdf
+
+
 def _export_downloads(
     city_dir: Path,
     h3_by_resolution: dict,
@@ -6147,11 +6752,14 @@ def _finish_pipeline_stages(
         chunk_paths_by_res = build_h3_by_resolution_chunked(
             h3_grid, params, config.uses_census,
             output_dir=str(city_dir / "results" / "metro" / "h3_by_resolution_chunks"),
+            worldpop_only_population=config.key in WORLDPOP_ONLY_POPULATION_CITIES,
         )
         h3_by_resolution = {res: _concat_gdf_parquets(paths) for res, paths in chunk_paths_by_res.items()}
     else:
         print(f"[pipeline:{config.key}] resampling every map/stats H3 resolution")
-        h3_by_resolution = build_h3_by_resolution(h3_grid, params, config.uses_census)
+        h3_by_resolution = build_h3_by_resolution(
+        h3_grid, params, config.uses_census, worldpop_only_population=config.key in WORLDPOP_ONLY_POPULATION_CITIES
+    )
     h3_grid = h3_by_resolution[params.h3_resolution]
     stats_grid = h3_by_resolution[params.stats_h3_resolution]
 
@@ -6248,6 +6856,7 @@ def _finish_pipeline_stages(
             h3_grid, aoi_gdf, config.census_states, MAP_CENSUS_LEVELS, census_dir,
             country=config.country, census_module=config.census_module,
             chunk_h3_resolution=params.isochrone_chunk_h3_resolution,
+            worldpop_only_population=config.key in WORLDPOP_ONLY_POPULATION_CITIES,
         )
         _lap("map: census geometries + score aggregation")
 
@@ -6283,7 +6892,7 @@ def _finish_pipeline_stages(
     # ... not to display the route shape on the map"), via `map_routes_gdf`
     # below.
     routes_lines_gdf = build_route_lines(_gtfs_dirs(city_dir / "gtfs"), aoi=aoi_gdf, exclude_no_shape_routes=False)
-    map_routes_gdf = routes_lines_gdf[routes_lines_gdf["has_real_shape"]] if "has_real_shape" in routes_lines_gdf.columns else routes_lines_gdf
+    map_routes_gdf = _map_routes_gdf_for_display(routes_lines_gdf)
 
     _apply_map_field_policy()
     development_gdf = development_gdf_for_map(census_by_level)
@@ -6322,7 +6931,9 @@ def _finish_pipeline_stages(
             renderer=os.environ.get("TRANSITLOS_RENDERER", "maplibre"),
             downloads_manifest=downloads_manifest,
             share_source_map=_share_column_sources(stats_grid),
+            country=config.country,
         )
+    _write_census_metadata_json(city_dir, stats_grid, h3_by_resolution, census_by_level, config.country, _share_column_sources(stats_grid))
     _lap("map: build_city_map (tile generation + HTML, incl. development overlay)")
 
     print(f"[pipeline:{config.key}] building H3 res-11 population chunks for the map editor")
@@ -6474,6 +7085,11 @@ def refresh_census_only(
         print(f"[pipeline] skipping LODES jobs join: {exc}")
     h3_grid = _rename_canonical_columns(h3_grid)
 
+    if config.exclude_cells_touching_country_border:
+        h3_grid = _filter_cells_touching_country_border(
+            h3_grid, config.border_country_geocode_name, city_dir / "border_clip"
+        )
+
     if config.census_worldpop_gapfill:
         gapfill_pop_col = CENSUS_WORLDPOP_GAPFILL_POPULATION_COLUMN.get(config.country)
         if gapfill_pop_col is None:
@@ -6530,6 +7146,7 @@ def rebuild_map_only(
     build_pop_chunks: bool = False,
     use_pmtiles: bool = True,
     enable_place_comparison: Optional[bool] = None,
+    style_only: bool = False,
 ) -> None:
     """Fast map/tiles-only rebuild, reusing cached `results/*.parquet`.
 
@@ -6541,6 +7158,23 @@ def rebuild_map_only(
     too (unlike `refresh_census_only`, which keeps stats) -- this is purely
     for iterating on map HTML/JS/CSS or, with `rebuild_tiles=True`, redrawing
     tiles from already-computed `level_of_service` values.
+
+    `style_only` (2026-09-22, explicit user request -- "I dont want to
+    recompute tiles if I only want some minor color changes or map html
+    style changes... right now it seems it is not even with the map only
+    flag"): even a plain `--map-only` still redoes three substantial
+    CPU-bound stages every time -- H3 resampling to every map resolution,
+    population-weighted score aggregation onto every real census polygon,
+    and rebuilding every GTFS route's line geometry -- none of which a
+    style/color/HTML change needs, since none of them depend on anything
+    `build_city_map` doesn't already receive as a plain argument. When
+    `style_only=True` and a prior real (non-style-only) run already wrote
+    `_write_map_inputs_checkpoint`'s cache, those three stages (plus the
+    downloads re-export, another real cost for a large city) are skipped
+    entirely in favor of a pure-I/O reload -- see that function's own
+    docstring. Falls back to the normal full computation (and writes a
+    fresh checkpoint) if no checkpoint exists yet, so this flag is always
+    safe to pass even before the first real `--map-only` run.
     """
     city_dir = Path(city_dir)
     census_dir = Path(census_root) if census_root is not None else city_dir / "uscensus"
@@ -6562,58 +7196,77 @@ def rebuild_map_only(
         summary = build_population_chunks_from_parquet(str(h3_grid_path), str(city_dir / "pop_chunks"))
         print(f"[pipeline:{config.key}]  -> {summary}")
 
-    print(f"[pipeline:{config.key}] loading cached results")
-    h3_table = read_h3_grid_table(h3_grid_path)
-    aoi_gdf = _load_aoi_gdf(city_dir, config)
+    from transitlos.map import build_city_map
 
-    print(f"[pipeline:{config.key}] resampling H3 resolutions (cheap, from cache)")
-    h3_by_resolution = build_h3_by_resolution(h3_table, params, config.uses_census)
-    del h3_table
-    import gc as _gc
-    _gc.collect()
-    h3_grid = h3_by_resolution[params.h3_resolution]
-    stats_grid = h3_by_resolution[params.stats_h3_resolution]
+    access_gdf = gpd.read_parquet(access_path, columns=["level_of_service", "geometry"])
+    stops = gpd.read_parquet(stops_path)
 
-    core_boundary = resolve_core_boundary(
-        config.display_name, config.country == "USA",
-        state=config.census_states[0] if config.census_states else None,
-        geocode_name=config.geocode_name,
+    checkpoint = _read_map_inputs_checkpoint(city_dir) if style_only else None
+    downloads_manifest_path = city_dir / "results" / "downloads_manifest.json"
+    if checkpoint is not None and downloads_manifest_path.is_file():
+        print(f"[pipeline:{config.key}] style-only: reusing cached H3-resample/census-geometry/routes/downloads (pure I/O, no recompute)")
+        h3_by_resolution, census_by_level, stats_grid, routes_lines_gdf, stats_core_mask = checkpoint
+        map_routes_gdf = _map_routes_gdf_for_display(routes_lines_gdf)
+        downloads_manifest = json.loads(downloads_manifest_path.read_text())
+    else:
+        if style_only:
+            print(f"[pipeline:{config.key}] style-only: no checkpoint yet -- falling back to a full (slower) rebuild, which will write one for next time")
+        print(f"[pipeline:{config.key}] loading cached results")
+        h3_table = read_h3_grid_table(h3_grid_path)
+        aoi_gdf = _load_aoi_gdf(city_dir, config)
+
+        print(f"[pipeline:{config.key}] resampling H3 resolutions (cheap, from cache)")
+        h3_by_resolution = build_h3_by_resolution(
+        h3_table, params, config.uses_census, worldpop_only_population=config.key in WORLDPOP_ONLY_POPULATION_CITIES
     )
-    core_union = core_boundary.union_all()
-    stats_core_mask = stats_grid.geometry.centroid.to_crs(4326).within(core_union)
+        del h3_table
+        import gc as _gc
+        _gc.collect()
+        h3_grid = h3_by_resolution[params.h3_resolution]
+        stats_grid = h3_by_resolution[params.stats_h3_resolution]
 
-    census_by_level = None
-    if config.uses_census:
-        print(f"[pipeline:{config.key}] aggregating level_of_service onto census geometries")
-        census_by_level = _census_geometries_with_score(
-            h3_grid, aoi_gdf, config.census_states, MAP_CENSUS_LEVELS, census_dir,
-            country=config.country, census_module=config.census_module,
-            chunk_h3_resolution=params.isochrone_chunk_h3_resolution,
+        core_boundary = resolve_core_boundary(
+            config.display_name, config.country == "USA",
+            state=config.census_states[0] if config.census_states else None,
+            geocode_name=config.geocode_name,
         )
+        core_union = core_boundary.union_all()
+        stats_core_mask = stats_grid.geometry.centroid.to_crs(4326).within(core_union)
 
-    from transitlos.map import build_city_map, build_route_lines
+        census_by_level = None
+        if config.uses_census:
+            print(f"[pipeline:{config.key}] aggregating level_of_service onto census geometries")
+            census_by_level = _census_geometries_with_score(
+                h3_grid, aoi_gdf, config.census_states, MAP_CENSUS_LEVELS, census_dir,
+                country=config.country, census_module=config.census_module,
+                chunk_h3_resolution=params.isochrone_chunk_h3_resolution,
+                worldpop_only_population=config.key in WORLDPOP_ONLY_POPULATION_CITIES,
+            )
 
-    print(f"[pipeline:{config.key}] building transit-line geometry from GTFS")
-    # `exclude_no_shape_routes=False` -- see the matching comment in
-    # `run_city_study` above: `routes_lines_gdf` also feeds the
-    # downloadable `routes.parquet` export a few lines down and should keep
-    # every real route; only the map's own line layer (`map_routes_gdf`)
-    # hides straight-line-fallback routes.
-    routes_lines_gdf = build_route_lines(
-        [p for p in sorted((city_dir / "gtfs").iterdir()) if p.is_dir()], aoi=aoi_gdf, exclude_no_shape_routes=False,
-    )
-    map_routes_gdf = routes_lines_gdf[routes_lines_gdf["has_real_shape"]] if "has_real_shape" in routes_lines_gdf.columns else routes_lines_gdf
-    print(f"[pipeline:{config.key}]  -> {len(routes_lines_gdf)} route lines")
+        from transitlos.map import build_route_lines
+
+        print(f"[pipeline:{config.key}] building transit-line geometry from GTFS")
+        # `exclude_no_shape_routes=False` -- see the matching comment in
+        # `run_city_study` above: `routes_lines_gdf` also feeds the
+        # downloadable `routes.parquet` export a few lines down and should keep
+        # every real route; only the map's own line layer (`map_routes_gdf`)
+        # hides straight-line-fallback routes.
+        routes_lines_gdf = build_route_lines(
+            [p for p in sorted((city_dir / "gtfs").iterdir()) if p.is_dir()], aoi=aoi_gdf, exclude_no_shape_routes=False,
+        )
+        map_routes_gdf = _map_routes_gdf_for_display(routes_lines_gdf)
+        print(f"[pipeline:{config.key}]  -> {len(routes_lines_gdf)} route lines")
+
+        downloads_manifest = _export_downloads(
+            city_dir, h3_by_resolution, census_by_level, stops, routes_lines_gdf, core_union, core_boundary.crs,
+        )
+        _write_map_inputs_checkpoint(
+            city_dir, h3_by_resolution, census_by_level, routes_lines_gdf, params.stats_h3_resolution, stats_core_mask,
+        )
 
     print(
         f"[pipeline:{config.key}] rebuilding tiles + HTML" if rebuild_tiles
         else f"[pipeline:{config.key}] building map HTML only (skip_tile_build=True)"
-    )
-    access_gdf = gpd.read_parquet(access_path, columns=["level_of_service", "geometry"])
-    stops = gpd.read_parquet(stops_path)
-
-    downloads_manifest = _export_downloads(
-        city_dir, h3_by_resolution, census_by_level, stops, routes_lines_gdf, core_union, core_boundary.crs,
     )
 
     _apply_map_field_policy()
@@ -6639,7 +7292,9 @@ def rebuild_map_only(
             ),
             downloads_manifest=downloads_manifest,
             share_source_map=_share_column_sources(stats_grid),
+            country=config.country,
         )
+    _write_census_metadata_json(city_dir, stats_grid, h3_by_resolution, census_by_level, config.country, _share_column_sources(stats_grid))
     print(f"[pipeline:{config.key}] done -> {city_dir / 'map.html'}")
 
 
@@ -6668,7 +7323,9 @@ def rebuild_development_tiles_only(
     h3_grid = gpd.read_parquet(h3_grid_path)
     aoi_gdf = _load_aoi_gdf(city_dir, config)
 
-    h3_by_resolution = build_h3_by_resolution(h3_grid, params, config.uses_census)
+    h3_by_resolution = build_h3_by_resolution(
+        h3_grid, params, config.uses_census, worldpop_only_population=config.key in WORLDPOP_ONLY_POPULATION_CITIES
+    )
     h3_grid = h3_by_resolution[params.h3_resolution]
 
     if not config.uses_census:
@@ -6679,6 +7336,7 @@ def rebuild_development_tiles_only(
         h3_grid, aoi_gdf, config.census_states, MAP_CENSUS_LEVELS, census_dir,
         country=config.country, census_module=config.census_module,
         chunk_h3_resolution=params.isochrone_chunk_h3_resolution,
+        worldpop_only_population=config.key in WORLDPOP_ONLY_POPULATION_CITIES,
     )
     development_gdf = development_gdf_for_map(census_by_level)
     if development_gdf is None:
@@ -6926,24 +7584,19 @@ def run_city_study(
             pop_access_h3.write_parquet(pop_access_checkpoint_path)
             print(f"[pipeline:{config.key}] wrote pop_access_h3 checkpoint -> {pop_access_checkpoint_path}")
 
-    # 2026-09-06, explicit user request ("I want worldpop population column
-    # to appear on all maps... I see many count worldpop columns but not
-    # worldpop population"): `population` is already the raw WorldPop total
-    # headcount at this point (before any census join or country-specific
-    # override, e.g. Germany's Zensus grid replacing `population` further
-    # down) -- see `_worldpop_population_column`/`_add_worldpop_gapfill`'s
-    # docstring. It was deliberately never duplicated under a
-    # `worldpop_`-prefixed name because that seemed redundant with bare
-    # `population` -- but bare `population` is in `MAP_FIELD_EXCLUDE`
-    # (it's the default weight/denominator, not meant to itself be a
-    # selectable field), which is exactly why it never showed up in the
-    # map's "circle size by"/distribution dropdowns even though every other
-    # `worldpop_*` count column does. Snapshotting it here, under the
-    # `worldpop_` prefix already in `CENSUS_COLUMN_PREFIXES`, makes it flow
-    # through `_census_columns`'s `sum_cols` automatically -- resampled
-    # (summed) correctly at every resolution by `_resample_h3`, and exposed
-    # everywhere the other worldpop_* count columns already are.
-    pop_access_h3 = pop_access_h3.with_columns(pl.col("population").alias("worldpop_population"))
+    # 2026-09-23 (superseding the 2026-09-06 `worldpop_population` alias
+    # this comment used to describe): the map-facing WorldPop count now
+    # lives under `worldpop_residents`, materialized once at the very end of
+    # grid preparation by `_finalize_population_columns`/
+    # `_finalize_population_columns_polars` (called from
+    # `prepare_grid_for_map`/`_prepare_grid_polars`) from whatever
+    # `_worldpop_population_column` resolves to AFTER resampling -- not
+    # snapshotted here, pre-census-join/pre-resample, under a second name.
+    # `population` itself stays bare WorldPop through the rest of this
+    # function (census joins below read/overwrite it per country -- see
+    # `_RENAME_EXCLUDED_CANONICAL_NAMES`), and is itself re-derived to its
+    # final per-city meaning (census residents, WorldPop residents, or
+    # census + jobs) by that same finalize step.
 
     if config.uses_census:
         h3_grid = _add_h3_grid(pop_access_h3)
@@ -6986,6 +7639,12 @@ def run_city_study(
         # landed their prefixed columns on `h3_grid`.
         h3_grid = _rename_canonical_columns(h3_grid)
         _lap("canonical column rename")
+
+        if config.exclude_cells_touching_country_border:
+            h3_grid = _filter_cells_touching_country_border(
+                h3_grid, config.border_country_geocode_name, city_dir / "border_clip"
+            )
+            _lap("border clip")
 
         if config.census_worldpop_gapfill:
             gapfill_pop_col = CENSUS_WORLDPOP_GAPFILL_POPULATION_COLUMN.get(config.country)

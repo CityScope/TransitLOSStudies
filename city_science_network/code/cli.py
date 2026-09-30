@@ -44,6 +44,17 @@ def _build_parser() -> argparse.ArgumentParser:
         help="With --map-only: also regenerate vector tiles from cached results (slower).",
     )
     parser.add_argument(
+        "--style-only", dest="style_only", action="store_true",
+        help=(
+            "With --map-only: skip re-resampling H3, re-aggregating census "
+            "geometries, and rebuilding GTFS route lines too -- reuses a "
+            "cached checkpoint from the last real --map-only run (pure I/O, "
+            "seconds not minutes). For pure color/CSS/HTML/JS changes that "
+            "don't touch any underlying data. Falls back to a normal "
+            "--map-only run (and writes the checkpoint) if none exists yet."
+        ),
+    )
+    parser.add_argument(
         "--pop-chunks", dest="pop_chunks", action="store_true",
         help="With --map-only: also rebuild the scenario editor's H3 population chunks.",
     )
@@ -79,6 +90,7 @@ def _build_parser() -> argparse.ArgumentParser:
 class RunFlags:
     map_only: bool = False
     rebuild_tiles: bool = False
+    style_only: bool = False
     pop_chunks: bool = False
     census_only: bool = False
     dev_tiles_only: bool = False
@@ -139,6 +151,7 @@ class RunFlags:
                 build_pop_chunks=self.pop_chunks,
                 use_pmtiles=(True if self.use_pmtiles else default_use_pmtiles),
                 enable_place_comparison=enable_place_comparison,
+                style_only=self.style_only,
             )
             handled = True
         return handled
@@ -158,6 +171,7 @@ def parse_run_flags(argv: Optional[list[str]] = None) -> RunFlags:
     return RunFlags(
         map_only=args.map_only,
         rebuild_tiles=args.rebuild_tiles,
+        style_only=args.style_only,
         pop_chunks=args.pop_chunks,
         census_only=args.census_only,
         dev_tiles_only=args.dev_tiles_only,
