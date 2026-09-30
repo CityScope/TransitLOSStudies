@@ -19,6 +19,7 @@ experience).
 from __future__ import annotations
 
 import logging
+import re
 from pathlib import Path
 from typing import Optional, Sequence
 
@@ -27,6 +28,11 @@ import h3
 import pandas as pd
 
 logger = logging.getLogger(__name__)
+
+#: Matches every `{year}_{office}_...` election column -- kept in sync with
+#: `county_pipeline._ELECTION_COL_RE` (same naming convention, from
+#: `elections.schema`).
+_ELECTION_COL_RE = re.compile(r"^\d{4}_(president|senate)_")
 
 #: State-level h3 resolutions, matching `city_science_network.code.params
 #: .StudyParams.map_h3_resolutions`'s own zoom-banded set. 9 and 11 are
@@ -323,7 +329,7 @@ def add_state_native_elections(state_dir: Path, state_fips: str, state_abbr: str
 
     cache_dir = cache_dir or default_cache_dir()
 
-    state_boundary = load_boundaries("state", state_fips=state_fips, cache_dir=cache_dir)
+    state_boundary = load_boundaries("state", state_fips, 2023)
     state_boundary = state_boundary[state_boundary["GEOID"] == state_fips].reset_index(drop=True)
     if state_boundary.empty:
         logger.warning(f"No state boundary found for FIPS {state_fips} -- skipping state.geoparquet.")
@@ -378,10 +384,21 @@ def add_state_native_elections(state_dir: Path, state_fips: str, state_abbr: str
     if county_path.is_file():
         county_gdf = gpd.read_parquet(county_path)
         agg_map = _column_agg_map()
+        # Exclude election columns from this county->state resample: they
+        # were just set directly above from the genuinely state-NATIVE
+        # source (real MEDSL state-level totals, not a derived sum of the
+        # county file -- see module docstring). Re-summing county.geoparquet's
+        # OWN `_add_elections`-derived election columns here would silently
+        # overwrite the state-native numbers with a re-aggregated county
+        # figure -- confirmed live 2026-09-30: this bug produced
+        # 2024_president_total_votes=3453931 (the COUNTY sum) instead of
+        # the real state-native 3512930.
         numeric_cols = [
             c
             for c in county_gdf.columns
-            if c not in ("geometry", "GEOID") and pd.api.types.is_numeric_dtype(county_gdf[c])
+            if c not in ("geometry", "GEOID")
+            and pd.api.types.is_numeric_dtype(county_gdf[c])
+            and not _ELECTION_COL_RE.match(c)
         ]
         mean_cols = [c for c in numeric_cols if (agg_map.get(c) == "mean" or c == "level_of_service") and c != "population"]
         count_cols = [c for c in numeric_cols if c not in mean_cols and agg_map.get(c, "sum") == "sum"]
