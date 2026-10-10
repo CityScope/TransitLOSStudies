@@ -166,7 +166,22 @@ def acquire_state_feeds(
                     gtfs_dirs.append(folder)
                 ntd_rows_by_dir.setdefault(folder, []).extend(rows)
 
-            write_feed_report(state_dir, state_abbr, working, broken, matches, downloaded, tl_downloaded)
+            # Last resort: fuzzy name + spatial search verified against the candidates' own stops.
+            from .feed_match import match_unresolved
+
+            resolved |= {row.get("agency_name") for rows in tl_downloaded.values() for row in rows}
+            covered = {f.raw["ntd"].get("agency_name") for f in working}
+            todo = [f.raw["ntd"] for f in broken
+                    if f.raw["ntd"].get("agency_name") not in resolved | covered]
+            fuzzy_ok, fuzzy_report = match_unresolved(todo, state_abbr, catalog, gtfs_dir) if todo else ({}, {})
+            for folder, rows in fuzzy_ok.items():
+                if folder not in gtfs_dirs:
+                    gtfs_dirs.append(folder)
+                ntd_rows_by_dir.setdefault(folder, []).extend(rows)
+                logger.info(f"Fuzzy-matched feed {folder.name} for {[r.get('agency_name') for r in rows]}")
+
+            write_feed_report(state_dir, state_abbr, working, broken, matches, downloaded, tl_downloaded,
+                              fuzzy_ok, fuzzy_report)
         except Exception:
             logger.error(f"Feed fallback failed:\n{traceback.format_exc()}")
     # fallback feeds (Mobility Database / Transitland) get the same treatment

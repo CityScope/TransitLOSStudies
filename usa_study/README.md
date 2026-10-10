@@ -143,6 +143,19 @@ resumable and renamed only when complete). The pyCensus cache lives under
   computed for every stop and the LOS step takes the best access per street edge.
 - A downloaded NTD "weblink" that is not static GTFS (a GTFS-RT endpoint such as Fairfax Connector's, a web page, a
   directory) counts as broken and goes through the Mobility Database fallback.
+### Feed discovery order
+
+For every NTD agency whose feed is broken/partial, `acquire_state_feeds` tries, in order: pinned overrides
+(`KNOWN_FEED_OVERRIDES`, `TRANSITLAND_OVERRIDES`, `DIRECT_URL_OVERRIDES`) -> Mobility Database name match ->
+Transitland name match -> **fuzzy name + spatial match** (`code/feed_match.py`): the agency city is geocoded,
+Mobility Database feeds whose bounding box contains it and Transitland agencies within 8 km are ranked by name
+similarity, the top 3 are downloaded and checked against their own stops (stops within 5/15 km, stop names
+containing the city, trips, service end). A candidate is used automatically only when verified (similarity >= 0.45,
+trips > 0, >= 3 stops within 15 km and city name hits or >= 3 stops within 5 km); every candidate and its evidence is
+written to `feed_report.json` (`candidates`) for manual review. Resolution `fuzzy_match` appears in `feed_exceptions.csv`.
+Requires the git-ignored `pyGTFSHandler/api_keys.json` (Transitland key); run `python main.py <STATES> --refresh-stops`
+to re-acquire feeds for states that had unresolved agencies.
+
 - Audits: `python audit_feeds.py` (per-feed date selection / usable files -> `data/feed_audit.csv`) and
   `python audit_scores.py` (best stop near ~30 well-known rail/tram stations -> `data/score_audit.csv`).
 

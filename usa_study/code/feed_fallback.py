@@ -71,6 +71,9 @@ KNOWN_FEED_OVERRIDES: Dict[str, List[str]] = {
     # partial NTD feeds replaced (see REPLACE_NTD_AGENCIES)
     "Denver Regional Transportation District": ["mdb-178"],  # RTD (the NTD link is one 7-stop route)
     "Cambria County Transit Authority": ["tld-4671"],
+    # found with the authenticated Mobility Database search: Linn Shuttle serves Sweet Home and Lebanon (70 stops, valid to 2026-11)
+    "Senior Citizens of Sweet Home, Inc.": ["mdb-137"],
+    "Oregon|City of Lebanon": ["mdb-137"],  # state-aware key: other states have a "City of Lebanon" too
 }
 
 #: NTD agencies (by NTD id) whose NTD weblink is a small PARTIAL feed (a route or a mode, found by comparing weekday trips
@@ -169,7 +172,7 @@ def find_fallbacks(
             out.append((cid, direct, ntd))
             logger.info(f"Direct URL override for broken NTD feed '{agency}': {direct}")
             continue
-        forced = KNOWN_FEED_OVERRIDES.get(agency)
+        forced = KNOWN_FEED_OVERRIDES.get(f"{state_name}|{agency}") or KNOWN_FEED_OVERRIDES.get(agency)
         if forced:
             known = catalog[catalog["id"].isin(forced)]
             for _, row in known.iterrows():
@@ -220,7 +223,8 @@ def download_fallbacks(matches: List[Tuple[str, str, dict]], gtfs_dir: Path) -> 
 
 
 def write_feed_report(
-    state_dir: Path, state_abbr: str, working: List, broken: List, matches, downloaded, transitland=None
+    state_dir: Path, state_abbr: str, working: List, broken: List, matches, downloaded, transitland=None,
+    fuzzy=None, fuzzy_report=None
 ) -> Path:
     """Log every feed exception of one state to `<state_dir>/feed_report.json`.
 
@@ -233,6 +237,7 @@ def write_feed_report(
         replaced.setdefault(ntd.get("agency_name", ""), []).append(cid)
     ok_ids = {folder.name.replace("_fallback", "") for folder in downloaded}
     tl_agencies = {row.get("agency_name", "") for rows in (transitland or {}).values() for row in rows}
+    fz_agencies = {r.get("agency_name", "") for rs in (fuzzy or {}).values() for r in rs}
     working_agencies = {f.raw["ntd"].get("agency_name", "") for f in working}
     entries = []
     for feed in broken:
@@ -246,11 +251,12 @@ def write_feed_report(
                 "reason": feed.raw.get("broken_reason", ""),
                 "url": feed.download_url,
                 "resolution": "mobility_database" if ids else (
-                    "transitland" if agency in tl_agencies else (
+                    "transitland" if agency in tl_agencies else "fuzzy_match" if agency in fz_agencies else (
                         "covered_by_working_feed" if agency in working_agencies else "unresolved"
                     )
                 ),
                 "mobility_database_ids": ids,
+                "candidates": (fuzzy_report or {}).get(agency, []),
             }
         )
     path = state_dir / "feed_report.json"
@@ -281,17 +287,10 @@ TRANSITLAND_BASE = "https://transit.land/api/v2/rest"
 
 
 def _transitland_key() -> Optional[str]:
-    import os
+    """Transitland API key via pyGTFSHandler's lookup: `TRANSITLAND_API_KEY`, else `api_keys.json` (see its config module)."""
+    from pyGTFSHandler.downloaders.utils.config import get_api_key
 
-    key = os.getenv("TRANSITLAND_API_KEY")
-    if key:
-        return key
-    try:
-        import json
-
-        return json.loads((Path.home() / ".pygtfshandler" / "api_keys.json").read_text()).get("transitland") or None
-    except Exception:
-        return None
+    return get_api_key("transitland", None, "TRANSITLAND_API_KEY") or None
 
 
 _SKIP_WORDS = {"of", "the", "and", "for", "dba", "inc", "llc", "corp", "co"}
@@ -389,6 +388,9 @@ TRANSITLAND_OVERRIDES = {
     "Umpqua Public Transportation District": ("UTrans", "f-9r8m-umpquatransit~or~us"),
     "Terrebonne Parish Consolidated Government": ("Good Earth Transit", None),
     "Stanislaus Regional Transit Authority": ("The S", "f-9q9-modesto~ca~us"),
+    # fuzzy + spatial match, verified against the candidate's stops and routes
+    "River Bend Transit": ("DAVENPORT CITIBUS", "f-citibus~ia~us"),  # Davenport IA: 11 routes, 565 stops, all within 15 km
+    "Town of Wallkill": ("Middletown Area Transit", "f-middletown~ny~us"),  # Middletown NY: 4 routes, 26 stops
     "Arizona|City of Glendale": ("Valley Metro", "f-9tb-valleymetro"),  # (Glendale, CA's Beeline is a different agency)
     "Arizona|City of Scottsdale": ("Valley Metro", "f-9tb-valleymetro"),
     "Tennessee|Regional Transportation Authority": ("WeGo Public Transit", "f-dn6-regionaltransportationauthorityofmiddletennessee~nashville"),
