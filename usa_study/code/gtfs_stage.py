@@ -29,7 +29,7 @@ review for ambiguous BRT cases) follows
 from __future__ import annotations
 
 import logging
-from datetime import date
+from datetime import date, time
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence
 
@@ -47,6 +47,25 @@ logger = logging.getLogger(__name__)
 #: docstring). A feed with zero trips inside this window becomes a
 #: fallback feed instead.
 DEFAULT_WINDOW = (date(2026, 10, 1), date(2026, 10, 15))
+
+#: The ONE day every in-window feed is scored on (a mid-window Wednesday: 1,063 of 1,225 feeds run on it, vs 1,049 on
+#: Oct 1). A feed without service on this day -- even if it runs on another day of the window, like Bi-State, whose
+#: calendar starts Oct 2 -- cannot be scored with the others (no trips = no headway = its stops silently vanished); it is
+#: scored alone on its own typical weekday instead.
+ANALYSIS_DATE = date(2026, 10, 7)
+
+#: Daily analysis window for headway/speed (study-wide, same as `city_science_network`'s
+#: `analysis_start_time`/`analysis_end_time`). It MUST NOT be the full day: headway is
+#: sum(gap^2)/window-length with the overnight gap added as one gap, so a 24 h window
+#: turns every route's night break into 30-90 min of 'headway' (BART Embarcadero 5 min -> 30 min).
+ANALYSIS_START_TIME = time(6, 0)
+ANALYSIS_END_TIME = time(22, 0)
+
+#: Stops without a parent station are grouped when within this distance, and NO two stops of a group are farther apart
+#: than this (complete linkage: `GTFS_STOP_GROUPING=complete`, set in main.py). The library's default grouping chains
+#: (neighbour-of-neighbour), which merged whole downtown streets into one "station" (CTA Loop: 395 stops -> 35
+#: stations, clusters up to 2.9 km), each scored from a single mean location.
+STOP_GROUP_DISTANCE_M = 150.0
 
 #: `transitlos.scoring.mrc.mode_category`'s own {rail, tram} route_type
 #: sets (everything else, including our BRT marker `702`, falls to "bus"
@@ -107,6 +126,12 @@ def resolve_feed_modes(gtfs_dir: Path, ntd_rows: List[Dict[str, object]]) -> pl.
     )
 
     ntd_modes = {r.get("mode_name") for r in ntd_rows}
+    if "route_type" not in routes.columns:
+        # Some feeds (Metra) ship a routes.txt without route_type: take the mode from NTD (rail / tram / bus).
+        ntd_mode = NTD_MODE_TO_SCORING_MODE.get(next(iter(ntd_modes))) if len(ntd_modes) == 1 else None
+        fill = {"rail": 2, "tram": 0, "bus": 3}.get(ntd_mode, 3)
+        logger.warning(f"Feed '{gtfs_dir}': routes.txt has no route_type -- using NTD mode {ntd_mode!r} (route_type {fill}).")
+        routes = routes.with_columns(pl.lit(fill).alias("route_type"))
     unique_types = routes["route_type"].unique().to_list()
     default_mode = None
     if len(ntd_modes) == 1:
@@ -150,8 +175,8 @@ def _feed_has_service_in_window(
     feed = Feed(
         gtfs_dirs=[str(gtfs_dir)],
         aoi=aoi,
-        start_date=window[0],
-        end_date=window[1],
+        start_date=ANALYSIS_DATE,
+        end_date=ANALYSIS_DATE,
         stop_group_distance=stop_group_distance,
     )
     return feed.trips.lf.limit(1).collect().height > 0
@@ -161,7 +186,7 @@ def split_feeds_by_window(
     gtfs_dirs: Sequence[Path],
     aoi: gpd.GeoDataFrame,
     window: tuple = DEFAULT_WINDOW,
-    stop_group_distance: float = 150.0,
+    stop_group_distance: float = STOP_GROUP_DISTANCE_M,
 ) -> tuple[List[Path], List[Path]]:
     """Partition a state's downloaded feeds into "has service in `window`" / fallback.
 
@@ -201,12 +226,35 @@ def _route_modes_for(gtfs_dirs: Sequence[Path], ntd_rows_by_dir: Dict[Path, List
     return pl.concat(mode_frames, how="diagonal_relaxed")
 
 
+def merge_same_location_stops(stops: gpd.GeoDataFrame, decimals: int = 6) -> gpd.GeoDataFrame:
+    """One row per location: of all rows at the same coordinates keep the best `stop_score`, with the route lists joined.
+
+    Feeds scored separately (each day / each fallback feed gets its own `Feed` object) can produce the same physical stop
+    several times; the combined table must not carry the same stop more than once. Rows at DIFFERENT locations are never
+    merged here. `route_ids` of the kept row becomes the union (in order of appearance, de-duplicated) of the group's.
+    """
+    if stops.empty:
+        return stops
+    key = stops["stop_lat"].round(decimals).astype(str) + "," + stops["stop_lon"].round(decimals).astype(str)
+    ranked = stops.assign(_loc=key).sort_values("stop_score", ascending=False, na_position="last", kind="stable")
+    if "route_ids" in ranked.columns:
+        joined = ranked.groupby("_loc", sort=False)["route_ids"].agg(
+            lambda col: ";".join(dict.fromkeys(r for v in col.dropna() for r in str(v).split(";") if r))
+        )
+    best = ranked.drop_duplicates("_loc", keep="first").copy()
+    if "route_ids" in best.columns:
+        best["route_ids"] = best["_loc"].map(joined)
+    merged = best.drop(columns="_loc").sort_index().reset_index(drop=True)
+    logger.info(f"Merged same-location stops: {len(stops):,} -> {len(merged):,} rows.")
+    return gpd.GeoDataFrame(merged, geometry="geometry", crs=stops.crs)
+
+
 def score_state_stops(
     gtfs_dirs: Sequence[Path],
     ntd_rows_by_dir: Dict[Path, List[Dict[str, object]]],
     state_aoi: gpd.GeoDataFrame,
     window: tuple = DEFAULT_WINDOW,
-    stop_group_distance: float = 150.0,
+    stop_group_distance: float = STOP_GROUP_DISTANCE_M,
 ) -> gpd.GeoDataFrame:
     """Build one state's scored `stops` table (the `stops.geoparquet` content).
 
@@ -236,31 +284,57 @@ def score_state_stops(
     in_window, fallback = split_feeds_by_window(gtfs_dirs, state_aoi, window, stop_group_distance)
     frames = []
 
+    # Feeds with service in the window are loaded together (one stop clustering, headways combined across them).
+    # Feeds WITHOUT service in the window (expired calendars) are NOT combined with anything: each is scored alone
+    # on its own representative date. Every group's stops are kept (even at the same place) and concatenated, so
+    # isochrones are computed for all of them and headways are never combined across groups; the LOS step then takes
+    # the best access per street edge.
     if in_window:
-        combined_feed = Feed(
-            gtfs_dirs=[str(d) for d in in_window],
-            aoi=state_aoi,
-            start_date=window[0],
-            end_date=window[1],
-            stop_group_distance=stop_group_distance,
-        )
-        route_modes = _route_modes_for(in_window, ntd_rows_by_dir)
-        combined = best_subset_stop_scores(combined_feed, window[0], route_modes)
-        if not combined.empty:
-            combined = combined_feed.add_stop_coords(combined)
-            frames.append(combined)
+        def _score_in_window(dirs):
+            feed = Feed(
+                gtfs_dirs=[str(d) for d in dirs],
+                aoi=state_aoi,
+                start_date=window[0],
+                end_date=window[1],
+                stop_group_distance=stop_group_distance,
+            )
+            route_modes = _route_modes_for(dirs, ntd_rows_by_dir)
+            scored = best_subset_stop_scores(feed, ANALYSIS_DATE, route_modes, ANALYSIS_START_TIME, ANALYSIS_END_TIME)
+            if scored.empty:
+                return None
+            return feed.add_stop_coords(scored)
+
+        try:
+            combined = _score_in_window(in_window)
+            if combined is not None:
+                frames.append(combined)
+        except Exception as exc:
+            # One bad feed must not discard the others: retry each alone.
+            logger.warning(f"Combined in-window load failed ({exc}); retrying feeds one by one.")
+            for d in in_window:
+                try:
+                    single = _score_in_window([d])
+                except Exception as exc2:
+                    logger.warning(f"Feed '{d}': could not load -- skipping: {exc2}")
+                    continue
+                if single is not None:
+                    frames.append(single)
     else:
         logger.warning(f"No feeds have service in {window} -- every feed will use its own fallback date.")
 
     for gtfs_dir in fallback:
-        feed = Feed(gtfs_dirs=[str(gtfs_dir)], aoi=state_aoi, stop_group_distance=stop_group_distance)
-        rep_date = feed.get_representative_date(date_type="weekday")
+        try:
+            feed = Feed(gtfs_dirs=[str(gtfs_dir)], aoi=state_aoi, stop_group_distance=stop_group_distance)
+            rep_date = feed.get_representative_date(date_type="weekday")
+        except Exception as exc:  # e.g. feed has no stops in this state, or is malformed
+            logger.warning(f"Feed '{gtfs_dir}': could not load -- skipping: {exc}")
+            continue
         if rep_date is None:
             logger.warning(f"Feed '{gtfs_dir}': no representative date found at all -- skipping.")
             continue
         route_modes = _route_modes_for([gtfs_dir], ntd_rows_by_dir)
         try:
-            fallback_stops = best_subset_stop_scores(feed, rep_date, route_modes)
+            fallback_stops = best_subset_stop_scores(feed, rep_date, route_modes, ANALYSIS_START_TIME, ANALYSIS_END_TIME)
         except Exception as exc:  # pragma: no cover - real feeds vary widely
             logger.warning(f"Feed '{gtfs_dir}': fallback scoring failed on {rep_date}: {exc}")
             continue
@@ -285,4 +359,4 @@ def score_state_stops(
     ).to_pandas()
 
     geometry = gpd.points_from_xy(all_stops["stop_lon"], all_stops["stop_lat"])
-    return gpd.GeoDataFrame(all_stops, geometry=geometry, crs=4326)
+    return merge_same_location_stops(gpd.GeoDataFrame(all_stops, geometry=geometry, crs=4326))
