@@ -183,3 +183,16 @@ GTFS_BUILD.md
 !/city_science_network/*/aoi.gpkg
 !/city_science_network/beerseba/aoi_city.gpkg
 !/city_science_network/boston/aoi_city_only.gpkg
+
+# --- Caches and generated data. Keep this block LAST: it must come after any "!tests/**"-style re-include. ---
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+**/.ipynb_checkpoints/
+.cache/
+**/*_cache/
+population_data/
+output/
+**/map_tiles/
