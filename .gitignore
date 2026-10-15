@@ -196,3 +196,4 @@ GTFS_BUILD.md
 population_data/
 output/
 **/map_tiles/
+**/cache/
