@@ -197,3 +197,10 @@ population_data/
 output/
 **/map_tiles/
 **/cache/
+
+# Taipei GTFS (TDX bus, slimmed: no fare files) and metro zips are tracked; code/gtfs_fetch.py unzips them.
+!/city_science_network/taipei/gtfs/
+/city_science_network/taipei/gtfs/*
+!/city_science_network/taipei/gtfs/gtfs_tdx_bus_core.zip
+!/city_science_network/taipei/gtfs/gtfs_tdx_bus_shapes.zip
+!/city_science_network/taipei/gtfs/gtfs_trtc.zip

@@ -8,7 +8,7 @@ Sources per city:
   * Mobility Database ids listed in `gtfs_mdb_feeds.json` (boston, gipuzkoa, guadalajara, san_francisco, toronto)
   * a zip committed in the repo (concepcion: no public download exists), gtfs.de (hamburg), Israel Ministry of Transport (beerseba)
   * local builder scripts (andorra, shanghai -- the latter needs the CPTOND-2025 dataset from figshare)
-  * taipei: TDX bus feed needs a TDX account and cannot be fetched here -- must be copied manually.
+  * taipei: slimmed TDX bus + TRTC metro zips committed in taipei/gtfs/ (unzipped on demand).
 
 Re-downloading gives the CURRENT snapshot of each feed, not the exact files of the original run.
 """
@@ -138,11 +138,17 @@ def ensure_gtfs(key: str) -> bool:
             if not _has_feed(gtfs, "gran_concepcion"):
                 _fetch_archive(gtfs, key)
         elif key == "taipei":
-            for folder in ("tdx_bus", "trtc_metro"):
-                if not _has_feed(gtfs, folder):
-                    print(f"[gtfs] taipei: {gtfs / folder} missing -- the TDX feeds need a TDX account; "
-                          "copy them over manually from the original machine", flush=True)
-                    return False
+            # TDX bus (slimmed, no fare files) and TRTC metro ship as zips in the repo
+            for folder, zips in (("tdx_bus", ["gtfs_tdx_bus_core.zip", "gtfs_tdx_bus_shapes.zip"]), ("trtc_metro", ["gtfs_trtc.zip"])):
+                if _has_feed(gtfs, folder):
+                    continue
+                for name in zips:
+                    zpath = gtfs / name
+                    if not zpath.is_file():
+                        print(f"[gtfs] taipei: {zpath} missing -- copy it from the original machine", flush=True)
+                        return False
+                    with zipfile.ZipFile(zpath) as zf:
+                        zf.extractall(gtfs / folder)
         else:
             ids = json.loads(MDB_FEEDS.read_text())[key]
             missing = [i for i in ids if not _has_feed(gtfs, i)]
