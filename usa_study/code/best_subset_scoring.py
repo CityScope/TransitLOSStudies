@@ -60,6 +60,8 @@ instead of once) wins.
 
 from __future__ import annotations
 
+import math
+
 from datetime import date, datetime, time
 from typing import Optional, Union
 
@@ -132,8 +134,8 @@ def best_subset_stop_scores(
     feed: Feed,
     analysis_date: Union[date, datetime],
     route_modes: pl.DataFrame,
-    start_time: Union[datetime, time] = time.min,
-    end_time: Union[datetime, time] = time.max,
+    start_time: Union[datetime, time] = time(6, 0),
+    end_time: Union[datetime, time] = time(22, 0),
     region: str = "global",
 ) -> pd.DataFrame:
     """Search mode-tier x min-speed combinations per parent_station, keep the best.
@@ -216,7 +218,11 @@ def best_subset_stop_scores(
 
             bucketed_speeds = sorted(
                 {
-                    round(r["route_speed_kmh"] / _SPEED_BUCKET_KMH) * _SPEED_BUCKET_KMH
+                    # FLOOR, not round: with round-to-nearest a station served by one route at 13 km/h got the only
+                    # cutoff 15, which excluded its own route -> "no valid combination" -> the station was dropped
+                    # (about a third of all stations, mostly slow downtown routes). Floored, every route always
+                    # passes at least its own cutoff.
+                    math.floor(r["route_speed_kmh"] / _SPEED_BUCKET_KMH) * _SPEED_BUCKET_KMH
                     for r in tier_rows
                     if r["route_speed_kmh"] is not None
                 }

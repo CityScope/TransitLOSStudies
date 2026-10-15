@@ -50,7 +50,11 @@ from typing import Optional
 import geopandas as gpd
 import pandas as pd
 
+import h3
+import numpy as np
+import shapely
 from geohierarchy import h3_cells
+from geohierarchy.utils import h3_cells_from_ids
 from geohierarchy.aggregation import Mean
 from transitlos.level_of_service import compute_level_of_service
 from transitlos.network import prepare_street_network
@@ -69,7 +73,17 @@ MAX_WALK_DISTANCE_M = 1500.0
 SIMPLIFY_DISTANCE_M = 10.0
 
 #: h3 resolutions to build per county (prompt's "maximum h3 level... res 11) and res 9").
-H3_RESOLUTIONS = (11, 9)
+H3_RESOLUTIONS = (11, 9, 7)
+
+#: Same for every county: res 7 covers all populated area; finer
+#: resolutions (> `H3_COARSE_RESOLUTION`) are only generated inside census
+#: tracts denser than this (people per km2).
+H3_COARSE_RESOLUTION = 7
+H3_FINEST_RESOLUTION = 11
+H3_SCHEME_MARKER = "h3_scheme_v4.txt"
+#: Buffer (m) around LOS > 0 street edges when selecting res 11 cells.
+H3_LOS_REGION_BUFFER_M = 40.0
+H3_DENSE_TRACT_PER_KM2 = 1000.0
 
 
 def get_state_pbf(state_aoi: gpd.GeoDataFrame, osm_files_dir: Path) -> str:
@@ -112,6 +126,23 @@ def _buffer_m(gdf: gpd.GeoDataFrame, distance_m: float) -> gpd.GeoDataFrame:
     return buffered.to_crs(4326)
 
 
+STOPS_SIGNATURE_FILE = "stops_signature.txt"
+
+
+def county_stops_signature(county_gdf: gpd.GeoDataFrame, stops_gdf: gpd.GeoDataFrame) -> str:
+    """Fingerprint of the stops that can affect a county (those within walking distance of it): location and score.
+
+    Stored with the county's outputs; when the stops are rescored later, only counties whose fingerprint changed are
+    recomputed (scores compared at 0.01, locations at ~1 m).
+    """
+    import hashlib
+
+    buf = _buffer_m(county_gdf, MAX_WALK_DISTANCE_M).union_all()
+    sel = stops_gdf[stops_gdf.intersects(buf)]
+    rows = sorted(zip(sel["stop_lat"].round(5), sel["stop_lon"].round(5), sel["stop_score"].round(2)))
+    return hashlib.sha1(repr(rows).encode()).hexdigest()
+
+
 def process_county(
     county_gdf: gpd.GeoDataFrame,
     county_geoid: str,
@@ -149,58 +180,89 @@ def process_county(
     os.makedirs(county_dir, exist_ok=True)
     county_aoi = AreaOfInterest(county_gdf)
 
-    network = prepare_street_network(
-        county_aoi,
-        cache_dir=str(network_cache_dir) if network_cache_dir else None,
-        cluster_distance=SIMPLIFY_DISTANCE_M,
-        pbf_path=state_pbf_path,
-        network_type="all",
-        ignore_oneway=True,
-    )
-
     county_buffer = _buffer_m(county_gdf, MAX_WALK_DISTANCE_M)
     stops_in_county = stops_gdf[stops_gdf.intersects(county_buffer.union_all())].reset_index(drop=True)
     n_stops = len(stops_in_county)
 
+    written = {}
+    scored_edges = []
+    edges_gdf = None
+    edges_wkb = None
+    scored_wkb = None
+    street_geoms = None
+    n_network_edges = n_cropped_edges = 0
+
     if n_stops > 0:
+        # The network covers the county PLUS the walking distance around it: a stop just outside the border reaches
+        # streets inside it only through streets outside it. Results are still restricted to the county below.
+        network = prepare_street_network(
+            AreaOfInterest(county_buffer),
+            cache_dir=str(network_cache_dir) if network_cache_dir else None,
+            cluster_distance=SIMPLIFY_DISTANCE_M,
+            pbf_path=state_pbf_path,
+            network_type="all",
+            ignore_oneway=True,
+        )
         stops_union_aoi = AreaOfInterest(_buffer_m(stops_in_county, MAX_WALK_DISTANCE_M))
         # Plain spatial clip, NOT another connectivity repair -- see module
         # docstring step 3. `StreetNetwork.crop`'s own `crop_by_aoi_connected`
         # still runs, but with a buffer of 0 it degenerates to an exact clip
         # per real (now-expected-to-be-many) connected piece.
+        # Street PRESENCE (every street in the county, scored or not) decides, per h3 cell, between
+        # "has streets but no transit access" (LOS 0) and "no streets at all" (no score).
+        street_geoms = gpd.GeoSeries(
+            shapely.from_wkb(network.edges["geometry_wkb"].to_numpy()), crs=network.crs
+        ).to_crs(4326)
+        n_network_edges = network.edges.height
         network = network.crop(stops_union_aoi, crop_buffer_m=0.0)
+        n_cropped_edges = network.edges.height
+
+        edges_gdf = compute_level_of_service(
+            aoi=county_aoi,
+            network=network,
+            stops=stops_in_county,
+            max_walk_distance_m=MAX_WALK_DISTANCE_M,
+        )
+
+        if len(edges_gdf) == 0:  # no streets near the stops: same as no transit (LOS 0)
+            edges_gdf = None
+    if edges_gdf is not None:
+        county_geom = county_gdf.to_crs(edges_gdf.crs).union_all()
+        edges_in_county = edges_gdf[edges_gdf.intersects(county_geom)]
+        scored_edges = edges_in_county[edges_in_county["level_of_service"] > 0]
+        if len(scored_edges) > 0:
+            street_path = county_dir / "street.geoparquet"
+            scored_edges.to_crs(4326).to_parquet(street_path)
+            written["street"] = str(street_path)
+
+        # `edges_to_level` labels its input WKB with whatever `crs` it's given
+        # rather than reprojecting -- so reproject to WGS84 here FIRST, the
+        # same pattern `UrbanAccessAnalyzer.api.AccessibilityAnalyzer.to_h3`/
+        # `.to_level` use (both reproject edges to WGS84 before ever calling
+        # `edges_to_level`, since h3/census grids are natively WGS84 too).
+        # Only edges with LOS > 0 feed the h3 means (same inputs as `rebuild_county_h3`, which only has these).
+        scored_wgs = edges_in_county[edges_in_county["level_of_service"] > 0].to_crs(4326)
+        scored_wkb = _to_wkb_polars(scored_wgs) if len(scored_wgs) else None
+        # Census levels (block ... county) average over ALL of the county's edges, zeros included (not the buffer ring
+        # around it); h3 uses the scored ones.
+        edges_wkb = _to_wkb_polars(edges_in_county.to_crs(4326)) if len(edges_in_county) else None
     else:
-        logger.warning(f"County {county_geoid}: no stops within {MAX_WALK_DISTANCE_M}m -- LOS will be all-zero.")
+        # No public transport (or street network) reaches this county: LOS is 0 everywhere, so
+        # the street network is not downloaded/built at all.
+        logger.warning(f"County {county_geoid}: no stops within {MAX_WALK_DISTANCE_M}m -- skipping street network, LOS = 0.")
 
-    edges_gdf = compute_level_of_service(
-        aoi=county_aoi,
-        network=network,
-        stops=stops_in_county if n_stops > 0 else stops_gdf.iloc[0:0],
-        max_walk_distance_m=MAX_WALK_DISTANCE_M,
+    census_written = _join_census_and_h3(
+        county_gdf, county_geoid, edges_wkb, county_dir, census_cache_dir, street_geoms=street_geoms,
+        scored_edges=scored_wkb,
     )
-
-    written = {}
-
-    county_geom = county_gdf.to_crs(edges_gdf.crs).union_all()
-    edges_in_county = edges_gdf[edges_gdf.intersects(county_geom)]
-    scored_edges = edges_in_county[edges_in_county["level_of_service"] > 0]
-    if len(scored_edges) > 0:
-        street_path = county_dir / "street.geoparquet"
-        scored_edges.to_crs(4326).to_parquet(street_path)
-        written["street"] = str(street_path)
-
-    # `edges_to_level` labels its input WKB with whatever `crs` it's given
-    # rather than reprojecting -- so reproject to WGS84 here FIRST, the
-    # same pattern `UrbanAccessAnalyzer.api.AccessibilityAnalyzer.to_h3`/
-    # `.to_level` use (both reproject edges to WGS84 before ever calling
-    # `edges_to_level`, since h3/census grids are natively WGS84 too).
-    edges_wkb = _to_wkb_polars(edges_gdf.to_crs(4326))
-    census_written = _join_census_and_h3(county_gdf, county_geoid, edges_wkb, county_dir, census_cache_dir)
     written.update(census_written)
 
+    (county_dir / STOPS_SIGNATURE_FILE).write_text(county_stops_signature(county_gdf, stops_gdf))
     return {
         "n_stops": n_stops,
-        "n_edges_total": len(edges_gdf),
+        "n_network_edges": n_network_edges,  # cached county+buffer network (never cropped to stops)
+        "n_cropped_edges": n_cropped_edges,  # the part within walking range of the stops
+        "n_edges_total": 0 if edges_gdf is None else len(edges_gdf),
         "n_edges_scored": len(scored_edges),
         "written": written,
     }
@@ -384,12 +446,35 @@ def _fetch_native_census_level(level: str, county_gdf: gpd.GeoDataFrame, state_f
     return merged
 
 
+def _county_election_row(county_gdf, county_geoid, state_fips, cache_dir, county_centroid_geom):
+    """Fetch this county's native county-level row (+ elections); returns (county_level_gdf, election_row)."""
+    county_election_row: Optional[pd.Series] = None
+    county_level_gdf = _fetch_native_census_level("county", county_gdf, state_fips, cache_dir)
+    if county_level_gdf is not None and not county_level_gdf.empty:
+        county_level_gdf = county_level_gdf[
+            county_level_gdf.geometry.representative_point().within(county_centroid_geom)  # centroid can lie outside island / multi-part counties
+        ].reset_index(drop=True)
+        county_level_gdf = _add_elections(county_level_gdf, state_fips, cache_dir)
+        if len(county_level_gdf) == 1:
+            county_election_row = county_level_gdf.iloc[0]
+        elif len(county_level_gdf) > 1:
+            # A county-level fetch should return exactly this county's own
+            # row; if more than one survived the centroid filter, match by
+            # GEOID rather than guessing which row is "ours".
+            matches = county_level_gdf[county_level_gdf["GEOID"] == county_geoid]
+            if not matches.empty:
+                county_election_row = matches.iloc[0]
+    return county_level_gdf, county_election_row
+
+
 def _join_census_and_h3(
     county_gdf: gpd.GeoDataFrame,
     county_geoid: str,
     edges_gdf: gpd.GeoDataFrame,
     county_dir: Path,
     census_cache_dir: Optional[Path] = None,
+    street_geoms=None,
+    scored_edges=None,
 ) -> dict:
     """Join `level_of_service` + population/jobs onto every census/h3 level, save geoparquets.
 
@@ -421,22 +506,9 @@ def _join_census_and_h3(
     # fetch that row up front so block/blockgroup/tract/h3 can each get it
     # disaggregated down via `_disaggregate_elections_onto`, regardless of
     # `_CENSUS_ADMIN_LEVELS`' own iteration order.
-    county_election_row: Optional[pd.Series] = None
-    county_level_gdf = _fetch_native_census_level("county", county_gdf, state_fips, cache_dir)
-    if county_level_gdf is not None and not county_level_gdf.empty:
-        county_level_gdf = county_level_gdf[
-            county_level_gdf.geometry.centroid.within(county_centroid_geom)
-        ].reset_index(drop=True)
-        county_level_gdf = _add_elections(county_level_gdf, state_fips, cache_dir)
-        if len(county_level_gdf) == 1:
-            county_election_row = county_level_gdf.iloc[0]
-        elif len(county_level_gdf) > 1:
-            # A county-level fetch should return exactly this county's own
-            # row; if more than one survived the centroid filter, match by
-            # GEOID rather than guessing which row is "ours".
-            matches = county_level_gdf[county_level_gdf["GEOID"] == county_geoid]
-            if not matches.empty:
-                county_election_row = matches.iloc[0]
+    county_level_gdf, county_election_row = _county_election_row(
+        county_gdf, county_geoid, state_fips, cache_dir, county_centroid_geom
+    )
 
     for level in _CENSUS_ADMIN_LEVELS:
         if level == "county" and county_level_gdf is not None:
@@ -452,7 +524,7 @@ def _join_census_and_h3(
         # merely intersect the clip bounds). Already applied above for
         # the reused `county_level_gdf`.
         if level != "county":
-            centroids = gdf.geometry.centroid
+            centroids = gdf.geometry.representative_point()  # always inside the polygon (a centroid can fall outside it)
             gdf = gdf[centroids.within(county_centroid_geom)].reset_index(drop=True)
         if gdf.empty:
             continue
@@ -461,10 +533,13 @@ def _join_census_and_h3(
         # requested columns -- merge its `level_of_service` back onto the
         # original `gdf` (which carries every census column) rather than
         # replacing `gdf` with that slim result.
-        los = geometry_levels.edges_to_level(
-            edges_gdf, gdf, id_col="GEOID", columns=["level_of_service"], agg=Mean(), geometry_col="geometry"
-        )
-        gdf = gdf.merge(los[["GEOID", "level_of_service"]], on="GEOID", how="left")
+        if edges_gdf is None:
+            gdf["level_of_service"] = 0.0
+        else:
+            los = geometry_levels.edges_to_level(
+                edges_gdf, gdf, id_col="GEOID", columns=["level_of_service"], agg=Mean(), geometry_col="geometry"
+            )
+            gdf = gdf.merge(los[["GEOID", "level_of_service"]], on="GEOID", how="left")
         gdf["level_of_service"] = gdf["level_of_service"].fillna(0.0)
 
         pop_col = next((c for c in ("population", "dhc_population", "acs5_population") if c in gdf.columns), None)
@@ -485,42 +560,227 @@ def _join_census_and_h3(
         gdf.to_crs(4326).to_parquet(path)
         written[level] = str(path)
 
-    block_gdf = _fetch_native_census_level("block", county_gdf, state_fips, cache_dir)
-    for resolution in H3_RESOLUTIONS:
-        h3_written = _join_h3_level(
-            county_gdf, county_geoid, edges_gdf, block_gdf, resolution, county_dir, county_election_row
+    written.update(
+        _write_h3_levels(
+            county_gdf, county_geoid, scored_edges, county_dir, cache_dir, county_election_row, county_centroid_geom,
+            street_geoms=street_geoms,
         )
-        if h3_written:
-            written[f"h3_res{resolution}"] = h3_written
-
+    )
     return written
+
+
+def _write_h3_levels(
+    county_gdf, county_geoid, edges_gdf, county_dir, cache_dir, county_election_row, county_centroid_geom, street_geoms=None
+) -> dict:
+    """Write this county's h3 files: res 11 from the street edges, coarser levels derived from it.
+
+    Res 11 exists wherever LOS > 0 (any population density) plus inside dense
+    tracts (> `H3_DENSE_TRACT_PER_KM2`). Res 9 and 7 are then resampled from
+    res 11 (population-weighted LOS). Population stays complete at every
+    level because it comes from census blocks, not from res 11.
+    """
+    state_fips = county_geoid[:2]
+    written = {}
+    block_gdf = _fetch_native_census_level("block", county_gdf, state_fips, cache_dir)
+    dense_region = _dense_tract_region(county_gdf, state_fips, cache_dir, county_centroid_geom)
+    res11 = None
+    for resolution in H3_RESOLUTIONS:  # finest first
+        out = _join_h3_level(
+            county_gdf, county_geoid, edges_gdf, block_gdf, resolution, county_dir, county_election_row,
+            dense_region=dense_region, res11=res11, street_geoms=street_geoms,
+        )
+        if out is None:
+            continue
+        path, df = out
+        written[f"h3_res{resolution}"] = path
+        if resolution == H3_FINEST_RESOLUTION:
+            res11 = df
+    (county_dir / H3_SCHEME_MARKER).write_text(
+        "res11: LOS>0 or dense tracts, mean of scored edges, 0 if streets but no score, null if no streets; coarser resampled\n"
+    )
+    return written
+
+
+def _dense_tract_region(county_gdf, state_fips, cache_dir, county_geom):
+    """Union (EPSG:4326) of this county's tracts denser than `H3_DENSE_TRACT_PER_KM2`, or None."""
+    tracts = _fetch_native_census_level("tract", county_gdf, state_fips, cache_dir)
+    if tracts is None or tracts.empty or "population" not in tracts.columns:
+        return None
+    tracts = tracts[tracts.geometry.centroid.within(county_geom)]
+    return dense_union(tracts)
+
+
+def dense_union(tracts: gpd.GeoDataFrame):
+    """Union of tracts with population density above `H3_DENSE_TRACT_PER_KM2` (None if none)."""
+    if tracts.empty:
+        return None
+    tracts = tracts.to_crs(4326)
+    area_km2 = tracts.to_crs(tracts.estimate_utm_crs()).area / 1e6
+    pop = pd.to_numeric(tracts["population"], errors="coerce").fillna(0)
+    dense = tracts[(pop / area_km2.where(area_km2 > 0)) > H3_DENSE_TRACT_PER_KM2]
+    if dense.empty:
+        return None
+    return dense.union_all()
+
+
+def county_already_processed(county_dir: Path) -> bool:
+    """A county counts as done once it has its county file or any h3 output.
+
+    (Some counties have no native census county row, e.g. Connecticut's
+    planning regions, so `county.geoparquet` alone can't be the marker.)
+    """
+    return (county_dir / "county.geoparquet").is_file() or any(county_dir.glob("h3_res*.geoparquet"))
+
+
+def rebuild_county_h3(county_gdf: gpd.GeoDataFrame, county_dir: Path, census_cache_dir: Optional[Path] = None) -> bool:
+    """Rebuild a finished county's h3 files under the current scheme, without recomputing LOS.
+
+    Uses the county's saved scored street edges (`street.geoparquet`, LOS > 0
+    only) for the cell means and the cached county street network
+    (`_network_cache`) for street presence -- the same inputs a fresh run
+    uses, so the result is identical to a full recomputation.
+
+    Returns:
+        True if rebuilt, False if already current / the county has no output.
+    """
+    if (county_dir / H3_SCHEME_MARKER).is_file() or not county_already_processed(county_dir):
+        return False
+    geoid = county_dir.name
+    cache_dir = str(census_cache_dir) if census_cache_dir is not None else None
+    if cache_dir is None:
+        from pycensus.cache import default_cache_dir
+
+        cache_dir = default_cache_dir()
+    centroid_geom = county_gdf.to_crs(4326).union_all()
+    _, election_row = _county_election_row(county_gdf, geoid, geoid[:2], cache_dir, centroid_geom)
+
+    edges_wkb = None
+    street_path = county_dir / "street.geoparquet"
+    if street_path.is_file():
+        edges_wkb = _to_wkb_polars(gpd.read_parquet(street_path).to_crs(4326))
+    street_geoms = None
+    net_edges = county_dir / "_network_cache_b1500" / "edges.parquet"
+    if net_edges.is_file():
+        import polars as pl
+
+        crs = (county_dir / "_network_cache_b1500" / "meta.txt").read_text().strip()
+        street_geoms = gpd.GeoSeries(
+            shapely.from_wkb(pl.read_parquet(net_edges, columns=["geometry_wkb"])["geometry_wkb"].to_numpy()), crs=crs
+        ).to_crs(4326)
+    for old in county_dir.glob("h3_res*.geoparquet"):
+        old.unlink()
+    _write_h3_levels(county_gdf, geoid, edges_wkb, county_dir, cache_dir, election_row, centroid_geom, street_geoms=street_geoms)
+    return True
+
+
+def _los_region_4326(edges_gdf):
+    """Union (EPSG:4326) of the buffered street edges with LOS > 0, or None.
+
+    `edges_gdf` is the polars WKB edge table (EPSG:4326) passed through the pipeline.
+    """
+    if edges_gdf is None or edges_gdf.height == 0:
+        return None
+    scored = edges_gdf.filter(edges_gdf["level_of_service"] > 0)
+    if scored.height == 0:
+        return None
+    geoms = gpd.GeoSeries(shapely.from_wkb(scored["geometry"].to_numpy()), crs=4326)
+    utm = geoms.estimate_utm_crs()
+    region = geoms.to_crs(utm).buffer(H3_LOS_REGION_BUFFER_M).union_all()
+    return gpd.GeoSeries([region], crs=utm).to_crs(4326).iloc[0]
+
+
+def _scored_edge_cell_means(edges_wkb, resolution: int, step_m: float = 10.0) -> pd.Series:
+    """Mean LOS of the scored street edges in each h3 cell, from points sampled every `step_m` along every edge.
+
+    `geohierarchy.edges_to_level` length-weights edge overlaps but drops cells where an edge only grazes a small part of
+    its length -- at res 11 (~30 m cells, edges of 100+ m) about a third of the cells that really touch a scored street
+    came out as 0. Sampling points along the (densified) lines and binning them into cells is exact for such small
+    cells and is length-weighted by construction.
+    """
+    from pyproj import Transformer
+
+    if edges_wkb is None or edges_wkb.height == 0:
+        return pd.Series(dtype=float)
+    geoms = shapely.from_wkb(edges_wkb["geometry"].to_numpy())
+    los = edges_wkb["level_of_service"].to_numpy().astype(float)
+    series = gpd.GeoSeries(geoms, crs=4326)
+    utm = series.estimate_utm_crs()
+    dense = shapely.segmentize(series.to_crs(utm).values, step_m)
+    xy, idx = shapely.get_coordinates(dense, return_index=True)
+    lon, lat = Transformer.from_crs(utm, 4326, always_xy=True).transform(xy[:, 0], xy[:, 1])
+    cells = [h3.latlng_to_cell(la, lo, resolution) for la, lo in zip(lat, lon)]
+    return pd.DataFrame({"h3": cells, "los": los[idx]}).groupby("h3")["los"].mean()
 
 
 def _join_h3_level(
     county_gdf: gpd.GeoDataFrame,
     county_geoid: str,
-    edges_gdf: gpd.GeoDataFrame,
+    edges_gdf,
     block_gdf: Optional[gpd.GeoDataFrame],
     resolution: int,
     county_dir: Path,
     county_election_row: Optional[pd.Series] = None,
-) -> Optional[str]:
-    """Build one h3 resolution's grid over the county, join LOS + population/jobs, save."""
-    grid = h3_cells(county_gdf, resolution)
+    dense_region=None,
+    res11: Optional[pd.DataFrame] = None,
+    street_geoms=None,
+):
+    """Build one h3 resolution for a county, join LOS + population, save.
+
+    Res 11 (`H3_FINEST_RESOLUTION`): cells over (buffered LOS > 0 streets) union
+    (dense tracts); LOS is the mean of the street edges' LOS in each cell.
+    Coarser: cells covering res 11's footprint (res 9) or the whole county
+    (res 7); LOS is the population-weighted mean of the res 11 children,
+    with population taken from the blocks (so people outside res 11, who have
+    LOS 0, still count in the denominator).
+
+    Returns:
+        `(path, DataFrame)` or None if nothing to write.
+    """
     county_geom = county_gdf.to_crs(4326).union_all()
+
+    if resolution == H3_FINEST_RESOLUTION:
+        parts = [g for g in (dense_region, _los_region_4326(edges_gdf)) if g is not None]
+        if not parts:
+            return None
+        region_gdf = gpd.GeoDataFrame(geometry=[shapely.union_all(parts)], crs=4326)
+        grid = h3_cells(region_gdf, resolution)
+    elif resolution == 9:
+        if res11 is None or res11.empty:
+            return None
+        parents = sorted({h3.cell_to_parent(c, resolution) for c in res11["h3"]})
+        grid = h3_cells_from_ids(parents)
+    else:  # res 7: whole county (cells without population are dropped below)
+        grid = h3_cells(county_gdf, resolution)
+
     grid = grid[grid.geometry.centroid.within(county_geom)].reset_index(drop=True)
     if grid.empty:
         return None
 
-    grid = geometry_levels.edges_to_level(
-        edges_gdf, grid, id_col="h3", columns=["level_of_service"], agg=Mean(), geometry_col="geometry"
-    )
-    grid["level_of_service"] = grid["level_of_service"].fillna(0.0)
+    if resolution == H3_FINEST_RESOLUTION:
+        # Mean of the SCORED street edges (LOS > 0) in the cell; NaN where none touch it.
+        grid["level_of_service"] = grid["h3"].map(_scored_edge_cell_means(edges_gdf, resolution))
+        # No scored edge: LOS 0 if the cell touches any street, else no score (None, ignored when resampling).
+        # `street_geoms=None` means street presence is unknown (no network was loaded): assume streets.
+        unscored = grid["level_of_service"].isna()
+        if unscored.any():
+            if street_geoms is None:
+                grid.loc[unscored, "level_of_service"] = 0.0
+            else:
+                cand = grid.loc[unscored, ["h3", "geometry"]]
+                hit = gpd.sjoin(
+                    cand.set_crs(4326, allow_override=True),
+                    gpd.GeoDataFrame(geometry=street_geoms.values, crs=4326),
+                    how="inner", predicate="intersects",
+                )["h3"].unique()
+                grid.loc[unscored & grid["h3"].isin(hit), "level_of_service"] = 0.0
 
     # Real decennial block population is the finest native source
     # available (see [[usa_study_native_level_rule]]) -- area-weighted
     # onto h3 cells since blocks and h3 cells don't nest.
     grid = _add_area_weighted(grid, block_gdf, ["population"], id_col="h3")
+
+    if resolution != H3_FINEST_RESOLUTION:
+        grid["level_of_service"] = _resample_los_from_res11(grid, res11, resolution)
 
     if "population" in grid.columns:
         grid = _disaggregate_elections_onto(grid, county_election_row, pop_col="population")
@@ -537,7 +797,32 @@ def _join_h3_level(
     out = grid.drop(columns="geometry")
     path = county_dir / f"h3_res{resolution}.geoparquet"
     out.to_parquet(path)
-    return str(path)
+    return str(path), out
+
+
+def _resample_los_from_res11(grid: pd.DataFrame, res11: Optional[pd.DataFrame], resolution: int) -> pd.Series:
+    """Population-weighted LOS of each coarser cell from its res 11 children.
+
+    Children with no score (no streets) are ignored: their population is removed from the
+    denominator. People of the coarse cell outside any res 11 cell count as LOS 0.
+    A cell whose entire population is unscored gets no score (NaN).
+    """
+    if res11 is None or res11.empty:
+        return pd.Series(0.0, index=grid.index)
+    kids = res11[["h3", "level_of_service", "population"]].copy()
+    kids["_parent"] = [h3.cell_to_parent(c, resolution) for c in kids["h3"]]
+    pop_k = pd.to_numeric(kids["population"], errors="coerce").fillna(0)
+    scored = kids["level_of_service"].notna()
+    numer = (pop_k * kids["level_of_service"]).where(scored, 0.0).groupby(kids["_parent"]).sum()
+    unscored_pop = pop_k.where(~scored, 0.0).groupby(kids["_parent"]).sum()
+    pop = pd.to_numeric(grid["population"], errors="coerce").fillna(0)
+    denom = (pop - grid["h3"].map(unscored_pop).fillna(0.0)).clip(lower=0)
+    los = grid["h3"].map(numer).fillna(0.0) / denom.where(denom > 0)
+    los = los.clip(upper=float(kids["level_of_service"].max()))
+    # all of the cell's population unscored -> no score; no children at all -> 0
+    has_kids = grid["h3"].isin(numer.index)
+    los = los.where(~(has_kids & ~(denom > 0)), np.nan)
+    return los.where(has_kids, 0.0)
 
 
 def _add_area_weighted(

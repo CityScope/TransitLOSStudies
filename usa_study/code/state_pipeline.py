@@ -36,11 +36,11 @@ _ELECTION_COL_RE = re.compile(r"^\d{4}_(president|senate)_")
 
 #: State-level h3 resolutions, matching `city_science_network.code.params
 #: .StudyParams.map_h3_resolutions`'s own zoom-banded set. 9 and 11 are
-#: already built per-county; 5 and 7 are new, resampled up from 9.
-STATE_H3_RESOLUTIONS: Sequence[int] = (5, 7, 9, 11)
+#: 11 (LOS>0 or dense tracts), 9 and 7 are built per-county; 3, 4 and 5 are resampled up from 7.
+STATE_H3_RESOLUTIONS: Sequence[int] = (3, 4, 5, 7, 9, 11)
 
 #: Finest per-county h3 resolution coarser levels resample up from.
-_BASE_H3_RESOLUTION = 9
+_BASE_H3_RESOLUTION = 7
 
 
 def merge_counties(state_dir: Path) -> Path:
@@ -79,9 +79,9 @@ def merge_and_resample_h3(state_dir: Path, resolutions: Sequence[int] = STATE_H3
     Args:
         state_dir: State folder containing a `counties/` subdirectory.
         resolutions: Target resolutions to write (see `STATE_H3_RESOLUTIONS`).
-            Any resolution <= `_BASE_H3_RESOLUTION` (9) is a plain concat
+            Any resolution >= `_BASE_H3_RESOLUTION` (7) is a plain concat
             of the matching per-county files; anything coarser is
-            resampled up from the concatenated res-9 table.
+            resampled up from the concatenated res-7 table.
 
     Returns:
         Dict mapping resolution -> written file path (a resolution with
@@ -106,8 +106,7 @@ def merge_and_resample_h3(state_dir: Path, resolutions: Sequence[int] = STATE_H3
         if resolution == _BASE_H3_RESOLUTION:
             out = base
         elif resolution > _BASE_H3_RESOLUTION:
-            # Finer than the per-county base -- concat that county-level
-            # resolution directly (built by `county_pipeline` already).
+            # Finer than the base (dense tracts only) -- plain concat.
             frames = []
             for county_folder in sorted(counties_dir.iterdir()):
                 p = county_folder / f"h3_res{resolution}.geoparquet"
@@ -423,7 +422,8 @@ def _resample_h3_up(fine: pd.DataFrame, target_resolution: int) -> pd.DataFrame:
     """Aggregate a fine-resolution h3 table up to a coarser resolution.
 
     `population`/any `*_jobsTotal`-like count column: summed (a real
-    total). `level_of_service`: population-weighted mean, never a plain
+    total); share/intensive columns and `level_of_service`: population-weighted means over the
+    children that have a value (a cell with no score, i.e. no streets, is ignored), never a plain
     unweighted average (a near-zero-population cell shouldn't drag a
     coarser cell's real, population-experienced access score down/up as
     much as a heavily-populated one).
@@ -431,14 +431,36 @@ def _resample_h3_up(fine: pd.DataFrame, target_resolution: int) -> pd.DataFrame:
     df = fine.copy()
     df["_parent"] = df["h3"].apply(lambda cell: h3.cell_to_parent(cell, target_resolution))
 
-    count_cols = [c for c in df.columns if c not in ("h3", "_parent", "level_of_service") and pd.api.types.is_numeric_dtype(df[c])]
-    agg = {col: "sum" for col in count_cols}
+    try:
+        agg_map = _column_agg_map()
+    except Exception:
+        agg_map = {}
+    num_cols = [c for c in df.columns if c not in ("h3", "_parent", "level_of_service") and pd.api.types.is_numeric_dtype(df[c])]
+    is_mean = lambda c: agg_map.get(c) == "mean" or c.endswith(("_share", "_rate")) or any(  # noqa: E731 -- intensive columns
+        m in c.lower() for m in ("median", "mean_", "_mean", "density", "_index", "_ratio"))
+    sum_cols = [c for c in num_cols if not is_mean(c)]
+    mean_cols = [c for c in num_cols if is_mean(c)]
+    agg = {col: "sum" for col in sum_cols}
 
-    if "level_of_service" in df.columns and "population" in df.columns:
-        df["_los_weighted"] = df["level_of_service"] * df["population"]
-        grouped = df.groupby("_parent").agg({**agg, "_los_weighted": "sum", "population": "sum"})
-        grouped["level_of_service"] = (grouped["_los_weighted"] / grouped["population"].replace(0, pd.NA)).fillna(0.0)
-        grouped = grouped.drop(columns="_los_weighted")
+    if "population" in df.columns:
+        pop = pd.to_numeric(df["population"], errors="coerce").fillna(0)
+        # LOS: population-weighted mean over SCORED children only (NaN = no streets, ignored).
+        scored = df["level_of_service"].notna() if "level_of_service" in df.columns else pd.Series(False, index=df.index)
+        df["_los_w"] = (df["level_of_service"] * pop).where(scored, 0.0) if "level_of_service" in df.columns else 0.0
+        df["_los_p"] = pop.where(scored, 0.0)
+        for c in mean_cols:  # intensive columns: population-weighted mean
+            df[f"_w_{c}"] = (df[c] * pop).where(df[c].notna(), 0.0)
+            df[f"_p_{c}"] = pop.where(df[c].notna(), 0.0)
+        extra = {"_los_w": "sum", "_los_p": "sum"}
+        for c in mean_cols:
+            extra[f"_w_{c}"] = "sum"
+            extra[f"_p_{c}"] = "sum"
+        grouped = df.groupby("_parent").agg({**agg, **extra})
+        if "level_of_service" in df.columns:
+            grouped["level_of_service"] = grouped["_los_w"] / grouped["_los_p"].where(grouped["_los_p"] > 0)
+        for c in mean_cols:
+            grouped[c] = grouped[f"_w_{c}"] / grouped[f"_p_{c}"].where(grouped[f"_p_{c}"] > 0)
+        grouped = grouped.drop(columns=[c for c in grouped.columns if c.startswith(("_los_", "_w_", "_p_"))])
     else:
         grouped = df.groupby("_parent").agg(agg)
 

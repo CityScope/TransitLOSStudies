@@ -71,3 +71,87 @@ build/
 # by `county_pipeline.get_state_pbf` on the target machine anyway.
 /usa_study/data/
 /usa_study/osm_files/
+
+# ===== Processing results are never tracked (only code) =====
+# Anything a run produces -- data, tiles, maps, caches, logs, downloaded feeds / OSM extracts, audit tables -- stays local
+# and is regenerable by re-running the code. Test fixtures under tests/ are code assets and stay trackable.
+
+# Result / raw-data / cache file types (anywhere in the repo)
+*.parquet
+*.geoparquet
+*.gpkg
+*.geojson
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.pmtiles
+*.mbtiles
+*.pbf
+*.osm.pbf
+*.tif
+*.tiff
+*.npy
+*.npz
+*.pkl
+*.pickle
+*.feather
+*.h5
+*.hdf5
+*.zip
+*.log
+nohup.out
+*.tmp
+*.part
+.cache/
+*_cache/
+_network_cache*/
+pycensus_cache/
+
+# Generated maps and audit/summary tables
+map.html
+combined_map.html
+*_map.html
+feed_report.json
+feed_exceptions.csv
+feed_audit.csv
+feed_size_audit.csv
+feeds_dropped_by_analysis_date.csv
+score_audit.csv
+ptlos_by_state.csv
+stops_signature.txt
+h3_scheme_v*.txt
+
+# Secrets / local configuration
+api_keys.json
+*.env
+.env
+
+# Study run folders. Studies keep code, prompts and orchestration scripts (*.py, *.sh, README, prompt.txt) only.
+/usa_study/data/
+/usa_study/osm_files/
+/usa_study/logs/
+/usa_study/logs_prev/
+/usa_study/*.log
+/city_science_network/**/tiles/
+/city_science_network/**/results/
+/city_science_network/**/map_tiles/
+/city_science_network/**/stats_data.json
+/**/tiles/
+/**/output/
+/**/outputs/
+
+# Test fixtures are code assets: keep them trackable even though they match the types above.
+!tests/**
+
+# usa_study: only the study runner and the pipeline code are tracked -- main.py (`python main.py ALL` runs the complete
+# study), code/*.py, build_usa_map.py (imported by main.py), README.md and prompt.txt. One-off helpers written while building
+# or correcting the study (state-by-state re-runs, chained run scripts, migrations, audits, feed downloaders) stay local.
+/usa_study/*.sh
+/usa_study/audit_feeds.py
+/usa_study/audit_scores.py
+/usa_study/backfill_stop_signatures.py
+/usa_study/fetch_missing_feeds.py
+/usa_study/_local*/
+/usa_study/tmp_*.py

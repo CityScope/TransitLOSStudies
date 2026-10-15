@@ -51,7 +51,10 @@ SPECIAL_LEVEL_LABELS = {
     "state": "State (elections)",
 }
 
-H3_RESOLUTIONS = (5, 7, 9, 11)
+H3_RESOLUTIONS = (3, 4, 5, 7, 9, 11)
+
+#: Resolution covering all populated area; finer layers fall back to it where absent.
+COARSE_RESOLUTION = 7
 
 
 def _h3_geometry(df: pd.DataFrame) -> gpd.GeoDataFrame:
@@ -64,7 +67,8 @@ def _h3_geometry(df: pd.DataFrame) -> gpd.GeoDataFrame:
     build time instead.
     """
     polys = [shapely.Polygon([(lon, lat) for lat, lon in h3.cell_to_boundary(cell)]) for cell in df["h3"]]
-    return gpd.GeoDataFrame(df, geometry=polys, crs=4326)
+    # `build_city_map` keys h3 layers on `h3_cell`.
+    return gpd.GeoDataFrame(df.rename(columns={"h3": "h3_cell"}), geometry=polys, crs=4326)
 
 
 def _load_state_streets(state_dir: Path) -> gpd.GeoDataFrame:
@@ -75,58 +79,146 @@ def _load_state_streets(state_dir: Path) -> gpd.GeoDataFrame:
         if p.is_file():
             frames.append(gpd.read_parquet(p))
     if not frames:
-        raise ValueError(f"No street.geoparquet files found under {state_dir / 'counties'}")
+        logger.warning(f"No street.geoparquet files under {state_dir / 'counties'} (no scored streets) -- skipped.")
+        return None
+    return gpd.GeoDataFrame(pd.concat(frames, ignore_index=True), geometry="geometry", crs=frames[0].crs)
+
+
+#: Levels whose tiles are written per state in nationwide ("external") mode -- keep in sync with `code.external_tiles`.
+STATS_RESOLUTION = 4  # nation-level stats grid embedded in the page (res 4: ~6k cells; states load res 7 on demand)
+EXTERNAL_H3 = (9, 11)  # sampled in memory (tiles per state); res 7 is tiled per state but kept in full
+EXTERNAL_CENSUS = ("blockgroup", "block")
+
+
+def _representative_sample(parts, n_per_state: int = 4000) -> pd.DataFrame:
+    """A small stand-in for a huge per-state table: a random sample from each state plus every numeric
+    column's min and max row, so schema and value domains (colour/opacity ranges) match the full data."""
+    out = []
+    for df in parts:
+        if df.empty:
+            continue
+        pick = {*df.sample(min(len(df), n_per_state), random_state=0).index}
+        for col in df.select_dtypes("number").columns:
+            if df[col].notna().any():
+                pick.add(df[col].idxmax())
+                pick.add(df[col].idxmin())
+        out.append(df.loc[sorted(pick)])
+    return pd.concat(out, ignore_index=True)
+
+
+def _concat_gdfs(frames):
+    frames = [f for f in frames if f is not None and len(f)]
+    if not frames:
+        return None
     return gpd.GeoDataFrame(pd.concat(frames, ignore_index=True), geometry="geometry", crs=frames[0].crs)
 
 
 def assemble_state_map_inputs(state_dir: Path) -> dict:
-    """Build every `build_city_map` argument from one state's real usa_study output.
+    """Build every `build_city_map` argument from one state's real usa_study output (see `assemble_map_inputs`)."""
+    return assemble_map_inputs([Path(state_dir)])
+
+
+def assemble_map_inputs(state_dirs, include_streets: bool = True, external: bool = False) -> dict:
+    """Build every `build_city_map` argument from one or MANY states' usa_study output.
 
     Args:
-        state_dir: State folder (containing `stops.geoparquet`,
-            `county.geoparquet`, `h3_res*.geoparquet`, and a `counties/`
+        state_dirs: State folders (each containing `stops.geoparquet`,
+            `county.geoparquet`, `h3_res*.geoparquet` and a `counties/`
             subdirectory), as written by `main.py`/`state_pipeline.py`.
+            Passing all of them gives the nationwide map inputs.
+        include_streets: Whether to load the (very large) street edges.
+        external: Nationwide mode: the heavy levels (h3 res 9/11, census block/blockgroup, streets) are NOT
+            loaded -- only a representative sample (schema + value domains) is returned, because their tiles
+            are written per state by `code.external_tiles` and never held in one process.
 
     Returns:
         Dict of keyword arguments ready to `**`-splat into
         `transitlos.map.build.build_city_map` (missing optional inputs,
         e.g. no state-district files yet built, are simply omitted).
     """
-    h3_by_resolution: Dict[int, gpd.GeoDataFrame] = {}
+    state_dirs = [Path(d) for d in state_dirs]
+    multi = len(state_dirs) > 1
+
+    h3_tables: Dict[int, pd.DataFrame] = {}
     for res in H3_RESOLUTIONS:
-        path = state_dir / f"h3_res{res}.geoparquet"
-        if path.is_file():
-            h3_by_resolution[res] = _h3_geometry(pd.read_parquet(path))
+        parts = [pd.read_parquet(d / f"h3_res{res}.geoparquet") for d in state_dirs if (d / f"h3_res{res}.geoparquet").is_file()]
+        if res == COARSE_RESOLUTION and parts:
+            # Census / ACS / jobs variables (tract values) so the stats panel can use every variable, not only elections.
+            from .census_h3 import add_census_variables
+
+            parts = [add_census_variables(df, d) for df, d in zip(parts, [d for d in state_dirs if (d / f"h3_res{res}.geoparquet").is_file()])]
+        if parts and external and res in EXTERNAL_H3 and res != COARSE_RESOLUTION:
+            h3_tables[res] = _representative_sample(parts)
+        elif parts:
+            h3_tables[res] = pd.concat(parts, ignore_index=True)
         else:
-            logger.warning(f"No h3_res{res}.geoparquet under {state_dir} -- that resolution omitted from the map.")
+            logger.warning(f"No h3_res{res}.geoparquet under {[d.name for d in state_dirs][:3]}... -- that resolution omitted from the map.")
+
+    if multi and COARSE_RESOLUTION in h3_tables:
+        # A cell on a state border appears in both states with partial counts: merge duplicates
+        # at the base resolution, then re-derive every coarser level from the merged table.
+        from .state_pipeline import _resample_h3_up
+
+        merged = _resample_h3_up(h3_tables[COARSE_RESOLUTION], COARSE_RESOLUTION)
+        h3_tables[COARSE_RESOLUTION] = merged
+        for res in H3_RESOLUTIONS:
+            if res < COARSE_RESOLUTION:
+                h3_tables[res] = _resample_h3_up(merged, res)
+
+    # Note: res 7 stays in memory IN FULL even though its tiles are written per state (`code.external_tiles`): the
+    # stats panel and the coarse levels are computed from it, and ~1.5M cells fit easily.
+
+    if 7 in h3_tables:
+        from .equity import add_equity_flag
+
+        h3_tables[7] = add_equity_flag(h3_tables[7])
+    h3_by_resolution = {res: _h3_geometry(df) for res, df in h3_tables.items()}
+
+    # Res 9/11 only exist where LOS > 0 or in dense tracts; the map keeps res 7 drawn
+    # underneath them (`set_fallback_level` in transitlos.map.build) for everywhere else.
 
     census_by_level: Dict[str, gpd.GeoDataFrame] = {}
-    county_path = state_dir / "county.geoparquet"
-    if county_path.is_file():
-        census_by_level["county"] = gpd.read_parquet(county_path)
+    county = _concat_gdfs([gpd.read_parquet(d / "county.geoparquet") for d in state_dirs if (d / "county.geoparquet").is_file()])
+    if county is not None:
+        census_by_level["county"] = county
     for level in ("tract", "blockgroup", "block"):
         frames = []
-        for county_folder in sorted((state_dir / "counties").iterdir()):
-            p = county_folder / f"{level}.geoparquet"
-            if p.is_file():
-                frames.append(gpd.read_parquet(p))
-        if frames:
-            census_by_level[level] = gpd.GeoDataFrame(pd.concat(frames, ignore_index=True), geometry="geometry", crs=frames[0].crs)
+        for d in state_dirs:
+            files = [p for p in (cf / f"{level}.geoparquet" for cf in sorted((d / "counties").iterdir())) if p.is_file()]
+            if external and level in EXTERNAL_CENSUS:
+                files = files[:1]  # a sample county per state is enough for schema/domains
+            for p in files:
+                frames.append(gpd.read_parquet(p).head(3000) if external and level in EXTERNAL_CENSUS else gpd.read_parquet(p))
+        gdf = _concat_gdfs(frames)
+        if gdf is not None:
+            census_by_level[level] = gdf
 
     special_levels: Dict[str, gpd.GeoDataFrame] = {}
     for level in (*CENSUS_SPECIAL_LEVELS, "state"):
-        path = state_dir / f"{level}.geoparquet"
-        if path.is_file():
-            special_levels[level] = gpd.read_parquet(path)
+        gdf = _concat_gdfs([gpd.read_parquet(d / f"{level}.geoparquet") for d in state_dirs if (d / f"{level}.geoparquet").is_file()])
+        if gdf is not None:
+            special_levels[level] = gdf
         else:
-            logger.warning(f"No {level}.geoparquet under {state_dir} -- omitted from the map's special selector.")
+            logger.warning(f"No {level}.geoparquet found -- omitted from the map's special selector.")
 
-    edges_gdf = _load_state_streets(state_dir)
+    edges_gdf = None
+    if include_streets and not external:
+        edges_gdf = _concat_gdfs([_load_state_streets(d) for d in state_dirs if (d / "counties").is_dir()])
 
-    stops_gdf = None
-    stops_path = state_dir / "stops.geoparquet"
-    if stops_path.is_file():
-        stops_gdf = gpd.read_parquet(stops_path)
+    if edges_gdf is None:
+        # `build_city_map` requires an edges frame: hand it a small sample so the streets
+        # overlay is effectively empty when streets are excluded.
+        samples = []
+        for d in state_dirs:
+            sample = next(iter(sorted((d / "counties").glob("*/street.geoparquet"))), None)
+            if sample is not None:
+                samples.append(gpd.read_parquet(sample).head(300))
+            if len(samples) >= 10:
+                break
+        edges_gdf = _concat_gdfs(samples)
+
+    stops_gdf = _concat_gdfs([gpd.read_parquet(d / "stops.geoparquet") for d in state_dirs if (d / "stops.geoparquet").is_file()])
+    if stops_gdf is not None:
         # `build_city_map` expects `mode_category` (`"bus"`/`"tram"`/`"rail"`)
         # -- this study's own equivalent column is `scoring_mode` (see
         # `gtfs_stage.py`/`best_subset_scoring.py`), same 3-value
@@ -134,7 +226,27 @@ def assemble_state_map_inputs(state_dir: Path) -> dict:
         if "scoring_mode" in stops_gdf.columns and "mode_category" not in stops_gdf.columns:
             stops_gdf = stops_gdf.rename(columns={"scoring_mode": "mode_category"})
 
-    return {
+    # Nationwide: stops are written as one JSON per state and loaded on demand when zoomed in (the browser cannot hold
+    # 300k clustered points); the stats panel / scenario editor read the res-5 grid (embedded, ~35k cells).
+    stops_chunks = None
+    stats_by_area = None
+    if multi:
+        stops_chunks = {}
+        for d in state_dirs:
+            p = d / "stops.geoparquet"
+            if p.is_file():
+                g = gpd.read_parquet(p)
+                if "scoring_mode" in g.columns and "mode_category" not in g.columns:
+                    g = g.rename(columns={"scoring_mode": "mode_category"})
+                stops_chunks[d.name] = g
+        stops_gdf = None
+        if STATS_RESOLUTION in h3_by_resolution:
+            stats = h3_by_resolution[STATS_RESOLUTION].copy()
+            num_cols = [c for c in stats.columns if c not in ("h3_cell", "geometry") and pd.api.types.is_numeric_dtype(stats[c])]
+            stats[num_cols] = stats[num_cols].round(2)  # keeps the embedded page JSON small
+            stats_by_area = {"metro": stats}
+
+    out = {
         "h3_by_resolution": h3_by_resolution,
         "edges_gdf": edges_gdf,
         "census_by_level": census_by_level,
@@ -143,6 +255,11 @@ def assemble_state_map_inputs(state_dir: Path) -> dict:
         "stops_gdf": stops_gdf,
         "is_us": True,
     }
+    if stops_chunks is not None:
+        out["stops_chunks"] = stops_chunks
+    if stats_by_area is not None:
+        out["stats_by_area"] = stats_by_area
+    return out
 
 
 def build_state_map(state_dir: Path, tiles_dir: Optional[Path] = None, out_html: Optional[Path] = None) -> str:
