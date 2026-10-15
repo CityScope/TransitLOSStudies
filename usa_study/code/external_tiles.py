@@ -46,6 +46,25 @@ def _h3_frame(state_dir: Path, res: int, circles: bool) -> Optional[gpd.GeoDataF
     return gpd.GeoDataFrame(df, geometry=geoms, crs=4326)
 
 
+def _dev_frame(state_dir: Path, offset: int) -> Optional[gpd.GeoDataFrame]:
+    """One state's flagged res-7 cells (equity_flag set) for the development overlay -- unflagged cells draw nothing."""
+    from .equity import flags_from_thresholds, load_thresholds
+
+    path = state_dir / "h3_res7.geoparquet"
+    if not path.is_file():
+        return None
+    df = pd.read_parquet(path, columns=["h3", "population", "level_of_service"])
+    df["equity_flag"] = flags_from_thresholds(df, load_thresholds())
+    df = df[df["equity_flag"].notna()].rename(columns={"h3": "h3_cell"}).reset_index(drop=True)
+    geoms = [shapely.Polygon([(lon, lat) for lat, lon in h3.cell_to_boundary(c)]) for c in df["h3_cell"]]
+    return gpd.GeoDataFrame(df[["h3_cell", "equity_flag", "level_of_service"]], geometry=geoms, crs=4326)
+
+
+def make_dev_writer(state_dirs: Iterable[Path]):
+    """Writer for the development overlay: `tiles/development/h3_7/chunk_<State>.pmtiles` (51 sources, not thousands)."""
+    return _make_writer(_dev_frame, [Path(d) for d in state_dirs])
+
+
 def _census_frame(state_dir: Path, level: str) -> Optional[gpd.GeoDataFrame]:
     frames = [gpd.read_parquet(p) for p in sorted((state_dir / "counties").glob(f"*/{level}.geoparquet"))]
     return pd.concat(frames, ignore_index=True) if frames else None
@@ -117,6 +136,7 @@ def make_writers(state_dirs: Iterable[Path], include_streets: bool = True) -> Di
         writers[("circles", f"h3_{res}")] = _make_writer(lambda d, off, r=res: _h3_frame(d, r, True), dirs)
     for level in EXTERNAL_CENSUS_LEVELS:
         writers[("census", f"census_{level}")] = _make_writer(lambda d, off, lv=level: _census_frame(d, lv), dirs)
+    writers[("development", "h3_7")] = make_dev_writer(dirs)
     if include_streets:
         writers[("streets", "edges")] = _make_writer(_street_frame, dirs)
     return writers

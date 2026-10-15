@@ -452,7 +452,7 @@ def _county_election_row(county_gdf, county_geoid, state_fips, cache_dir, county
     county_level_gdf = _fetch_native_census_level("county", county_gdf, state_fips, cache_dir)
     if county_level_gdf is not None and not county_level_gdf.empty:
         county_level_gdf = county_level_gdf[
-            county_level_gdf.geometry.centroid.within(county_centroid_geom)
+            county_level_gdf.geometry.representative_point().within(county_centroid_geom)  # centroid can lie outside island / multi-part counties
         ].reset_index(drop=True)
         county_level_gdf = _add_elections(county_level_gdf, state_fips, cache_dir)
         if len(county_level_gdf) == 1:
@@ -524,7 +524,7 @@ def _join_census_and_h3(
         # merely intersect the clip bounds). Already applied above for
         # the reused `county_level_gdf`.
         if level != "county":
-            centroids = gdf.geometry.centroid
+            centroids = gdf.geometry.representative_point()  # always inside the polygon (a centroid can fall outside it)
             gdf = gdf[centroids.within(county_centroid_geom)].reset_index(drop=True)
         if gdf.empty:
             continue

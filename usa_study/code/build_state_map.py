@@ -85,6 +85,7 @@ def _load_state_streets(state_dir: Path) -> gpd.GeoDataFrame:
 
 
 #: Levels whose tiles are written per state in nationwide ("external") mode -- keep in sync with `code.external_tiles`.
+STATS_RESOLUTION = 4  # nation-level stats grid embedded in the page (res 4: ~6k cells; states load res 7 on demand)
 EXTERNAL_H3 = (9, 11)  # sampled in memory (tiles per state); res 7 is tiled per state but kept in full
 EXTERNAL_CENSUS = ("blockgroup", "block")
 
@@ -141,6 +142,11 @@ def assemble_map_inputs(state_dirs, include_streets: bool = True, external: bool
     h3_tables: Dict[int, pd.DataFrame] = {}
     for res in H3_RESOLUTIONS:
         parts = [pd.read_parquet(d / f"h3_res{res}.geoparquet") for d in state_dirs if (d / f"h3_res{res}.geoparquet").is_file()]
+        if res == COARSE_RESOLUTION and parts:
+            # Census / ACS / jobs variables (tract values) so the stats panel can use every variable, not only elections.
+            from .census_h3 import add_census_variables
+
+            parts = [add_census_variables(df, d) for df, d in zip(parts, [d for d in state_dirs if (d / f"h3_res{res}.geoparquet").is_file()])]
         if parts and external and res in EXTERNAL_H3 and res != COARSE_RESOLUTION:
             h3_tables[res] = _representative_sample(parts)
         elif parts:
@@ -162,6 +168,10 @@ def assemble_map_inputs(state_dirs, include_streets: bool = True, external: bool
     # Note: res 7 stays in memory IN FULL even though its tiles are written per state (`code.external_tiles`): the
     # stats panel and the coarse levels are computed from it, and ~1.5M cells fit easily.
 
+    if 7 in h3_tables:
+        from .equity import add_equity_flag
+
+        h3_tables[7] = add_equity_flag(h3_tables[7])
     h3_by_resolution = {res: _h3_geometry(df) for res, df in h3_tables.items()}
 
     # Res 9/11 only exist where LOS > 0 or in dense tracts; the map keeps res 7 drawn
@@ -216,7 +226,27 @@ def assemble_map_inputs(state_dirs, include_streets: bool = True, external: bool
         if "scoring_mode" in stops_gdf.columns and "mode_category" not in stops_gdf.columns:
             stops_gdf = stops_gdf.rename(columns={"scoring_mode": "mode_category"})
 
-    return {
+    # Nationwide: stops are written as one JSON per state and loaded on demand when zoomed in (the browser cannot hold
+    # 300k clustered points); the stats panel / scenario editor read the res-5 grid (embedded, ~35k cells).
+    stops_chunks = None
+    stats_by_area = None
+    if multi:
+        stops_chunks = {}
+        for d in state_dirs:
+            p = d / "stops.geoparquet"
+            if p.is_file():
+                g = gpd.read_parquet(p)
+                if "scoring_mode" in g.columns and "mode_category" not in g.columns:
+                    g = g.rename(columns={"scoring_mode": "mode_category"})
+                stops_chunks[d.name] = g
+        stops_gdf = None
+        if STATS_RESOLUTION in h3_by_resolution:
+            stats = h3_by_resolution[STATS_RESOLUTION].copy()
+            num_cols = [c for c in stats.columns if c not in ("h3_cell", "geometry") and pd.api.types.is_numeric_dtype(stats[c])]
+            stats[num_cols] = stats[num_cols].round(2)  # keeps the embedded page JSON small
+            stats_by_area = {"metro": stats}
+
+    out = {
         "h3_by_resolution": h3_by_resolution,
         "edges_gdf": edges_gdf,
         "census_by_level": census_by_level,
@@ -225,6 +255,11 @@ def assemble_map_inputs(state_dirs, include_streets: bool = True, external: bool
         "stops_gdf": stops_gdf,
         "is_us": True,
     }
+    if stops_chunks is not None:
+        out["stops_chunks"] = stops_chunks
+    if stats_by_area is not None:
+        out["stats_by_area"] = stats_by_area
+    return out
 
 
 def build_state_map(state_dir: Path, tiles_dir: Optional[Path] = None, out_html: Optional[Path] = None) -> str:

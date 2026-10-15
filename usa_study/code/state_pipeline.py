@@ -419,7 +419,8 @@ def _resample_h3_up(fine: pd.DataFrame, target_resolution: int) -> pd.DataFrame:
     except Exception:
         agg_map = {}
     num_cols = [c for c in df.columns if c not in ("h3", "_parent", "level_of_service") and pd.api.types.is_numeric_dtype(df[c])]
-    is_mean = lambda c: agg_map.get(c) == "mean" or c.endswith("_share")  # noqa: E731 -- intensive columns
+    is_mean = lambda c: agg_map.get(c) == "mean" or c.endswith(("_share", "_rate")) or any(  # noqa: E731 -- intensive columns
+        m in c.lower() for m in ("median", "mean_", "_mean", "density", "_index", "_ratio"))
     sum_cols = [c for c in num_cols if not is_mean(c)]
     mean_cols = [c for c in num_cols if is_mean(c)]
     agg = {col: "sum" for col in sum_cols}

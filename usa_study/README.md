@@ -156,8 +156,6 @@ written to `feed_report.json` (`candidates`) for manual review. Resolution `fuzz
 Requires the git-ignored `pyGTFSHandler/api_keys.json` (Transitland key); run `python main.py <STATES> --refresh-stops`
 to re-acquire feeds for states that had unresolved agencies.
 
-- Audits: `python audit_feeds.py` (per-feed date selection / usable files -> `data/feed_audit.csv`) and
-  `python audit_scores.py` (best stop near ~30 well-known rail/tram stations -> `data/score_audit.csv`).
 
 - **Stop grouping: 150 m, strict** (applies to every feed of every state: `Feed(stop_group_distance=150)` with `GTFS_STOP_GROUPING=complete`). Stops are grouped into stations by `GTFS_STOP_GROUPING=complete` (set in `main.py`): no two
   stops of a group are farther apart than 150 m (complete linkage), EXCEPT stops that share a declared `parent_station`
@@ -225,3 +223,51 @@ ones:
   /usa/brt.py`). Only a handful of agencies have a verified route-level
   mapping seeded in `KNOWN_BRT_ROUTES`; the rest get a manual-review
   warning logged rather than a guess.
+
+
+## Outputs of a complete run
+
+`python main.py ALL` writes one log (`data/usa_study.log`), `data/ptlos_by_state.csv` + `data/ptlos_usa.json` (the PTLOS score: population-weighted mean level of service over H3 res-7 cells), `data/feed_exceptions.csv`, and `data/run_manifest.json` (parameters, git HEAD of the six repos, fingerprint of every GTFS file used). Feeds already on disk are reused, so to reproduce a result exactly keep `data/*/gtfs`; a fresh machine re-downloads the latest feeds (the NTD/Mobility Database/Transitland sources change over time), so the manifest fingerprints show whether the same feed versions were used.
+## Nationwide map internals (how it stays fast)
+
+- `data/_usa/map.html` is ~16 MB: stops are **not** embedded. Each state's stops are `stops_chunks/<State>.json`, fetched when the
+  view reaches zoom 7 and intersects the state (at most 10 states are kept in memory).
+- The stats panel (distribution / regression / census) reads the H3 res-5 grid (~35k cells) embedded in the page.
+- Drawn lines: **Compute** fetches only the `pop_chunks/` squares (0.04 deg, res-11 cells; res-7 cells where no res-11 exists, see
+  `code/pop_chunks_usa.py`) around the line (~0.5 s) and recolors the res-11 hexagons. Census-polygon recolor needs `geoid_chunks/`
+  (not built nationwide; the console shows a harmless 404).
+- `python build_usa_map.py --page-only` rewrites only the page + chunks and reuses the tiles on disk (minutes instead of hours).
+
+## Stats panels: scope, comparison, scenario, address search
+
+- Every stats tab (distribution / regression / census) has **Level** and **Compare with** buttons. Level: Nation, State, County or
+  Place (County/Place only after a state is picked, one of them at a time; clicking an active State/County/Place again deactivates it);
+  type in the box to filter (best matches first, 8 shown with their population). Compare with adds None. Zooming out to a view that
+  covers several states resets to the nation with no comparison; zooming into one state selects it automatically.
+- Nation data = `stats_chunks/Nation.json.gz`: a seeded, stratified (population x level-of-service) sample of ~100k of the 1.3M
+  res-7 cells with count columns rescaled per stratum, so it is at the SAME resolution as the state files, keeps the exact national
+  population (327,267,727 vs 327,268,274) and weighted level of service (21.61 vs 21.60); the res-4 grid embedded in the page is only
+  the instant fallback while it loads. State / county / place data = `stats_chunks/<State>.json.gz` (res-7 cells with
+  every census / ACS / jobs / election variable, `code/stats_chunks.py` + `code/census_h3.py`), fetched on demand.
+- A Scenario selector (Original / With edits) is next to the scope buttons and mirrors the top bar.
+- The address box (top left) geocodes with OpenStreetMap (Nominatim) and flies to the point at zoom 6.
+- "More housing / more transit" overlay (`code/equity.py`): one national regression of level of service on log population density
+  (res-7 cells with LOS > 0); more housing = above +1 std, more transit = below -1 std and density > 1000 people/km2.
+
+- **No edit mode at nation level**: while the view covers several states (or below zoom 5) the Draw button and line toolbar are
+  hidden, 'With edits' is disabled and nation-scope plots never apply edits; zooming into a single state brings them back.
+
+## Data notes and checks worth knowing
+
+- County rows used to be dropped for counties whose geometric centre lies outside their own boundary (island / multi-part counties:
+  Honolulu, San Francisco, Miami-Dade, Aleutians West, one Missouri county); `county_pipeline` now tests with a point guaranteed to
+  be inside the polygon. Such counties need `python main.py <STATE> --skip-map` after clearing their folder to be rebuilt.
+- pyCensus' `acs5_commuteTimeMean` is mapped to ACS B08303_001 = the NUMBER of commuters, not a mean. `code/census_h3.py` therefore builds
+  `mean_commute_time_minutes` from the aggregate travel time B08013_001 (cached in `data/_cache/acs_commute_aggregate.json`) divided by it
+  (national weighted mean 26.6 min). The pyCensus schema entry itself still needs fixing.
+- Development overlay tiles are written per state (`code/external_tiles.py::make_dev_writer`, flagged cells only: 51 sources instead of
+  5,000+) and the overlay only shows from zoom 8 (`dev_min_zoom` in `stats_scope_cfg`).
+- `python build_usa_map.py --page-only --census-tiles` rewrites the page, the stats / population / stops chunks and the census county / tract
+  tiles (use it after counties were reprocessed); without `--census-tiles` only the page and chunks.
+- Each stats-panel state table is cached in the browser (at most 4 states + the nation); after 14 visited states the page holds ~400 MB
+  of JS heap.

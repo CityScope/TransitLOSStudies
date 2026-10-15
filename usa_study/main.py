@@ -32,6 +32,7 @@ Usage:
     python main.py MA --force         # redo even if state_dir already has output
     python main.py MA --skip-map      # stages 1-3 only, no map.html
     python main.py ALL                # whole experiment: every state, then the nationwide map (stage 5)
+    # every run ends by writing data/ptlos_by_state.csv, data/ptlos_usa.json (the PTLOS score) and data/run_manifest.json
     python main.py --usa-map-only     # only rebuild the nationwide map from existing state outputs
     (see README.md for all flags and the final experiment design)
 """
@@ -65,7 +66,12 @@ from code.county_pipeline import STOPS_SIGNATURE_FILE, county_already_processed,
 from code.state_pipeline import add_state_districts, add_state_native_elections, merge_and_resample_h3, merge_counties
 from pyGTFSHandler.downloaders.usa.ntd import NTDDownloader
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+# One single log file for the whole experiment (appended across runs), next to the console output.
+(Path(__file__).parent / "data").mkdir(exist_ok=True)
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[logging.StreamHandler(), logging.FileHandler(Path(__file__).parent / "data" / "usa_study.log")],
+)
 logger = logging.getLogger("usa_study.main")
 
 BASE_DIR = Path(__file__).parent
@@ -332,6 +338,24 @@ def main():
         write_feed_exceptions_summary(DATA_DIR)
     except Exception:
         logger.error(f"Feed exceptions summary failed:\n{traceback.format_exc()}")
+
+    try:
+        from code.summary import write_ptlos_summary, write_run_manifest
+        from code.gtfs_stage import ANALYSIS_DATE, ANALYSIS_START_TIME, ANALYSIS_END_TIME, STOP_GROUP_DISTANCE_M
+        from code.county_pipeline import H3_RESOLUTIONS, H3_DENSE_TRACT_PER_KM2
+
+        usa = write_ptlos_summary(DATA_DIR)
+        logger.info(f"USA PTLOS = {usa['ptlos']:.2f} ({usa['served_share']:.1%} of people served; {usa['states']} states, "
+                    f"{usa['counties']} counties, {usa['stops']} stops) -> {DATA_DIR / 'ptlos_by_state.csv'}")
+        write_run_manifest(DATA_DIR, Path(__file__).parent.parent.parent, {
+            "analysis_date": str(ANALYSIS_DATE), "window": [str(ANALYSIS_START_TIME), str(ANALYSIS_END_TIME)],
+            "stop_group_distance_m": STOP_GROUP_DISTANCE_M, "h3_resolutions": list(H3_RESOLUTIONS),
+            "h3_dense_tract_per_km2": H3_DENSE_TRACT_PER_KM2, "network_cache": NETWORK_CACHE_NAME,
+            "env": {k: os.environ.get(k) for k in ("GTFS_STOP_GROUPING", "GEOHIERARCHY_MAX_NATIVE_TILE_ZOOM")},
+            "argv": sys.argv[1:],
+        })
+    except Exception:
+        logger.error(f"PTLOS summary failed:\n{traceback.format_exc()}")
 
     if failed:
         logger.warning(f"{len(failed)} state(s) failed entirely: {failed}")

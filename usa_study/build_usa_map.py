@@ -44,7 +44,18 @@ def finished_state_dirs(data_dir: Path, only=None):
     return dirs
 
 
-def build_usa_map(states=None, include_streets: bool = True, out_dir=None, in_process: bool = False) -> str:
+def _center_on_contiguous_us(html_path) -> None:
+    """The bounds of all states span the antimeridian (Aleutians), which centres the default view in the Atlantic."""
+    import re
+
+    path = Path(html_path)
+    text = path.read_text(encoding="utf-8")
+    text = re.sub(r"center: \[[^\]]*\],(\s*)zoom: [0-9.]+,", r"center: [-98.5, 39.0],\1zoom: 3.6,", text, count=1)
+    path.write_text(text, encoding="utf-8")
+
+
+def build_usa_map(states=None, include_streets: bool = True, out_dir=None, in_process: bool = False,
+                  page_only: bool = False, census_tiles: bool = False) -> str:
     """Assemble every finished state's outputs and build the nationwide map.
 
     Args:
@@ -54,6 +65,10 @@ def build_usa_map(states=None, include_streets: bool = True, out_dir=None, in_pr
         in_process: Tile everything inside one process (small subsets only). The default tiles the heavy levels
             (h3 res 9/11, blocks, block groups, streets) one state at a time (`code.external_tiles`) so the
             nationwide map fits in memory and streets load lazily at high zoom.
+
+    Returns:
+        census_tiles: With `page_only`: also rebuild the census county / tract tiles (e.g. after counties were reprocessed).
+        page_only: Rewrite only map.html (+ stops/population chunks) and reuse the tiles already on disk.
 
     Returns:
         Path to the written `map.html`.
@@ -71,11 +86,35 @@ def build_usa_map(states=None, include_streets: bool = True, out_dir=None, in_pr
     inputs = assemble_map_inputs(dirs, include_streets=include_streets, external=not in_process)
     logger.info(f"Inputs assembled in {time.time() - t:.0f}s: h3 res {sorted(inputs['h3_by_resolution'])}")
     extra = {}
-    if not in_process:
+    if page_only:
+        extra["skip_tile_build"] = True
+        extra["force_development_tiles"] = True  # the development overlay is small: always rebuilt (per state)
+        from code.external_tiles import make_dev_writer
+
+        extra["external_tile_writers"] = {("development", "h3_7"): make_dev_writer(dirs)}
+        if census_tiles:
+            # county / tract tiles are rebuilt in-process; block / block group (tiled per state) are left untouched
+            extra["force_census_tiles"] = True
+            noop = lambda **kwargs: None  # noqa: E731
+            extra["external_tile_writers"].update({("census", "census_block"): noop, ("census", "census_blockgroup"): noop})
+    if not in_process and not page_only:
         from code.external_tiles import make_writers
 
         extra["external_tile_writers"] = make_writers(dirs, include_streets=include_streets)
+    if not in_process:
+        from code.stats_chunks import build_stats_chunks
+
+        from code.stats_chunks import build_nation_sample
+
+        build_stats_chunks(dirs, out, BASE_DIR / "data" / "_cache" / "geo_names.json")
+        build_nation_sample(inputs["h3_by_resolution"][7].drop(columns="geometry").rename(columns={"h3_cell": "h3"}), out)
+        extra["stats_scope_cfg"] = {"dir": "stats_chunks", "min_zoom": 5, "address_zoom": 6, "dev_min_zoom": 8}
+    if not in_process and not (page_only and (out / 'pop_chunks' / 'index.json').is_file()):
+        from code.pop_chunks_usa import build_usa_pop_chunks
+
+        build_usa_pop_chunks(dirs, out)
     html = build_city_map(tiles_dir=str(out / "tiles"), out_html=str(out / "map.html"), **inputs, **extra)
+    _center_on_contiguous_us(html)
     logger.info(f"Wrote {html} in {time.time() - t:.0f}s")
     return html
 
@@ -84,11 +123,13 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--states", help="comma-separated state abbreviations (default: every finished state)")
     ap.add_argument("--no-streets", action="store_true", help="omit the street edges layer")
+    ap.add_argument("--page-only", action="store_true", help="rewrite map.html and chunks only, reuse existing tiles")
+    ap.add_argument("--census-tiles", action="store_true", help="with --page-only: rebuild the census county/tract tiles too")
     ap.add_argument("--in-process", action="store_true", help="tile everything in one process (small subsets only)")
     ap.add_argument("--out", default=str(BASE_DIR / "data" / "_usa"), help="output folder (map.html + tiles/)")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-    build_usa_map(args.states.split(",") if args.states else None, not args.no_streets, args.out, args.in_process)
+    build_usa_map(args.states.split(",") if args.states else None, not args.no_streets, args.out, args.in_process, args.page_only, args.census_tiles)
 
 
 if __name__ == "__main__":
