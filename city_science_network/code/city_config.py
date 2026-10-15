@@ -207,6 +207,8 @@ CITY_CONFIGS: dict[str, CityConfig] = {
         census_states=("CA",),
         pbf_filename="northern_california.osm.pbf",
         worldpop_filename="usa_pop_2025_CN_100m_R2025A_v1.tif",
+        # Feeds' calendars are stale by different amounts: score each feed on its own auto-picked date.
+        stops_per_feed=True,
     ),
     "guadalajara": CityConfig(
         key="guadalajara",
@@ -253,6 +255,8 @@ CITY_CONFIGS: dict[str, CityConfig] = {
         # than section-level (see pycensus.countries.euskadi.api's module
         # docstring: EUSTAT's Data Bank API IS real/reachable but not yet
         # wired to any loader).
+        # Feeds' calendars are stale by different amounts: score each feed on its own auto-picked date.
+        stops_per_feed=True,
     ),
     "toronto": CityConfig(
         key="toronto",

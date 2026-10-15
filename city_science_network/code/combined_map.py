@@ -596,16 +596,10 @@ function ensureOverviewMap() {{
   for (var i = 0; i < CITIES.length; i++) if (CITIES[i].center) pts.push(CITIES[i]);
   __overviewMap = new maplibregl.Map({{
     container: 'overviewMap',
-    // 2026-09-02 follow-up (explicit user request: "for the world map use
-    // the same simple background map as for the individual places") -- a
-    // per-city `map.html`'s own DEFAULT basemap is NOT CartoDB either (see
-    // `geohierarchy.maps.maplibre.render.BASEMAP_STYLES`/`DEFAULT_BASEMAP`
-    // -- CartoDB Positron/Dark Matter were already replaced there with the
-    // OpenFreeMap equivalents for the same "no CARTO" reason this page's
-    // own CartoDB raster tiles were dropped for originally). Using the
-    // exact same style URL here (a full MapLibre vector style, not a plain
-    // raster XYZ template like the earlier OSM-raster attempt) keeps the
-    // world map and every individual city map visually consistent.
+    // Same simple background map as the individual places (see
+    // `geohierarchy.maps.maplibre.render.BASEMAP_STYLES`/`DEFAULT_BASEMAP`):
+    // a full MapLibre vector style (OpenFreeMap), so the world map and every
+    // city map look consistent.
     style: 'https://tiles.openfreemap.org/styles/positron',
     center: pts.length ? pts[0].center : [0, 20],
     zoom: 2,

@@ -61,6 +61,7 @@ from pathlib import Path
 
 from code.city_config import CITY_CONFIGS
 from code.combined_map import build_combined_map
+from code.gtfs_fetch import ensure_gtfs
 
 # Conservative systemd-run memory limits for `_ensure_memory_safe_wrapper`,
 # below. Matches the values manually used to wrap this pipeline's real runs
@@ -276,6 +277,10 @@ def run_all_cities(
     skipped: list[str] = []
     for key in CITY_KEYS:
         extra_args: list[str] = []
+        if not map_only and not census_only and not ensure_gtfs(key):
+            print(f"[main] {key}: GTFS unavailable -- skipping", flush=True)
+            failed.append(key)
+            continue
         if map_only:
             extra_args.append("--map-only")
         elif census_only:

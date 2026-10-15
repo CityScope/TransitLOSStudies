@@ -24,7 +24,7 @@ build/
 /city_science_network/boston_city/
 /city_science_network/boston_city_evolution/
 /city_science_network/census/
-/city_science_network/china/
+/city_science_network/china/*
 /city_science_network/streets/
 /city_science_network/taiwan/
 /city_science_network/worldpop/
@@ -155,3 +155,31 @@ api_keys.json
 /usa_study/fetch_missing_feeds.py
 /usa_study/_local*/
 /usa_study/tmp_*.py
+
+# --- GTFS builders / research inputs needed to regenerate hand-built feeds (see code/gtfs_fetch.py) ---
+!/city_science_network/china/CPTOND-2025/
+/city_science_network/china/CPTOND-2025/*
+!/city_science_network/china/CPTOND-2025/code/
+!/city_science_network/china/sources/
+!/city_science_network/andorra/sources/
+!/city_science_network/andorra/sources/*.py
+!/city_science_network/andorra/sources/*.md
+!/city_science_network/shanghai/gtfs/
+/city_science_network/shanghai/gtfs/*
+!/city_science_network/shanghai/gtfs/sources/
+/city_science_network/shanghai/gtfs/sources/*
+!/city_science_network/shanghai/gtfs/sources/GTFS_CONSTRUCTION.md
+!/city_science_network/shanghai/gtfs/sources/zhwiki_shanghai_numbered_routes_parsed.csv
+!/city_science_network/shanghai/gtfs/sources/osm_overpass_maglev.json
+!/city_science_network/shanghai/gtfs/sources/outer_ring_s20_polygon.geojson
+/city_science_network/china/CPTOND-2025/code/.Rhistory
+!/city_science_network/concepcion/gtfs_archive/
+!/city_science_network/concepcion/gtfs_archive/*.zip
+
+# Per-city GTFS build notes stay local
+GTFS_BUILD.md
+
+# City AOIs (small, partly hand-built, not regenerable) are tracked.
+!/city_science_network/*/aoi.gpkg
+!/city_science_network/beerseba/aoi_city.gpkg
+!/city_science_network/boston/aoi_city_only.gpkg

@@ -5017,6 +5017,56 @@ def _census_polygon_agg_chunked(
     return result[["_geo_idx", "level_of_service", "_h3_fallback_population"]]
 
 
+_RESAMPLE_MAX_CELLS = 3_000_000
+_RESAMPLE_SKIP = {
+    "GEOID", "_geo_idx", "geometry", "area_m2", "level_of_service", "h3_cell", "equity_flag",
+    # population bookkeeping: reconciled per polygon by _finalize_population_columns /
+    # _add_worldpop_outside_census_columns, which must keep seeing the census value
+    "population", "census_residents", "worldpop_residents", "worldpop_overestimation", "worldpop_underestimation",
+}
+
+
+def _resample_missing_h3_counts(
+    census_gdf: gpd.GeoDataFrame, h3_grid: gpd.GeoDataFrame, populated_mask
+) -> gpd.GeoDataFrame:
+    """Resample absolute-count columns that exist on the H3 grid but not on this census layer.
+
+    Some sources are only published at one level (e.g. Eustat establishments/births/deaths at
+    municipality), so the polygon layers of the other levels would lack them. Every such count is
+    area-weighted summed from the H3 cells onto the polygons (geohierarchy `Sum(geoweighted=True)`,
+    exact intersection), so each census geometry carries every count column. Native columns are
+    never overwritten. Skipped for grids above `_RESAMPLE_MAX_CELLS` populated cells.
+    """
+    from transitlos.map.build import absolute_fields
+
+    missing = [
+        c for c in absolute_fields(list(h3_grid.columns))
+        if c not in census_gdf.columns and c not in _RESAMPLE_SKIP
+        and pd.api.types.is_numeric_dtype(h3_grid[c]) and h3_grid[c].notna().any()
+    ]
+    if not missing:
+        return census_gdf
+    cells = h3_grid.loc[populated_mask, [*missing, "geometry"]]
+    if len(cells) > _RESAMPLE_MAX_CELLS:
+        print(f"[pipeline] skipping h3->census resampling of {len(missing)} count columns: {len(cells)} cells > {_RESAMPLE_MAX_CELLS}")
+        return census_gdf
+    cells = gpd.GeoDataFrame(cells, geometry="geometry", crs=h3_grid.crs).to_crs(census_gdf.crs)
+    hierarchy = GeoHierarchy(crs=census_gdf.crs)
+    hierarchy.add_level("_census_map_level", census_gdf[["_geo_idx", "geometry"]].copy(), id_col="_geo_idx")
+    hierarchy.add_vector_data(
+        cells,
+        level="_census_map_level",
+        columns=missing,
+        agg={c: Sum(geoweighted=True) for c in missing},
+        fill_null=None,
+        intersection_mode="exact",
+    )
+    id_col = hierarchy.id_cols["_census_map_level"]
+    resampled = hierarchy["_census_map_level"][[id_col, *missing]].rename(columns={id_col: "_geo_idx"})
+    print(f"[pipeline] resampled {len(missing)} h3 count columns onto census polygons: {missing}")
+    return census_gdf.merge(resampled, on="_geo_idx", how="left")
+
+
 def _census_geometries_with_score(
     h3_grid: gpd.GeoDataFrame,
     aoi: gpd.GeoDataFrame,
@@ -5624,6 +5674,7 @@ def _census_geometries_with_score(
         for c in _scale_cols:
             census_gdf[c] = census_gdf[c].to_numpy(dtype=float) * _area_fraction
         census_gdf = census_gdf.drop(columns=["_orig_area_m2"])
+        census_gdf = _resample_missing_h3_counts(census_gdf, h3_grid, populated_mask)
         census_gdf = _add_share_columns(census_gdf)
         census_gdf = _add_pop_jobs_columns(census_gdf)
         census_gdf = _add_derived_density_columns(census_gdf)
