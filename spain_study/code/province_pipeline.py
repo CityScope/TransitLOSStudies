@@ -231,7 +231,7 @@ def municipality_level(sections: gpd.GeoDataFrame, names: Optional[pd.Series] = 
 
 
 def municipality_names(data_dir: str) -> pd.Series:
-    from pycensus.countries.spain import geography
+    from pycensus.census.countries.spain import geography
 
     m = geography._load_spain_municipalities(data_dir)
     return m.set_index("GEOID")["LAU_NAME"]

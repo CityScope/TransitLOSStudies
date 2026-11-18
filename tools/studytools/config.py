@@ -12,9 +12,9 @@ from typing import Optional, Sequence
 
 # `CityConfig.country` is an ISO-3166-1 alpha-3 code (e.g. "USA", "MEX"),
 # but `pycensus`'s per-country submodules are lowercase full country names
-# (`pycensus.countries.usa`, `pycensus.countries.mexico`, ... -- see that package's
+# (`pycensus.census.countries.usa`, `pycensus.census.countries.mexico`, ... -- see that package's
 # `src/pycensus/__init__.py`), not a lowercased alpha-3 code. Naively trying
-# `pycensus.countries.{country.lower()}` therefore only accidentally works for USA
+# `pycensus.census.countries.{country.lower()}` therefore only accidentally works for USA
 # ("usa" == "usa") and silently fails ImportError (-> `uses_census=False`)
 # for every other alpha-3 code that doesn't literally match its module name,
 # e.g. "MEX" -> "mex" (module is `mexico`), "ESP" -> "esp" (module is
@@ -25,7 +25,7 @@ from typing import Optional, Sequence
 # session -- Toronto/Andorra/Taipei/Concepcion were silently falling back to
 # `uses_census=False` (ImportError swallowed below) despite real census data
 # being available for all four. `CHN` (Shanghai) is deliberately absent --
-# there is no `pycensus.countries.china` module by explicit design (no
+# there is no `pycensus.census.countries.china` module by explicit design (no
 # China census implementation) -- Shanghai correctly stays WorldPop-only.
 _ISO3_TO_PYCENSUS_MODULE: dict[str, str] = {
     "USA": "usa",
@@ -55,12 +55,12 @@ def _census_supported(country: str, census_module: str | None = None) -> bool:
     `_ISO3_TO_PYCENSUS_MODULE[country]` entirely -- this is how a specific
     city routes to a *sub*-national census module instead of its country's
     generic one, e.g. Gipuzkoa (`country="ESP"`) routing to
-    `pycensus.countries.euskadi` (the Basque Country's own statistical source)
-    instead of `pycensus.countries.spain` (generic Spain/INE), which is wrong for a
+    `pycensus.census.countries.euskadi` (the Basque Country's own statistical source)
+    instead of `pycensus.census.countries.spain` (generic Spain/INE), which is wrong for a
     Basque city -- Euskadi collects and reports its own census data
     separately from INE.
 
-    `pycensus.countries.worldwide` (WorldPop) is deliberately excluded: it is a
+    `pycensus.census.worldwide` (WorldPop) is deliberately excluded: it is a
     global raster source keyed by whatever AOI the caller passes in, not
     a per-country census source, and every `CityConfig` already uses it
     for population regardless of `country`.
@@ -69,7 +69,7 @@ def _census_supported(country: str, census_module: str | None = None) -> bool:
     if module_name is None:
         return False
     try:
-        importlib.import_module(f"pycensus.countries.{module_name}")
+        importlib.import_module(f"pycensus.census.countries.{module_name}")
     except ImportError:
         return False
     return True
@@ -91,7 +91,7 @@ class CityConfig:
             Drives `uses_census` below -- not itself a `pycensus` API call,
             just the key `_census_supported` checks for a matching module.
         census_states: US state name(s)/abbreviation(s) forwarded to
-            `pycensus.countries.usa.acs5.load`/`.dhc.load` as `states`. `None` for
+            `pycensus.census.countries.usa.acs5.load`/`.dhc.load` as `states`. `None` for
             cities outside `pycensus`'s census coverage.
         pbf_filename: Shared `.osm.pbf` file (under `city_science_network/streets/`)
             covering this city's metro AOI.
@@ -105,7 +105,7 @@ class CityConfig:
             sets `census_module="euskadi"` so it uses the Basque Country's
             own Eustat-sourced data instead of generic Spain/INE, while
             other Spanish cities (if any are added) keep using
-            `pycensus.countries.spain` untouched.
+            `pycensus.census.countries.spain` untouched.
     """
 
     key: str
@@ -148,7 +148,7 @@ class CityConfig:
     # gap -- for a city where the census join already covers the whole AOI,
     # this is a no-op (no cell will ever have a null population to fill).
     census_worldpop_gapfill: bool = False
-    # GlobalBuildingAtlas buildings (`pycensus.countries.worldwide.gba`): building metrics (`gba_building*`, `gba_builtFloorArea*`)
+    # GlobalBuildingAtlas buildings (`pycensus.census.worldwide.gba`): building metrics (`gba_building*`, `gba_builtFloorArea*`)
     # on every h3 resolution and census level, and a population source from built floor area (`gba_builtSurfacePopulation`:
     # people per built m2 calibrated on the census / WorldPop, filling where WorldPop misses what is built -- see
     # `pipeline._gba_population_rasters`).

@@ -60,7 +60,7 @@ PROVINCE_RETRY_WAITS_S = (60, 300)
 
 
 def _constants():
-    from pycensus.countries.spain import constants
+    from pycensus.census.countries.spain import constants
 
     return constants
 

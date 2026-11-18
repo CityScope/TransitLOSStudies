@@ -14,7 +14,7 @@ sys.path.insert(0, str(BASE))
 
 def main():
     import us
-    from pycensus.countries.usa import acs5
+    from pycensus.census.countries.usa import acs5
 
     want = set(sys.argv[1:])
     fips_by_dir = {"".join(c for c in s.name if c.isalnum()): (s.fips, s.abbr) for s in us.states.STATES + [us.states.DC]}

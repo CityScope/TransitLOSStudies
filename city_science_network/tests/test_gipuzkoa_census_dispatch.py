@@ -1,16 +1,16 @@
 """Regression test for Gipuzkoa's census routing.
 
 History: the original fix here made Gipuzkoa (`country="ESP"`) route to
-`pycensus.countries.euskadi` (Basque Country's own Eustat statistics
-office) instead of generic `pycensus.countries.spain`/INE, reasoning that
+`pycensus.census.countries.euskadi` (Basque Country's own Eustat statistics
+office) instead of generic `pycensus.census.countries.spain`/INE, reasoning that
 Euskadi's own agency would have richer/finer data for its own territory.
 
-That was revisited 2026-08-22: investigation found `pycensus.countries
+That was revisited 2026-08-22: investigation found `pycensus.census.countries
 .euskadi` has no boundary source finer than `municipality` (Euskadi's own
 geo-cartography portals are genuinely unreachable -- 403/404 -- to a
 scripted client) and only 3 fields, all ultimately sourced from the same
 GISCO/LAU 2021 municipal figures Spain/INE already exposes -- not
-independent EUSTAT data. Generic `pycensus.countries.spain`, meanwhile, now
+independent EUSTAT data. Generic `pycensus.census.countries.spain`, meanwhile, now
 has a real, live section-level (seccion censal) source from INE's own OGC
 API Features service covering Gipuzkoa (province code "20") with 544 real
 sections and 3 real fields (population/malePopulation/femalePopulation),
@@ -19,7 +19,7 @@ Irun (~99% match). Since Gipuzkoa *is* INE province "20", generic Spain/INE
 gives it both finer resolution and the same-or-more real fields than the
 Euskadi-specific module -- so `gipuzkoa`'s `CityConfig` no longer overrides
 `census_module`, and it dispatches through the generic Spain/INE path like
-any other Spanish city. `pycensus.countries.euskadi` remains implemented
+any other Spanish city. `pycensus.census.countries.euskadi` remains implemented
 (for any future non-Gipuzkoa Basque use, or if EUSTAT's own Data Bank API
 -- real and reachable, see `euskadi/api.py` -- is later wired into a
 loader with genuinely richer/finer verified data) but is no longer wired
@@ -40,7 +40,7 @@ def test_gipuzkoa_routes_to_generic_spain():
 
 
 def test_census_module_override_beats_country_mapping():
-    # Without an override, country="ESP" resolves to pycensus.countries.spain.
+    # Without an override, country="ESP" resolves to pycensus.census.countries.spain.
     assert _census_supported("ESP", census_module=None) is True  # pycensus.spain exists
     assert _census_supported("ESP", census_module="euskadi") is True  # overridden, pycensus.euskadi exists
     assert _census_supported("ESP", census_module="does_not_exist") is False
@@ -48,7 +48,7 @@ def test_census_module_override_beats_country_mapping():
 
 def test_census_module_defaults_to_none_for_every_city():
     # No city (including gipuzkoa) should have an override into
-    # pycensus.countries.euskadi any more -- see module docstring for why.
+    # pycensus.census.countries.euskadi any more -- see module docstring for why.
     for key, config in CITY_CONFIGS.items():
         assert config.census_module is None, f"{key} unexpectedly has census_module={config.census_module!r}"
 
@@ -91,7 +91,7 @@ def test_join_census_dispatches_generic_spain_for_gipuzkoa(monkeypatch, capsys):
 
 
 def test_join_census_still_dispatches_euskadi_when_explicitly_requested(monkeypatch, capsys):
-    # pycensus.countries.euskadi is still implemented and reachable via an
+    # pycensus.census.countries.euskadi is still implemented and reachable via an
     # explicit override, even though no CityConfig uses it any more.
     calls = {}
 
@@ -120,7 +120,7 @@ def test_join_census_still_dispatches_euskadi_when_explicitly_requested(monkeypa
 
 
 def test_join_census_dispatches_germany(monkeypatch, capsys):
-    # Germany was wired 2026-08-21: pycensus.countries.germany.destatis's
+    # Germany was wired 2026-08-21: pycensus.census.countries.germany.destatis's
     # real GENESIS-Online token was verified live to authenticate and
     # retrieve real data once the host (no "www-" prefix) and auth
     # transport (credentials as HTTP headers) were corrected. So

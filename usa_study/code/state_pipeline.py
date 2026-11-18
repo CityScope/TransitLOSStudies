@@ -148,10 +148,10 @@ def _column_agg_map() -> dict:
     this never has to independently guess/hardcode which of the ~90
     census columns this study carries are counts vs. rates.
     """
-    from pycensus.countries.usa.acs5.schema import SCHEMA as ACS5_SCHEMA
-    from pycensus.countries.usa.dhc.schema import SCHEMA as DHC_SCHEMA
-    from pycensus.countries.usa.elections.schema import SCHEMA as ELECTIONS_SCHEMA
-    from pycensus.countries.usa.lodes_wac.schema import SCHEMA as LODES_SCHEMA
+    from pycensus.census.countries.usa.acs5.schema import SCHEMA as ACS5_SCHEMA
+    from pycensus.census.countries.usa.dhc.schema import SCHEMA as DHC_SCHEMA
+    from pycensus.census.countries.usa.elections.schema import SCHEMA as ELECTIONS_SCHEMA
+    from pycensus.census.countries.usa.lodes_wac.schema import SCHEMA as LODES_SCHEMA
 
     agg_map = {}
     for schema in (ACS5_SCHEMA, DHC_SCHEMA, LODES_SCHEMA, ELECTIONS_SCHEMA):
@@ -179,7 +179,7 @@ def _resample_by_centroid(
             `blockgroup.geoparquet` concatenated), with `level_of_service`
             and every joined census column.
         district_gdf: Target district polygons (from
-            `pycensus.countries.usa.constants.GEOMETRY_FUNCS`), with the
+            `pycensus.census.countries.usa.constants.GEOMETRY_FUNCS`), with the
             district's own id column.
         id_col: District id column name in `district_gdf`.
 
@@ -254,7 +254,7 @@ def build_voting_districts(state_dir: Path, state_fips: str, year: int = 2020) -
         vtd = vtd.rename(columns={id_src: "GEOID"})[["GEOID", "geometry"]].to_crs(4326)
     except Exception as exc:  # noqa: BLE001 - the Census Bureau publishes no VTDs for California, Hawaii and Oregon
         from pycensus.cache import default_cache_dir
-        from pycensus.countries.usa.elections_precinct.official import load_state_precincts
+        from pycensus.census.countries.usa.elections_precinct.official import load_state_precincts
 
         logger.warning(f"No Census voting districts for state {state_fips} ({exc}); using the state's precinct polygons instead")
         prec, _ = load_state_precincts(state_fips, default_cache_dir())
@@ -324,7 +324,7 @@ def add_state_districts(
         pygris data for this state, or nothing surviving the
         population/jobs > 0 filter, is simply absent).
     """
-    from pycensus.countries.usa.constants import GEOMETRY_FUNCS
+    from pycensus.census.countries.usa.constants import GEOMETRY_FUNCS
 
     counties_dir = state_dir / "counties"
     bg_frames = [
@@ -392,7 +392,7 @@ def add_state_native_elections(state_dir: Path, state_fips: str, state_abbr: str
     Per Miguel's 2026-09-29 direction: "add the native election levels as
     additional map levels that incorporate resampled data from all the
     other census columns." President/Senate are genuinely native at
-    STATE level too (see `pycensus.countries.usa.elections.loader`'s
+    STATE level too (see `pycensus.census.countries.usa.elections.loader`'s
     module docstring -- a separate, independently-published MEDSL file
     each time, not a derived sum of the county file), so this is a
     distinct map level from `county.geoparquet`, carrying election
@@ -413,9 +413,9 @@ def add_state_native_elections(state_dir: Path, state_fips: str, state_abbr: str
         available for this state at all.
     """
     from pycensus.cache import default_cache_dir
-    from pycensus.countries.usa import elections
-    from pycensus.countries.usa.elections.loader import STATE_AVAILABLE
-    from pycensus.countries.usa.geography import load_boundaries
+    from pycensus.census.countries.usa import elections
+    from pycensus.census.countries.usa.elections.loader import STATE_AVAILABLE
+    from pycensus.census.countries.usa.geography import load_boundaries
 
     cache_dir = cache_dir or default_cache_dir()
 

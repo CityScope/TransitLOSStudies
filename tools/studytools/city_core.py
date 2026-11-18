@@ -1,7 +1,7 @@
 """Resolve a city's "core" boundary, used to split results into core vs metro.
 
 US cities: the Census `place` boundary matching the city name (via
-`pycensus.countries.usa.constants.GEOMETRY_FUNCS["place"]`, i.e. `pygris.places`).
+`pycensus.census.countries.usa.constants.GEOMETRY_FUNCS["place"]`, i.e. `pygris.places`).
 Non-US cities: the OSM administrative boundary for the city name, resolved
 directly against Nominatim (see `_geocode_admin_polygon` below) rather than
 through `UrbanAccessAnalyzer.api.AreaOfInterest.from_name`, which takes
@@ -23,8 +23,7 @@ from pathlib import Path
 
 import geopandas as gpd
 import requests
-from pycensus.countries.usa.constants import GEOMETRY_FUNCS
-from shapely.geometry import shape
+from pycensus.census.countries.usa.constants import GEOMETRY_FUNCS
 
 
 # geocoded boundaries, in the shared cache (`STUDY_CACHE_DIR`, default TransitLOSStudies/cache)
@@ -32,49 +31,21 @@ _CACHE_DIR = Path(os.environ.get("STUDY_CACHE_DIR") or Path(__file__).resolve().
 
 
 def _geocode_admin_polygon(query: str, limit: int = 10, retries: int = 4) -> gpd.GeoDataFrame:
-    """Geocode `query` via Nominatim, keeping only the first Polygon/MultiPolygon hit.
+    """The boundary polygon of `query`: geohierarchy's `get_city_geometry` (first polygon among Nominatim's answers, cached in
+    `core_boundaries/` so the core / metro split of a city never changes between runs), then Overpass when Nominatim has none."""
+    from geohierarchy.geocoding import get_city_geometry
 
-    Mirrors `UrbanAccessAnalyzer.utils.get_city_geometry`'s request shape
-    (same endpoint/params), but requests several candidates instead of just
-    the top one and skips any that come back as a bare `Point` (a place
-    marker, not a boundary) -- see module docstring for why that matters.
+    try:
+        return get_city_geometry(query, cache_dir=_CACHE_DIR, limit=limit, attempts=retries)
+    except (ValueError, RuntimeError) as exc:
+        gdf = _overpass_admin_polygon(query)
+        if gdf is None:
+            raise exc
+        import hashlib
 
-    A successful result is cached on disk (`core_boundaries/`) and retries are made on empty / point-only / failed responses
-    (Nominatim is rate limited and sometimes answers differently under load): the core / metro split of a city must not change
-    from one run to the next.
-    """
-    import hashlib
-    import time
-
-    cache = _CACHE_DIR / (hashlib.sha1(query.encode("utf-8")).hexdigest()[:16] + ".geojson")
-    if cache.is_file():
-        return gpd.read_file(cache)
-    last: Exception = ValueError(f"No boundary polygon (only point/no results) found for {query!r}.")
-    for attempt in range(1, retries + 1):
-        try:
-            response = requests.get(
-                "https://nominatim.openstreetmap.org/search",
-                params={"q": query, "format": "jsonv2", "polygon_geojson": 1, "limit": limit},
-                headers={"User-Agent": "transitLOS"},
-                timeout=30,
-            )
-            response.raise_for_status()
-            for result in response.json():
-                geojson = result.get("geojson")
-                if geojson and geojson.get("type") in ("Polygon", "MultiPolygon"):
-                    gdf = gpd.GeoDataFrame({"display_name": [result["display_name"]]}, geometry=[shape(geojson)], crs="EPSG:4326")
-                    _CACHE_DIR.mkdir(parents=True, exist_ok=True)
-                    gdf.to_file(cache, driver="GeoJSON")
-                    return gdf
-        except requests.RequestException as exc:
-            last = exc
-        time.sleep(5 * attempt)
-    gdf = _overpass_admin_polygon(query)
-    if gdf is not None:
         _CACHE_DIR.mkdir(parents=True, exist_ok=True)
-        gdf.to_file(cache, driver="GeoJSON")
+        gdf.to_file(_CACHE_DIR / (hashlib.sha1(query.encode("utf-8")).hexdigest()[:16] + ".geojson"), driver="GeoJSON")
         return gdf
-    raise last
 
 
 def _overpass_admin_polygon(query: str):

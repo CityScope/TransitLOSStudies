@@ -20,20 +20,20 @@ columns.
 
 from studytools import pipeline as P
 
-from pycensus.countries.usa.acs5.schema import SCHEMA as ACS5_SCHEMA
-from pycensus.countries.usa.dhc.schema import SCHEMA as DHC_SCHEMA
-from pycensus.countries.usa.lodes_wac.schema import SCHEMA as LODES_WAC_SCHEMA
-from pycensus.countries.germany.ba.schema import SCHEMA as GERMANY_BA_SCHEMA
-from pycensus.countries.mexico.inegi.schema import SCHEMA as INEGI_SCHEMA
-from pycensus.countries.euskadi.eustat.schema import SCHEMA as EUSKADI_SCHEMA
-from pycensus.countries.spain.ine.schema import SCHEMA as SPAIN_SCHEMA
-from pycensus.countries.spain.censo2021.schema import SCHEMA as SPAIN_CENSO2021_SCHEMA
-from pycensus.countries.israel.cbs.schema import SCHEMA as ISRAEL_SCHEMA
-from pycensus.countries.taiwan.moi.schema import SCHEMA as TAIWAN_MOI_SCHEMA
-from pycensus.countries.chile.ine.schema import SCHEMA as CHILE_INE_SCHEMA
-from pycensus.countries.chile.casen.schema import SCHEMA as CHILE_CASEN_SCHEMA
-from pycensus.countries.canada.statcan.schema import SCHEMA as CANADA_SCHEMA
-from pycensus.countries.andorra.estadisticaad.schema import SCHEMA as ANDORRA_SCHEMA
+from pycensus.census.countries.usa.acs5.schema import SCHEMA as ACS5_SCHEMA
+from pycensus.census.countries.usa.dhc.schema import SCHEMA as DHC_SCHEMA
+from pycensus.census.countries.usa.lodes_wac.schema import SCHEMA as LODES_WAC_SCHEMA
+from pycensus.census.countries.germany.ba.schema import SCHEMA as GERMANY_BA_SCHEMA
+from pycensus.census.countries.mexico.inegi.schema import SCHEMA as INEGI_SCHEMA
+from pycensus.census.countries.euskadi.eustat.schema import SCHEMA as EUSKADI_SCHEMA
+from pycensus.census.countries.spain.ine.schema import SCHEMA as SPAIN_SCHEMA
+from pycensus.census.countries.spain.censo2021.schema import SCHEMA as SPAIN_CENSO2021_SCHEMA
+from pycensus.census.countries.israel.cbs.schema import SCHEMA as ISRAEL_SCHEMA
+from pycensus.census.countries.taiwan.moi.schema import SCHEMA as TAIWAN_MOI_SCHEMA
+from pycensus.census.countries.chile.ine.schema import SCHEMA as CHILE_INE_SCHEMA
+from pycensus.census.countries.chile.casen.schema import SCHEMA as CHILE_CASEN_SCHEMA
+from pycensus.census.countries.canada.statcan.schema import SCHEMA as CANADA_SCHEMA
+from pycensus.census.countries.andorra.estadisticaad.schema import SCHEMA as ANDORRA_SCHEMA
 
 
 def _all_prefixed_columns(schema) -> set[str]:
@@ -131,7 +131,7 @@ def test_taiwan_keep_columns_match_current_moi_schema():
     """Covers the 2026-08-23 age-bracket addition (under18Population/
     adultPopulation/over65Population/medianAge, computed from MOI RIS
     ODRP014's real single-year age columns -- see
-    pycensus.countries.taiwan.moi.loader._add_derived_age_columns)."""
+    pycensus.census.countries.taiwan.moi.loader._add_derived_age_columns)."""
     valid = _all_prefixed_columns(TAIWAN_MOI_SCHEMA)
     stale = P.TAIWAN_KEEP_COLUMNS - valid
     assert not stale, (
@@ -153,7 +153,7 @@ def test_chile_casen_keep_columns_match_current_casen_schema():
     """Covers the 2026-08-23 Casen SAE comunal poverty addition
     (povertyRate/povertyRateMultidimensional, real Ministerio de Desarrollo
     Social bulk .xlsx download, distinct from INE's Censo 2017 DPA source
-    above -- see pycensus.countries.chile.casen.api module docstring)."""
+    above -- see pycensus.census.countries.chile.casen.api module docstring)."""
     valid = _all_prefixed_columns(CHILE_CASEN_SCHEMA)
     stale = P.CHILE_CASEN_KEEP_COLUMNS - valid
     assert not stale, (

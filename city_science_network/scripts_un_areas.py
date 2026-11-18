@@ -1,4 +1,4 @@
-"""Write the metro (aoi.gpkg) and core (core.gpkg) boundaries of every city from the UN Degree of Urbanisation areas (pycensus.worldwide.un_metro_areas).
+"""Write the metro (aoi.gpkg) and core (core.gpkg) boundaries of every city from the UN Degree of Urbanisation areas (pycensus.census.worldwide.un_metro_areas).
 
     metro = functional urban area (urban centre + commuting zone), core = urban centre, both without holes.
     Exceptions: andorra (core = Andorra la Vella municipality, metro = the whole country: files kept), gipuzkoa (metro = the province: file kept,
@@ -10,7 +10,7 @@ from pathlib import Path
 import geopandas as gpd, pandas as pd
 
 ROOT = Path(__file__).resolve().parent
-from pycensus.worldwide import un_metro_areas as un
+from pycensus.census.worldwide import un_metro_areas as un
 
 CACHE = str(ROOT.parent / "cache" / "pycensus")
 POINTS = {"toronto": (-79.38, 43.65), "boston": (-71.06, 42.36), "san_francisco": (-122.42, 37.77), "hamburg": (9.99, 53.55), "taipei": (121.56, 25.04),

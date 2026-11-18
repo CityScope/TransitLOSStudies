@@ -195,7 +195,7 @@ def commute_aggregates(state_fips: str) -> dict:
 @functools.lru_cache(maxsize=1)
 def _county_religion() -> pd.DataFrame:
     """County religion table (parsed from the RCMS Excel file once per process: ~10 s each time otherwise)."""
-    from pycensus.countries.usa.religion import load_county_religion
+    from pycensus.census.countries.usa.religion import load_county_religion
 
     return load_county_religion(data_dir=str(Path(__file__).resolve().parent.parent / "data" / "_cache" / "usa_religion")).set_index("GEOID")
 

@@ -288,7 +288,7 @@ def _add_elections(county_gdf: gpd.GeoDataFrame, state_fips: str, cache_dir: str
     """Join every implemented MEDSL office/year onto county-level rows.
 
     County is elections' own native level here (see
-    `pycensus.countries.usa.elections.loader`'s module docstring for
+    `pycensus.census.countries.usa.elections.loader`'s module docstring for
     exactly what's implemented -- House and most non-2024 non-presidential
     years are documented gaps, not silently produced as zero/missing).
     One column pair per `(year, office)`: `{year}_{office}_total_votes`
@@ -307,7 +307,7 @@ def _add_elections(county_gdf: gpd.GeoDataFrame, state_fips: str, cache_dir: str
         `county_gdf` with elections columns added (left join -- a county
         with no election data available just gets nulls, not dropped).
     """
-    from pycensus.countries.usa import elections
+    from pycensus.census.countries.usa import elections
 
     result = county_gdf.copy()
     for office, year in elections.AVAILABLE:
@@ -420,10 +420,10 @@ def _fetch_native_census_level(level: str, county_gdf: gpd.GeoDataFrame, state_f
         since it's a full count, not a 5-year estimate), or `None` if no
         source natively covers this level.
     """
-    from pycensus.countries.usa import acs5, dhc, lodes_wac
-    from pycensus.countries.usa.acs5.schema import NATIVE_LEVELS as ACS5_NATIVE
-    from pycensus.countries.usa.dhc.schema import NATIVE_LEVELS as DHC_NATIVE
-    from pycensus.countries.usa.lodes_wac.schema import NATIVE_LEVELS as LODES_NATIVE
+    from pycensus.census.countries.usa import acs5, dhc, lodes_wac
+    from pycensus.census.countries.usa.acs5.schema import NATIVE_LEVELS as ACS5_NATIVE
+    from pycensus.census.countries.usa.dhc.schema import NATIVE_LEVELS as DHC_NATIVE
+    from pycensus.census.countries.usa.lodes_wac.schema import NATIVE_LEVELS as LODES_NATIVE
 
     frames = []
     if level in DHC_NATIVE:
@@ -724,7 +724,7 @@ def _nsi_cells(county_geoid: str, county_geom, resolution: int):
     by structure point). Empty arrays when NSI is not available (the split then falls back to equal shares)."""
     try:
         import h3ronpy.vector as hv
-        from pycensus.cadaster.usa.nsi.loader import state as nsi_state
+        from pycensus.cadaster.countries.usa.nsi.loader import state as nsi_state
 
         st = county_geoid[:2]
         if st not in _NSI_STATE:

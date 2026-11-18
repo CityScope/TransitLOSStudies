@@ -140,7 +140,7 @@ _MITMA_CACHE: dict = {}
 
 def mitma_table(cache_dir: str) -> pd.DataFrame:
     """MITMA distance / long-distance / regular-commute columns (``ine_mitma_*``, year dropped) indexed by 10-digit section id."""
-    from pycensus.countries.spain.mobility import mitma
+    from pycensus.census.countries.spain.mobility import mitma
 
     if "t" not in _MITMA_CACHE:
         trips = mitma.load_sections(2024, cache_dir=cache_dir)
@@ -160,8 +160,8 @@ def mobility_extras(result: pd.DataFrame, cache_dir: str) -> pd.DataFrame:
 
 def housing_extras(result: pd.DataFrame, data_dir: str) -> pd.DataFrame:
     """Same joins and ``ine_`` names as ``_spain_housing_extras`` (section level)."""
-    from pycensus.countries.spain import serpavi, valor_tasado
-    from pycensus.countries.spain.ine_tables import load_migration_balance, load_tourist_dwellings
+    from pycensus.census.countries.spain import serpavi, valor_tasado
+    from pycensus.census.countries.spain.ine_tables import load_migration_balance, load_tourist_dwellings
 
     provinces = sorted({str(g)[:2] for g in result["GEOID"]})
     try:
@@ -186,7 +186,7 @@ def housing_extras(result: pd.DataFrame, data_dir: str) -> pd.DataFrame:
     except Exception as exc:  # noqa: BLE001
         logger.warning(f"municipal housing / tourism joins skipped: {exc}")
     try:
-        from pycensus.countries.spain.censo2021.housing import load_section_housing
+        from pycensus.census.countries.spain.censo2021.housing import load_section_housing
 
         ch = load_section_housing(data_dir).drop(columns=["district", "household_size_mean"], errors="ignore")
         result = _attach(result, ch, {c: f"ine_{c}" for c in ch.columns if c != "GEOID"})
@@ -196,7 +196,7 @@ def housing_extras(result: pd.DataFrame, data_dir: str) -> pd.DataFrame:
         if "geometry" not in result.columns:
             break
         try:
-            from pycensus.countries.spain import catastro
+            from pycensus.census.countries.spain import catastro
 
             mask = result["GEOID"].astype(str).str.startswith(prov)
             ca = catastro.load_attributes(prov, result.loc[mask, ["GEOID", "geometry"]], data_dir)
@@ -210,7 +210,7 @@ def housing_extras(result: pd.DataFrame, data_dir: str) -> pd.DataFrame:
     basque = [p for p in provinces if p in ("01", "20", "48")]
     if basque:
         try:
-            from pycensus.countries.euskadi.eustat import housing_income as hi
+            from pycensus.census.countries.euskadi.eustat import housing_income as hi
 
             em = hi.load_emal_municipal(2025, data_dir, tuple(basque))
             em16 = hi.load_emal_municipal(2016, data_dir, tuple(basque)).rename(columns={"emalRentM2": "emalRentM2_2016"})
@@ -236,7 +236,7 @@ def elections_join(result, provinces, data_dir):
     """Congreso 2023, municipal 2023 (mesa files cover only municipalities above 250 inhabitants: NaN elsewhere) and, for 01 / 20 / 48,
     Parlamento Vasco 2024, at section level -> ``ine_elec_*`` (``..._votes`` / ``..._electors`` counts, shares and turnout rates)."""
     try:
-        from pycensus.countries.spain import elections
+        from pycensus.census.countries.spain import elections
     except Exception as exc:  # noqa: BLE001
         logger.warning(f"elections skipped: {exc}")
         return result
@@ -256,7 +256,7 @@ def elections_join(result, provinces, data_dir):
 
 def load_province_sections(province: str, data_dir: str, cache_dir: str) -> gpd.GeoDataFrame:
     """One row per census section of ``province`` (2-digit code): geometry (4326), ``population`` and all ``ine_*`` columns."""
-    from pycensus.countries.spain import adrh, censo2021, ine
+    from pycensus.census.countries.spain import adrh, censo2021, ine
 
     base = ine.load(regions=[_region(province)], level="section", cache_dir=cache_dir, data_dir=data_dir)
     # Population: Padron's bare/ine_ population column is exposed as ``population`` (this study's activity column).
@@ -277,7 +277,7 @@ def load_province_sections(province: str, data_dir: str, cache_dir: str) -> gpd.
     try:
         attrs = adrh.load_attributes([province], "section", data_dir=data_dir)
         if province in ("01", "20", "48"):
-            from pycensus.countries.spain.adrh.eustat_sections import load_sections
+            from pycensus.census.countries.spain.adrh.eustat_sections import load_sections
 
             eus = load_sections([province], data_dir=data_dir)
             if len(eus):

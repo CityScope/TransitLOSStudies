@@ -1,11 +1,11 @@
 """Tests for `studytools.pipeline._join_zensus_grid_population`: WorldPop -> real Zensus grid replacement.
 
 Technical aspects:
-    Built 2026-08-22 alongside wiring `pycensus.countries.germany.zensus_grid`
+    Built 2026-08-22 alongside wiring `pycensus.census.countries.germany.zensus_grid`
     (a real, live-verified Destatis Zensus 2022 100m x 100m population grid,
     see that module's docstring) into Hamburg's pipeline. Offline: the real
     Destatis download is monkeypatched out via
-    `pycensus.countries.germany.zensus_grid.loader.download_grid`, same
+    `pycensus.census.countries.germany.zensus_grid.loader.download_grid`, same
     pattern as `pyCensus/tests/test_germany_zensus_grid.py`.
 
     Uses real H3 hexagon geometry (`h3.grid_disk` + `UrbanAccessAnalyzer.
@@ -81,7 +81,7 @@ def fake_zensus_grid(monkeypatch):
         )
         return cells
 
-    monkeypatch.setattr("pycensus.countries.germany.zensus_grid.loader.load", fake_load)
+    monkeypatch.setattr("pycensus.census.countries.germany.zensus_grid.loader.load", fake_load)
     return fake_load
 
 
@@ -112,7 +112,7 @@ class TestJoinZensusGridPopulation:
         def fake_load_empty(aoi=None, data_dir=None):
             return gpd.GeoDataFrame({"GEOID": [], "population": []}, geometry=[], crs=4326)
 
-        monkeypatch.setattr("pycensus.countries.germany.zensus_grid.loader.load", fake_load_empty)
+        monkeypatch.setattr("pycensus.census.countries.germany.zensus_grid.loader.load", fake_load_empty)
 
         h3_grid = _hamburg_h3_grid()
         aoi = gpd.GeoDataFrame(geometry=[box(9.9, 53.5, 10.1, 53.6)], crs=4326)

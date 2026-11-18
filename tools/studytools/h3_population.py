@@ -3,7 +3,7 @@
 Thin orchestration over two reusable, configurable functions in the sibling
 packages (not custom logic of its own):
 
-- `pycensus.countries.worldwide.worldpop.h3.worldpop_raster_to_h3` resamples
+- `pycensus.census.worldwide.worldpop.h3.worldpop_raster_to_h3` resamples
   the WorldPop raster onto H3 cells -- area-weighted and mass-conserving
   (built on `geohierarchy.raster_resample`), not the old centroid-snap
   method, so a pixel straddling a cell boundary splits its value correctly
@@ -50,8 +50,8 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import shapely
 from geohierarchy import Max, edges_to_h3_by_distance
-from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast as worldpop_raster_to_h3
-from pycensus.countries.worldwide.worldpop.loader import _clip_to_aoi
+from pycensus.census.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast as worldpop_raster_to_h3
+from pycensus.census.worldwide.worldpop.loader import _clip_to_aoi
 
 
 ROADLESS_WARN_SHARE = 0.05   # warn when more than this share of a source's people / jobs is not near a road

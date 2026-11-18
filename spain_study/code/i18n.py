@@ -112,7 +112,7 @@ def _labels():
     return en, es
 
 
-# ---- election columns (pycensus.countries.spain.elections): labels derived from the column key, so any party slug works.
+# ---- election columns (pycensus.census.countries.spain.elections): labels derived from the column key, so any party slug works.
 # English: the builder's own label where it has one ("National election 2023: left bloc vote"); the columns it does not name (votes cast, electors,
 # vote counts) get the same style here. Spanish: "Elecciones generales 2023: voto bloque izquierda".
 _EL = _load("elections.json")

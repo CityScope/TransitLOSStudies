@@ -27,8 +27,8 @@ CENSUS = {"boston": "ACS 5-year (commuters by mode)", "san_francisco": "ACS 5-ye
           "concepcion": "INE Chile, Censo 2024 (commuters by mode)"}
 def _published() -> dict:
     """Municipality value + the value of the rest of its region (both published); every area = population-weighted mix of the two."""
-    from pycensus.countries.germany import mid_hamburg
-    from pycensus.countries.taiwan import motc_mode_use
+    from pycensus.census.countries.germany import mid_hamburg
+    from pycensus.census.countries.taiwan import motc_mode_use
 
     c = str(HERE.parent / "cache")
     h, t = mid_hamburg.load(c), motc_mode_use.load(c)
@@ -51,9 +51,9 @@ UNITS = {   # the finest unit the census PUBLISHES commute modes for (never a va
 }
 LOADED = {   # units read through a pycensus source: city -> (source label, census label, loader(aoi) -> GeoDataFrame with the four counts)
     "beerseba": ("CBS Israel, Census 2022 public-use file (main means of transport to work)", "sub-quarters / localities",
-                 lambda aoi: __import__("pycensus.countries.israel.cbs_commute", fromlist=["load"]).load(aoi=aoi, cache_dir=str(HERE / "census"))),
+                 lambda aoi: __import__("pycensus.census.countries.israel.cbs_commute", fromlist=["load"]).load(aoi=aoi, cache_dir=str(HERE / "census"))),
     "guadalajara": ("INEGI, Censo 2020 cuestionario ampliado (means of transport to work)", "municipalities",
-                    lambda aoi: __import__("pycensus.countries.mexico.inegi_movilidad", fromlist=["load"]).load(
+                    lambda aoi: __import__("pycensus.census.countries.mexico.inegi_movilidad", fromlist=["load"]).load(
                         aoi=aoi, cache_dir=str(HERE / "census"), data_dir=str(HERE / "census" / "mexico"))),
     "andorra": ("ENM 2050 citizen survey (CRES 2021): modes used the day before, by parish", "parishes", None),
 }
@@ -70,7 +70,7 @@ def _area_union(city: str):
 def _andorra_units():
     import geopandas as gpd
 
-    from pycensus.countries.andorra import enm_mobility
+    from pycensus.census.countries.andorra import enm_mobility
 
     t = enm_mobility.parish_table(str(HERE / "census"))
     g = gpd.read_parquet(HERE / "andorra" / "results" / "census" / "parish.parquet", columns=["GEOID", "geometry", "census_residents"])

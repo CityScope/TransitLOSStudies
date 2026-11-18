@@ -21,7 +21,7 @@ import pandas as pd
 
 HERE = Path(__file__).resolve().parents[1]
 CACHE = HERE.parent / "cache" / "ine_ecepov"
-from pycensus.countries.spain.mobility import ecepov as _ec
+from pycensus.census.countries.spain.mobility import ecepov as _ec
 
 _norm = _ec.norm_name
 

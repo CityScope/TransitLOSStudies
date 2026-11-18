@@ -59,12 +59,12 @@ CITY_CONFIGS: dict[str, CityConfig] = {
         # section-level (or finer) census data than generic Spain/INE:
         # EUSTAT's geo-cartography portals (opendata.euskadi.eus,
         # eustat.eus/geoservicios) remain genuinely unreachable (403/404) to
-        # a scripted client, so pycensus.countries.euskadi has no boundary
+        # a scripted client, so pycensus.census.countries.euskadi has no boundary
         # source finer than municipality and only 3 fields (population,
         # areaKm2, populationDensity, all from GISCO/LAU 2021 -- the SAME
         # underlying INE-sourced municipal figures Spain/INE already
         # exposes, not independent EUSTAT data). Generic
-        # pycensus.countries.spain, by contrast, now has a real, live
+        # pycensus.census.countries.spain, by contrast, now has a real, live
         # section-level (seccion censal) source from INE's own OGC API
         # Features service -- 544 real sections for Gipuzkoa (province
         # "20"), live-verified 2026-08-22 by summing section population for
@@ -75,7 +75,7 @@ CITY_CONFIGS: dict[str, CityConfig] = {
         # real fields than the Euskadi-specific module -- routing there
         # instead. Do not resurrect census_module="euskadi" without a real,
         # verified EUSTAT attribute/geometry source that's actually finer
-        # than section-level (see pycensus.countries.euskadi.api's module
+        # than section-level (see pycensus.census.countries.euskadi.api's module
         # docstring: EUSTAT's Data Bank API IS real/reachable but not yet
         # wired to any loader).
         # Feeds' calendars are stale by different amounts: score each feed on its own auto-picked date.

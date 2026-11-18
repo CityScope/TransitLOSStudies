@@ -56,7 +56,7 @@ def state_density(cells: pd.DataFrame) -> pd.DataFrame:
 
 
 def main(y0: int = 2019, y1: int = 2023) -> None:
-    from pycensus.countries.usa.fuel_prices import gasoline_price_mean
+    from pycensus.census.countries.usa.fuel_prices import gasoline_price_mean
 
     fuel = gasoline_price_mean(y0, y1, str(CACHE))
     out = []

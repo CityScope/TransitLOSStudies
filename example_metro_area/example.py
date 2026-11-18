@@ -125,7 +125,7 @@ def area_from_place(place: str, area: str = "municipality") -> gpd.GeoDataFrame:
                     print(f"[area] US Census place not found ({exc}); using OpenStreetMap", flush=True)
             elif source == "openstreetmap":
                 return _one_area(osm, place)
-    from pycensus.worldwide import un_metro_areas
+    from pycensus.census.worldwide import un_metro_areas
 
     found = un_metro_areas.find(point=(point.x, point.y), kind=_UN_KIND[area])
     if found.empty:
@@ -162,7 +162,14 @@ def api_key(name: str) -> Optional[str]:
     `~/.config/ptlos/api_keys.json`, so it is asked only once."""
     import getpass
 
-    from geohierarchy.api_keys import STANDARD_PATH, resolve_api_key, save_api_key
+    if name == "destatis_genesis":   # census keys: pyCensus; transit-feed keys: pyGTFSHandler (each package has its own lookup)
+        from pycensus.api_keys import STANDARD_PATH, resolve_api_key, save_api_key
+    else:
+        from pyGTFSHandler.downloaders.utils.config import STANDARD_PATH, save_api_key
+        from pyGTFSHandler.downloaders.utils.config import get_api_key as _get
+
+        def resolve_api_key(n, env):
+            return _get(n, None, env)
 
     what, url, env = API_KEYS[name]
     key = resolve_api_key(name, env)
@@ -170,8 +177,7 @@ def api_key(name: str) -> Optional[str]:
         return key
     print(f"{what} needs an API key. Get one for free at {url}", flush=True)
     if not (sys.stdin and sys.stdin.isatty()) and "ipykernel" not in sys.modules:
-        print("Not asked (no terminal): skipped. Save it with geohierarchy.api_keys.save_api_key or the environment variable "
-              f"{env}.", flush=True)
+        print(f"Not asked (no terminal): skipped. Add it to {STANDARD_PATH} or set the environment variable {env}.", flush=True)
         return None
     key = getpass.getpass("Paste the key here, or press Enter to skip: ").strip()
     if key:

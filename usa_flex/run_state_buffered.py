@@ -131,7 +131,7 @@ def _nsi_floor_area(abbr, cells):
     try:
         import us
         import h3ronpy.vector as hv
-        from pycensus.cadaster.usa.nsi.loader import state as nsi_state
+        from pycensus.cadaster.countries.usa.nsi.loader import state as nsi_state
         g = nsi_state(us.states.lookup(abbr).fips, HERE.parent / "cache")
     except Exception as exc:  # noqa: BLE001
         log(abbr, f"NSI floor areas not available ({type(exc).__name__}: {str(exc)[:120]}): equal split")

@@ -340,7 +340,7 @@ SHARE_COLUMNS: dict[str, list[tuple[str, str]]] = {
     # deliberately NOT kept on `h3_grid`/`census_gdf` -- see
     # `GERMANY_BA_PENDLER_KEEP_COLUMNS`'s comment -- and the two are
     # verified numerically identical for the same Stichtag anyway, see
-    # `pycensus.countries.germany.ba_pendler.loader`'s module docstring).
+    # `pycensus.census.countries.germany.ba_pendler.loader`'s module docstring).
     "commuter_in_share": [("ba_pendler_einpendler", "ba_jobsTotal")],
     "local_worker_share": [("ba_pendler_sameGemeindeWorkers", "ba_jobsTotal")],
     # -- education (no canonical numerator -- stay prefixed) --
@@ -539,7 +539,7 @@ SHARE_COLUMNS: dict[str, list[tuple[str, str]]] = {
     # -- religion, Israel (CBS, `cbs_*` -- see `ISRAEL_KEEP_COLUMNS`).
     # Added (2026-08-25): CBS reports religion as a single per-area
     # dominant-religion classification code, not a population breakdown
-    # (see `pycensus.countries.israel.cbs.schema.cbs_schema.json`'s
+    # (see `pycensus.census.countries.israel.cbs.schema.cbs_schema.json`'s
     # "religionCode" feature) -- `cbs.loader.load()` reconstructs real
     # per-religion population counts from that classification (live-
     # verified 2026-08-25: Beersheba metro AOI sums to 948,640 Jewish +
@@ -593,7 +593,7 @@ SHARE_COLUMNS: dict[str, list[tuple[str, str]]] = {
     "worldpop_urban_share": [("worldpop_urbanPopulation", "worldpop_residents"), ("worldpop_urbanPopulation", "population_worldpop"), ("worldpop_urbanPopulation", "population")],
 
     # -- WorldPop `urbanPopulation` (added 2026-08-25, see
-    # `pycensus.countries.worldwide.worldpop.loader`'s module docstring for
+    # `pycensus.census.worldwide.worldpop.loader`'s module docstring for
     # live verification) -- same bare-name shape as the other
     # `_join_worldpop_global_schema` features above (`worldpop_female_share`
     # etc. are for the gap-fill-prefixed columns; this is for Shanghai's
@@ -620,7 +620,7 @@ SHARE_COLUMNS: dict[str, list[tuple[str, str]]] = {
 #
 # Scale factors are picked from each source's own verified real values, not
 # guessed: CBS's own loader derives a population count as
-# `rate / 100.0 * pop` (see `pycensus.countries.israel.cbs.loader.load`), so
+# `rate / 100.0 * pop` (see `pycensus.census.countries.israel.cbs.loader.load`), so
 # CBS `*Rate` columns are 0-100 percent -- divide by 100. Casen's own module
 # docstring gives real verified values already as fractions (Santiago
 # `povertyRate=0.038648`), so Casen needs no rescaling (divide by 1).
@@ -639,7 +639,7 @@ RATE_SOURCE_COLUMNS: dict[str, list[tuple[str, float]]] = {
     # SAE estimate (`casen_cl_povertyRateMultidimensional`, present in
     # `CHILE_CASEN_KEEP_COLUMNS` alongside `casen_cl_povertyRate`, same
     # Fay-Herriot SAE methodology and already published as a 0-1 fraction --
-    # see `pycensus.countries.chile.schema.casen_schema.json`'s
+    # see `pycensus.census.countries.chile.schema.casen_schema.json`'s
     # `povertyRateMultidimensional` feature, `unit: "share (0-1)"`, no
     # rescaling needed) had no `RATE_SOURCE_COLUMNS` entry at all -- a real
     # gap, not speculative.
@@ -1068,7 +1068,7 @@ WORLDPOP_RESIDENTS_COLUMN = "worldpop_residents"
 WORLDPOP_ONLY_POPULATION_CITIES = frozenset({"beerseba", "shanghai", "andorra"})
 
 # Checked in order; the first one present on the grid wins. `lodes_wac_*` is
-# what `pycensus.countries.usa.lodes_wac` produces; the rest are the plain names a non-US
+# what `pycensus.census.countries.usa.lodes_wac` produces; the rest are the plain names a non-US
 # study is likely to bring its own workplace/jobs count in under.
 JOBS_COLUMN_CANDIDATES: tuple[str, ...] = (
     "lodes_wac_jobsTotal",
@@ -1096,7 +1096,7 @@ def jobs_column(gdf) -> Optional[str]:
     return None
 
 
-# Every wired country's real `pycensus.countries.<x>.<source>.schema.SCHEMA
+# Every wired country's real `pycensus.census.countries.<x>.<source>.schema.SCHEMA
 # (prefix=...)` -- the single source of truth for "which column prefixes are
 # real census data" used across this module (resampling's `sum_cols`,
 # population-column detection, and anywhere else that needs "every census
@@ -1118,13 +1118,13 @@ CENSUS_COLUMN_PREFIXES: tuple[str, ...] = (
     "gba_",   # GlobalBuildingAtlas building metrics / built-surface population (`_gba_cell_population`, `_add_gba_columns`)
 )
 
-# `pyCensus/src/pycensus/schemas/global_schema.json`'s `feature_name` set,
+# `pyCensus/src/pycensus/census/global_schema.json`'s `feature_name` set,
 # loaded once (never hardcoded -- see `AGENT_GUIDE_NEW_CITY_OR_COUNTRY.md`'s
 # anti-fabrication rule) and memoized here. Resolved via `pycensus.__file__`
 # rather than a path relative to this repo, so it works the same whether
 # pyCensus is a normal site-packages install or (as in this dev checkout) an
 # editable install from a sibling repo -- the same convention every other
-# `pycensus.countries.<x>.<source>` import in this module already relies on
+# `pycensus.census.countries.<x>.<source>` import in this module already relies on
 # implicitly (they all resolve through whatever `pycensus` is on `sys.path`).
 _GLOBAL_SCHEMA_FEATURE_NAMES_CACHE: Optional[frozenset[str]] = None
 
@@ -1133,9 +1133,7 @@ def _global_schema_feature_names() -> frozenset[str]:
     """The canonical `feature_name` set every wired country's census join may rename onto."""
     global _GLOBAL_SCHEMA_FEATURE_NAMES_CACHE
     if _GLOBAL_SCHEMA_FEATURE_NAMES_CACHE is None:
-        import pycensus
-
-        schema_path = Path(pycensus.__file__).resolve().parent / "schemas" / "global_schema.json"
+        from pycensus.canonical import GLOBAL_SCHEMA_PATH as schema_path
         with open(schema_path, encoding="utf-8") as f:
             entries = json.load(f)
         _GLOBAL_SCHEMA_FEATURE_NAMES_CACHE = frozenset(entry["feature_name"] for entry in entries)
@@ -1373,7 +1371,7 @@ def _scale_worldpop_to_census(city_dir, h3_by_resolution, census_by_level, stats
     def raw_worldpop(df):
         res = h3.get_resolution(str(df["h3_cell"].iloc[0]))
         if res not in raw_cache:
-            from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast
+            from pycensus.census.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast
 
             layer = worldpop_raster_to_h3_fast(tifs[0], resolution=res, value_col="__wp_raw").to_pandas().set_index("h3_cell")["__wp_raw"]
             raw_cache[res] = layer
@@ -2786,7 +2784,7 @@ def build_h3_by_resolution(
     # native-resolution hexagon/circle "Circle size by" dropdown -- built
     # from the un-resampled grid -- had them all along. `CENSUS_COLUMN_PREFIXES`
     # covers every wired country's real source prefix (see each one's own
-    # `pycensus.countries.<x>.<source>.schema.SCHEMA(prefix=...)`).
+    # `pycensus.census.countries.<x>.<source>.schema.SCHEMA(prefix=...)`).
     #
     # `_census_columns` (not a plain prefix check) because
     # `_rename_canonical_columns` has, by this point, already renamed a real
@@ -3254,7 +3252,7 @@ def _usa_map_census_loader(aoi, states, level, cache_dir):
     caller) works with whatever real fields whichever source returns for
     each level; it doesn't require the same field set across levels.
     """
-    from pycensus.countries.usa import acs5, dhc
+    from pycensus.census.countries.usa import acs5, dhc
 
     if level == "block":
         gdf = dhc.load(aoi=aoi, states=states, level=level, cache_dir=str(cache_dir))
@@ -3317,7 +3315,7 @@ def _add_h3_grid(pop_h3: pl.DataFrame) -> gpd.GeoDataFrame:
 # snake_case (`acs_income_median_household`) this used to match verbatim.
 #
 # `"rate"`/`"ratio"`/`"share"`/`"density"` added when wiring Israel/Spain in
-# (2026-08-19): Israel's `pycensus.countries.israel.cbs` schema has real raw source
+# (2026-08-19): Israel's `pycensus.census.countries.israel.cbs` schema has real raw source
 # columns of exactly this shape (`cbs_sexRatio`, `cbs_employmentRate`,
 # `cbs_populationShare019`, `cbs_populationDensity`, ...) -- these are
 # already-relative figures for their whole locality polygon, so they must be
@@ -3474,7 +3472,7 @@ ACS_KEEP_COLUMNS = {
 }
 
 # DHC (decennial) race/ethnicity variables -- ACS doesn't publish a race breakdown at
-# all (see `pycensus.countries.usa.acs5.schema.SCHEMA`), decennial DHC is the only source for it
+# all (see `pycensus.census.countries.usa.acs5.schema.SCHEMA`), decennial DHC is the only source for it
 # (and is a full count, not a sample estimate, which is arguably better anyway).
 #
 # Names match pyCensus's current camelCase `dhc_` schema (see
@@ -3543,7 +3541,7 @@ DHC_KEEP_COLUMNS = {
 # geometry, not itself a value the Census Bureau published at block
 # resolution), kept in a column distinct from any real block-resolution
 # figure so the two are never silently blended under one name -- same
-# spirit as `pycensus.countries.worldwide.worldpop.loader`'s documented
+# spirit as `pycensus.census.worldwide.worldpop.loader`'s documented
 # bin-15 linear-interpolation columns for `under18Population`.
 ACS_COUNT_FIELDS_FOR_INTERPOLATION = {
     "acs5_population",
@@ -3580,9 +3578,9 @@ def _schema_columns(country: str, source: str, prefix: str) -> set:
     """Every feature of a pycensus source schema as the pipeline names it (`prefix` + feature name): ALL the local census columns."""
     import json as _json
 
-    import pycensus as _pc
+    from pycensus.schema import schema_dir
 
-    f = Path(_pc.__file__).resolve().parent / "countries" / country / "schema" / f"{source}_schema.json"
+    f = schema_dir(country) / f"{source}_schema.json"
     try:
         return {prefix + e["feature_name"] for e in _json.loads(f.read_text(encoding="utf-8")).get("features", [])}
     except (OSError, ValueError, KeyError):
@@ -3593,9 +3591,9 @@ def _register_schema_rates(country: str, source: str, prefix: str) -> None:
     """Mark every intensive feature (mean / median / index / percentage) of a pycensus schema as a rate column."""
     import json as _json
 
-    import pycensus as _pc
+    from pycensus.schema import schema_dir
 
-    f = Path(_pc.__file__).resolve().parent / "countries" / country / "schema" / f"{source}_schema.json"
+    f = schema_dir(country) / f"{source}_schema.json"
     try:
         feats = _json.loads(f.read_text(encoding="utf-8")).get("features", [])
     except (OSError, ValueError):
@@ -3625,10 +3623,10 @@ def _interpolate_acs_to_dhc_blocks(
 
     Args:
         acs_gdf: ACS5 blockgroup-level GeoDataFrame (`acs5_*`-prefixed
-            columns), as returned by `pycensus.countries.usa.acs5.load`.
+            columns), as returned by `pycensus.census.countries.usa.acs5.load`.
         block_gdf: DHC block-level GeoDataFrame (`dhc_population` column,
             real per-block population), as returned by
-            `pycensus.countries.usa.dhc.load`.
+            `pycensus.census.countries.usa.dhc.load`.
         count_fields: ACS5 column names (already `acs5_`-prefixed) to
             interpolate. Any name not present in `acs_gdf` is skipped.
 
@@ -3690,12 +3688,12 @@ def _toronto_profile_levels(cache_dir) -> tuple:
 
 def _toronto_profile_loader(aoi, states, level, cache_dir):
     """`_join_polygon_stats`-shaped loader for the City of Toronto 2021 neighbourhood profile (see pycensus ``canada.toronto``)."""
-    from pycensus.countries.canada import toronto
+    from pycensus.census.countries.canada import toronto
 
     gdf = toronto.load(aoi=aoi, level=level, data_dir=str(Path(cache_dir) / "toronto_profile_data"), canada_dir=str(Path(cache_dir) / "canada"))
     gdf = _restore_population_prefix(gdf, "statcan")
     if str(level).startswith(("dissem", "da")):   # federal 2025, Ontario 2025 and Toronto 2022 mayor results per dissemination area
-        from pycensus.countries.canada import elections as el
+        from pycensus.census.countries.canada import elections as el
 
         for scope in ("national", "state", "municipal"):
             try:
@@ -3711,8 +3709,8 @@ US_RELIGION_KEEP_COLUMNS = set()   # filled below from the pycensus usa religion
 
 def _us_religion_loader(aoi, states, level, cache_dir):
     """`_join_polygon_stats`-shaped loader: county polygons with the 2020 U.S. Religion Census columns (``usrc_*``)."""
-    from pycensus.countries.usa import acs5
-    from pycensus.countries.usa.religion import load_county_religion
+    from pycensus.census.countries.usa import acs5
+    from pycensus.census.countries.usa.religion import load_county_religion
 
     counties = acs5.load(aoi=aoi, states=list(states) if states else None, level="county", cache_dir=str(cache_dir))[["GEOID", "geometry"]]
     rel = load_county_religion(data_dir=str(Path(cache_dir) / "usa_religion"))
@@ -3725,8 +3723,8 @@ US_PRECINCT_ELECTION_KEEP: set = set()
 
 def _us_precinct_elections_loader(aoi, states, level, cache_dir):
     """`_join_polygon_stats`-shaped loader: 2020 tracts with precinct-resolution elections (2024 president, 2022 governor, latest mayor)."""
-    from pycensus.countries.usa import acs5
-    from pycensus.countries.usa.elections_precinct import load as load_prec
+    from pycensus.census.countries.usa import acs5
+    from pycensus.census.countries.usa.elections_precinct import load as load_prec
 
     tracts = acs5.load(aoi=aoi, states=list(states) if states else None, level="tract", cache_dir=str(cache_dir))[["GEOID", "geometry"]]
     fips = {str(g)[:2] for g in tracts["GEOID"]}
@@ -3747,8 +3745,8 @@ def _us_precinct_elections_loader(aoi, states, level, cache_dir):
 def _us_housing_loader(aoi, states, level, cache_dir):
     """`_join_polygon_stats`-shaped loader: 2020 tracts with home value / rent / tenure (ACS now, ~2016, 2000), FHFA price index and HUD rents (``ushs_*``)."""
     import us as _us
-    from pycensus.countries.usa import acs5
-    from pycensus.countries.usa.housing import load_tract_housing
+    from pycensus.census.countries.usa import acs5
+    from pycensus.census.countries.usa.housing import load_tract_housing
 
     tracts = acs5.load(aoi=aoi, states=list(states) if states else None, level="tract", cache_dir=str(cache_dir))[["GEOID", "geometry"]]
     frames = []
@@ -3767,8 +3765,8 @@ US_LAST_ELECTION_COLUMNS = {"2024_president_total_votes", "2024_president_democr
 def _us_last_election_loader(aoi, states, level, cache_dir):
     """`_join_polygon_stats`-shaped loader: county polygons with the 2024 presidential result (votes, two-party-style shares 0-1)."""
     import us as _us
-    from pycensus.countries.usa import acs5
-    from pycensus.countries.usa import elections
+    from pycensus.census.countries.usa import acs5
+    from pycensus.census.countries.usa import elections
 
     counties = acs5.load(aoi=aoi, states=list(states) if states else None, level="county", cache_dir=str(cache_dir))[["GEOID", "geometry"]]
     frames = []
@@ -3798,7 +3796,7 @@ def _acs_interpolated_census_loader(aoi, states, level, cache_dir):
     AOI, same "fail safely, skip" behavior every other loader in this
     module follows.
     """
-    from pycensus.countries.usa import acs5, dhc
+    from pycensus.census.countries.usa import acs5, dhc
 
     states_arg = list(states) if states else None
     acs_gdf = acs5.load(aoi=aoi, states=states_arg, level="blockgroup", cache_dir=str(cache_dir))
@@ -4104,7 +4102,7 @@ def _join_polygon_stats(
     is already representative of the whole polygon.
 
     Args:
-        loader: `pycensus.countries.usa.acs5.load`/`pycensus.countries.usa.dhc.load`-shaped
+        loader: `pycensus.census.countries.usa.acs5.load`/`pycensus.census.countries.usa.dhc.load`-shaped
             callable: `(aoi, states, level, cache_dir) -> GeoDataFrame`.
         keep_columns: Column names (after `prefix`-renaming) to keep; every
             other column from the source is dropped before joining.
@@ -4261,7 +4259,7 @@ def _join_polygon_stats(
 
 # Mexico (INEGI) has no ACS/DHC/LODES equivalents -- it publishes population,
 # household, religion, health, disability, education, and labor-force totals
-# (see `pycensus.countries.mexico.inegi.schema.SCHEMA`) but nothing shaped like US
+# (see `pycensus.census.countries.mexico.inegi.schema.SCHEMA`) but nothing shaped like US
 # race/ethnicity categories or LODES workplace-jobs flows. This is the
 # population/household counterpart of `ACS_KEEP_COLUMNS` for `_join_census`
 # only; `_join_race`/`_join_jobs` have no Mexico source at all and are
@@ -4308,8 +4306,8 @@ INEGI_KEEP_COLUMNS = {
 
 # INEGI's `inegi.load` implements "block" (urban manzana), "ageb" (urban
 # AGEB, tract-equivalent), "municipality", and "state" levels (see
-# `pycensus.countries.mexico.geography.IMPLEMENTED_LEVELS`) -- every other standard
-# level falls back, via `pycensus.countries.mexico.constants.LEVEL_FALLBACK`, onto one
+# `pycensus.census.countries.mexico.geography.IMPLEMENTED_LEVELS`) -- every other standard
+# level falls back, via `pycensus.census.countries.mexico.constants.LEVEL_FALLBACK`, onto one
 # of these four. Listed finest-first: `_join_polygon_stats` joins each level
 # in order and only backfills h3 cells still missing a value at the next
 # (coarser) level, so block gives the finest real resolution in urban AOI
@@ -4319,7 +4317,7 @@ INEGI_LEVELS: tuple[str, ...] = ("block", "ageb", "municipality", "state")
 
 
 def _mexico_census_loader(aoi, states, level, cache_dir):
-    """Adapt `pycensus.countries.mexico.inegi.load`'s signature to `_join_polygon_stats`'s.
+    """Adapt `pycensus.census.countries.mexico.inegi.load`'s signature to `_join_polygon_stats`'s.
 
     Explicitly forwards `data_dir` (INEGI's raw ITER/RESAGEBURB download
     cache) alongside `cache_dir` (the joined parquet cache) -- `inegi.load`
@@ -4327,7 +4325,7 @@ def _mexico_census_loader(aoi, states, level, cache_dir):
     `cache_dir` here, so raw downloads silently fell back to `inegi`'s own
     CWD-relative default instead of living under the shared census cache.
     """
-    from pycensus.countries.mexico import inegi
+    from pycensus.census.countries.mexico import inegi
 
     gdf = inegi.load(
         aoi=aoi, states=states, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "mexico")
@@ -4335,7 +4333,7 @@ def _mexico_census_loader(aoi, states, level, cache_dir):
     gdf = _restore_population_prefix(gdf, "inegi")
     if level == "ageb" and len(gdf):   # 2024 presidential result (casilla -> seccion -> H3 -> AGEB)
         try:
-            from pycensus.countries.mexico import elections as el
+            from pycensus.census.countries.mexico import elections as el
 
             t = el.load("national", level="ageb", census_geometry={"ageb": gdf[["GEOID", "geometry"]]}, aoi=aoi)
             gdf = _merge_elections(gdf, t, INEGI_KEEP_COLUMNS, "inegi_")
@@ -4352,26 +4350,26 @@ def _mexico_census_loader(aoi, states, level, cache_dir):
 EUSKADI_KEEP_COLUMNS = {"eustat_population", "eustat_areaKm2", "eustat_populationDensity"}
 
 # pycensus.euskadi implements only these three real levels (see
-# pycensus.countries.euskadi.constants.LEVEL_FALLBACK) -- finer standard levels all
+# pycensus.census.countries.euskadi.constants.LEVEL_FALLBACK) -- finer standard levels all
 # fall back to "municipality" inside the loader itself, so requesting them
 # here would just repeat the same fetch three times for no benefit.
 EUSKADI_LEVELS: tuple[str, ...] = ("municipality", "territory")
 
 
 def _euskadi_census_loader(aoi, states, level, cache_dir):
-    """Adapt `pycensus.countries.euskadi.eustat.load`'s signature to `_join_polygon_stats`'s.
+    """Adapt `pycensus.census.countries.euskadi.eustat.load`'s signature to `_join_polygon_stats`'s.
 
     Euskadi has no US-style `states` concept (`states` is ignored, unlike
     the USA/Mexico loaders) -- `regions` is derived from `aoi` instead, via
-    `pycensus.countries.euskadi.geography.territories_in_aoi`.
+    `pycensus.census.countries.euskadi.geography.territories_in_aoi`.
     """
-    from pycensus.countries.euskadi import eustat
+    from pycensus.census.countries.euskadi import eustat
 
     return _restore_population_prefix(eustat.load(aoi=aoi, level=level, cache_dir=str(cache_dir)), "eustat")
 
 
-# Spain (INE Padron, `pycensus.countries.spain.ine`, plus INE's Censo 2021
-# SDC21 dissemination API, `pycensus.countries.spain.censo2021`) -- real,
+# Spain (INE Padron, `pycensus.census.countries.spain.ine`, plus INE's Censo 2021
+# SDC21 dissemination API, `pycensus.census.countries.spain.censo2021`) -- real,
 # verified population + education/employment/migration/household data (see
 # the schema-redesign memory doc's "Spain rebuilt for real" round, and the
 # 2026-08-22 census2021-column-coverage pass). Both sources' output columns
@@ -4385,7 +4383,7 @@ def _euskadi_census_loader(aoi, states, level, cache_dir):
 # fields are NOT included: SDC21 has no way to split "other tertiary" from
 # university (`ID_ESREAL_GR5` only has one tertiary bucket) and no income or
 # commute-mode variable at all -- see
-# `pycensus.countries.spain.censo2021.loader` module docstring.
+# `pycensus.census.countries.spain.censo2021.loader` module docstring.
 SPAIN_KEEP_COLUMNS = {
     "ine_population",
     "ine_malePopulation",
@@ -4400,7 +4398,7 @@ SPAIN_KEEP_COLUMNS = {
     "ine_foreignBornPopulation",
 }
 
-# `pycensus.countries.spain.geography.IMPLEMENTED_LEVELS` = (nation,
+# `pycensus.census.countries.spain.geography.IMPLEMENTED_LEVELS` = (nation,
 # autonomous_community, province, municipality, section) -- as of a
 # 2026-08-2x rebuild INE's own OGC "Secciones censales" service is real and
 # live-verified (see that module's docstring), and `spain.ine.loader.load`
@@ -4418,20 +4416,20 @@ SPAIN_LEVELS: tuple[str, ...] = ("section", "municipality", "province")
 def _spain_census_loader(aoi, states, level, cache_dir):
     """Adapt Spain's two real census sources to `_join_polygon_stats`'s single-loader signature.
 
-    Both `pycensus.countries.spain.ine.load` (Padron population) and
-    `pycensus.countries.spain.censo2021.load` (Censo 2021 education/
+    Both `pycensus.census.countries.spain.ine.load` (Padron population) and
+    `pycensus.census.countries.spain.censo2021.load` (Censo 2021 education/
     employment/migration/households) take `regions` (autonomous-community/
     province/municipality/section code), not `states` -- derived from `aoi`
     when omitted, so `states` is ignored here (same pattern as
     `_euskadi_census_loader`). The two sources share the same real
-    boundaries (`pycensus.countries.spain.geography`), so their outputs are
+    boundaries (`pycensus.census.countries.spain.geography`), so their outputs are
     merged on `GEOID` (dropping censo2021's own geometry column, since
     it's identical to ine's for a shared `GEOID`). If censo2021's fetch
     fails (its API is a separate, less-established endpoint than ine's
     Padron), that's swallowed and only the Padron population columns are
     returned -- a partial-but-real join beats no join.
     """
-    from pycensus.countries.spain import censo2021, ine
+    from pycensus.census.countries.spain import censo2021, ine
 
     data_dir = str(Path(cache_dir) / "spain")
     result = _restore_population_prefix(
@@ -4446,12 +4444,12 @@ def _spain_census_loader(aoi, states, level, cache_dir):
     # INE income atlas (ADRH): income, Gini, relative poverty, age/household/nationality indicators per section and municipality.
     if level in ("section", "municipality") and len(result):
         try:
-            from pycensus.countries.spain import adrh
+            from pycensus.census.countries.spain import adrh
 
             provinces = sorted({str(g)[:2] for g in result["GEOID"]})
             attrs = adrh.load_attributes(provinces, level, data_dir=data_dir)
             if level == "section":   # Basque sections: Eustat's sex / age / nationality table (ADRH values win where both have a column)
-                from pycensus.countries.spain.adrh.eustat_sections import load_sections
+                from pycensus.census.countries.spain.adrh.eustat_sections import load_sections
 
                 eus = load_sections(provinces, data_dir=data_dir)
                 if len(eus):
@@ -4476,8 +4474,8 @@ def _spain_housing_extras(result, level, data_dir):
     """
     import pandas as pd
 
-    from pycensus.countries.spain import serpavi, valor_tasado
-    from pycensus.countries.spain.ine_tables import load_migration_balance, load_tourist_dwellings
+    from pycensus.census.countries.spain import serpavi, valor_tasado
+    from pycensus.census.countries.spain.ine_tables import load_migration_balance, load_tourist_dwellings
 
     if not len(result) or level not in ("section", "municipality"):
         return result
@@ -4518,7 +4516,7 @@ def _spain_housing_extras(result, level, data_dir):
         print(f"[pipeline] skipping Spain municipal housing/tourism joins: {exc}")
     if level == "section":
         try:  # Census 2021 dwelling use + district-level tenure / year built / floor area / building type
-            from pycensus.countries.spain.censo2021.housing import load_section_housing
+            from pycensus.census.countries.spain.censo2021.housing import load_section_housing
 
             ch = load_section_housing(data_dir).drop(columns=["district", "household_size_mean"], errors="ignore")
             attach(ch, {c: f"ine_{c}" for c in ch.columns if c != "GEOID"})
@@ -4527,7 +4525,7 @@ def _spain_housing_extras(result, level, data_dir):
     basque = [p for p in provinces if p in ("01", "20", "48")]
     if basque:
         try:
-            from pycensus.countries.euskadi.eustat import housing_income as hi
+            from pycensus.census.countries.euskadi.eustat import housing_income as hi
 
             em = hi.load_emal_municipal(2025, data_dir, tuple(basque))
             em16 = hi.load_emal_municipal(2016, data_dir, tuple(basque)).rename(columns={"emalRentM2": "emalRentM2_2016"})
@@ -4544,7 +4542,7 @@ def _spain_housing_extras(result, level, data_dir):
             print(f"[pipeline] skipping Basque housing / income join: {exc}")
     if level == "section":   # latest national (Congreso 2023), municipal (2023) and regional (Parlamento Vasco 2024) elections per section
         try:
-            from pycensus.countries.spain import elections as el
+            from pycensus.census.countries.spain import elections as el
 
             for fn, kw in ((el.load_congreso_2023, {}), (el.load_municipal_2023, {}),
                            (el.load_parlamento_vasco_2024, {"provinces": basque})):
@@ -4566,7 +4564,7 @@ def _spain_housing_extras(result, level, data_dir):
 
 
 # Eustat municipal indicators (real, live PXWeb "Banco de Datos" API,
-# `pycensus.countries.euskadi.eustat.municipal_indicators` -- added
+# `pycensus.census.countries.euskadi.eustat.municipal_indicators` -- added
 # 2026-08-25), layered ALONGSIDE the finer INE section-level join above, not
 # replacing it. Eustat's own section-level population is measurably less
 # accurate than INE's (see `euskadi/api.py`'s module docstring), but these
@@ -4591,7 +4589,7 @@ EUSTAT_MUNICIPAL_LEVELS: tuple[str, ...] = ("municipality",)
 
 
 def _eustat_municipal_loader(aoi, states, level, cache_dir):
-    """Adapt `pycensus.countries.euskadi.eustat.municipal_indicators`' fetchers to `_join_polygon_stats`'s signature.
+    """Adapt `pycensus.census.countries.euskadi.eustat.municipal_indicators`' fetchers to `_join_polygon_stats`'s signature.
 
     Returns a municipality-polygon GeoDataFrame (real GISCO LAU boundaries,
     same source `euskadi.eustat.loader`/`euskadi.geography` already use)
@@ -4603,8 +4601,8 @@ def _eustat_municipal_loader(aoi, states, level, cache_dir):
     import geopandas as gpd
     import pandas as pd
 
-    from pycensus.countries.euskadi import geography as euskadi_geography
-    from pycensus.countries.euskadi.eustat import municipal_indicators
+    from pycensus.census.countries.euskadi import geography as euskadi_geography
+    from pycensus.census.countries.euskadi.eustat import municipal_indicators
 
     if level != "municipality":
         return gpd.GeoDataFrame({"GEOID": []}, geometry=gpd.GeoSeries([], crs=4326), crs=4326)
@@ -4632,7 +4630,7 @@ def _eustat_municipal_loader(aoi, states, level, cache_dir):
     return gpd.GeoDataFrame(merged, geometry="geometry", crs=boundaries.crs)
 
 
-# Israel (CBS census, `pycensus.countries.israel.cbs`) -- real, verified data (see the
+# Israel (CBS census, `pycensus.census.countries.israel.cbs`) -- real, verified data (see the
 # schema-redesign memory doc's "Israel rebuild" round). `cbs.loader.load`'s own
 # docstring/`IMPLEMENTED_LEVELS` (audited 2026-08-22) confirm BOTH
 # `"locality"` and `"statistical_area"` have a real, live-verified attribute
@@ -4643,7 +4641,7 @@ def _eustat_municipal_loader(aoi, states, level, cache_dir):
 # matching to rounding), so `statistical_area` is a genuinely finer level
 # with real data, not just finer boundary geometry. Listed finest-first,
 # same convention as `INEGI_LEVELS`. Prefix "cbs_"
-# (`pycensus.countries.israel.cbs.schema.SCHEMA = ColumnSchema(prefix="cbs")`).
+# (`pycensus.census.countries.israel.cbs.schema.SCHEMA = ColumnSchema(prefix="cbs")`).
 ISRAEL_KEEP_COLUMNS = {
     "cbs_population",
     "cbs_households",
@@ -4668,7 +4666,7 @@ ISRAEL_KEEP_COLUMNS = {
     "cbs_foreignResidentRate",
     # Derived (round(Foreign_pcnt/100 * pop_approx)) -- CBS has no native
     # foreign-resident COUNT field, only the rate above; see
-    # pycensus.countries.israel.schema.cbs_schema.json's
+    # pycensus.census.countries.israel.schema.cbs_schema.json's
     # "foreignBornPopulation" feature and cbs/loader.py's `load()` for the
     # verified-consistent derivation. No real jobs-by-workplace source was
     # found for Israel (investigated 2026-08-23: CBS's own ArcGIS layers --
@@ -4717,25 +4715,25 @@ ISRAEL_COMMUTE_KEEP_COLUMNS: set = set()   # filled from the schema below (every
 
 
 def _israel_commute_loader(aoi, states, level, cache_dir):
-    """Census 2022 means of transport to work (`pycensus.countries.israel.cbs_commute`), one level: `commute_area`."""
-    from pycensus.countries.israel import cbs_commute
+    """Census 2022 means of transport to work (`pycensus.census.countries.israel.cbs_commute`), one level: `commute_area`."""
+    from pycensus.census.countries.israel import cbs_commute
 
     return cbs_commute.load(aoi=aoi, level=level, cache_dir=str(cache_dir))
 
 
 def _israel_census_loader(aoi, states, level, cache_dir):
-    """Adapt `pycensus.countries.israel.cbs.load`'s signature to `_join_polygon_stats`'s.
+    """Adapt `pycensus.census.countries.israel.cbs.load`'s signature to `_join_polygon_stats`'s.
 
     Israel's `cbs.load` takes `localities`/`regions` (CBS/LAMAS locality
     code), not `states` -- derived from `aoi` when omitted, so `states` is
     ignored here (same pattern as `_euskadi_census_loader`/`_spain_census_loader`).
     """
-    from pycensus.countries.israel import cbs
+    from pycensus.census.countries.israel import cbs
 
     gdf = _restore_population_prefix(cbs.load(aoi=aoi, level=level, cache_dir=str(cache_dir)), "cbs")
     if level == "statistical_area":   # Knesset 25 (2022) per statistical area (ballot boxes -> H3 -> areas; box locations geocoded from polling places)
         try:
-            from pycensus.countries.israel.elections import load_knesset
+            from pycensus.census.countries.israel.elections import load_knesset
 
             localities = sorted({int(str(g)[:4]) for g in gdf["GEOID"]})[:50]
             import pandas as pd
@@ -4766,7 +4764,7 @@ def _israel_census_loader(aoi, states, level, cache_dir):
     return gdf
 
 
-# Canada (StatCan, `pycensus.countries.canada.statcan`) -- real, verified data
+# Canada (StatCan, `pycensus.census.countries.canada.statcan`) -- real, verified data
 # (see that module's own docstrings/tests: nationwide sums cross-checked
 # against StatCan's own published 98100002.csv figures). `population`/
 # `households`/`dwellings` are nationwide (all levels, all provinces).
@@ -4817,7 +4815,7 @@ CANADA_KEEP_COLUMNS = {
     # UNDER-counts true total jobs-by-workplace vs. a LODES-style
     # complete jobs census -- not directly comparable to
     # lodes_wac_jobsTotal without accounting for that gap. See
-    # pycensus.countries.canada.constants.WORKPLACE_JOBS_PID's docstring.
+    # pycensus.census.countries.canada.constants.WORKPLACE_JOBS_PID's docstring.
     "statcan_jobsTotal",
 }
 
@@ -4829,18 +4827,18 @@ CANADA_KEEP_COLUMNS = {
 # from the 2021 Geographic Attribute File (catalogue 92-151-X), not merely
 # a populated/unpopulated flag; block-level sums reproduce the DA-level
 # PID 98-10-0015 totals exactly for all 3,743 real Toronto DAs (see
-# pycensus.countries.canada.statcan.loader module docstring).
+# pycensus.census.countries.canada.statcan.loader module docstring).
 CANADA_LEVELS: tuple[str, ...] = ("dissemination-block", "dissemination-area", "municipality", "province")
 
 
 def _canada_census_loader(aoi, states, level, cache_dir):
-    """Adapt `pycensus.countries.canada.statcan.load`'s signature to `_join_polygon_stats`'s.
+    """Adapt `pycensus.census.countries.canada.statcan.load`'s signature to `_join_polygon_stats`'s.
 
     Canada's `statcan.load` takes `provinces`, not `states` -- derived from
     `aoi` when omitted, so `states` is ignored here (same pattern as
     `_euskadi_census_loader`/`_israel_census_loader`).
     """
-    from pycensus.countries.canada import statcan
+    from pycensus.census.countries.canada import statcan
 
     gdf = statcan.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "canada"))
     data_cols = [c for c in gdf.columns if c not in ("GEOID", "geometry")]
@@ -4850,7 +4848,7 @@ def _canada_census_loader(aoi, states, level, cache_dir):
     return _restore_population_prefix(gdf, "statcan")
 
 
-# Andorra (`pycensus.countries.andorra.estadisticaad`) -- real, live-verified
+# Andorra (`pycensus.census.countries.andorra.estadisticaad`) -- real, live-verified
 # data (module docstring: nationwide `pob_2023` cross-checked against
 # Departament d'Estadistica's own published figure). Only real field is
 # `population`, already canonical.
@@ -4860,7 +4858,7 @@ def _canada_census_loader(aoi, states, level, cache_dir):
 # (buildings: "Edificis 2019", 21,529 real building footprints, single
 # vintage year 2019; active businesses: "REE_Ubicacio" business register,
 # 8,142 real active businesses, live current-state snapshot) -- see
-# pycensus.countries.andorra.api / estadisticaad.loader module docstrings
+# pycensus.census.countries.andorra.api / estadisticaad.loader module docstrings
 # for the exact URLs and verification numbers. Everything else from the
 # outside-source lead (A047 income, A061/A062 building/dwelling
 # characteristics beyond footprint counts, A231 territorial register,
@@ -4920,8 +4918,8 @@ GERMANY_ELECTION_KEEP: set = set()
 
 def _hamburg_elections_loader(aoi, states, level, cache_dir):
     """`_join_polygon_stats`-shaped loader: Hamburg Wahlbezirk polygons with the latest Bundestag, Buergerschaft and Bezirksversammlung results."""
-    from pycensus.countries.germany import elections as el
-    from pycensus.countries.germany.elections.loader import load_wahlbezirke
+    from pycensus.census.countries.germany import elections as el
+    from pycensus.census.countries.germany.elections.loader import load_wahlbezirke
 
     data_dir = str(Path(cache_dir) / "germany")
     out = load_wahlbezirke(data_dir)
@@ -4935,13 +4933,13 @@ def _hamburg_elections_loader(aoi, states, level, cache_dir):
 
 
 def _andorra_census_loader(aoi, states, level, cache_dir):
-    """Adapt `pycensus.countries.andorra.estadisticaad.load`'s signature to `_join_polygon_stats`'s."""
-    from pycensus.countries.andorra import estadisticaad
+    """Adapt `pycensus.census.countries.andorra.estadisticaad.load`'s signature to `_join_polygon_stats`'s."""
+    from pycensus.census.countries.andorra import estadisticaad
 
     gdf = estadisticaad.load(aoi=aoi, level=level, cache_dir=str(cache_dir))
     gdf = _restore_population_prefix(gdf, "estadisticaad")
     if level == "parish":   # Consell General 2023 and Comunals 2023 (parish = the finest published level)
-        from pycensus.countries.andorra import elections as el
+        from pycensus.census.countries.andorra import elections as el
 
         for fn in (el.load_consell_general_2023, el.load_comunals_2023):
             try:
@@ -4952,14 +4950,14 @@ def _andorra_census_loader(aoi, states, level, cache_dir):
     return gdf
 
 
-# Taiwan (MOI RIS, `pycensus.countries.taiwan.moi`) -- real, verified data
+# Taiwan (MOI RIS, `pycensus.census.countries.taiwan.moi`) -- real, verified data
 # (module docstring/tests: real MOI RIS API responses, real district codes).
 # `households` (ODRP014, merged onto ODRP013 rows by district_code) and
 # `minorityEthnicityPopulation` (ODRP013's real aborigine_plain_total_*/
 # aborigine_mountain_total_* fields, summed) were added 2026-08-22 after
 # live-verifying both against real, well-documented figures (Taipei ~1.08M
 # households, ~19k indigenous residents; Hualien County ~94k indigenous
-# residents -- see pycensus.countries.taiwan.api module docstring). All 5
+# residents -- see pycensus.census.countries.taiwan.api module docstring). All 5
 # real fields already match global_schema.json canonical names.
 TAIWAN_KEEP_COLUMNS = {
     "moi_population", "moi_malePopulation", "moi_femalePopulation",
@@ -4967,7 +4965,7 @@ TAIWAN_KEEP_COLUMNS = {
     # Age-bracket fields added 2026-08-23: real MOI RIS ODRP014 single-year
     # age columns (people_age_000_m/f .. people_age_100up_m/f, the top
     # bucket genuinely top-coded at 100+, not an approximation), aggregated
-    # in `pycensus.countries.taiwan.moi.loader._add_derived_age_columns`.
+    # in `pycensus.census.countries.taiwan.moi.loader._add_derived_age_columns`.
     # `moi_under18Population`/`moi_adultPopulation`/`moi_over65Population`
     # are additive sums-of-sums (valid at any level); `moi_medianAge` is
     # computed once per requested level from that level's own summed age
@@ -4987,27 +4985,27 @@ TAIWAN_KEEP_COLUMNS = {
 # was added 2026-08-22: OSM Overpass admin_level=9 relations carry MOI's own
 # 11-digit district_code as their `nat_ref` tag directly, verified live to
 # be an *exact* 456/456 match against MOI's own Taipei village list (see
-# `pycensus.countries.taiwan.geography` module docstring / `constants.
-# OVERPASS_API_URL` docstring) -- `pycensus.countries.taiwan.geography.
+# `pycensus.census.countries.taiwan.geography` module docstring / `constants.
+# OVERPASS_API_URL` docstring) -- `pycensus.census.countries.taiwan.geography.
 # load_boundaries`/`villages_in_aoi` re-verify this match (>=99% of MOI's
 # live village list per county) on every fetch and raise loudly if it drops
 # below threshold, rather than silently using unverified geometry. Only
 # `nation` still has no real, verified boundary source (NLSC's official
 # files all 403 from their TGOS file host) -- see
-# `pycensus.countries.taiwan.geography.IMPLEMENTED_LEVELS`. Requesting
+# `pycensus.census.countries.taiwan.geography.IMPLEMENTED_LEVELS`. Requesting
 # "nation" directly would raise `ValueError`.
 TAIWAN_LEVELS: tuple[str, ...] = ("village", "district", "county_city")
 
 
 def _taiwan_census_loader(aoi, states, level, cache_dir):
-    """Adapt `pycensus.countries.taiwan.moi.load`'s signature to `_join_polygon_stats`'s."""
-    from pycensus.countries.taiwan import moi
+    """Adapt `pycensus.census.countries.taiwan.moi.load`'s signature to `_join_polygon_stats`'s."""
+    from pycensus.census.countries.taiwan import moi
 
     gdf = moi.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "taiwan"))
     gdf = _restore_population_prefix(gdf, "moi")
     gdf = _taiwan_realprice_extras(gdf, level, cache_dir)
     if level in ("village", "district", "county_city"):   # 2024 presidential + legislative, 2022 mayor + council (village-native)
-        from pycensus.countries.taiwan import elections as el
+        from pycensus.census.countries.taiwan import elections as el
 
         for fn, kw in ((el.load_presidential, 2024), (el.load_legislative, 2024), (el.load_mayor, 2022), (el.load_council, 2022)):
             try:
@@ -5022,7 +5020,7 @@ def _taiwan_realprice_extras(gdf, level, cache_dir):
     """MOI real-price registry (sale / pre-sale price and rent per m2, native = district) joined onto every Taiwan level by GEOID prefix."""
     import pandas as pd
 
-    from pycensus.countries.taiwan.moi.realprice import load_realprice
+    from pycensus.census.countries.taiwan.moi.realprice import load_realprice
 
     width = {"village": 8, "district": 8, "county_city": 5}.get(level)
     if width is None or not len(gdf):
@@ -5049,7 +5047,7 @@ def _taiwan_realprice_extras(gdf, level, cache_dir):
     return out
 
 
-# Chile (INE/DPA, `pycensus.countries.chile.ine`, prefix "ine_cl" -- distinct
+# Chile (INE/DPA, `pycensus.census.countries.chile.ine`, prefix "ine_cl" -- distinct
 # from Spain's "ine" to avoid a collision) -- real, verified data (module
 # docstring/tests: nationwide sum cross-checked against Chile's published
 # Censo 2017 total). All 6 real fields already match global_schema.json
@@ -5064,8 +5062,8 @@ CHILE_LEVELS: tuple[str, ...] = ("distrito", "comuna", "provincia", "region")
 
 
 def _chile_census_loader(aoi, states, level, cache_dir):
-    """Adapt `pycensus.countries.chile.ine.load`'s signature to `_join_polygon_stats`'s."""
-    from pycensus.countries.chile import ine
+    """Adapt `pycensus.census.countries.chile.ine.load`'s signature to `_join_polygon_stats`'s."""
+    from pycensus.census.countries.chile import ine
 
     gdf = ine.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "chile"))
     return _restore_population_prefix(gdf, "ine_cl")
@@ -5075,11 +5073,11 @@ CHILE_MANZANA_KEEP_COLUMNS = set()   # filled below from the pycensus chile ine_
 
 
 def _chile_manzana_loader(aoi, states, level, cache_dir):
-    from pycensus.countries.chile.ine import manzana
+    from pycensus.census.countries.chile.ine import manzana
 
     gdf = _restore_population_prefix(manzana.load(aoi=aoi, data_dir=str(Path(cache_dir) / "chile")), "ine_cl")
     try:   # 2025 presidential runoff (Servel preliminary; mesa -> local de votacion -> H3 -> manzana)
-        from pycensus.countries.chile import elections as el
+        from pycensus.census.countries.chile import elections as el
 
         wp_name = "chl_pop_2025_CN_100m_R2025A_v1.tif"
         wp = next((q for q in (Path(cache_dir) / "worldpop" / wp_name, Path(cache_dir).parent / "worldpop" / wp_name,
@@ -5093,7 +5091,7 @@ def _chile_manzana_loader(aoi, states, level, cache_dir):
 
 
 # Chile Casen SAE comunal poverty (Ministerio de Desarrollo Social y Familia,
-# `pycensus.countries.chile.casen`, prefix "casen_cl") -- real, government-
+# `pycensus.census.countries.chile.casen`, prefix "casen_cl") -- real, government-
 # published Small Area Estimation (Fay-Herriot model) comunal poverty rates,
 # a genuinely distinct source from INE's Censo 2017 DPA data above (a real
 # bulk .xlsx download, not the ArcGIS FeatureServer). Live-verified
@@ -5102,7 +5100,7 @@ def _chile_manzana_loader(aoi, states, level, cache_dir):
 # Talcahuano (08110) povertyRate=0.050827; povertyRateMultidimensional
 # Santiago=0.164654, Concepcion=0.114778. Comuna-only (no region/provincia/
 # distrito table exists for this source) -- see
-# `pycensus.countries.chile.casen.api` module docstring for the full
+# `pycensus.census.countries.chile.casen.api` module docstring for the full
 # provenance/verification notes, including what was actually tried for
 # REDATAM (a live, session-stateful engine with no documented query API --
 # not just "no API exists") and CASEN's Ministerio de Desarrollo Social
@@ -5113,14 +5111,14 @@ CHILE_CASEN_LEVELS: tuple[str, ...] = ("comuna",)
 
 
 def _chile_casen_census_loader(aoi, states, level, cache_dir):
-    """Adapt `pycensus.countries.chile.casen.load`'s signature to `_join_polygon_stats`'s."""
-    from pycensus.countries.chile import casen
+    """Adapt `pycensus.census.countries.chile.casen.load`'s signature to `_join_polygon_stats`'s."""
+    from pycensus.census.countries.chile import casen
 
     return casen.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "chile"))
 
 
 # Chile SII (Servicio de Impuestos Internos) comunal jobs-by-workplace
-# (`pycensus.countries.chile.sii`, prefix "sii_cl") -- real, government-
+# (`pycensus.census.countries.chile.sii`, prefix "sii_cl") -- real, government-
 # published dependent-worker (payroll job) counts attributed to the
 # employer's registered comuna, i.e. jobs *located in* the comuna, not
 # employed residents -- Chile's equivalent of USA's LODES WAC `jobsTotal`
@@ -5132,7 +5130,7 @@ def _chile_casen_census_loader(aoi, states, level, cache_dir):
 # comuna's known role as a regional/national job center (exceeding each
 # comuna's own resident population). Data vintage is commercial year 2015
 # (the file's most recent year for this series -- see
-# `pycensus.countries.chile.sii.api` module docstring for why more recent
+# `pycensus.census.countries.chile.sii.api` module docstring for why more recent
 # years were not found), notably older than the Censo 2017 DPA population
 # already wired via `CHILE_KEEP_COLUMNS`. Comuna-name matching against the
 # real DPA boundary service is live (no hardcoded name table) and drops
@@ -5148,13 +5146,13 @@ CHILE_SII_LEVELS: tuple[str, ...] = ("comuna",)
 
 
 def _chile_sii_census_loader(aoi, states, level, cache_dir):
-    """Adapt `pycensus.countries.chile.sii.load`'s signature to `_join_polygon_stats`'s."""
-    from pycensus.countries.chile import sii
+    """Adapt `pycensus.census.countries.chile.sii.load`'s signature to `_join_polygon_stats`'s."""
+    from pycensus.census.countries.chile import sii
 
     return sii.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "chile"))
 
 
-# Germany (Destatis GENESIS-Online, `pycensus.countries.germany.destatis`)
+# Germany (Destatis GENESIS-Online, `pycensus.census.countries.germany.destatis`)
 # -- real, live-verified data (module docstring/tests: Germany 31.12.2022
 # = 83,118,501, Bavaria 31.12.2022 = 13,105,221, both cross-checked against
 # Destatis' own published figures). Only real field is `population`,
@@ -5178,7 +5176,7 @@ def _chile_sii_census_loader(aoi, states, level, cache_dir):
 # `destatis_malePopulation`/`destatis_femalePopulation` added 2026-08-22:
 # real GENESIS "Bevoelkerung ... Geschlecht" sex-breakdown tables
 # (12411-0003/0011/0016, nation/state/district -- see
-# `pycensus.countries.germany.constants.GENESIS_SEX_TABLES`), live-verified
+# `pycensus.census.countries.germany.constants.GENESIS_SEX_TABLES`), live-verified
 # to sum exactly to the already-wired `population` at every level (nation
 # 40,919,705 + 42,198,796 = 83,118,501; Hamburg state/district
 # 894,537 + 938,138 = 1,832,675). Not available for municipality (GISCO LAU
@@ -5189,7 +5187,7 @@ GERMANY_KEEP_COLUMNS = {
     "destatis_femalePopulation",
     # Real Auslaenderzentralregister-derived foreign-population figure
     # (statistic 12521, table 12521-0040) -- only wired at "district" level
-    # (see pycensus.countries.germany.constants.GENESIS_FOREIGN_POPULATION_TABLES);
+    # (see pycensus.census.countries.germany.constants.GENESIS_FOREIGN_POPULATION_TABLES);
     # NaN at nation/state/municipality. Live-verified 2026-08-23: Muenchen
     # (Kreis AGS 09162), 31.12.2022 = 505,760.
     "destatis_foreignBornPopulation",
@@ -5213,8 +5211,8 @@ GERMANY_LEVELS: tuple[str, ...] = ("grid", *GERMANY_ADMIN_LEVELS)
 
 
 def _germany_census_loader(aoi, states, level, cache_dir):
-    """Adapt `pycensus.countries.germany.destatis.load`'s signature to `_join_polygon_stats`'s."""
-    from pycensus.countries.germany.destatis import loader as destatis_loader
+    """Adapt `pycensus.census.countries.germany.destatis.load`'s signature to `_join_polygon_stats`'s."""
+    from pycensus.census.countries.germany.destatis import loader as destatis_loader
 
     gdf = destatis_loader.load(
         aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "germany")
@@ -5223,7 +5221,7 @@ def _germany_census_loader(aoi, states, level, cache_dir):
 
 
 # Native cell size of Destatis' Zensus 2022 population grid (see
-# `pycensus.countries.germany.zensus_grid.loader`'s module docstring) --
+# `pycensus.census.countries.germany.zensus_grid.loader`'s module docstring) --
 # passed to `pycensus.raster_to_h3.resample_grid_to_h3` so the H3 resolution
 # it picks (res 10, ~0.015 km^2/cell -- the closest real match without going
 # coarser than one real 100m x 100m = 0.01 km^2 source cell) is derived from
@@ -5264,7 +5262,7 @@ def _germany_grid_census_loader(aoi, states, level, cache_dir):
     Returns an empty GeoDataFrame (not an error) for an AOI outside Germany,
     matching every other loader's "no data for this AOI" convention.
     """
-    from pycensus.countries.germany.zensus_grid import loader as zensus_loader
+    from pycensus.census.countries.germany.zensus_grid import loader as zensus_loader
 
     grid = zensus_loader.load(aoi=aoi, data_dir=str(Path(cache_dir) / "zensus_grid_data"))
     if grid.empty:
@@ -5293,7 +5291,7 @@ def _join_zensus_grid_population(
     """Replace WorldPop-modeled `population` with real Destatis Zensus 2022 grid population.
 
     Mirrors the shape of `population_and_access_to_h3` (WorldPop raster ->
-    H3), but the source here is `pycensus.countries.germany.zensus_grid`'s
+    H3), but the source here is `pycensus.census.countries.germany.zensus_grid`'s
     real, official 100m x 100m Destatis Zensus 2022 population grid --
     architecturally a point/cell grid like WorldPop, not an administrative
     polygon hierarchy (see that module's docstring), so it's joined here
@@ -5333,7 +5331,7 @@ def _join_zensus_grid_population(
     Returns `h3_grid` unchanged (after logging) if the Zensus loader
     returns zero cells for `aoi` (e.g. AOI outside Germany).
     """
-    from pycensus.countries.germany.zensus_grid import loader as zensus_loader
+    from pycensus.census.countries.germany.zensus_grid import loader as zensus_loader
 
     grid = zensus_loader.load(aoi=aoi, data_dir=str(Path(cache_dir) / "zensus_grid_data"))
     if grid.empty:
@@ -5400,7 +5398,7 @@ def _join_zensus_grid_population(
 
     # Hamburg's Sozialmonitoring (social status / dynamics class per Statistisches Gebiet, ~900 areas): the class of the area holding the H3 cell's centre
     try:
-        from pycensus.countries.germany.hamburg_sozialmonitoring import loader as soz_loader
+        from pycensus.census.countries.germany.hamburg_sozialmonitoring import loader as soz_loader
 
         soz = soz_loader.load(aoi=aoi, data_dir=str(Path(cache_dir) / "zensus_grid_data"))
         cents = gpd.GeoDataFrame(geometry=_h3_cell_centroids(h3_grid["h3_cell"]), crs=4326)
@@ -5454,7 +5452,7 @@ def _join_census(
             h3_grid, aoi, states, EUSKADI_LEVELS, cache_dir, _euskadi_census_loader, EUSKADI_KEEP_COLUMNS, "eustat_"
         )
     if country == "USA":
-        from pycensus.countries.usa import acs5 as acs
+        from pycensus.census.countries.usa import acs5 as acs
 
         h3_grid = _join_polygon_stats(
             h3_grid, aoi, states, census_levels, cache_dir, acs.load, ACS_KEEP_COLUMNS, "acs5_"
@@ -5650,7 +5648,7 @@ def _join_race(
     if country != "USA":
         print(f"[pipeline] no race/ethnicity census source for country={country!r} -- skipping race join")
         return h3_grid
-    from pycensus.countries.usa import dhc
+    from pycensus.census.countries.usa import dhc
 
     # "block" is real and live-verified: decennial DHC (a full count, not a
     # sample) publishes real attribute data down to block level -- unlike
@@ -5678,7 +5676,7 @@ LODES_LEVELS: tuple[str, ...] = ("blockgroup", "tract", "county")
 # real, independent LODES-WAC equivalent, built from mandatory
 # social-security registrations (sozialversicherungspflichtige Beschaeftigung)
 # rather than Destatis/GENESIS census-style data. Only the "am Arbeitsort"
-# (workplace) total is kept -- see `pycensus.countries.germany.ba.loader`'s
+# (workplace) total is kept -- see `pycensus.census.countries.germany.ba.loader`'s
 # module docstring for the live verification (Hamburg 2025: 1,084,974
 # workplace jobs) and for why AMK's real granularity is Gemeinde
 # (municipality), not Kreis (district) as first assumed.
@@ -5691,7 +5689,7 @@ GERMANY_BA_LEVELS: tuple[str, ...] = ("municipality", "district")
 # Gemeindedaten-sozialversicherungspflichtig-Beschaeftigter-Nav.html), also
 # keyless. Its own workplace-jobs figure (`ba_pendler_pendlerJobsAtWorkplace`)
 # matches AMK's `ba_jobsTotal` exactly for the same Stichtag (Hamburg 2025:
-# both 1,084,974 -- see `pycensus.countries.germany.ba_pendler.loader`'s
+# both 1,084,974 -- see `pycensus.census.countries.germany.ba_pendler.loader`'s
 # module docstring), so it's kept anyway ONLY for the fields AMK doesn't
 # have: the real Wohnort/Arbeitsort commuter cross-tab (Einpendler/
 # Auspendler/same-Gemeinde workers) needed for `commuter_in_share`/
@@ -5726,7 +5724,7 @@ def _join_jobs(
     returns `h3_grid` unchanged.
     """
     if country == "USA":
-        from pycensus.countries.usa import lodes_wac as lodes
+        from pycensus.census.countries.usa import lodes_wac as lodes
 
         def _loader(aoi, states, level, cache_dir):
             return lodes.load_wac(aoi=aoi, states=states, level=level, cache_dir=cache_dir)
@@ -5735,7 +5733,7 @@ def _join_jobs(
             h3_grid, aoi, states, LODES_LEVELS, cache_dir, _loader, LODES_KEEP_COLUMNS, "lodes_wac_"
         )
     if country == "DEU":
-        from pycensus.countries.germany import ba, ba_pendler
+        from pycensus.census.countries.germany import ba, ba_pendler
 
         def _loader(aoi, states, level, cache_dir):
             return ba.load(
@@ -5748,7 +5746,7 @@ def _join_jobs(
 
         # 2026-08-25 audit: real BA Pendlerstatistik (Einpendler/Auspendler/
         # same-Gemeinde workers), see `GERMANY_BA_PENDLER_KEEP_COLUMNS` above
-        # and `pycensus.countries.germany.ba_pendler.loader`. Non-fatal like
+        # and `pycensus.census.countries.germany.ba_pendler.loader`. Non-fatal like
         # the AMK join above -- a failed fetch just leaves the study without
         # `commuter_in_share`/`local_worker_share` (see `SHARE_COLUMNS`).
         def _pendler_loader(aoi, states, level, cache_dir):
@@ -5909,7 +5907,7 @@ def _join_worldpop_global_schema(
     (Shanghai as of this writing -- see `CityConfig.uses_census`/
     `_census_supported`; there is no China census implementation in
     `pycensus`). Downloads each layer via
-    `pycensus.countries.worldwide.worldpop.loader.download_worldpop_layer`
+    `pycensus.census.worldwide.worldpop.loader.download_worldpop_layer`
     (see that module's docstring for exactly how each feature is derived --
     exact for `malePopulation`/`femalePopulation`/`over65Population`, a
     documented linear-within-bin approximation for `under18Population`/
@@ -5938,7 +5936,7 @@ def _join_worldpop_global_schema(
     backstop; not expected given today's column set) is skipped with a
     printed warning rather than overwritten.
     """
-    from pycensus.countries.worldwide.worldpop.loader import GLOBAL_SCHEMA_FEATURES, download_worldpop_layer
+    from pycensus.census.worldwide.worldpop.loader import GLOBAL_SCHEMA_FEATURES, download_worldpop_layer
 
     # Real OOM incidents, 2026-08-21: `under18Population`/`adultPopulation`/
     # `over65Population` each required `pycensus`'s `_weighted_sum_rasters` to
@@ -5960,7 +5958,7 @@ def _join_worldpop_global_schema(
     # `gc.collect()` below is kept as a still-cheap extra safety margin.
     #
     # Added 2026-08-25: `births`/`pregnancies`/`urbanPopulation` (see
-    # `pycensus.countries.worldwide.worldpop.loader`'s module docstring for
+    # `pycensus.census.worldwide.worldpop.loader`'s module docstring for
     # live verification) join through this exact same loop -- `births`/
     # `pregnancies` are single-file downloads (no multi-raster band math,
     # so no extra OOM exposure), and `urbanPopulation`'s one internal
@@ -5995,7 +5993,7 @@ def _join_worldpop_global_schema(
         # a pixel's area genuinely overlapped them). See
         # `geohierarchy.raster_resample`/`pycensus...worldpop.h3` for the
         # conservation guarantee.
-        from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast as worldpop_raster_to_h3
+        from pycensus.census.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast as worldpop_raster_to_h3
         layer_h3 = worldpop_raster_to_h3(tif_path, resolution=resolution, value_col=feature)
         # Plain polars left-join, not the old pandas `.map()` on a
         # `.to_pandas().set_index(...)` Series -- see this function's
@@ -6196,7 +6194,7 @@ def _add_worldpop_gapfill(
     denominate against a real, already-covered-everywhere figure rather
     than a new column that would just equal a subset of it.
     """
-    from pycensus.countries.worldwide.worldpop.loader import GLOBAL_SCHEMA_FEATURES, download_worldpop_layer
+    from pycensus.census.worldwide.worldpop.loader import GLOBAL_SCHEMA_FEATURES, download_worldpop_layer
 
     if population_column not in h3_grid.columns:
         print(
@@ -6232,7 +6230,7 @@ def _add_worldpop_gapfill(
         tif_path = download_worldpop_layer(aoi, year, feature, folder=str(cache_dir))
         # 2026-08-30: area-weighted, mass-conserving resample -- see the
         # matching comment in `_join_worldpop_global_schema` above.
-        from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast as worldpop_raster_to_h3
+        from pycensus.census.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast as worldpop_raster_to_h3
         layer_h3 = worldpop_raster_to_h3(tif_path, resolution=resolution, value_col=col)
         layer_series = layer_h3.to_pandas().set_index("h3_cell")[col]
         values = h3_grid["h3_cell"].map(layer_series).to_numpy(dtype=float)
@@ -6308,7 +6306,7 @@ def _add_worldpop_demographic_layers(
     as `_join_worldpop_global_schema`/`_add_worldpop_gapfill` (see those
     docstrings for the live 2026-08-21 OOM incident this avoids).
     """
-    from pycensus.countries.worldwide.worldpop.loader import GLOBAL_SCHEMA_FEATURES, download_worldpop_layer
+    from pycensus.census.worldwide.worldpop.loader import GLOBAL_SCHEMA_FEATURES, download_worldpop_layer
 
     features = [f for f in GLOBAL_SCHEMA_FEATURES if f != "population"]
 
@@ -6336,7 +6334,7 @@ def _add_worldpop_demographic_layers(
 
     import gc
 
-    from pycensus.countries.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast as worldpop_raster_to_h3
+    from pycensus.census.worldwide.worldpop.h3 import worldpop_raster_to_h3_fast as worldpop_raster_to_h3
     from concurrent.futures import ThreadPoolExecutor
 
     cells_all = h3_grid["h3_cell"]
@@ -6429,7 +6427,7 @@ def _census_loader_and_levels_for_map(
     Mirrors `_join_census`'s per-country dispatch table (same modules, same
     `*_LEVELS` tuples) so the map's "Census geometries" shape option covers
     every country `_join_census` does, not just USA -- before this, this
-    function was hardcoded to `pycensus.countries.usa.acs5` unconditionally, so every
+    function was hardcoded to `pycensus.census.countries.usa.acs5` unconditionally, so every
     non-US city's `_census_geometries_with_score` call failed immediately
     (`states=None` -> `list(None)` -> `TypeError`, swallowed by the
     per-level `except`) and silently produced an empty `census_by_level`.
@@ -7185,14 +7183,14 @@ def _census_geometries_with_score(
         # wired here with a workplace-jobs-flow source.
         try:
             if country == "USA":
-                from pycensus.countries.usa import lodes_wac as lodes
+                from pycensus.census.countries.usa import lodes_wac as lodes
 
                 jobs_gdf = lodes.load_wac(
                     aoi=aoi, states=states_arg, level=level, cache_dir=str(cache_dir)
                 )
                 jobs_keep_columns = LODES_KEEP_COLUMNS
             elif country == "DEU":
-                from pycensus.countries.germany import ba
+                from pycensus.census.countries.germany import ba
 
                 jobs_gdf = ba.load(aoi=aoi, regions=states_arg, level=level, cache_dir=str(cache_dir))
                 jobs_keep_columns = GERMANY_BA_KEEP_COLUMNS
@@ -7209,7 +7207,7 @@ def _census_geometries_with_score(
         # joined by GEOID (no apportionment needed, same as BA's AMK).
         if country == "DEU":
             try:
-                from pycensus.countries.germany import ba_pendler
+                from pycensus.census.countries.germany import ba_pendler
 
                 pendler_gdf = ba_pendler.load(
                     aoi=aoi, regions=states_arg, level=level, cache_dir=str(cache_dir)
@@ -7236,7 +7234,7 @@ def _census_geometries_with_score(
         try:
             if country != "USA":
                 raise ValueError(f"no race/ethnicity census source for country={country!r}")
-            from pycensus.countries.usa import dhc
+            from pycensus.census.countries.usa import dhc
 
             dhc_gdf = dhc.load(aoi=aoi, states=states_arg, level=level, cache_dir=str(cache_dir))
             # Same native-level guard as `_usa_map_census_loader`/`_join_race`
@@ -8440,7 +8438,7 @@ def _gba_cache_root(census_dir: Path) -> Path:
 
 
 def _gba_buildings(census_dir: Path, aoi_gdf):
-    from pycensus.countries.worldwide import gba
+    from pycensus.census.worldwide import gba
 
     return gba.fill_heights(gba.load_buildings(aoi_gdf, cache_dir=_gba_cache_root(census_dir)))
 
@@ -8514,7 +8512,7 @@ def _gba_cell_population(config, city_dir: Path, aoi_gdf, census_dir: Path, cell
     import json as _json
 
     import h3ronpy
-    from pycensus.countries.worldwide import gba
+    from pycensus.census.worldwide import gba
     from scipy.spatial import cKDTree
 
     cells = list(cells)
@@ -8566,11 +8564,11 @@ def _gba_cell_population(config, city_dir: Path, aoi_gdf, census_dir: Path, cell
 
 def _add_gba_columns(config, census_dir: Path, aoi_gdf, h3_by_resolution: dict | None = None, census_by_level: dict | None = None,
                      h3_grid=None) -> None:
-    """GBA building metrics (`gba_` + `pycensus.countries.worldwide.gba.METRIC_COLUMNS`) computed directly on every h3 resolution and
+    """GBA building metrics (`gba_` + `pycensus.census.worldwide.gba.METRIC_COLUMNS`) computed directly on every h3 resolution and
     census level (max / median cannot be resampled), in place. Buildings by centroid."""
     if not getattr(config, "gba_buildings", False):
         return
-    from pycensus.countries.worldwide import gba
+    from pycensus.census.worldwide import gba
 
     b = _gba_buildings(census_dir, aoi_gdf)
     cols = [f"gba_{c}" for c in gba.METRIC_COLUMNS]

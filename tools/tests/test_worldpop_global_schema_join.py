@@ -55,8 +55,8 @@ def test_join_worldpop_global_schema_is_geometry_free_polars_join(monkeypatch, t
 
     monkeypatch.setattr(P, "gpd", P.gpd)  # sanity: module still has gpd for the `aoi` type hint
 
-    import pycensus.countries.worldwide.worldpop.loader as loader_mod
-    import pycensus.countries.worldwide.worldpop.h3 as worldpop_h3_mod
+    import pycensus.census.worldwide.worldpop.loader as loader_mod
+    import pycensus.census.worldwide.worldpop.h3 as worldpop_h3_mod
 
     monkeypatch.setattr(loader_mod, "GLOBAL_SCHEMA_FEATURES", ["population"] + fake_features, raising=False)
     monkeypatch.setattr(
@@ -94,8 +94,8 @@ def test_join_worldpop_global_schema_skips_existing_columns(monkeypatch, tmp_pat
         }
     )
 
-    import pycensus.countries.worldwide.worldpop.loader as loader_mod
-    import pycensus.countries.worldwide.worldpop.h3 as worldpop_h3_mod
+    import pycensus.census.worldwide.worldpop.loader as loader_mod
+    import pycensus.census.worldwide.worldpop.h3 as worldpop_h3_mod
 
     monkeypatch.setattr(
         loader_mod, "GLOBAL_SCHEMA_FEATURES", ["population", "malePopulation", "femalePopulation"], raising=False

@@ -12,7 +12,9 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
-BLOCS = Path(__file__).resolve().parents[3] / "pyCensus" / "src" / "pycensus" / "countries" / "spain" / "schema" / "elections_blocs.json"
+from pycensus.schema import schema_dir  # noqa: E402
+
+BLOCS = schema_dir("spain") / "elections_blocs.json"
 
 _DOCS = json.loads((Path(__file__).resolve().parents[1] / "i18n" / "column_docs.json").read_text(encoding="utf-8"))   # every text of this module
 

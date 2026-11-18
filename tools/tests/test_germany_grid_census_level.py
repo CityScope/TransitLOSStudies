@@ -47,7 +47,7 @@ def fake_zensus_grid(monkeypatch):
         )
         return cells
 
-    monkeypatch.setattr("pycensus.countries.germany.zensus_grid.loader.load", fake_load)
+    monkeypatch.setattr("pycensus.census.countries.germany.zensus_grid.loader.load", fake_load)
     return fake_load
 
 
@@ -118,7 +118,7 @@ class TestGermanyGridCensusLoader:
             return gpd.GeoDataFrame({"population": [1.0]}, geometry=[box(0, 0, 1, 1)], crs=4326)
 
         monkeypatch.setattr(
-            "pycensus.countries.germany.destatis.loader.load", fake_destatis_load
+            "pycensus.census.countries.germany.destatis.loader.load", fake_destatis_load
         )
         aoi = gpd.GeoDataFrame(geometry=[box(9.9, 53.5, 10.1, 53.6)], crs=4326)
         out = P._germany_map_census_loader(aoi=aoi, states=None, level="district", cache_dir=tmp_path)
@@ -129,7 +129,7 @@ class TestGermanyGridCensusLoader:
         def fake_load_empty(aoi=None, data_dir=None):
             return gpd.GeoDataFrame({"GEOID": [], "population": []}, geometry=[], crs=4326)
 
-        monkeypatch.setattr("pycensus.countries.germany.zensus_grid.loader.load", fake_load_empty)
+        monkeypatch.setattr("pycensus.census.countries.germany.zensus_grid.loader.load", fake_load_empty)
         aoi = gpd.GeoDataFrame(geometry=[box(0, 0, 1, 1)], crs=4326)
         out = P._germany_grid_census_loader(aoi=aoi, states=None, level="grid", cache_dir=tmp_path)
         assert out.empty

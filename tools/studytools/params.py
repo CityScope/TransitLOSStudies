@@ -38,7 +38,7 @@ class StudyParams:
         map_h3_resolutions: H3 resolutions rendered as separate zoom-banded
             layers in each city's map (`transitlos.map`).
         census_levels: US Census geometry levels joined onto the population
-            grid for US cities (`pycensus.countries.usa.constants.GEOMETRY_FUNCS`
+            grid for US cities (`pycensus.census.countries.usa.constants.GEOMETRY_FUNCS`
             keys).
         score_bins: Distance-matrix score bucket count forwarded to
             `compute_level_of_service` (see that function's docstring for

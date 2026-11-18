@@ -22,8 +22,8 @@ import numpy as np
 import pandas as pd
 
 from pycensus.cache import default_cache_dir
-from pycensus.countries.usa.elections_precinct import nyt2024
-from pycensus.countries.usa.elections_precinct.official import REGISTRY, load_state_precincts
+from pycensus.census.countries.usa.elections_precinct import nyt2024
+from pycensus.census.countries.usa.elections_precinct.official import REGISTRY, load_state_precincts
 
 import os
 DATA = Path(os.environ.get("US_DATA") or Path(__file__).parent / "data")

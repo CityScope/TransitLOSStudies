@@ -48,7 +48,7 @@ def main():
     out["detached_share"] = num("acs5_unitsDetached1") / hu
     out["built_pre1950_share"] = (num("acs5_dwellingsBuilt1939OrEarlier").fillna(0) + num("acs5_dwellingsBuilt1940To1949").fillna(0)) / blt
     # car commute speed by tract
-    from pycensus.countries.usa.acs_commute_time import tract_table
+    from pycensus.census.countries.usa.acs_commute_time import tract_table
 
     bg = pd.read_parquet(T / "cache" / "derived" / "bg_table.parquet", columns=["GEOID", "commute_km_residents", "resident_workers_lodes"]).set_index("GEOID")
     tr = bg.assign(tract=bg.index.str[:11], w=pd.to_numeric(bg["resident_workers_lodes"], errors="coerce").fillna(0),

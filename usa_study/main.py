@@ -3,7 +3,7 @@
 
 Stages, per `prompt.txt` (see `code/gtfs_stage.py`, `code/county_pipeline.py`,
 `code/state_pipeline.py`, `code/build_state_map.py`, and
-`pycensus.countries.usa.elections` for each stage's own module docstring --
+`pycensus.census.countries.usa.elections` for each stage's own module docstring --
 this file just wires them together):
 
 1. Download that state's NTD GTFS feeds (`pyGTFSHandler.downloaders.usa
@@ -21,7 +21,7 @@ this file just wires them together):
    one census dropdown as the real admin hierarchy, not a separate
    selector).
 
-Elections (`pycensus.countries.usa.elections`) are joined onto the county
+Elections (`pycensus.census.countries.usa.elections`) are joined onto the county
 level only for now -- see that module's own docstring for exactly what
 years/offices are implemented and why the rest is a documented gap.
 
@@ -93,7 +93,7 @@ def run_state(state_abbr: str, force: bool = False, skip_map: bool = False, refr
     `refresh_stops`: redo stage 1 (feed download + stop scoring) even though stops exist, e.g. after
     improving the downloader; the county outputs are only invalidated if the stops actually changed.
     """
-    from pycensus.countries.usa import geography
+    from pycensus.census.countries.usa import geography
 
     import us
 
@@ -151,7 +151,7 @@ def run_state(state_abbr: str, force: bool = False, skip_map: bool = False, refr
     logger.info("Stage 2: downloading state OSM extract...")
     pbf_path = get_state_pbf(state_gdf, OSM_FILES_DIR)
 
-    from pycensus.countries.usa import dhc
+    from pycensus.census.countries.usa import dhc
 
     counties_gdf = dhc.load(aoi=state_gdf, states=[state_abbr], level="county", cache_dir=str(PYCENSUS_CACHE_DIR))
     if counties_gdf is None or len(counties_gdf) == 0:

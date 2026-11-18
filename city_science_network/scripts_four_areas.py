@@ -2,7 +2,7 @@
 
     metro_official.gpkg  official metropolitan area: every municipality that belongs to it officially (list and source in OFFICIAL below)
     municipality.gpkg    the municipality that gives the city its name
-    un_metro.gpkg        UN Degree of Urbanisation functional urban area (pycensus.worldwide.un_metro_areas), no holes
+    un_metro.gpkg        UN Degree of Urbanisation functional urban area (pycensus.census.worldwide.un_metro_areas), no holes
     core.gpkg            UN urban centre (Andorra: see scripts_un_areas.py), no holes
     aoi.gpkg             union of the four (the area that is processed); the previous file is kept as aoi_prev_areas.gpkg
 
@@ -18,7 +18,7 @@ from shapely.ops import unary_union
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT.parent / "tools"))
-from pycensus.worldwide import un_metro_areas as un
+from pycensus.census.worldwide import un_metro_areas as un
 from studytools.city_core import _geocode_admin_polygon
 
 CACHE = ROOT.parent / "cache"
@@ -59,7 +59,7 @@ def previous(city, name=None):
 
 def us_geom(level, state, geoid, year=2023):
     """Official US area from pycensus's geometry loader (TIGER/Line): CBSA or place."""
-    from pycensus.countries.usa.geography import load_boundaries
+    from pycensus.census.countries.usa.geography import load_boundaries
     g = load_boundaries(level, state, year, erase_water=True)
     col = next(c for c in ("GEOID", "GEOIDFQ") if c in g.columns)
     sel = g[g[col].astype(str).str.endswith(geoid)]
