@@ -6,7 +6,7 @@ drawn line. Written state by state in parallel (each worker its own files), then
 holds the nation.
 
 Res 11 only exists where LOS > 0 or in dense tracts (see `county_pipeline`); elsewhere population is taken from the
-res-7 cells that have no res-11 child, so a new line can still reach people in areas that had no service before
+res-8 cells that have no res-11 child, so a new line can still reach people in areas that had no service before
 (coarser points, same population totals).
 """
 import json
@@ -32,11 +32,11 @@ def _state_part(args):
     covered = set()
     if r11.is_file():
         d = pd.read_parquet(r11, columns=["h3", "population", "level_of_service"])
-        covered = set(h3.cell_to_parent(c, 7) for c in d["h3"].unique())
+        covered = set(h3.cell_to_parent(c, 8) for c in d["h3"].unique())
         frames.append(d)
-    r7 = state_dir / "h3_res7.geoparquet"
-    if r7.is_file():
-        d = pd.read_parquet(r7, columns=["h3", "population", "level_of_service"])
+    r8 = state_dir / "h3_res8.geoparquet"
+    if r8.is_file():
+        d = pd.read_parquet(r8, columns=["h3", "population", "level_of_service"])
         frames.append(d[~d["h3"].isin(covered)])
     if not frames:
         return 0

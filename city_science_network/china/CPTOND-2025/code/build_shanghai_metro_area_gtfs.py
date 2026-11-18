@@ -8,8 +8,7 @@ study AOI -- plus the Shanghai Maglev (not in CPTOND, built from OSM).
 CPTOND-2025 gives route existence, ordered stops and route geometry, but no
 timetable. Headways, service spans, time bands and running speeds below are
 researched values; every number cites its source in
-`shanghai/gtfs/sources/` (see `GTFS_CONSTRUCTION.md` there for the full
-write-up and what is data vs. assumption).
+`shanghai/gtfs/sources/`.
 
 Usage (from `city_science_network/`):
     uv run python china/CPTOND-2025/code/build_shanghai_metro_area_gtfs.py \\
@@ -21,6 +20,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import os
 import re
 from collections import defaultdict
@@ -94,23 +94,126 @@ def banded(profile, open_min, close_min, bands):
 # central <= 8 min peak / <= 20 other; trunk (骨干线) <= 5 / <= 15; all other
 # routes <= 25. Values below were calibrated so the buses needed to run them
 # (route length / zone speed * 1.15 layover / headway) match ~90% of the real
-# fleet (~17,000 buses, 2024 annual report): 8/12/15 min peak -> ~15,200.
+# fleet (~17,000 buses, 2024 annual report). Not all of the fleet runs at peak: ~8% is in maintenance and ~9% is a
+# standby/spare buffer (together the usual ~20% spare ratio, 17,000/1.2 = ~14,100 in service). ASSUMPTION: the
+# percentages are typical transit practice, no Shanghai figure was found.
 SH_BUS = {
-    "central": band_profile(am=8, midday=12, pm=8, evening=12, late=20),
-    "radial": band_profile(am=12, midday=15, pm=12, evening=15, late=25),
-    "suburban": band_profile(am=15, midday=20, pm=15, evening=20, late=25),
+    "central": band_profile(am=8.5, midday=12.5, pm=8.5, evening=12.5, late=20),
+    "radial": band_profile(am=12.5, midday=16, pm=12.5, evening=16, late=25),
+    "suburban": band_profile(am=16, midday=21, pm=16, evening=21, late=25),
     "trunk": band_profile(am=5, midday=10, pm=5, evening=10, late=15),
 }
 # Other metro-area cities: Suzhou's 2024 statistical bulletin gives 5,316
 # buses on 791 urban routes; with CPTOND's Suzhou mean route length (17.5 km)
 # at 20 km/h and the same layover/availability, that is ~20 min at peak.
 OTHER_BUS = band_profile(am=20, midday=25, pm=20, evening=25, late=30)
-FERRY = band_profile(am=15, midday=20, pm=15, evening=20, late=25)  # Wikipedia "Shanghai Ferry": 10-30 min
+# Conservative route classes for the ordinary routes of the non-Shanghai cities (no per-route headway source was found for Kunshan, Taicang or
+# Jiashan: see city_science_network/china/GTFS_PLAYBOOK.md). Rule: never above the flat OTHER_BUS value used before, lower where the route class
+# is known to be low-frequency. Class from the route number, following the numbering the zh.wikipedia Kunshan list states (1-199 urban and
+# cross-town, 200-399 town-internal, 400-499 student, 900-999 community) and the same convention of the neighbouring cities' 3-digit
+# town routes. All values are ASSUMPTIONS (logged as "assumption: ..." in build_summary.json).
+TOWN_BUS = band_profile(am=30, midday=40, pm=30, evening=40, late=60)        # town-internal and inter-town routes
+SCHOOL_BUS = {"am": 30, "pm": 30}                                              # student routes: school peaks only
+COMMUNITY_BUS = band_profile(am=40, midday=40, pm=40, evening=40, late=60)    # community / feeder-to-nowhere routes numbered 900+
+NUM_IN_NAME = re.compile(r"(\d{1,4})(?:路|号线)")
+SCHOOL_RE = re.compile(r"学校|小学|中学|学院|大学|实验|附中")
+
+
+def other_city_class(name):
+    """-> (profile, category) for an ordinary route of a non-Shanghai city, or None to keep the flat OTHER_BUS profile."""
+    m = NUM_IN_NAME.search(name or "")
+    n = int(m.group(1)) if m else None
+    if n is None:
+        return None
+    if 900 <= n <= 999:
+        return COMMUNITY_BUS, "assumption: community 900s"
+    if 400 <= n <= 499 and SCHOOL_RE.search(name):
+        return SCHOOL_BUS, "assumption: student 400s"
+    if 200 <= n <= 399:
+        return TOWN_BUS, "assumption: town 200-399"
+    if re.search(r"K\d{2,3}路|^[^\d(]*K\d", name or ""):
+        return TOWN_BUS, "assumption: K inter-town"
+    return None
+
+
+FERRY = band_profile(am=16, midday=21, pm=16, evening=21, late=25)  # Wikipedia "Shanghai Ferry": 10-30 min
 FLAT = lambda hw: {b: hw for b in ("early", "am", "midday", "pm", "evening", "late", "weekend_day")}
 
-SH_SPEED_INSIDE_RING_KMH = 16.0   # 2021 central-city peak average 16.1/15.8 km/h
-SH_SPEED_OUTSIDE_RING_KMH = 21.0  # gives the citywide 19.2 km/h average (official 19.6/19.2)
-OTHER_BUS_SPEED_KMH = 20.0
+# Shanghai bus speed per segment: variable with the distance between consecutive stops (short spacing = more stopping and
+# dwell = slower) and with congestion. Raw shape: 10 km/h at <= 300 m rising linearly to 20 km/h at >= 1000 m; in the
+# congested core (dense bus-stop areas inside the S20 ring, found by stop density, not a published polygon) 70% of that
+# (7-14 km/h raw). The shape is then scaled per zone so that the route-km-weighted mean speed equals the sourced averages
+# below (official 2021 peak: 16.1/15.8 km/h central city, 19.6/19.2 citywide), so only the variability is assumed.
+SH_MEAN_INSIDE_RING_KMH = 16.0
+SH_MEAN_OUTSIDE_RING_KMH = 21.0
+SH_SPEED_NORMAL_KMH = (10.0, 20.0)
+CONGESTED_FACTOR = 0.7
+SPEED_CLIP_KMH = (7.0, 30.0)
+# Express / big-station / medium-capacity (BRT-like) routes normally run in bus lanes: never given the congested factor.
+EXPRESS_RE = re.compile(r"快线|快速|快车|大站|中运量|BRT|^71路|直达|机场", re.IGNORECASE)
+SPACING_M = (300.0, 1000.0)
+DENSE_CELL_M = 500.0
+DENSE_QUANTILE = 0.75
+
+
+def raw_speed(seg_km, congested):
+    t = min(1.0, max(0.0, (seg_km * 1000 - SPACING_M[0]) / (SPACING_M[1] - SPACING_M[0])))
+    v = SH_SPEED_NORMAL_KMH[0] + t * (SH_SPEED_NORMAL_KMH[1] - SH_SPEED_NORMAL_KMH[0])
+    return v * (CONGESTED_FACTOR if congested else 1.0)
+
+
+def calibrate_speeds(segments):
+    """segments: [(seg_km, congested, inside_ring)] -> (scale_inside, scale_outside) giving the sourced mean speeds."""
+    out = []
+    for inside, target in ((True, SH_MEAN_INSIDE_RING_KMH), (False, SH_MEAN_OUTSIDE_RING_KMH)):
+        sel = [(d, c) for d, c, i in segments if i == inside]
+        km = sum(d for d, _ in sel)
+        lo, hi = 0.1, 10.0
+        for _ in range(60):   # bisection: mean speed after the 4-30 km/h clip must equal the target
+            k = (lo + hi) / 2
+            mean = km / sum(d / min(max(raw_speed(d, c) * k, SPEED_CLIP_KMH[0]), SPEED_CLIP_KMH[1]) for d, c in sel)
+            lo, hi = (k, hi) if mean < target else (lo, k)
+        out.append(k)
+    return tuple(out)
+
+
+def build_density(stops, ring):
+    """-> function(lon, lat) -> True when the point lies in a dense bus-stop area inside the ring."""
+    import numpy as np
+    from collections import Counter
+    k = 111.32 * 1000
+    pts = {(round(x, 5), round(y, 5)) for x, y in stops}
+    cell = lambda x, y: (int(x * k * 0.857 // DENSE_CELL_M), int(y * k // DENSE_CELL_M))
+    cnt = Counter(cell(x, y) for x, y in pts)
+    smooth = Counter()
+    for (cx, cy), n in cnt.items():
+        for dx in (-1, 0, 1):
+            for dy in (-1, 0, 1):
+                smooth[(cx + dx, cy + dy)] += n
+    inside = [v for (cx, cy), v in smooth.items()
+              if ring.contains(Point((cx + .5) * DENSE_CELL_M / (k * 0.857), (cy + .5) * DENSE_CELL_M / k))]
+    thr = float(np.quantile(inside, DENSE_QUANTILE))
+    return lambda x, y: ring.contains(Point(x, y)) and smooth.get(cell(x, y), 0) >= thr
+OTHER_BUS_SPEED_KMH = 20.0   # no longer used for buses: see other_city_speed
+# Non-Shanghai bus running speed by distance of the segment from the city centre. Anchors: Shanghai's official 2021 peak averages (16.1 km/h central city,
+# 19.6 km/h citywide, sh_transport_report_2022_sina.html) as the most congested case, Suzhou old city peak bus average 20.0 km/h (2022 traffic report, bus lanes 100%),
+# a bus-lane line in Ningbo 19.9 peak / 22 off-peak, Shenzhen citywide 16.6; the outer values are ASSUMPTIONS (uncongested roads, but longer stop spacing and town stops).
+CITY_CENTRES = {"sz": (31.30, 120.59), "wx": (31.49, 120.31), "cz": (31.81, 119.97), "nt": (32.01, 120.86), "nb": (29.87, 121.55),
+                "jx": (30.75, 120.76), "hz": (30.89, 120.09), "zs": (30.02, 122.11)}
+OTHER_SPEED_ZONES = ((5.0, 20.0), (12.0, 24.0), (25.0, 32.0), (1e9, 45.0))   # speed CAP by km from the centre (traffic): 45 beyond 25 km
+# Speed by stop spacing (the segment length): short spacing = slow (stops, signals), far-apart stops = fast. Anchors: urban central peak 14.6 km/h at 678 m mean spacing
+# (Liaoning, 12 cities), 15.9 km/h (Baoji), Suzhou old city 20.0; speed limits of urban-rural buses 50 km/h and inter-county 60 km/h outside the city (Tai'an bus rules);
+# a counter-example: the Suzhou-Wuxi express (33.4 km, 8 stops, 95 min) averages only 21 km/h. The spacing values are ASSUMPTIONS inside those anchors.
+BRT_RE = re.compile(r"^B\d+路|快速公交|BRT|快线\d+号|^快\d+")   # BRT-like routes run in dedicated lanes: speed floor 24 km/h (Changzhou BRT 1 reported 23-25.6 km/h, Fengpu BRT 25)
+OTHER_SPEED_SPACING = ((0.4, 14.0), (1.0, 20.0), (2.0, 28.0), (4.0, 34.0), (1e9, 40.0))   # (segment km, km/h)
+
+
+def other_city_speed(ck, lat, lon, seg_km):
+    la0, lo0 = CITY_CENTRES.get(ck, (lat, lon))
+    km = math.hypot((lat - la0) * 111.0, (lon - lo0) * 111.0 * math.cos(math.radians(la0)))
+    cap = next(v for lim, v in OTHER_SPEED_ZONES if km <= lim)
+    uplift = 1.0 if km <= 12 else (1.1 if km <= 25 else 1.2)   # fewer signals and less traffic outside the built-up area (ASSUMPTION)
+    return min(cap, uplift * next(v for lim, v in OTHER_SPEED_SPACING if seg_km <= lim))
 LAYOVER = 1.15
 
 NIGHT_RE = re.compile(r"夜宵|夜班|夜间|通宵")
@@ -278,6 +381,13 @@ def bus_service(city_key, route_cn, type_en, zone, span, log=None):
         profile, cat = SH_BUS[zone], zone
     else:
         profile, cat = OTHER_BUS, "regular"
+        oc = other_city_class(name)
+        if oc is not None:
+            profile, cat = oc
+            if cat == "assumption: student 400s":   # peaks only, weekdays
+                s0, e0 = span if span else (390, 1080)
+                w = [(max(s0, 420), min(e0, 510), 30), (max(s0, 960), min(e0, 1080), 30)]
+                return cat, {"WD": [x for x in w if x[0] < x[1]]}
     if span is None:
         span = default_bus_span(city_key, zone, name)
         log["span: default"] += 1
@@ -366,7 +476,9 @@ OTHER_METRO = {
         7: other_line(6, 7, we=7),                             # suzhou_metro_line7_thepaper
         11: other_line(6.5, 8, we=8),                          # zhwiki_suzhou_line11
         "default": other_line(6, 8),  # Lines 3/5/6/8: 2022 notice gives 8 all day (Lines 3/5); peak 6 assumed
-        "tram": other_line(10, 12, late=15),                   # no source found: assumption
+        "tram": other_line(17.5, 17.5, late=17.5),             # Wujiang Smart Rail T1 (5.1 km, 4 three-car vehicles, tourist line to Tongli): 15-20 min, 07:00-19:35 (Suzhou Bendibao / Wikipedia)
+        "tram1": other_line(M(5, 48), 8, late=12, we=M(8, 2)),  # Gaoxin tram 1: weekday peak 5 min 48 s, weekend 8 min 02 s (Suzhou Bendibao); off-peak 8 and late 12 assumed
+        "tram2": other_line(M(11, 28), 15, late=15, we=M(11, 28)),   # Gaoxin tram 2: main line and branch each 11 min 28 s (5 min 44 s on the shared section, Suzhou Bendibao); off-peak 15 assumed
     },
     "wx": {  # wuxi_metro_line2_interval_bendibao (2020 notice covering Lines 1 and 2)
         1: other_line(6, 8, late=9), 2: other_line(6, 8, late=9),
@@ -396,6 +508,7 @@ OTHER_METRO_HOURS = {"cz": (360, 1320), "nt": (360, 1320), "nb": (345, 1320), "s
                      "default": (360, 1350)}
 METRO_SPEED_KMH = 35.0
 TRAM_SPEED_KMH = 18.0
+TRAM_SPEEDS = {"tram1": 24.0, "tram2": 27.0}   # Gaoxin trams: 25.76 km with 16 stops, design 70 km/h, tram 2 reported as the fastest-averaging tram line (Wikipedia); the averages are ASSUMPTIONS
 
 # Maglev (Wikipedia "Shanghai maglev train" + operator timetable pages):
 # 30 km in 8 min 10 s (300 km/h cruise since May 2021), 06:45-21:42,
@@ -407,14 +520,20 @@ MAGLEV_WINDOWS = [(405, 420, 15), (420, 1302, 20)]
 def metro_line_key(name):
     if "浦江线" in name:
         return "pujiang"
-    if "有轨电车" in name or "智轨" in name:
+    if "智轨" in name:
         return "tram"
+    if "有轨电车" in name:
+        return "tram2" if "2号线" in name else ("tram1" if "1号线" in name else "tram")
     m = re.search(r"(\d+)号线", name)
     return int(m.group(1)) if m else None
 
 
+# Lines flagged as not operating in the CPTOND snapshot that opened afterwards (checked against operator / government notices, Nov 2026):
+OPENED_SINCE_SNAPSHOT = (("sh", "18号线二期"),)   # Shanghai Line 18 phase 2 (Changjiang South Road - Kangwen Road), opened 2025-12-27
+
+
 def metro_drop_reason(city_key, name, status):
-    if str(status) != "1":
+    if str(status) != "1" and not any(city_key == c and k in name for c, k in OPENED_SINCE_SNAPSHOT):
         return f"status {status} (not operating in CPTOND)"
     if "夜班" in name:
         return "night-shift trains (modelled separately)"
@@ -553,12 +672,30 @@ def build_city(feed, city_dir, prefix, ck, agency, ring):
 
 
 def build_bus(feed, ck, routes, seqs, ring):
+    dense = build_density([(p.x, p.y) for g in seqs.values() for p in g.geometry], ring) if ck == "sh" else None
+    if ck == "sh":
+        segs = []
+        for _, r in routes.iterrows():
+            g = seqs.get(r["route_cn"])
+            if g is None or len(g) < 2 or r.geometry is None or r.geometry.geom_type != "LineString" or str(r["status"]) != "1":
+                continue
+            la, lo = g.geometry.y.tolist(), g.geometry.x.tolist()
+            d, ok = along_route_km(r.geometry, la, lo)
+            if not ok:
+                continue
+            for i in range(1, len(d)):
+                m = Point((lo[i] + lo[i - 1]) / 2, (la[i] + la[i - 1]) / 2)
+                if d[i] > d[i - 1]:
+                    segs.append((d[i] - d[i - 1], dense(m.x, m.y) and not EXPRESS_RE.search(r["route_cn"]), ring.contains(m)))
+        scale_in, scale_out = calibrate_speeds(segs)
+        print(f"sh bus speed scale inside {scale_in:.3f}, outside {scale_out:.3f} from {len(segs)} segments")
     for _, r in routes.iterrows():
         rc = r["route_cn"]
         if str(r["status"]) != "1":
             feed.log[ck]["bus dropped: status 0 (suspended)"] += 1
             continue
-        if RAIL_IN_BUS_RE.search(rc):
+        is_s1 = ck == "nb" and "S1线" in rc and RAIL_IN_BUS_RE.search(rc) is not None   # Ningbo-Yuyao intercity rail S1, kept as a rail route
+        if RAIL_IN_BUS_RE.search(rc) and not is_s1:
             feed.log[ck]["bus dropped: intercity rail line filed as bus in CPTOND"] += 1
             continue
         g = seqs.get(rc)
@@ -580,6 +717,8 @@ def build_bus(feed, ck, routes, seqs, ring):
             zone = "central" if (first_in and last_in) or share_in >= 2 / 3 else (
                 "radial" if first_in or last_in else "suburban")
         cat, services = bus_service(ck, rc, r.get("type_en"), zone, cptond_span(r), feed.log[ck])
+        if is_s1:   # 9 pairs a day since 2023-07 (Baidu Baike / Ningbo Bendibao), first 06:01, last 20:05 -> about every 93 min; 35 min run (Zhejiang Online 2017)
+            cat, services = "intercity_rail", {"WD": [(360, 1230, 93)], "WE": [(360, 1230, 93)]}
         feed.log[ck][f"bus {cat}"] += 1
 
         dists, use_shape = along_route_km(r.geometry, lats, lons)
@@ -590,17 +729,23 @@ def build_bus(feed, ck, routes, seqs, ring):
             seg = dists[i] - dists[i - 1]
             if ck == "sh":
                 mid = Point((lons[i] + lons[i - 1]) / 2, (lats[i] + lats[i - 1]) / 2)
-                v = SH_SPEED_INSIDE_RING_KMH if ring.contains(mid) else SH_SPEED_OUTSIDE_RING_KMH
+                inside = ring.contains(mid)
+                v = raw_speed(seg, dense(mid.x, mid.y) and not EXPRESS_RE.search(rc)) * (scale_in if inside else scale_out)
+                v = min(max(v, SPEED_CLIP_KMH[0]), SPEED_CLIP_KMH[1])
             else:
-                v = OTHER_BUS_SPEED_KMH
+                v = other_city_speed(ck, (lats[i] + lats[i - 1]) / 2, (lons[i] + lons[i - 1]) / 2, seg)
+                if BRT_RE.search(rc):
+                    v = max(v, 24.0)
             offsets.append(offsets[-1] + seg / v * 3600)
+        if is_s1 and offsets[-1] > 0:
+            offsets = [o * 2100.0 / offsets[-1] for o in offsets]
 
         rid = f"{ck}_b_{r.name}"
         stop_ids = [f"{ck}_{s}" for s in g["stop_id"]]
         short, long_ = route_names(r)
         feed.routes.append({"route_id": rid, "agency_id": ck, "route_short_name": short,
                             "route_long_name": long_, "route_desc": cat,
-                            "route_type": 4 if cat == "ferry" else 3})
+                            "route_type": 4 if cat == "ferry" else (2 if cat == "intercity_rail" else 3)})
         shape_id = rid if use_shape else ""
         if use_shape:
             feed.add_shape(rid, r.geometry)
@@ -623,12 +768,12 @@ def build_metro(feed, ck, routes, seqs):
             feed.log[ck]["metro dropped: no stops"] += 1
             continue
         key = metro_line_key(name)
-        tram = key == "tram"
+        tram = isinstance(key, str) and key.startswith("tram")
         lats, lons = g.geometry.y.tolist(), g.geometry.x.tolist()
         dists, use_shape = along_route_km(r.geometry, lats, lons)
         if not use_shape:
             feed.log[ck]["metro shape omitted: line passes a stop twice"] += 1
-        v = TRAM_SPEED_KMH if tram else METRO_SPEED_KMH
+        v = TRAM_SPEEDS.get(key, TRAM_SPEED_KMH) if tram else METRO_SPEED_KMH
         offsets = [d / v * 3600 for d in dists]
         rid = f"{ck}_m_{r.name}"
         stop_ids = [f"{ck}_{s}" for s in g["stop_id"]]
@@ -709,7 +854,9 @@ def metro_profile(ck, key):
     if ck == "sh":
         return SH_METRO[key], SH_METRO_HOURS
     table = OTHER_METRO[ck]
-    profile = table.get(key) or (table.get("tram") if key == "tram" else None) or table["default"]
+    profile = table.get(key) or (table.get("tram") if isinstance(key, str) and key.startswith("tram") else None) or table["default"]
+    if ck == "sz" and key == "tram":   # the Wujiang smart rail runs 07:00-19:35 only
+        return profile, (420, 1175)
     return profile, OTHER_METRO_HOURS.get(ck, OTHER_METRO_HOURS["default"])
 
 

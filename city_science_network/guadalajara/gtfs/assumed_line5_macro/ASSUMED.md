@@ -1,0 +1,7 @@
+# ASSUMED feed: Guadalajara Line 5 Mi Macro Aeropuerto
+
+Not official data. Line 5 opened on 2026-06-04, after the calendar-2024 official feed (mdb-2366).
+PUBLISHED: 27 stations Chapalita Inn - Aeropuerto, 32 km, 41 electric buses, 03:30-22:30 from 2026-06-08 (Wikipedia 'Guadalajara Mi Macro'; Jalisco government release 2026-06-05; https://linea5.jalisco.gob.mx/; SITEUR). No headway is published.
+STATIONS: 14 have known coordinates: the Mi Macro Periférico stations with the same exact name in the official feed (Chapalita Inn, Felipe Ruvalcaba, Miramar, El Briseño, Terminal Sur de Autobuses, San Sebastianito, Adolf Horn, Las Pintas), ITESO and Periférico Sur (official feed / OSM), Toluquilla and Artesanos (OSM), Jalisco 200 Años (Line 4 station table), the airport terminal. The rest (El Colli, Mariano Otero, Agrícola, López Mateos, 8 de Julio, Carretera a Chapala, Las Liebres, Parque Montenegro, Las Torres, Las Pintitas, La Gigantera, La Piedrera, San José del Quince) keep their published order and are spaced evenly along the road path between their known neighbours (marked 'interpolated'); no source with their coordinates was found.
+PATH: shortest OSM road path through the known stations (34.7 km here, 32 km published).
+HEADWAY_BASIS: fleet method: round trip 2 x 34.7 km at 25 km/h with 10% layover, buses in service 41 x (1 - 8% workshop - 9% spare) -> every 5 min on the trunk (three extra service patterns share the fleet).

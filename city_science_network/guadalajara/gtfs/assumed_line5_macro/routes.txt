@@ -1,0 +1,2 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type
+assumed_line5_macro,assumed,L5,Línea 5 Mi Macro Aeropuerto: Chapalita Inn - Aeropuerto,"ASSUMED: Line 5 opened 2026-06-04 (after the 2024 official feed); 14 of 27 stations at known coordinates, the others spaced along the OSM road path; headway 5 min from the 41-bus fleet, 03:30-22:30",3

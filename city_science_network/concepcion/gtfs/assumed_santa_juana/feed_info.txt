@@ -1,0 +1,2 @@
+feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_version
+ASSUMED (OpenStreetMap + DTPR Biobío 2025 fleet),https://github.com,es,20260101,20271231,assumed-1

@@ -1,0 +1,74 @@
+{
+ "_about": "Election column labels: '<scope label>: <what>'. {y} = election year.",
+ "scope_en": {
+  "national": "National election {y}",
+  "municipal": "Municipal election {y}",
+  "state": "State election {y}"
+ },
+ "scope_es": {
+  "national": "Elecciones generales {y}",
+  "municipal": "Elecciones municipales {y}",
+  "state": "Elecciones al Parlamento Vasco {y}"
+ },
+ "base": {
+  "total_votes": [
+   "valid votes",
+   "votos válidos"
+  ],
+  "votes_cast": [
+   "votes cast",
+   "votos emitidos"
+  ],
+  "electors": [
+   "registered voters",
+   "electores"
+  ],
+  "turnout_rate": [
+   "turnout",
+   "participación"
+  ],
+  "left_votes": [
+   "left bloc votes",
+   "votos bloque izquierda"
+  ],
+  "right_votes": [
+   "right bloc votes",
+   "votos bloque derecha"
+  ],
+  "left_share": [
+   "left bloc vote",
+   "voto bloque izquierda"
+  ],
+  "right_share": [
+   "right bloc vote",
+   "voto bloque derecha"
+  ],
+  "other_share": [
+   "other vote",
+   "voto otros partidos"
+  ]
+ },
+ "party_names": {
+  "eaj_pnv": "EAJ-PNV",
+  "eh_bildu": "EH Bildu",
+  "pp": "PP",
+  "psoe": "PSOE",
+  "vox": "Vox",
+  "sumar": "Sumar",
+  "pse_ee_psoe": "PSE-EE (PSOE)",
+  "pacma": "PACMA",
+  "fo": "FO",
+  "bng": "BNG",
+  "erc": "ERC",
+  "junts": "Junts",
+  "cc": "CC",
+  "upn": "UPN",
+  "podemos": "Podemos",
+  "cs": "Cs",
+  "escanos_en_blanco": "Escaños en Blanco",
+  "recortes_cero": "Recortes Cero",
+  "iu": "IU",
+  "compromis": "Compromís",
+  "podemos_ezker_anitza_iu_berdeak_equo_alianza": "Podemos-Ezker Anitza-IU-Berdeak-Equo-Alianza"
+ }
+}

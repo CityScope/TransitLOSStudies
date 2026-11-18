@@ -1,0 +1,5 @@
+trip_id,start_time,end_time,headway_secs,exact_times
+assumed_nlt_centro_0,05:34:00,22:00:00,1800,0
+assumed_nlt_centro_1,05:41:38,22:00:00,1800,0
+assumed_nlt_coliumo_0,06:14:01,22:00:00,2700,0
+assumed_nlt_coliumo_1,06:05:19,22:00:00,2700,0

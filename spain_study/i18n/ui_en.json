@@ -1,0 +1,8 @@
+{
+ "_about": "English-mode rewrites of the map's own labels (emoji-prefixed layer names, clumsy builder labels).",
+ "strings": {
+  "Home size m 2 mean (Eustat dwelling avg useful area)": "Home size",
+  "🛣️ streets": "streets",
+  "🏗️ development": "development"
+ }
+}

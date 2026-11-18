@@ -2,16 +2,16 @@
 name = "city-science-network"
 version = "0.1.0"
 description = "Multi-city transit level-of-service case study built on transitLOS, UrbanAccessAnalyzer, geohierarchy, and pyCensus."
-readme = "README.md"
 requires-python = ">=3.11"
 authors = [
     { name = "Miguel Ureña Pliego" }
 ]
 dependencies = [
-    "transitlos",
-    "urbanaccessanalyzer",
-    "geohierarchy",
-    "pycensus",
+    "transitlos @ git+https://github.com/CityScope/transitLOS.git",
+    "urbanaccessanalyzer @ git+https://github.com/CityScope/UrbanAccessAnalyzer.git",
+    "pygtfshandler @ git+https://github.com/CityScope/pyGTFSHandler.git",
+    "pycensus @ git+https://github.com/CityScope/pyCensus.git",
+    "geohierarchy @ git+https://github.com/CityScope/geohierarchy.git",
     "geopandas>=0.14.0",
     "pandas>=2.3.3",
     "polars>=1.0.0",
@@ -31,11 +31,16 @@ dependencies = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.uv.sources]
-transitlos = { path = "../../transitLOS", editable = true }
-urbanaccessanalyzer = { path = "../../UrbanAccessAnalyzer", editable = true }
-geohierarchy = { path = "../../geohierarchy", editable = true }
-pycensus = { path = "../../pyCensus", editable = true }
-
 [tool.hatch.build.targets.wheel]
 packages = ["code"]
+
+[project.optional-dependencies]
+# GPU is OPTIONAL: nothing here is installed by default and every code path falls back to the CPU when CuPy / a CUDA device is missing (TRANSITLOS_DEVICE=cpu forces it).
+gpu = ["cupy-cuda12x>=13.0"]
+# RAPIDS (cuDF / cuGraph) is big and pins its own dependency versions: install it in a SEPARATE environment, e.g.
+#   python -m venv .venv-rapids && .venv-rapids/bin/pip install cudf-cu12 cugraph-cu12 --extra-index-url=https://pypi.nvidia.com
+# and point TRANSITLOS_RAPIDS_PYTHON at that environment's python; the pipeline calls it in a subprocess only when it exists.
+rapids = ["cudf-cu12", "cugraph-cu12"]
+
+[tool.hatch.metadata]
+allow-direct-references = true   # the sibling packages are git dependencies (github.com/CityScope)

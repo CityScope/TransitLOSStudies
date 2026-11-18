@@ -1,7 +1,8 @@
-"""Shared helpers for the city_science_network multi-city transit-LOS study.
+"""The city study's own code (its cities, feeds, combined map). The pipeline it runs is shared: `TransitLOSStudies/tools/studytools`."""
 
-Every module here is reused by both `city_science_network/main.py` (the six-city
-cross-city study) and `boston_city_evolution/main.py` (the Boston 2019 vs
-2026 comparison, imported via a `sys.path` insert since there is no
-top-level installable package spanning both studies).
-"""
+import sys
+from pathlib import Path
+
+_TOOLS = str(Path(__file__).resolve().parents[2] / "tools")
+if _TOOLS not in sys.path:
+    sys.path.insert(0, _TOOLS)

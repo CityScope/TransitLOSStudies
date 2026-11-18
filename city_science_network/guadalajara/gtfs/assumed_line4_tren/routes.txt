@@ -1,0 +1,2 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type
+assumed_line4_tren,assumed,L4,Línea 4 Tren Eléctrico Urbano: Las Juntas - Tlajomulco Centro,"ASSUMED: Line 4 opened 2025-12-15 (after the 2024 official feed); 8 stations with Wikipedia coordinates, track drawn station to station; every 9 min (SITEUR), 05:00-21:30",0

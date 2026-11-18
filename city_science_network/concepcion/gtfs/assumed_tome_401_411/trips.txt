@@ -1,0 +1,5 @@
+route_id,service_id,trip_id,trip_headsign,direction_id,shape_id
+assumed_401,ALL,assumed_401_0,Concepción,0,assumed_401_shape
+assumed_401,ALL,assumed_401_1,Alto Tomé,1,
+assumed_411,ALL,assumed_411_0,Concepción,0,assumed_411_shape
+assumed_411,ALL,assumed_411_1,Dichato,1,

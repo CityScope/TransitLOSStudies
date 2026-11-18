@@ -2,7 +2,7 @@
 
 Usage: `uv run python boston/run.py` from `city_science_network/`.
 
-Fast re-entry-point flags (see `code.cli.parse_run_flags`, folded in here
+Fast re-entry-point flags (see `studytools.cli.parse_run_flags`, folded in here
 from what used to be separate `rebuild_map_only.py`/
 `rebuild_development_only.py`/`export_gpkg.py` scripts):
 
@@ -22,12 +22,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from code.city_config import CITY_CONFIGS
-from code.cli import parse_run_flags
-from code.params import GLOBAL_PARAMS
-from code.pipeline import run_city_study
+from studytools.cli import parse_run_flags
+from studytools.params import GLOBAL_PARAMS
+from studytools.pipeline import run_city_study
 
 CITY_DIR = Path(__file__).resolve().parent
 ROOT = CITY_DIR.parent
+
+from code.study_cache import apply_env as _apply_cache_env, osm_dir as _osm_dir, pycensus_dir as _pycensus_dir, resolve_cache_dir as _resolve_cache_dir, worldpop_dir as _worldpop_dir
+
+_CACHE = _resolve_cache_dir()  # shared TransitLOSStudies/cache (or --cache-dir / STUDY_CACHE_DIR)
+_apply_cache_env(_CACHE)
 
 # Boston-only override (2026-09-04, live OOM x3: an unwrapped/wrapped run
 # consistently hit ~11.5-12.7GB RSS and got killed by the kernel's GLOBAL OOM
@@ -64,15 +69,15 @@ if __name__ == "__main__":
     # single tile-build worker for this city to keep peak RSS bounded,
     # at the cost of a slower (serial) tile build.
     if flags.dispatch(city_dir=CITY_DIR, config=CITY_CONFIGS["boston"], params=BOSTON_PARAMS,
-                       census_root=ROOT / "census", default_tile_workers=1):
+                       census_root=_pycensus_dir(_CACHE), default_tile_workers=1):
         raise SystemExit(0)
     run_city_study(
         city_dir=CITY_DIR,
         config=CITY_CONFIGS["boston"],
         params=BOSTON_PARAMS,
-        streets_root=ROOT / "streets",
-        worldpop_root=ROOT / "worldpop",
-        census_root=ROOT / "census",
+        streets_root=_osm_dir(_CACHE),
+        worldpop_root=_worldpop_dir(_CACHE),
+        census_root=_pycensus_dir(_CACHE),
         # Defaults to True (consistent with every other city's `run.py`):
         # resumes from the cached stops/access-edges of a previous run (see
         # `run_city_study`) instead of redoing the GTFS/isochrone/LOS stage.

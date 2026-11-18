@@ -51,11 +51,12 @@ def _center_on_contiguous_us(html_path) -> None:
     path = Path(html_path)
     text = path.read_text(encoding="utf-8")
     text = re.sub(r"center: \[[^\]]*\],(\s*)zoom: [0-9.]+,", r"center: [-98.5, 39.0],\1zoom: 3.6,", text, count=1)
-    path.write_text(text, encoding="utf-8")
+    from transitlos.map.buildstamp import write_stamped
+    write_stamped(path, text)
 
 
 def build_usa_map(states=None, include_streets: bool = True, out_dir=None, in_process: bool = False,
-                  page_only: bool = False, census_tiles: bool = False) -> str:
+                  page_only: bool = False, census_tiles: bool = False, census_tiles_all: bool = False) -> str:
     """Assemble every finished state's outputs and build the nationwide map.
 
     Args:
@@ -91,12 +92,18 @@ def build_usa_map(states=None, include_streets: bool = True, out_dir=None, in_pr
         extra["force_development_tiles"] = True  # the development overlay is small: always rebuilt (per state)
         from code.external_tiles import make_dev_writer
 
-        extra["external_tile_writers"] = {("development", "h3_7"): make_dev_writer(dirs)}
+        extra["external_tile_writers"] = {("development", "h3_8"): make_dev_writer(dirs)}
         if census_tiles:
             # county / tract tiles are rebuilt in-process; block / block group (tiled per state) are left untouched
             extra["force_census_tiles"] = True
             noop = lambda **kwargs: None  # noqa: E731
-            extra["external_tile_writers"].update({("census", "census_block"): noop, ("census", "census_blockgroup"): noop})
+            if census_tiles_all:   # block group and block tiles too (per state, in parallel), e.g. after new census columns
+                from code.external_tiles import make_writers
+
+                allw = make_writers(dirs, include_streets=False)
+                extra["external_tile_writers"].update({k: allw[k] for k in (("census", "census_block"), ("census", "census_blockgroup"))})
+            else:
+                extra["external_tile_writers"].update({("census", "census_block"): noop, ("census", "census_blockgroup"): noop})
     if not in_process and not page_only:
         from code.external_tiles import make_writers
 
@@ -107,7 +114,16 @@ def build_usa_map(states=None, include_streets: bool = True, out_dir=None, in_pr
         from code.stats_chunks import build_nation_sample
 
         build_stats_chunks(dirs, out, BASE_DIR / "data" / "_cache" / "geo_names.json")
-        build_nation_sample(inputs["h3_by_resolution"][7].drop(columns="geometry").rename(columns={"h3_cell": "h3"}), out)
+        build_nation_sample(inputs["h3_by_resolution"][8].drop(columns="geometry").rename(columns={"h3_cell": "h3"}), out)
+        from code.stats_chunks import build_nation_quantiles
+
+        build_nation_quantiles(out)
+        try:   # Census metropolitan areas: stats chunks per area + dotted boundary lines
+            from code.metro_areas import build_metro_assets
+
+            logger.info(f"Metropolitan areas: {build_metro_assets(str(BASE_DIR / 'data'), str(out))}")
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(f"Metropolitan areas skipped: {exc!r}")
         extra["stats_scope_cfg"] = {"dir": "stats_chunks", "min_zoom": 5, "address_zoom": 6, "dev_min_zoom": 8}
     if not in_process and not (page_only and (out / 'pop_chunks' / 'index.json').is_file()):
         from code.pop_chunks_usa import build_usa_pop_chunks
@@ -125,11 +141,12 @@ def main():
     ap.add_argument("--no-streets", action="store_true", help="omit the street edges layer")
     ap.add_argument("--page-only", action="store_true", help="rewrite map.html and chunks only, reuse existing tiles")
     ap.add_argument("--census-tiles", action="store_true", help="with --page-only: rebuild the census county/tract tiles too")
+    ap.add_argument("--census-tiles-all", action="store_true", help="with --page-only: rebuild every census level's tiles (county, tract, block group, block)")
     ap.add_argument("--in-process", action="store_true", help="tile everything in one process (small subsets only)")
     ap.add_argument("--out", default=str(BASE_DIR / "data" / "_usa"), help="output folder (map.html + tiles/)")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-    build_usa_map(args.states.split(",") if args.states else None, not args.no_streets, args.out, args.in_process, args.page_only, args.census_tiles)
+    build_usa_map(args.states.split(",") if args.states else None, not args.no_streets, args.out, args.in_process, args.page_only, args.census_tiles or args.census_tiles_all, args.census_tiles_all)
 
 
 if __name__ == "__main__":

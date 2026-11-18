@@ -149,6 +149,7 @@ api_keys.json
 # study), code/*.py, build_usa_map.py (imported by main.py), README.md and prompt.txt. One-off helpers written while building
 # or correcting the study (state-by-state re-runs, chained run scripts, migrations, audits, feed downloaders) stay local.
 /usa_study/*.sh
+!/usa_study/run.sh
 /usa_study/audit_feeds.py
 /usa_study/audit_scores.py
 /usa_study/backfill_stop_signatures.py
@@ -183,3 +184,186 @@ GTFS_BUILD.md
 !/city_science_network/*/aoi.gpkg
 !/city_science_network/beerseba/aoi_city.gpkg
 !/city_science_network/boston/aoi_city_only.gpkg
+
+# --- spain_study: ignore downloaded/processed data ---
+/spain_study/data/
+
+# ASSUMED supplementary GTFS feeds (lines no official feed contains; see city_science_network/assumed_feeds/): the feeds and their ASSUMED.md
+# documentation are tracked, every other feed of the city stays ignored.
+!/city_science_network/andorra/gtfs/
+/city_science_network/andorra/gtfs/*
+!/city_science_network/andorra/gtfs/assumed_*/
+!/city_science_network/beerseba/gtfs/
+/city_science_network/beerseba/gtfs/*
+!/city_science_network/beerseba/gtfs/assumed_*/
+!/city_science_network/boston/gtfs/
+/city_science_network/boston/gtfs/*
+!/city_science_network/boston/gtfs/assumed_*/
+!/city_science_network/concepcion/gtfs/
+/city_science_network/concepcion/gtfs/*
+!/city_science_network/concepcion/gtfs/assumed_*/
+!/city_science_network/gipuzkoa/gtfs/
+/city_science_network/gipuzkoa/gtfs/*
+!/city_science_network/gipuzkoa/gtfs/assumed_*/
+!/city_science_network/guadalajara/gtfs/
+/city_science_network/guadalajara/gtfs/*
+!/city_science_network/guadalajara/gtfs/assumed_*/
+!/city_science_network/hamburg/gtfs/
+/city_science_network/hamburg/gtfs/*
+!/city_science_network/hamburg/gtfs/assumed_*/
+!/city_science_network/san_francisco/gtfs/
+/city_science_network/san_francisco/gtfs/*
+!/city_science_network/san_francisco/gtfs/assumed_*/
+!/city_science_network/shanghai/gtfs/
+/city_science_network/shanghai/gtfs/*
+!/city_science_network/shanghai/gtfs/assumed_*/
+!/city_science_network/taipei/gtfs/
+/city_science_network/taipei/gtfs/*
+!/city_science_network/taipei/gtfs/assumed_*/
+!/city_science_network/toronto/gtfs/
+/city_science_network/toronto/gtfs/*
+!/city_science_network/toronto/gtfs/assumed_*/
+
+# Inputs `<city>/run.py` needs and that are not downloaded by it: the four analysis areas + the processing area (scripts_four_areas.py), the archived
+# feed of Concepcion, the Andorra / Shanghai feed-builder sources. Never ignored (they come after the global *.gpkg / *.geojson rules on purpose).
+!/city_science_network/andorra/aoi.gpkg
+!/city_science_network/andorra/core.gpkg
+!/city_science_network/andorra/metro_official.gpkg
+!/city_science_network/andorra/municipality.gpkg
+!/city_science_network/andorra/un_metro.gpkg
+!/city_science_network/beerseba/aoi.gpkg
+!/city_science_network/beerseba/core.gpkg
+!/city_science_network/beerseba/metro_official.gpkg
+!/city_science_network/beerseba/municipality.gpkg
+!/city_science_network/beerseba/un_metro.gpkg
+!/city_science_network/boston/aoi.gpkg
+!/city_science_network/boston/core.gpkg
+!/city_science_network/boston/metro_official.gpkg
+!/city_science_network/boston/municipality.gpkg
+!/city_science_network/boston/un_metro.gpkg
+!/city_science_network/concepcion/aoi.gpkg
+!/city_science_network/concepcion/core.gpkg
+!/city_science_network/concepcion/metro_official.gpkg
+!/city_science_network/concepcion/municipality.gpkg
+!/city_science_network/concepcion/un_metro.gpkg
+!/city_science_network/gipuzkoa/aoi.gpkg
+!/city_science_network/gipuzkoa/core.gpkg
+!/city_science_network/gipuzkoa/metro_official.gpkg
+!/city_science_network/gipuzkoa/municipality.gpkg
+!/city_science_network/gipuzkoa/un_metro.gpkg
+!/city_science_network/guadalajara/aoi.gpkg
+!/city_science_network/guadalajara/core.gpkg
+!/city_science_network/guadalajara/metro_official.gpkg
+!/city_science_network/guadalajara/municipality.gpkg
+!/city_science_network/guadalajara/un_metro.gpkg
+!/city_science_network/hamburg/aoi.gpkg
+!/city_science_network/hamburg/core.gpkg
+!/city_science_network/hamburg/metro_official.gpkg
+!/city_science_network/hamburg/municipality.gpkg
+!/city_science_network/hamburg/un_metro.gpkg
+!/city_science_network/san_francisco/aoi.gpkg
+!/city_science_network/san_francisco/core.gpkg
+!/city_science_network/san_francisco/metro_official.gpkg
+!/city_science_network/san_francisco/municipality.gpkg
+!/city_science_network/san_francisco/un_metro.gpkg
+!/city_science_network/shanghai/aoi.gpkg
+!/city_science_network/shanghai/core.gpkg
+!/city_science_network/shanghai/metro_official.gpkg
+!/city_science_network/shanghai/municipality.gpkg
+!/city_science_network/shanghai/un_metro.gpkg
+!/city_science_network/taipei/aoi.gpkg
+!/city_science_network/taipei/core.gpkg
+!/city_science_network/taipei/metro_official.gpkg
+!/city_science_network/taipei/municipality.gpkg
+!/city_science_network/taipei/un_metro.gpkg
+!/city_science_network/toronto/aoi.gpkg
+!/city_science_network/toronto/core.gpkg
+!/city_science_network/toronto/metro_official.gpkg
+!/city_science_network/toronto/municipality.gpkg
+!/city_science_network/toronto/un_metro.gpkg
+!/city_science_network/concepcion/gtfs_archive/
+!/city_science_network/concepcion/gtfs_archive/*.zip
+!/city_science_network/shanghai/gtfs/sources/
+!/city_science_network/shanghai/gtfs/sources/**
+!/city_science_network/andorra/sources/
+!/city_science_network/andorra/sources/**
+!/city_science_network/assumed_feeds/
+!/city_science_network/assumed_feeds/**
+
+# Archived feeds that cannot be downloaded (archive_feeds.py): zips / parts below 50 MB, tracked.
+!/city_science_network/andorra/gtfs_archive/
+!/city_science_network/andorra/gtfs_archive/*
+!/city_science_network/beerseba/gtfs_archive/
+!/city_science_network/beerseba/gtfs_archive/*
+!/city_science_network/boston/gtfs_archive/
+!/city_science_network/boston/gtfs_archive/*
+!/city_science_network/concepcion/gtfs_archive/
+!/city_science_network/concepcion/gtfs_archive/*
+!/city_science_network/gipuzkoa/gtfs_archive/
+!/city_science_network/gipuzkoa/gtfs_archive/*
+!/city_science_network/guadalajara/gtfs_archive/
+!/city_science_network/guadalajara/gtfs_archive/*
+!/city_science_network/hamburg/gtfs_archive/
+!/city_science_network/hamburg/gtfs_archive/*
+!/city_science_network/san_francisco/gtfs_archive/
+!/city_science_network/san_francisco/gtfs_archive/*
+!/city_science_network/shanghai/gtfs_archive/
+!/city_science_network/shanghai/gtfs_archive/*
+!/city_science_network/taipei/gtfs_archive/
+!/city_science_network/taipei/gtfs_archive/*
+!/city_science_network/toronto/gtfs_archive/
+!/city_science_network/toronto/gtfs_archive/*
+
+# shared study cache (raw downloads, GBA tiles, LODES, WorldPop ...) and generated web builds: never tracked
+/cache/
+/usa_flex/web_buf/
+/usa_flex/web/
+# usa_flex run outputs: per-county results, network caches, fit data and fitted runs, generated report; world quantiles of the city maps;
+# memsched's job history; audit tables (all regenerable)
+/usa_flex/data/
+/usa_flex/data_buf/
+/usa_flex/fit/data/
+/usa_flex/fit/data_buf/
+/usa_flex/analysis/report/
+/city_science_network/world_quantiles*.json
+/city_science_network/combined_map.html.build
+/city_science_network/gtfs_date_audit.csv
+/peaks.json
+*.pt
+
+# compiled Python, also inside the whitelisted folders above
+**/__pycache__/
+*.pyc
+
+# run logs and screenshots of every study's run.sh (and the score study); the memory scheduler's job history of usa_flex
+**/logs/
+/usa_flex/peaks*.json
+# the warm start of the score study (a 15 KB fitted model): an input of usa_flex/fit/score_study, kept
+!/usa_flex/fit/init/
+!/usa_flex/fit/init/*.pt
+
+# example_metro_area: each run's area folder (downloads and results) stays local
+/example_metro_area/areas/
+
+# ===== Local only: never in the public repository =====
+# API keys and credentials
+api_keys.json
+*.env
+.env
+*.key
+*.pem
+# notes about this machine and its processes (hosting, uploads, runs, local paths): keep them as *.local.md or under local/
+*.local.md
+/local/
+# hosting / upload scripts (the maps' hosting lives outside the repositories)
+/hosting/
+**/deploy_*.py
+**/dep_*.py
+# coding-agent session files
+.claude/
+CLAUDE.local.md
+
+# the score study's write-up (report generators: findings and the reasoning behind the scoring) -- kept locally for now
+/usa_flex/analysis/report.py
+/usa_flex/analysis/report_gen23.py
+/usa_flex/analysis/report_gen4.py

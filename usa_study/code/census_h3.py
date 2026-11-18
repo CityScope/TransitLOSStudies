@@ -6,6 +6,7 @@ centre, as intensive variables (shares, rates, medians, densities) -- raw counts
 Coarser levels are then population-weighted means of the res-7 cells (`state_pipeline._resample_h3_up`).
 Names ending in `_share`/`_rate` show as "(%)" and `*_density` as "(pop/km2)" in the map.
 """
+import functools
 import logging
 from pathlib import Path
 
@@ -26,6 +27,7 @@ SHARES = [
     ("hispanic_share", "dhc_hispanicPopulation", "population"),
     ("foreign_born_share", "foreignBornPopulation", "population"),
     ("female_share", "femalePopulation", "population"),
+    ("male_share", "malePopulation", "population"),
     ("under18_share", "under18Population", "population"),
     ("age18to64_share", "dhc_age18to64Population", "population"),
     ("over65_share", "over65Population", "population"),
@@ -47,6 +49,8 @@ SHARES = [
     ("highschool_share", "acs5_educationHighSchool", "acs5_population25plus"),
     ("some_college_share", "acs5_educationSomeCollege", "acs5_population25plus"),
     ("bachelors_plus_share", "acs5_educationBachelorsPlus", "acs5_population25plus"),
+    ("university_share", "acs5_educationBachelorsPlus", "acs5_population25plus"),   # template name of bachelors_plus_share
+    ("education_basic_or_less_share", "acs5_educationLessThanHs", "acs5_population25plus"),   # template name of less_than_highschool_share
     ("income_under_10k_share", "acs5_incomeHouseholdsUnder10k", "households"),
     ("income_10k_25k_share", "acs5_incomeHouseholds10kTo25k", "households"),
     ("income_25k_50k_share", "acs5_incomeHouseholds25kTo50k", "households"),
@@ -64,6 +68,48 @@ SHARES = [
     ("jobs_age_young_share", "lodes_wac_jobsAgeYoung", "lodes_wac_jobsTotal"),
     ("jobs_age_prime_share", "lodes_wac_jobsAgePrime", "lodes_wac_jobsTotal"),
     ("jobs_age_older_share", "lodes_wac_jobsAgeOlder", "lodes_wac_jobsTotal"),
+    # More ACS 5-year tables (2026-10): housing stock, household types, digital divide, health, nativity, commute detail, industry.
+    ("vacant_housing_share", "acs5_vacantHousingUnits", "acs5_housingUnits"),
+    ("detached_house_share", "acs5_unitsDetached1", "acs5_housingUnits"),
+    ("attached_house_share", "acs5_unitsAttached1", "acs5_housingUnits"),
+    ("small_multifamily_share", "acs5_unitsSmallMulti2to9", "acs5_housingUnits"),
+    ("midsize_multifamily_share", "acs5_unitsMulti10to19", "acs5_housingUnits"),
+    ("large_multifamily_share", "acs5_unitsMulti20Plus", "acs5_housingUnits"),
+    ("mobile_home_share", "acs5_unitsMobileHome", "acs5_housingUnits"),
+    ("family_households_share", "acs5_familyHouseholds", "households"),
+    ("living_alone_households_share", "acs5_livingAloneHouseholds", "households"),
+    ("snap_households_share", "acs5_snapHouseholds", "households"),
+    ("broadband_households_share", "acs5_broadbandHouseholds", "households"),
+    ("no_internet_households_share", "acs5_noInternetHouseholds", "households"),
+    ("no_computer_households_share", "acs5_noComputerHouseholds", "households"),
+    ("limited_english_households_share", "acs5_limitedEnglishHouseholds", "households"),
+    ("car_households_share", "carHouseholds", "households"),
+    ("two_plus_car_households_share", "twoCarHouseholds", "households"),
+    ("veteran_share", "acs5_veteranPopulation", "acs5_civilianPopulation18plusVeterans"),
+    ("disability_share", "acs5_disabilityPopulation", "acs5_disabilityUniverse"),
+    ("uninsured_share", "acs5_uninsuredPopulation", "acs5_healthInsuranceUniverse"),
+    ("non_citizen_share", "acs5_nonCitizenPopulation", "acs5_nativityUniverse"),
+    ("naturalized_citizen_share", "acs5_naturalizedCitizenPopulation", "acs5_nativityUniverse"),
+    ("employment_rate", "employedResidents", "acs5_population16plus"),
+    ("drive_alone_commute_share", "acs5_driveAloneCommuters", "acs5_workers"),
+    ("carpool_commute_share", "acs5_carpoolCommuters", "acs5_workers"),
+    ("motorcycle_commute_share", "acs5_motorcycleCommuters", "acs5_workers"),
+    ("work_from_home_share", "acs5_workFromHome", "acs5_workers"),
+    ("commute_under_15_min_share", "acs5_commuteUnder15Minutes", "acs5_commuteTimeMean"),
+    ("commute_60_plus_min_share", "acs5_commute60PlusMinutes", "acs5_commuteTimeMean"),
+    ("industry_agriculture_mining_share", "acs5_industryAgriculture", "acs5_employedPopulation16plus"),
+    ("industry_construction_share", "acs5_industryConstruction", "acs5_employedPopulation16plus"),
+    ("industry_manufacturing_share", "acs5_industryManufacturing", "acs5_employedPopulation16plus"),
+    ("industry_wholesale_share", "acs5_industryWholesale", "acs5_employedPopulation16plus"),
+    ("industry_retail_share", "acs5_industryRetail", "acs5_employedPopulation16plus"),
+    ("industry_transport_utilities_share", "acs5_industryTransportUtilities", "acs5_employedPopulation16plus"),
+    ("industry_information_share", "acs5_industryInformation", "acs5_employedPopulation16plus"),
+    ("industry_finance_real_estate_share", "acs5_industryFinanceRealEstate", "acs5_employedPopulation16plus"),
+    ("industry_professional_services_share", "acs5_industryProfessionalServices", "acs5_employedPopulation16plus"),
+    ("industry_education_health_share", "acs5_industryEducationHealth", "acs5_employedPopulation16plus"),
+    ("industry_arts_food_share", "acs5_industryArtsFood", "acs5_employedPopulation16plus"),
+    ("industry_other_services_share", "acs5_industryOtherServices", "acs5_employedPopulation16plus"),
+    ("industry_public_admin_share", "acs5_industryPublicAdmin", "acs5_employedPopulation16plus"),
 ]
 #: Already-intensive tract columns, renamed so the map recognises them as intensive (marker words: median/mean/index).
 INTENSIVE = {
@@ -73,6 +119,13 @@ INTENSIVE = {
     "acs5_rentMedianGross": "median_gross_rent",
     "acs5_householdSizeMean": "mean_household_size",
     "acs5_incomeGini": "income_gini_index",
+    "acs5_homeValueMedian": "median_home_value",
+    "acs5_contractRentMedian": "median_contract_rent",
+    "acs5_rentBurdenMedian": "median_rent_burden_percent",
+    "acs5_yearBuiltMedian": "median_year_built",
+    "acs5_roomsMedian": "median_rooms",
+    "acs5_earningsMedianWorkers": "median_worker_earnings",
+    "acs5_familyIncomeMedian": "median_family_income",
 }
 #: (output name, numerator column) -- per km2 of tract area.
 DENSITIES = [
@@ -80,7 +133,32 @@ DENSITIES = [
     ("jobs_density", "lodes_wac_jobsTotal"),
     ("housing_units_density", "dhc_housingUnits"),
 ]
-OUTPUT_COLUMNS = [s[0] for s in SHARES] + list(INTENSIVE.values()) + [d[0] for d in DENSITIES] + ["mean_commute_time_minutes", "jobs_per_resident_ratio"]
+#: County-level shares from the 2020 U.S. Religion Census (adherents as % of the population, by tradition) -> output name.
+RELIGION_COLUMNS = {
+    "usrc_adherents_share": "religious_adherents_share", "usrc_catholic_share": "catholic_share", "usrc_nondenominational_share": "nondenominational_christian_share",
+    "usrc_southernBaptist_share": "southern_baptist_share", "usrc_lds_share": "latter_day_saints_share", "usrc_muslim_share": "muslim_share",
+    "usrc_jewish_share": "jewish_share", "usrc_hindu_share": "hindu_share", "usrc_buddhist_share": "buddhist_share",
+    "usrc_orthodoxChristian_share": "orthodox_christian_share", "usrc_congregations_per_100k_rate": "congregations_per_100k_rate",
+}
+#: Housing price / rent columns written onto the tract files by `add_housing_columns.py` (pycensus `usa.housing`); copied as they are (intensive).
+HOUSING_COLUMNS = [
+    f"{b}{s}" for s in ("", "_2016", "_2000") for b in (
+        "home_value_median", "rent_median", "rent_burden_median", "owner_share", "renter_share", "rent_burdened_share", "rooms_median", "rent_per_room_mean")
+    if not (b == "rent_burdened_share" and s == "_2000")
+] + [f"house_price_index_fhfa{z}{s}" for z in ("", "_zip") for s in ("", "_2016", "_2006")] + ["house_price_cagr_2016_2025_rate", "listing_price_per_m2", "listing_median_area_m2"] + [
+    f"hud_{k}_FY{fy}" for fy in (2019, 2022, 2026) for k in ("safmr_2br_rent_mean", "fmr_2br_county_rent_mean")
+]
+#: Year-built shares of dwellings (0-100 here like every other share of this table; the global schema's 0-1 is applied by the city pipeline): ACS B25034 bands
+#: (`acs5_dwellingsBuilt*`, added to the tract files by `add_acs_columns.py`) -> `pycensus.year_built` (1945 splits the 1940-49 band 50/50).
+YEAR_BUILT_COLUMNS = [
+    "dwellings_built_before_1945_share", "dwellings_built_1945_1970_share", "dwellings_built_1970_2000_share", "dwellings_built_after_2000_share",
+]
+#: Block-group values (`add_commute_columns.py`): a cell takes those of the block group containing its centre.
+BG_COLUMNS = ["commuteTimeResidentsMean", "commuteTimeWorkersMean", "commuteDistanceResidentsMean", "commuteDistanceWorkersMean",
+              "commuteSpeedResidentsMean", "commuteSpeedWorkersMean",
+              "losAtWorkplacesResidentsMean", "losAtHomesWorkersMean"]   # + `add_od_los_columns.py`: level of service at the other end of the commute
+JOBS_COLUMNS = ["jobs", "pop_jobs_total", "pop_jobs_density"]   # jobs / population + jobs per CELL (LODES WAC tract density x cell area)
+OUTPUT_COLUMNS = JOBS_COLUMNS + YEAR_BUILT_COLUMNS + HOUSING_COLUMNS + list(RELIGION_COLUMNS.values()) + [s[0] for s in SHARES] + list(INTENSIVE.values()) + [d[0] for d in DENSITIES] + ["mean_commute_time_minutes", "jobs_per_resident_ratio", "cars_per_household_ratio"] + BG_COLUMNS
 
 
 ACS_YEAR = 2023  # vintage pyCensus' acs5 columns come from (verified: B08303_001 equals `acs5_commuteTimeMean` exactly)
@@ -114,6 +192,14 @@ def commute_aggregates(state_fips: str) -> dict:
     return cache[state_fips]
 
 
+@functools.lru_cache(maxsize=1)
+def _county_religion() -> pd.DataFrame:
+    """County religion table (parsed from the RCMS Excel file once per process: ~10 s each time otherwise)."""
+    from pycensus.countries.usa.religion import load_county_religion
+
+    return load_county_religion(data_dir=str(Path(__file__).resolve().parent.parent / "data" / "_cache" / "usa_religion")).set_index("GEOID")
+
+
 def tract_variables(state_dir: Path) -> gpd.GeoDataFrame:
     """One state's tracts with every derived variable (`OUTPUT_COLUMNS`), EPSG:4326."""
     frames = [gpd.read_parquet(p) for p in sorted((state_dir / "counties").glob("*/tract.geoparquet"))]
@@ -128,6 +214,15 @@ def tract_variables(state_dir: Path) -> gpd.GeoDataFrame:
     for col, name in INTENSIVE.items():
         v = num(col)
         out[name] = v.where(v > 0)  # Census sentinels / zeros mean "no data"
+    for name in HOUSING_COLUMNS:  # shares may be 0; prices / rents must be > 0
+        v = num(name)
+        out[name] = v if name.endswith(("_share", "_rate")) or "_share_" in name else v.where(v > 0)
+    from pycensus.year_built import config, shares_from_bands
+
+    bands = next(src["columns"] for src in config()["sources"] if src["name"] == "usa_acs5_B25034")
+    yb = shares_from_bands(tr, bands, scale=100.0)   # NaN everywhere until `add_acs_columns.py` has added the B25034 bands
+    for name in YEAR_BUILT_COLUMNS:
+        out[name] = yb[name].to_numpy()
     area_km2 = tr.geometry.to_crs(5070).area / 1e6
     for name, col in DENSITIES:
         out[name] = num(col) / area_km2.where(area_km2 > 0)
@@ -135,6 +230,11 @@ def tract_variables(state_dir: Path) -> gpd.GeoDataFrame:
     commuters = num("acs5_commuteTimeMean")  # = B08303_001, workers who do not work at home
     out["mean_commute_time_minutes"] = (agg / commuters.where(commuters > 0)).where(lambda v: (v > 0) & (v < 180))
     out["jobs_per_resident_ratio"] = num("lodes_wac_jobsTotal") / num("population").where(num("population") > 0)
+    rel = _county_religion()
+    county = tr["GEOID"].astype(str).str[:5]
+    for src, name in RELIGION_COLUMNS.items():
+        out[name] = county.map(rel[src]).to_numpy()
+    out["cars_per_household_ratio"] = (num("cars") / num("households").where(num("households") > 0)).where(lambda v: v < 10)
     return gpd.GeoDataFrame(out, geometry=tr.geometry.to_crs(4326).values, crs=4326)
 
 
@@ -144,12 +244,30 @@ def add_census_variables(res7: pd.DataFrame, state_dir: Path) -> pd.DataFrame:
     if tracts.empty or res7.empty:
         return res7
     cells = res7["h3"].tolist()
-    pts = gpd.GeoDataFrame(
-        {"_i": np.arange(len(cells))}, geometry=gpd.points_from_xy(*zip(*[(h3.cell_to_latlng(c)[1], h3.cell_to_latlng(c)[0]) for c in cells])),
-        crs=4326,
-    )
+    ll = np.asarray([h3.cell_to_latlng(c) for c in cells], dtype=np.float64).reshape(-1, 2)
+    pts = gpd.GeoDataFrame({"_i": np.arange(len(cells))}, geometry=gpd.points_from_xy(ll[:, 1], ll[:, 0]), crs=4326)
     joined = gpd.sjoin(pts, tracts, how="left", predicate="within").drop_duplicates("_i").sort_values("_i")
     out = res7.reset_index(drop=True).copy()
     for col in OUTPUT_COLUMNS:
-        out[col] = joined[col].to_numpy() if col in joined.columns else np.nan
+        if col not in BG_COLUMNS:
+            out[col] = joined[col].to_numpy() if col in joined.columns else np.nan
+    bg_files = sorted((state_dir / "counties").glob("*/blockgroup.geoparquet"))
+    import pyarrow.parquet as pq
+
+    bgs = [gpd.read_parquet(f, columns=["geometry", *BG_COLUMNS]) for f in bg_files if set(BG_COLUMNS) <= set(pq.read_schema(f).names)]
+    if bgs:
+        bg = gpd.GeoDataFrame(pd.concat(bgs, ignore_index=True), geometry="geometry", crs=bgs[0].crs).to_crs(4326)
+        jb = gpd.sjoin(pts, bg, how="left", predicate="within").drop_duplicates("_i").sort_values("_i")
+        for col in BG_COLUMNS:
+            out[col] = jb[col].to_numpy()
+    else:
+        for col in BG_COLUMNS:
+            out[col] = np.nan
+    area = np.array([h3.cell_area(c, unit="km^2") for c in out["h3"]])
+    dens = pd.to_numeric(joined["jobs_density"], errors="coerce").to_numpy() if "jobs_density" in joined.columns else np.full(len(out), np.nan)
+    out["jobs"] = dens * area   # tract jobs density x this cell's area
+    if "population" in out.columns:
+        pop = pd.to_numeric(out["population"], errors="coerce").fillna(0).to_numpy()
+        out["pop_jobs_total"] = pop + np.nan_to_num(out["jobs"].to_numpy())
+        out["pop_jobs_density"] = out["pop_jobs_total"] / area
     return out

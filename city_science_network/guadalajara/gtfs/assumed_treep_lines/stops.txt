@@ -1,0 +1,939 @@
+stop_id,stop_name,stop_lat,stop_lon
+assumed_treep_c52_terminal_20.60159_-103.2879,Terminal (ASSUMED location),20.601587,-103.287899
+assumed_treep_c52_stop_20.60324_-103.28907,Stop (ASSUMED location),20.603245,-103.289071
+assumed_treep_c52_stop_20.60324_-103.29231,Stop (ASSUMED location),20.603245,-103.292311
+assumed_treep_c52_stop_20.6047_-103.29369,Stop (ASSUMED location),20.604700,-103.293685
+assumed_treep_c52_stop_20.60698_-103.29339,Stop (ASSUMED location),20.606985,-103.293390
+assumed_treep_c52_stop_20.60876_-103.29465,Stop (ASSUMED location),20.608760,-103.294653
+assumed_treep_c52_stop_20.60908_-103.2961,Stop (ASSUMED location),20.609082,-103.296102
+assumed_treep_c52_stop_20.61009_-103.29906,Stop (ASSUMED location),20.610093,-103.299057
+assumed_treep_c52_stop_20.61186_-103.30141,Stop (ASSUMED location),20.611856,-103.301408
+assumed_treep_c52_stop_20.6127_-103.30253,Stop (ASSUMED location),20.612700,-103.302535
+assumed_treep_c52_stop_20.61373_-103.30394,Stop (ASSUMED location),20.613727,-103.303938
+assumed_treep_c52_stop_20.61532_-103.30407,Stop (ASSUMED location),20.615320,-103.304072
+assumed_treep_c52_stop_20.61724_-103.30416,Stop (ASSUMED location),20.617239,-103.304164
+assumed_treep_c52_stop_20.62066_-103.30392,Stop (ASSUMED location),20.620660,-103.303924
+assumed_treep_c52_stop_20.62419_-103.30396,Stop (ASSUMED location),20.624193,-103.303964
+assumed_treep_c52_stop_20.6254_-103.30702,Stop (ASSUMED location),20.625402,-103.307025
+assumed_treep_c52_stop_20.62639_-103.3082,Stop (ASSUMED location),20.626388,-103.308204
+assumed_treep_c52_stop_20.62585_-103.31184,Stop (ASSUMED location),20.625849,-103.311843
+assumed_treep_c52_stop_20.626_-103.31485,Stop (ASSUMED location),20.626003,-103.314851
+assumed_treep_c52_stop_20.62645_-103.3184,Stop (ASSUMED location),20.626450,-103.318397
+assumed_treep_c52_stop_20.62667_-103.32017,Stop (ASSUMED location),20.626666,-103.320167
+assumed_treep_c52_stop_20.62854_-103.31985,Stop (ASSUMED location),20.628540,-103.319847
+assumed_treep_c52_stop_20.63051_-103.31901,Stop (ASSUMED location),20.630508,-103.319014
+assumed_treep_c52_stop_20.63264_-103.31818,Stop (ASSUMED location),20.632637,-103.318182
+assumed_treep_c52_stop_20.63472_-103.31726,Stop (ASSUMED location),20.634718,-103.317263
+assumed_treep_c52_stop_20.63636_-103.31686,Stop (ASSUMED location),20.636361,-103.316863
+assumed_treep_c52_stop_20.63924_-103.31643,Stop (ASSUMED location),20.639239,-103.316428
+assumed_treep_c52_stop_20.64148_-103.31693,Stop (ASSUMED location),20.641481,-103.316934
+assumed_treep_c52_stop_20.64349_-103.31847,Stop (ASSUMED location),20.643495,-103.318472
+assumed_treep_c52_stop_20.64609_-103.3204,Stop (ASSUMED location),20.646092,-103.320395
+assumed_treep_c52_stop_20.64723_-103.32121,Stop (ASSUMED location),20.647230,-103.321207
+assumed_treep_c52_stop_20.64965_-103.323,Stop (ASSUMED location),20.649652,-103.323001
+assumed_treep_c52_stop_20.65143_-103.32436,Stop (ASSUMED location),20.651427,-103.324358
+assumed_treep_c52_stop_20.65375_-103.3261,Stop (ASSUMED location),20.653749,-103.326097
+assumed_treep_c52_stop_20.65612_-103.32785,Stop (ASSUMED location),20.656123,-103.327849
+assumed_treep_c52_stop_20.65968_-103.33051,Stop (ASSUMED location),20.659677,-103.330508
+assumed_treep_c52_stop_20.66166_-103.332,Stop (ASSUMED location),20.661656,-103.331999
+assumed_treep_c52_stop_20.6632_-103.33315,Stop (ASSUMED location),20.663201,-103.333148
+assumed_treep_c52_stop_20.66623_-103.33393,Stop (ASSUMED location),20.666231,-103.333929
+assumed_treep_c52_stop_20.66713_-103.3351,Stop (ASSUMED location),20.667134,-103.335101
+assumed_treep_c52_stop_20.66801_-103.33717,Stop (ASSUMED location),20.668013,-103.337171
+assumed_treep_c52_stop_20.66884_-103.33942,Stop (ASSUMED location),20.668841,-103.339419
+assumed_treep_c52_stop_20.66972_-103.3418,Stop (ASSUMED location),20.669719,-103.341799
+assumed_treep_c52_stop_20.67052_-103.3437,Stop (ASSUMED location),20.670523,-103.343702
+assumed_treep_c52_stop_20.67217_-103.34629,Stop (ASSUMED location),20.672171,-103.346290
+assumed_treep_c87_terminal_20.60159_-103.2879,Terminal (ASSUMED location),20.601587,-103.287899
+assumed_treep_c87_stop_20.60508_-103.28741,Stop (ASSUMED location),20.605080,-103.287409
+assumed_treep_c87_stop_20.60571_-103.28933,Stop (ASSUMED location),20.605709,-103.289332
+assumed_treep_c87_stop_20.60776_-103.291,Stop (ASSUMED location),20.607755,-103.291004
+assumed_treep_c87_stop_20.60999_-103.29177,Stop (ASSUMED location),20.609995,-103.291765
+assumed_treep_c87_stop_20.61223_-103.29274,Stop (ASSUMED location),20.612226,-103.292737
+assumed_treep_c87_stop_20.61429_-103.29386,Stop (ASSUMED location),20.614288,-103.293860
+assumed_treep_c87_stop_20.61581_-103.29474,Stop (ASSUMED location),20.615813,-103.294737
+assumed_treep_c87_stop_20.6169_-103.29561,Stop (ASSUMED location),20.616903,-103.295606
+assumed_treep_c87_stop_20.61825_-103.29688,Stop (ASSUMED location),20.618250,-103.296875
+assumed_treep_c87_stop_20.61928_-103.29534,Stop (ASSUMED location),20.619280,-103.295344
+assumed_treep_c87_stop_20.62076_-103.29298,Stop (ASSUMED location),20.620760,-103.292976
+assumed_treep_c87_stop_20.62197_-103.29363,Stop (ASSUMED location),20.621965,-103.293634
+assumed_treep_c87_stop_20.62229_-103.29605,Stop (ASSUMED location),20.622286,-103.296045
+assumed_treep_c87_stop_20.62166_-103.2978,Stop (ASSUMED location),20.621659,-103.297802
+assumed_treep_c87_stop_20.62022_-103.29807,Stop (ASSUMED location),20.620223,-103.298065
+assumed_treep_c87_stop_20.61962_-103.29953,Stop (ASSUMED location),20.619615,-103.299535
+assumed_treep_c87_stop_20.62019_-103.30111,Stop (ASSUMED location),20.620193,-103.301107
+assumed_treep_c87_stop_20.62051_-103.30256,Stop (ASSUMED location),20.620509,-103.302555
+assumed_treep_c87_stop_20.62163_-103.30388,Stop (ASSUMED location),20.621630,-103.303879
+assumed_treep_c87_stop_20.62419_-103.30396,Stop (ASSUMED location),20.624193,-103.303964
+assumed_treep_c87_stop_20.6254_-103.30702,Stop (ASSUMED location),20.625402,-103.307025
+assumed_treep_c87_stop_20.62732_-103.30703,Stop (ASSUMED location),20.627319,-103.307031
+assumed_treep_c87_stop_20.62978_-103.30702,Stop (ASSUMED location),20.629775,-103.307015
+assumed_treep_c87_stop_20.63134_-103.30706,Stop (ASSUMED location),20.631339,-103.307064
+assumed_treep_c87_stop_20.63328_-103.30709,Stop (ASSUMED location),20.633279,-103.307086
+assumed_treep_c87_stop_20.63473_-103.30708,Stop (ASSUMED location),20.634726,-103.307077
+assumed_treep_c87_stop_20.63624_-103.30715,Stop (ASSUMED location),20.636238,-103.307147
+assumed_treep_c87_stop_20.6375_-103.30944,Stop (ASSUMED location),20.637503,-103.309442
+assumed_treep_c87_stop_20.63754_-103.3114,Stop (ASSUMED location),20.637539,-103.311403
+assumed_treep_c87_stop_20.63765_-103.31354,Stop (ASSUMED location),20.637654,-103.313542
+assumed_treep_c87_stop_20.63777_-103.31651,Stop (ASSUMED location),20.637769,-103.316505
+assumed_treep_c87_stop_20.63924_-103.31643,Stop (ASSUMED location),20.639239,-103.316428
+assumed_treep_c87_stop_20.64148_-103.31693,Stop (ASSUMED location),20.641481,-103.316934
+assumed_treep_c87_stop_20.64349_-103.31847,Stop (ASSUMED location),20.643495,-103.318472
+assumed_treep_c87_stop_20.64609_-103.3204,Stop (ASSUMED location),20.646092,-103.320395
+assumed_treep_c87_stop_20.64723_-103.32121,Stop (ASSUMED location),20.647230,-103.321207
+assumed_treep_c87_stop_20.64965_-103.323,Stop (ASSUMED location),20.649652,-103.323001
+assumed_treep_c87_stop_20.65143_-103.32436,Stop (ASSUMED location),20.651427,-103.324358
+assumed_treep_c87_stop_20.65375_-103.3261,Stop (ASSUMED location),20.653749,-103.326097
+assumed_treep_c87_stop_20.65612_-103.32785,Stop (ASSUMED location),20.656123,-103.327849
+assumed_treep_c87_stop_20.65968_-103.33051,Stop (ASSUMED location),20.659677,-103.330508
+assumed_treep_c87_stop_20.66166_-103.332,Stop (ASSUMED location),20.661656,-103.331999
+assumed_treep_c87_stop_20.6632_-103.33315,Stop (ASSUMED location),20.663201,-103.333148
+assumed_treep_c87_stop_20.66623_-103.33393,Stop (ASSUMED location),20.666231,-103.333929
+assumed_treep_c87_stop_20.66713_-103.3351,Stop (ASSUMED location),20.667134,-103.335101
+assumed_treep_c87_stop_20.66801_-103.33717,Stop (ASSUMED location),20.668013,-103.337171
+assumed_treep_c87_stop_20.66884_-103.33942,Stop (ASSUMED location),20.668841,-103.339419
+assumed_treep_c87_stop_20.66972_-103.3418,Stop (ASSUMED location),20.669719,-103.341799
+assumed_treep_c87_stop_20.67052_-103.3437,Stop (ASSUMED location),20.670523,-103.343702
+assumed_treep_c87_stop_20.67217_-103.34629,Stop (ASSUMED location),20.672171,-103.346290
+assumed_treep_c84_terminal_20.79904_-103.49788,Terminal (ASSUMED location),20.799042,-103.497884
+assumed_treep_c84_stop_20.79737_-103.49931,Stop (ASSUMED location),20.797371,-103.499309
+assumed_treep_c84_stop_20.79578_-103.50052,Stop (ASSUMED location),20.795778,-103.500525
+assumed_treep_c84_stop_20.79305_-103.50258,Stop (ASSUMED location),20.793054,-103.502584
+assumed_treep_c84_stop_20.78911_-103.50552,Stop (ASSUMED location),20.789107,-103.505521
+assumed_treep_c84_stop_20.78358_-103.50975,Stop (ASSUMED location),20.783581,-103.509746
+assumed_treep_c84_paraderointerpolated_20.77904_-103.51312,Paradero (interpolated) (ASSUMED location),20.779038,-103.513119
+assumed_treep_c84_paraderointerpolated_20.77519_-103.51607,Paradero (interpolated) (ASSUMED location),20.775194,-103.516068
+assumed_treep_c84_stop_20.76847_-103.52137,Stop (ASSUMED location),20.768466,-103.521371
+assumed_treep_c84_stop_20.7659_-103.5233,Stop (ASSUMED location),20.765903,-103.523304
+assumed_treep_c84_stop_20.76445_-103.52042,Stop (ASSUMED location),20.764455,-103.520420
+assumed_treep_c84_paraderointerpolated_20.76226_-103.51696,Paradero (interpolated) (ASSUMED location),20.762256,-103.516960
+assumed_treep_c84_paraderointerpolated_20.75763_-103.51355,Paradero (interpolated) (ASSUMED location),20.757625,-103.513545
+assumed_treep_c84_paraderointerpolated_20.75479_-103.51033,Paradero (interpolated) (ASSUMED location),20.754786,-103.510335
+assumed_treep_c84_stop_20.75087_-103.50589,Stop (ASSUMED location),20.750866,-103.505893
+assumed_treep_c84_paraderointerpolated_20.74595_-103.50709,Paradero (interpolated) (ASSUMED location),20.745948,-103.507087
+assumed_treep_c84_paraderointerpolated_20.74666_-103.50924,Paradero (interpolated) (ASSUMED location),20.746662,-103.509237
+assumed_treep_c84_stop_20.74588_-103.51267,Stop (ASSUMED location),20.745884,-103.512672
+assumed_treep_c84_stop_20.74728_-103.51133,Stop (ASSUMED location),20.747278,-103.511327
+assumed_treep_c84_paraderointerpolated_20.74561_-103.50604,Paradero (interpolated) (ASSUMED location),20.745609,-103.506045
+assumed_treep_c84_paraderointerpolated_20.7439_-103.50073,Paradero (interpolated) (ASSUMED location),20.743895,-103.500732
+assumed_treep_c84_paraderointerpolated_20.74248_-103.49656,Paradero (interpolated) (ASSUMED location),20.742478,-103.496560
+assumed_treep_c84_stop_20.74005_-103.49264,Stop (ASSUMED location),20.740051,-103.492644
+assumed_treep_c84_paraderointerpolated_20.73851_-103.48647,Paradero (interpolated) (ASSUMED location),20.738511,-103.486472
+assumed_treep_c84_stop_20.73709_-103.48094,Stop (ASSUMED location),20.737091,-103.480943
+assumed_treep_c84_paraderointerpolated_20.73613_-103.47638,Paradero (interpolated) (ASSUMED location),20.736129,-103.476384
+assumed_treep_c84_paraderointerpolated_20.73503_-103.47165,Paradero (interpolated) (ASSUMED location),20.735035,-103.471645
+assumed_treep_c84_stop_20.73416_-103.46732,Stop (ASSUMED location),20.734161,-103.467319
+assumed_treep_c84_stop_20.73339_-103.464,Stop (ASSUMED location),20.733386,-103.464003
+assumed_treep_c84_stop_20.73276_-103.46123,Stop (ASSUMED location),20.732762,-103.461232
+assumed_treep_c84_stop_20.73233_-103.45926,Stop (ASSUMED location),20.732326,-103.459264
+assumed_treep_c84_stop_20.73196_-103.45733,Stop (ASSUMED location),20.731958,-103.457329
+assumed_treep_c84_stop_20.73149_-103.45468,Stop (ASSUMED location),20.731486,-103.454681
+assumed_treep_c84_stop_20.73096_-103.45104,Stop (ASSUMED location),20.730963,-103.451041
+assumed_treep_c84_stop_20.73033_-103.44547,Stop (ASSUMED location),20.730334,-103.445473
+assumed_treep_c84_stop_20.72979_-103.44079,Stop (ASSUMED location),20.729787,-103.440787
+assumed_treep_c84_stop_20.7297_-103.43346,Stop (ASSUMED location),20.729703,-103.433458
+assumed_treep_c84_stop_20.72835_-103.43117,Stop (ASSUMED location),20.728346,-103.431167
+assumed_treep_c84_stop_20.7269_-103.43079,Stop (ASSUMED location),20.726900,-103.430791
+assumed_treep_c84_stop_20.72692_-103.429,Stop (ASSUMED location),20.726917,-103.429003
+assumed_treep_c84_stop_20.72794_-103.42597,Stop (ASSUMED location),20.727935,-103.425974
+assumed_treep_c84_stop_20.72944_-103.42606,Stop (ASSUMED location),20.729437,-103.426056
+assumed_treep_c84_stop_20.72995_-103.42347,Stop (ASSUMED location),20.729950,-103.423470
+assumed_treep_c84_stop_20.72748_-103.42366,Stop (ASSUMED location),20.727481,-103.423656
+assumed_treep_c84_stop_20.72741_-103.4205,Stop (ASSUMED location),20.727408,-103.420498
+assumed_treep_c84_stop_20.72753_-103.41845,Stop (ASSUMED location),20.727530,-103.418449
+assumed_treep_c84_stop_20.72771_-103.41624,Stop (ASSUMED location),20.727706,-103.416243
+assumed_treep_c84_stop_20.72801_-103.41274,Stop (ASSUMED location),20.728010,-103.412740
+assumed_treep_c84_stop_20.72839_-103.40868,Stop (ASSUMED location),20.728390,-103.408680
+assumed_treep_c84_stop_20.7286_-103.40607,Stop (ASSUMED location),20.728604,-103.406068
+assumed_treep_c84_stop_20.72749_-103.40293,Stop (ASSUMED location),20.727490,-103.402930
+assumed_treep_c84_stop_20.72513_-103.40031,Stop (ASSUMED location),20.725133,-103.400313
+assumed_treep_c84_stop_20.72288_-103.39864,Stop (ASSUMED location),20.722880,-103.398640
+assumed_treep_c84_stop_20.72259_-103.39704,Stop (ASSUMED location),20.722588,-103.397039
+assumed_treep_c84_stop_20.72233_-103.39547,Stop (ASSUMED location),20.722333,-103.395474
+assumed_treep_c84_stop_20.72177_-103.39206,Stop (ASSUMED location),20.721770,-103.392060
+assumed_treep_c84_stop_20.72122_-103.38902,Stop (ASSUMED location),20.721222,-103.389018
+assumed_treep_c84_stop_20.72063_-103.38756,Stop (ASSUMED location),20.720631,-103.387560
+assumed_treep_c84_stop_20.71802_-103.38434,Stop (ASSUMED location),20.718025,-103.384340
+assumed_treep_c84_stop_20.71559_-103.38055,Stop (ASSUMED location),20.715592,-103.380547
+assumed_treep_c84_stop_20.71335_-103.37704,Stop (ASSUMED location),20.713352,-103.377043
+assumed_treep_c121a_terminal_20.75994_-103.42939,Terminal (ASSUMED location),20.759940,-103.429392
+assumed_treep_c121a_stop_20.7614_-103.4273,Stop (ASSUMED location),20.761400,-103.427305
+assumed_treep_c121a_stop_20.76374_-103.4247,Stop (ASSUMED location),20.763740,-103.424700
+assumed_treep_c121a_stop_20.76548_-103.4227,Stop (ASSUMED location),20.765479,-103.422701
+assumed_treep_c121a_stop_20.76668_-103.42143,Stop (ASSUMED location),20.766680,-103.421430
+assumed_treep_c121a_stop_20.76811_-103.41979,Stop (ASSUMED location),20.768110,-103.419792
+assumed_treep_c121a_stop_20.76666_-103.41922,Stop (ASSUMED location),20.766660,-103.419220
+assumed_treep_c121a_stop_20.76533_-103.41791,Stop (ASSUMED location),20.765329,-103.417915
+assumed_treep_c121a_stop_20.76176_-103.41649,Stop (ASSUMED location),20.761760,-103.416490
+assumed_treep_c121a_stop_20.75726_-103.41557,Stop (ASSUMED location),20.757260,-103.415570
+assumed_treep_c121a_stop_20.75586_-103.41564,Stop (ASSUMED location),20.755856,-103.415638
+assumed_treep_c121a_stop_20.75214_-103.41578,Stop (ASSUMED location),20.752137,-103.415777
+assumed_treep_c121a_stop_20.74991_-103.41595,Stop (ASSUMED location),20.749909,-103.415948
+assumed_treep_c121a_stop_20.74836_-103.41603,Stop (ASSUMED location),20.748360,-103.416030
+assumed_treep_c121a_stop_20.74379_-103.41158,Stop (ASSUMED location),20.743792,-103.411580
+assumed_treep_c121a_stop_20.74127_-103.40811,Stop (ASSUMED location),20.741271,-103.408108
+assumed_treep_c121a_stop_20.73728_-103.40243,Stop (ASSUMED location),20.737283,-103.402432
+assumed_treep_c121a_stop_20.73538_-103.39979,Stop (ASSUMED location),20.735378,-103.399790
+assumed_treep_c121a_stop_20.73297_-103.39649,Stop (ASSUMED location),20.732971,-103.396494
+assumed_treep_c121a_stop_20.73135_-103.39426,Stop (ASSUMED location),20.731345,-103.394258
+assumed_treep_c121a_stop_20.72911_-103.39114,Stop (ASSUMED location),20.729106,-103.391140
+assumed_treep_c121a_stop_20.72765_-103.39059,Stop (ASSUMED location),20.727650,-103.390587
+assumed_treep_c121a_stop_20.72788_-103.3921,Stop (ASSUMED location),20.727880,-103.392105
+assumed_treep_c121a_stop_20.72628_-103.39256,Stop (ASSUMED location),20.726279,-103.392562
+assumed_treep_c121a_stop_20.72367_-103.39302,Stop (ASSUMED location),20.723668,-103.393023
+assumed_treep_c121a_stop_20.7222_-103.39329,Stop (ASSUMED location),20.722197,-103.393292
+assumed_treep_c121a_stop_20.72122_-103.38902,Stop (ASSUMED location),20.721222,-103.389018
+assumed_treep_c121a_stop_20.72063_-103.38756,Stop (ASSUMED location),20.720631,-103.387560
+assumed_treep_c121a_stop_20.71802_-103.38434,Stop (ASSUMED location),20.718025,-103.384340
+assumed_treep_c121a_stop_20.71559_-103.38055,Stop (ASSUMED location),20.715592,-103.380547
+assumed_treep_c121a_stop_20.71335_-103.37704,Stop (ASSUMED location),20.713352,-103.377043
+assumed_treep_c121a_stop_20.7114_-103.38066,Stop (ASSUMED location),20.711400,-103.380660
+assumed_treep_c121a_stop_20.70863_-103.37824,Stop (ASSUMED location),20.708630,-103.378240
+assumed_treep_c121a_stop_20.70665_-103.37726,Stop (ASSUMED location),20.706650,-103.377260
+assumed_treep_c121a_stop_20.70514_-103.37877,Stop (ASSUMED location),20.705141,-103.378771
+assumed_treep_c121a_stop_20.70347_-103.38181,Stop (ASSUMED location),20.703465,-103.381808
+assumed_treep_c121a_stop_20.70241_-103.38378,Stop (ASSUMED location),20.702412,-103.383782
+assumed_treep_c121a_stop_20.70029_-103.38709,Stop (ASSUMED location),20.700294,-103.387086
+assumed_treep_c121a_stop_20.69876_-103.3882,Stop (ASSUMED location),20.698758,-103.388202
+assumed_treep_c121a_stop_20.69723_-103.39044,Stop (ASSUMED location),20.697227,-103.390439
+assumed_treep_c121a_stop_20.69627_-103.39456,Stop (ASSUMED location),20.696268,-103.394556
+assumed_treep_c121a_stop_20.69601_-103.39619,Stop (ASSUMED location),20.696012,-103.396191
+assumed_treep_c121a_stop_20.69881_-103.39836,Stop (ASSUMED location),20.698812,-103.398358
+assumed_treep_c121a_stop_20.70071_-103.39991,Stop (ASSUMED location),20.700709,-103.399914
+assumed_treep_c121a_stop_20.70234_-103.40117,Stop (ASSUMED location),20.702342,-103.401167
+assumed_treep_c121a_stop_20.70531_-103.40343,Stop (ASSUMED location),20.705313,-103.403430
+assumed_treep_c121a_stop_20.70941_-103.4066,Stop (ASSUMED location),20.709408,-103.406595
+assumed_treep_c121a_stop_20.70763_-103.41186,Stop (ASSUMED location),20.707630,-103.411860
+assumed_treep_c121a_stop_20.70488_-103.41394,Stop (ASSUMED location),20.704880,-103.413940
+assumed_treep_c121a_stop_20.70277_-103.41497,Stop (ASSUMED location),20.702770,-103.414970
+assumed_treep_c121a_stop_20.69976_-103.41599,Stop (ASSUMED location),20.699760,-103.415990
+assumed_treep_c121a_stop_20.69622_-103.4158,Stop (ASSUMED location),20.696220,-103.415800
+assumed_treep_c121a_stop_20.69433_-103.41547,Stop (ASSUMED location),20.694330,-103.415470
+assumed_treep_c121a_stop_20.69256_-103.4154,Stop (ASSUMED location),20.692560,-103.415400
+assumed_treep_c121a_stop_20.69011_-103.41742,Stop (ASSUMED location),20.690111,-103.417418
+assumed_treep_c121a_stop_20.68801_-103.42007,Stop (ASSUMED location),20.688007,-103.420074
+assumed_treep_c121a_stop_20.68657_-103.42034,Stop (ASSUMED location),20.686570,-103.420340
+assumed_treep_c121a_stop_20.68001_-103.42156,Stop (ASSUMED location),20.680010,-103.421560
+assumed_treep_c121a_stop_20.67824_-103.41934,Stop (ASSUMED location),20.678239,-103.419341
+assumed_treep_c121a_paraderointerpolated_20.67548_-103.41608,Paradero (interpolated) (ASSUMED location),20.675480,-103.416082
+assumed_treep_c121a_stop_20.6779_-103.41263,Stop (ASSUMED location),20.677898,-103.412630
+assumed_treep_c121a_paraderointerpolated_20.67778_-103.40724,Paradero (interpolated) (ASSUMED location),20.677781,-103.407244
+assumed_treep_c121a_stop_20.67794_-103.40259,Stop (ASSUMED location),20.677944,-103.402585
+assumed_treep_c121a_stop_20.67817_-103.40057,Stop (ASSUMED location),20.678170,-103.400567
+assumed_treep_c121a_stop_20.67846_-103.39752,Stop (ASSUMED location),20.678459,-103.397520
+assumed_treep_c121a_stop_20.67879_-103.39454,Stop (ASSUMED location),20.678792,-103.394538
+assumed_treep_c121a_stop_20.67713_-103.39102,Stop (ASSUMED location),20.677133,-103.391017
+assumed_treep_c121a_stop_20.67529_-103.38864,Stop (ASSUMED location),20.675290,-103.388640
+assumed_treep_c121a_stop_20.67345_-103.38847,Stop (ASSUMED location),20.673447,-103.388467
+assumed_treep_c121a_stop_20.67313_-103.38689,Stop (ASSUMED location),20.673126,-103.386892
+assumed_treep_c121a_stop_20.67427_-103.38532,Stop (ASSUMED location),20.674268,-103.385317
+assumed_treep_c81_terminal_20.76492_-103.35796,Terminal (ASSUMED location),20.764917,-103.357960
+assumed_treep_c81_stop_20.76352_-103.35891,Stop (ASSUMED location),20.763515,-103.358906
+assumed_treep_c81_stop_20.76329_-103.36156,Stop (ASSUMED location),20.763294,-103.361561
+assumed_treep_c81_stop_20.76331_-103.36379,Stop (ASSUMED location),20.763310,-103.363793
+assumed_treep_c81_stop_20.76378_-103.36591,Stop (ASSUMED location),20.763776,-103.365906
+assumed_treep_c81_stop_20.76133_-103.36679,Stop (ASSUMED location),20.761331,-103.366789
+assumed_treep_c81_stop_20.75949_-103.36724,Stop (ASSUMED location),20.759490,-103.367239
+assumed_treep_c81_stop_20.7577_-103.3676,Stop (ASSUMED location),20.757700,-103.367602
+assumed_treep_c81_stop_20.75642_-103.36589,Stop (ASSUMED location),20.756421,-103.365894
+assumed_treep_c81_stop_20.75535_-103.36436,Stop (ASSUMED location),20.755347,-103.364362
+assumed_treep_c81_stop_20.75339_-103.36353,Stop (ASSUMED location),20.753386,-103.363530
+assumed_treep_c81_stop_20.75158_-103.36086,Stop (ASSUMED location),20.751579,-103.360856
+assumed_treep_c81_stop_20.74941_-103.35972,Stop (ASSUMED location),20.749412,-103.359723
+assumed_treep_c81_stop_20.74631_-103.35991,Stop (ASSUMED location),20.746309,-103.359912
+assumed_treep_c81_stop_20.74488_-103.35978,Stop (ASSUMED location),20.744884,-103.359779
+assumed_treep_c81_stop_20.74453_-103.36192,Stop (ASSUMED location),20.744527,-103.361917
+assumed_treep_c81_stop_20.74262_-103.36603,Stop (ASSUMED location),20.742619,-103.366026
+assumed_treep_c81_stop_20.74255_-103.36817,Stop (ASSUMED location),20.742548,-103.368172
+assumed_treep_c81_stop_20.74065_-103.36828,Stop (ASSUMED location),20.740654,-103.368285
+assumed_treep_c81_stop_20.73904_-103.36825,Stop (ASSUMED location),20.739039,-103.368254
+assumed_treep_c81_stop_20.73619_-103.36816,Stop (ASSUMED location),20.736191,-103.368163
+assumed_treep_c81_stop_20.73689_-103.37111,Stop (ASSUMED location),20.736889,-103.371107
+assumed_treep_c81_stop_20.73773_-103.37486,Stop (ASSUMED location),20.737733,-103.374860
+assumed_treep_c81_stop_20.73824_-103.37683,Stop (ASSUMED location),20.738240,-103.376830
+assumed_treep_c81_stop_20.73951_-103.38133,Stop (ASSUMED location),20.739510,-103.381330
+assumed_treep_c81_stop_20.74055_-103.38558,Stop (ASSUMED location),20.740550,-103.385580
+assumed_treep_c81_stop_20.74091_-103.38872,Stop (ASSUMED location),20.740910,-103.388720
+assumed_treep_c81_stop_20.7399_-103.38563,Stop (ASSUMED location),20.739899,-103.385627
+assumed_treep_c81_stop_20.73864_-103.38135,Stop (ASSUMED location),20.738636,-103.381345
+assumed_treep_c81_stop_20.7365_-103.37915,Stop (ASSUMED location),20.736500,-103.379150
+assumed_treep_c81_stop_20.73404_-103.3819,Stop (ASSUMED location),20.734040,-103.381900
+assumed_treep_c81_stop_20.73226_-103.38461,Stop (ASSUMED location),20.732260,-103.384610
+assumed_treep_c81_stop_20.72973_-103.38839,Stop (ASSUMED location),20.729727,-103.388388
+assumed_treep_c81_stop_20.72734_-103.38661,Stop (ASSUMED location),20.727339,-103.386607
+assumed_treep_c81_stop_20.72548_-103.38709,Stop (ASSUMED location),20.725478,-103.387090
+assumed_treep_c81_stop_20.72365_-103.38758,Stop (ASSUMED location),20.723655,-103.387584
+assumed_treep_c81_stop_20.72192_-103.38771,Stop (ASSUMED location),20.721919,-103.387708
+assumed_treep_c81_stop_20.71802_-103.38434,Stop (ASSUMED location),20.718025,-103.384340
+assumed_treep_c81_stop_20.71559_-103.38055,Stop (ASSUMED location),20.715592,-103.380547
+assumed_treep_c81_stop_20.71335_-103.37704,Stop (ASSUMED location),20.713352,-103.377043
+assumed_treep_c81_stop_20.71331_-103.37337,Stop (ASSUMED location),20.713310,-103.373370
+assumed_treep_c81_stop_20.71307_-103.36797,Stop (ASSUMED location),20.713070,-103.367970
+assumed_treep_c81_stop_20.71307_-103.36127,Stop (ASSUMED location),20.713067,-103.361270
+assumed_treep_c81_stop_20.71386_-103.35877,Stop (ASSUMED location),20.713860,-103.358770
+assumed_treep_c81_stop_20.71536_-103.35508,Stop (ASSUMED location),20.715359,-103.355083
+assumed_treep_c81_stop_20.71664_-103.35412,Stop (ASSUMED location),20.716640,-103.354120
+assumed_treep_c81_stop_20.71909_-103.35358,Stop (ASSUMED location),20.719093,-103.353578
+assumed_treep_c81_stop_20.72248_-103.35296,Stop (ASSUMED location),20.722480,-103.352960
+assumed_treep_c81_stop_20.72264_-103.35123,Stop (ASSUMED location),20.722644,-103.351231
+assumed_treep_c81_stop_20.72229_-103.34895,Stop (ASSUMED location),20.722290,-103.348950
+assumed_treep_c81_stop_20.72167_-103.34571,Stop (ASSUMED location),20.721670,-103.345710
+assumed_treep_c81_stop_20.72392_-103.34516,Stop (ASSUMED location),20.723925,-103.345160
+assumed_treep_c81_stop_20.72711_-103.34476,Stop (ASSUMED location),20.727110,-103.344760
+assumed_treep_c81_stop_20.72913_-103.34596,Stop (ASSUMED location),20.729129,-103.345964
+assumed_treep_c81_paraderointerpolated_20.73077_-103.35067,Paradero (interpolated) (ASSUMED location),20.730770,-103.350666
+assumed_treep_c81_stop_20.73138_-103.3521,Stop (ASSUMED location),20.731380,-103.352100
+assumed_treep_c81_stop_20.73227_-103.35527,Stop (ASSUMED location),20.732275,-103.355271
+assumed_treep_c81_stop_20.7344_-103.36097,Stop (ASSUMED location),20.734400,-103.360970
+assumed_treep_c81_stop_20.73639_-103.36097,Stop (ASSUMED location),20.736390,-103.360970
+assumed_treep_c81_stop_20.73983_-103.36276,Stop (ASSUMED location),20.739829,-103.362763
+assumed_treep_c81_stop_20.74056_-103.36439,Stop (ASSUMED location),20.740563,-103.364391
+assumed_treep_c81_stop_20.74237_-103.36469,Stop (ASSUMED location),20.742367,-103.364691
+assumed_treep_c81_stop_20.74432_-103.36366,Stop (ASSUMED location),20.744318,-103.363661
+assumed_treep_c81_stop_20.74638_-103.36305,Stop (ASSUMED location),20.746382,-103.363055
+assumed_treep_c81_stop_20.7475_-103.36147,Stop (ASSUMED location),20.747503,-103.361465
+assumed_treep_c81_stop_20.74892_-103.36016,Stop (ASSUMED location),20.748922,-103.360163
+assumed_treep_c81_stop_20.75123_-103.36021,Stop (ASSUMED location),20.751233,-103.360206
+assumed_treep_c81_stop_20.75244_-103.36093,Stop (ASSUMED location),20.752442,-103.360931
+assumed_treep_c81_stop_20.75373_-103.36408,Stop (ASSUMED location),20.753731,-103.364080
+assumed_treep_c81_stop_20.75566_-103.36523,Stop (ASSUMED location),20.755657,-103.365233
+assumed_treep_c81_stop_20.75675_-103.36649,Stop (ASSUMED location),20.756746,-103.366486
+assumed_treep_c81_stop_20.76117_-103.36673,Stop (ASSUMED location),20.761170,-103.366730
+assumed_treep_c81_stop_20.7638_-103.36561,Stop (ASSUMED location),20.763801,-103.365614
+assumed_treep_c81_stop_20.7632_-103.36394,Stop (ASSUMED location),20.763197,-103.363940
+assumed_treep_c81_stop_20.76323_-103.36152,Stop (ASSUMED location),20.763227,-103.361523
+assumed_treep_c81_stop_20.76339_-103.35897,Stop (ASSUMED location),20.763392,-103.358967
+assumed_treep_t22v02_terminal_20.67705_-103.36134,Terminal (ASSUMED location),20.677045,-103.361339
+assumed_treep_t22v02_paraderointerpolated_20.67689_-103.36729,Paradero (interpolated) (ASSUMED location),20.676893,-103.367289
+assumed_treep_t22v02_paraderointerpolated_20.67678_-103.37265,Paradero (interpolated) (ASSUMED location),20.676780,-103.372646
+assumed_treep_t22v02_paraderointerpolated_20.67679_-103.37865,Paradero (interpolated) (ASSUMED location),20.676787,-103.378654
+assumed_treep_t22v02_paraderointerpolated_20.67681_-103.38401,Paradero (interpolated) (ASSUMED location),20.676808,-103.384008
+assumed_treep_t22v02_paraderointerpolated_20.67385_-103.38791,Paradero (interpolated) (ASSUMED location),20.673848,-103.387912
+assumed_treep_t22v02_stop_20.67319_-103.38843,Stop (ASSUMED location),20.673192,-103.388428
+assumed_treep_t22v02_stop_20.6698_-103.39066,Stop (ASSUMED location),20.669804,-103.390663
+assumed_treep_t22v02_stop_20.66729_-103.39232,Stop (ASSUMED location),20.667287,-103.392325
+assumed_treep_t22v02_stop_20.66541_-103.39359,Stop (ASSUMED location),20.665413,-103.393588
+assumed_treep_t22v02_stop_20.66278_-103.39534,Stop (ASSUMED location),20.662785,-103.395339
+assumed_treep_t22v02_stop_20.65981_-103.39727,Stop (ASSUMED location),20.659812,-103.397265
+assumed_treep_t22v02_paraderointerpolated_20.66176_-103.39593,Paradero (interpolated) (ASSUMED location),20.661758,-103.395931
+assumed_treep_t22v02_stop_20.65742_-103.39886,Stop (ASSUMED location),20.657423,-103.398858
+assumed_treep_t22v02_stop_20.65489_-103.40054,Stop (ASSUMED location),20.654889,-103.400540
+assumed_treep_t22v02_paraderointerpolated_20.65141_-103.40279,Paradero (interpolated) (ASSUMED location),20.651412,-103.402789
+assumed_treep_t22v02_paraderointerpolated_20.64792_-103.40501,Paradero (interpolated) (ASSUMED location),20.647920,-103.405013
+assumed_treep_t22v02_stop_20.64409_-103.40767,Stop (ASSUMED location),20.644093,-103.407672
+assumed_treep_t22v02_stop_20.6408_-103.40988,Stop (ASSUMED location),20.640796,-103.409884
+assumed_treep_t22v02_stop_20.63954_-103.4107,Stop (ASSUMED location),20.639542,-103.410699
+assumed_treep_t22v02_stop_20.63733_-103.41217,Stop (ASSUMED location),20.637330,-103.412170
+assumed_treep_t22v02_stop_20.63578_-103.41319,Stop (ASSUMED location),20.635784,-103.413188
+assumed_treep_t22v02_stop_20.63249_-103.41539,Stop (ASSUMED location),20.632487,-103.415385
+assumed_treep_t22v02_stop_20.63102_-103.41635,Stop (ASSUMED location),20.631020,-103.416350
+assumed_treep_t22v02_stop_20.62919_-103.41756,Stop (ASSUMED location),20.629190,-103.417560
+assumed_treep_t22v02_stop_20.62576_-103.41984,Stop (ASSUMED location),20.625755,-103.419839
+assumed_treep_t22v02_stop_20.62331_-103.42144,Stop (ASSUMED location),20.623310,-103.421440
+assumed_treep_t22v02_stop_20.62153_-103.42262,Stop (ASSUMED location),20.621530,-103.422625
+assumed_treep_t22v02_stop_20.61856_-103.42457,Stop (ASSUMED location),20.618556,-103.424570
+assumed_treep_t22v02_paraderointerpolated_20.6148_-103.42775,Paradero (interpolated) (ASSUMED location),20.614802,-103.427750
+assumed_treep_t22v02_paraderointerpolated_20.61336_-103.4277,Paradero (interpolated) (ASSUMED location),20.613356,-103.427705
+assumed_treep_t22v02_stop_20.6088_-103.43104,Stop (ASSUMED location),20.608800,-103.431040
+assumed_treep_t22v02_stop_20.60684_-103.43235,Stop (ASSUMED location),20.606842,-103.432348
+assumed_treep_t22v02_paraderointerpolated_20.6034_-103.43429,Paradero (interpolated) (ASSUMED location),20.603396,-103.434294
+assumed_treep_t22v02_paraderointerpolated_20.60301_-103.43499,Paradero (interpolated) (ASSUMED location),20.603010,-103.434986
+assumed_treep_t22v02_stop_20.6046_-103.43383,Stop (ASSUMED location),20.604601,-103.433830
+assumed_treep_t22v02_stop_20.60166_-103.43571,Stop (ASSUMED location),20.601663,-103.435714
+assumed_treep_t22v02_stop_20.59922_-103.43739,Stop (ASSUMED location),20.599215,-103.437394
+assumed_treep_t22v02_stop_20.59665_-103.43901,Stop (ASSUMED location),20.596654,-103.439008
+assumed_treep_t22v02_stop_20.59366_-103.44101,Stop (ASSUMED location),20.593662,-103.441009
+assumed_treep_t22v02_stop_20.59036_-103.44321,Stop (ASSUMED location),20.590364,-103.443206
+assumed_treep_t22v02_stop_20.58734_-103.44516,Stop (ASSUMED location),20.587343,-103.445156
+assumed_treep_t22v02_stop_20.58554_-103.44637,Stop (ASSUMED location),20.585540,-103.446370
+assumed_treep_t22v02_stop_20.58224_-103.44857,Stop (ASSUMED location),20.582239,-103.448569
+assumed_treep_t22v02_stop_20.58034_-103.44983,Stop (ASSUMED location),20.580340,-103.449830
+assumed_treep_t22v02_stop_20.57645_-103.45235,Stop (ASSUMED location),20.576450,-103.452350
+assumed_treep_t22v02_stop_20.57243_-103.45499,Stop (ASSUMED location),20.572426,-103.454994
+assumed_treep_t22v02_stop_20.57014_-103.4565,Stop (ASSUMED location),20.570140,-103.456500
+assumed_treep_t22v02_stop_20.56745_-103.45828,Stop (ASSUMED location),20.567450,-103.458280
+assumed_treep_t22v02_stop_20.56507_-103.45989,Stop (ASSUMED location),20.565070,-103.459890
+assumed_treep_t22v02_stop_20.56239_-103.46168,Stop (ASSUMED location),20.562392,-103.461684
+assumed_treep_t22v02_stop_20.55893_-103.46394,Stop (ASSUMED location),20.558930,-103.463940
+assumed_treep_t22v02_stop_20.55676_-103.46533,Stop (ASSUMED location),20.556760,-103.465330
+assumed_treep_t22v02_stop_20.55503_-103.46648,Stop (ASSUMED location),20.555030,-103.466480
+assumed_treep_t22v02_stop_20.55197_-103.46847,Stop (ASSUMED location),20.551970,-103.468470
+assumed_treep_t22v02_stop_20.54861_-103.47067,Stop (ASSUMED location),20.548610,-103.470670
+assumed_treep_t22v02_stop_20.54713_-103.47164,Stop (ASSUMED location),20.547133,-103.471639
+assumed_treep_t22v02_stop_20.54289_-103.47318,Stop (ASSUMED location),20.542890,-103.473180
+assumed_treep_t22v02_stop_20.5387_-103.47414,Stop (ASSUMED location),20.538704,-103.474142
+assumed_treep_t22v02_stop_20.53572_-103.47486,Stop (ASSUMED location),20.535720,-103.474860
+assumed_treep_t22v02_stop_20.53325_-103.47541,Stop (ASSUMED location),20.533245,-103.475407
+assumed_treep_t22v02_paraderointerpolated_20.53179_-103.47584,Paradero (interpolated) (ASSUMED location),20.531792,-103.475844
+assumed_treep_t22v02_stop_20.52839_-103.47805,Stop (ASSUMED location),20.528393,-103.478048
+assumed_treep_t22v02_stop_20.5243_-103.48049,Stop (ASSUMED location),20.524300,-103.480490
+assumed_treep_t22v02_paraderointerpolated_20.51924_-103.48314,Paradero (interpolated) (ASSUMED location),20.519238,-103.483138
+assumed_treep_t22v02_paraderointerpolated_20.5144_-103.48594,Paradero (interpolated) (ASSUMED location),20.514404,-103.485936
+assumed_treep_t22v02_paraderointerpolated_20.50935_-103.48713,Paradero (interpolated) (ASSUMED location),20.509352,-103.487133
+assumed_treep_t22v02_paraderointerpolated_20.50265_-103.48823,Paradero (interpolated) (ASSUMED location),20.502649,-103.488234
+assumed_treep_t22v02_stop_20.49876_-103.48908,Stop (ASSUMED location),20.498760,-103.489078
+assumed_treep_t22v02_stop_20.49477_-103.48968,Stop (ASSUMED location),20.494773,-103.489676
+assumed_treep_t22v02_stop_20.49093_-103.49056,Stop (ASSUMED location),20.490934,-103.490559
+assumed_treep_t22v02_paraderointerpolated_20.48924_-103.49379,Paradero (interpolated) (ASSUMED location),20.489240,-103.493791
+assumed_treep_t22v02_paraderointerpolated_20.49039_-103.48882,Paradero (interpolated) (ASSUMED location),20.490389,-103.488824
+assumed_treep_t22v02_stop_20.49031_-103.48404,Stop (ASSUMED location),20.490310,-103.484040
+assumed_treep_t22v02_stop_20.49043_-103.48147,Stop (ASSUMED location),20.490432,-103.481468
+assumed_treep_t22v02_stop_20.49058_-103.47577,Stop (ASSUMED location),20.490584,-103.475766
+assumed_treep_t22v02_paraderointerpolated_20.49021_-103.47029,Paradero (interpolated) (ASSUMED location),20.490206,-103.470285
+assumed_treep_t22v02_paraderointerpolated_20.48957_-103.46472,Paradero (interpolated) (ASSUMED location),20.489568,-103.464721
+assumed_treep_t22v02_stop_20.48782_-103.46012,Stop (ASSUMED location),20.487819,-103.460119
+assumed_treep_t22v02_paraderointerpolated_20.48427_-103.45663,Paradero (interpolated) (ASSUMED location),20.484269,-103.456633
+assumed_treep_t22v02_stop_20.48005_-103.45454,Stop (ASSUMED location),20.480048,-103.454536
+assumed_treep_t22v02_stop_20.47844_-103.45366,Stop (ASSUMED location),20.478440,-103.453660
+assumed_treep_t22v02_stop_20.47708_-103.45283,Stop (ASSUMED location),20.477081,-103.452834
+assumed_treep_t22v02_stop_20.47304_-103.45226,Stop (ASSUMED location),20.473040,-103.452260
+assumed_treep_t22v02_stop_20.47037_-103.45228,Stop (ASSUMED location),20.470369,-103.452281
+assumed_treep_t22v02_stop_20.46782_-103.45168,Stop (ASSUMED location),20.467821,-103.451681
+assumed_treep_t22v02_stop_20.46478_-103.4482,Stop (ASSUMED location),20.464780,-103.448200
+assumed_treep_t22v02_stop_20.46206_-103.44513,Stop (ASSUMED location),20.462060,-103.445130
+assumed_treep_t22v02_stop_20.45982_-103.44255,Stop (ASSUMED location),20.459820,-103.442550
+assumed_treep_t22v02_stop_20.45825_-103.44059,Stop (ASSUMED location),20.458250,-103.440590
+assumed_treep_t22v02_paraderointerpolated_20.45644_-103.43833,Paradero (interpolated) (ASSUMED location),20.456436,-103.438334
+assumed_treep_t22v02_stop_20.45293_-103.43431,Stop (ASSUMED location),20.452934,-103.434312
+assumed_treep_t22v02_stop_20.45019_-103.43106,Stop (ASSUMED location),20.450190,-103.431060
+assumed_treep_t22v02_stop_20.45092_-103.42896,Stop (ASSUMED location),20.450919,-103.428962
+assumed_treep_t22v02_stop_20.45312_-103.42891,Stop (ASSUMED location),20.453120,-103.428910
+assumed_treep_t22v02_stop_20.45516_-103.42914,Stop (ASSUMED location),20.455160,-103.429144
+assumed_treep_t22v02_stop_20.45795_-103.4295,Stop (ASSUMED location),20.457949,-103.429502
+assumed_treep_t22v02_stop_20.4617_-103.42765,Stop (ASSUMED location),20.461698,-103.427646
+assumed_treep_t22v02_stop_20.46072_-103.42623,Stop (ASSUMED location),20.460717,-103.426232
+assumed_treep_t22v02_stop_20.45882_-103.42338,Stop (ASSUMED location),20.458818,-103.423383
+assumed_treep_t22v02_stop_20.45816_-103.42158,Stop (ASSUMED location),20.458163,-103.421585
+assumed_treep_t22v02_stop_20.45741_-103.41939,Stop (ASSUMED location),20.457413,-103.419394
+assumed_treep_c12_terminal_20.54711_-103.44682,Terminal (ASSUMED location),20.547109,-103.446819
+assumed_treep_c12_stop_20.54877_-103.44621,Stop (ASSUMED location),20.548771,-103.446209
+assumed_treep_c12_stop_20.54797_-103.44309,Stop (ASSUMED location),20.547965,-103.443089
+assumed_treep_c12_stop_20.54504_-103.44424,Stop (ASSUMED location),20.545040,-103.444240
+assumed_treep_c12_stop_20.54333_-103.44505,Stop (ASSUMED location),20.543328,-103.445052
+assumed_treep_c12_stop_20.54166_-103.44568,Stop (ASSUMED location),20.541660,-103.445680
+assumed_treep_c12_stop_20.53831_-103.44664,Stop (ASSUMED location),20.538311,-103.446639
+assumed_treep_c12_paraderointerpolated_20.54357_-103.44486,Paradero (interpolated) (ASSUMED location),20.543566,-103.444864
+assumed_treep_c12_paraderointerpolated_20.5437_-103.44043,Paradero (interpolated) (ASSUMED location),20.543698,-103.440432
+assumed_treep_c12_paraderointerpolated_20.54008_-103.4355,Paradero (interpolated) (ASSUMED location),20.540080,-103.435501
+assumed_treep_c12_paraderointerpolated_20.5365_-103.4329,Paradero (interpolated) (ASSUMED location),20.536502,-103.432898
+assumed_treep_c12_stop_20.53493_-103.43863,Stop (ASSUMED location),20.534930,-103.438630
+assumed_treep_c12_stop_20.53394_-103.43346,Stop (ASSUMED location),20.533940,-103.433460
+assumed_treep_c12_stop_20.53244_-103.43296,Stop (ASSUMED location),20.532438,-103.432962
+assumed_treep_c12_stop_20.53163_-103.42984,Stop (ASSUMED location),20.531630,-103.429840
+assumed_treep_c12_stop_20.53125_-103.42845,Stop (ASSUMED location),20.531248,-103.428446
+assumed_treep_c12_stop_20.53069_-103.42647,Stop (ASSUMED location),20.530690,-103.426470
+assumed_treep_c12_stop_20.53001_-103.42414,Stop (ASSUMED location),20.530013,-103.424138
+assumed_treep_c12_stop_20.53145_-103.42449,Stop (ASSUMED location),20.531445,-103.424489
+assumed_treep_c12_stop_20.53354_-103.42404,Stop (ASSUMED location),20.533540,-103.424040
+assumed_treep_c12_stop_20.5352_-103.42352,Stop (ASSUMED location),20.535200,-103.423520
+assumed_treep_c12_stop_20.53756_-103.42261,Stop (ASSUMED location),20.537558,-103.422609
+assumed_treep_c12_stop_20.53918_-103.42213,Stop (ASSUMED location),20.539179,-103.422132
+assumed_treep_c12_stop_20.54643_-103.42061,Stop (ASSUMED location),20.546432,-103.420612
+assumed_treep_c12_stop_20.55234_-103.41917,Stop (ASSUMED location),20.552340,-103.419170
+assumed_treep_c12_stop_20.55832_-103.41701,Stop (ASSUMED location),20.558316,-103.417010
+assumed_treep_c12_stop_20.56357_-103.41337,Stop (ASSUMED location),20.563570,-103.413370
+assumed_treep_c12_paraderointerpolated_20.56637_-103.41044,Paradero (interpolated) (ASSUMED location),20.566366,-103.410439
+assumed_treep_c12_paraderointerpolated_20.57029_-103.40706,Paradero (interpolated) (ASSUMED location),20.570286,-103.407058
+assumed_treep_c12_stop_20.57391_-103.40529,Stop (ASSUMED location),20.573910,-103.405290
+assumed_treep_c12_stop_20.57716_-103.40371,Stop (ASSUMED location),20.577162,-103.403709
+assumed_treep_c12_stop_20.58001_-103.40277,Stop (ASSUMED location),20.580012,-103.402773
+assumed_treep_c12_stop_20.58577_-103.40079,Stop (ASSUMED location),20.585769,-103.400792
+assumed_treep_c12_stop_20.58771_-103.40013,Stop (ASSUMED location),20.587708,-103.400131
+assumed_treep_c12_stop_20.58902_-103.39968,Stop (ASSUMED location),20.589020,-103.399683
+assumed_treep_c12_stop_20.59234_-103.39903,Stop (ASSUMED location),20.592340,-103.399033
+assumed_treep_c12_stop_20.59373_-103.39899,Stop (ASSUMED location),20.593727,-103.398991
+assumed_treep_c12_stop_20.60064_-103.4013,Stop (ASSUMED location),20.600644,-103.401302
+assumed_treep_c12_stop_20.60137_-103.40342,Stop (ASSUMED location),20.601370,-103.403420
+assumed_treep_c12_stop_20.60426_-103.4018,Stop (ASSUMED location),20.604260,-103.401800
+assumed_treep_c12_paraderointerpolated_20.60254_-103.40363,Paradero (interpolated) (ASSUMED location),20.602538,-103.403629
+assumed_treep_c12_stop_20.60536_-103.39958,Stop (ASSUMED location),20.605360,-103.399580
+assumed_treep_c12_stop_20.60988_-103.39846,Stop (ASSUMED location),20.609883,-103.398458
+assumed_treep_c12_stop_20.61315_-103.39589,Stop (ASSUMED location),20.613150,-103.395890
+assumed_treep_c12_stop_20.61488_-103.39445,Stop (ASSUMED location),20.614883,-103.394453
+assumed_treep_c12_stop_20.62048_-103.38988,Stop (ASSUMED location),20.620481,-103.389883
+assumed_treep_c12_stop_20.62599_-103.38524,Stop (ASSUMED location),20.625992,-103.385237
+assumed_treep_c12_stop_20.62754_-103.3841,Stop (ASSUMED location),20.627537,-103.384102
+assumed_treep_c12_stop_20.62966_-103.38257,Stop (ASSUMED location),20.629662,-103.382575
+assumed_treep_c12_stop_20.63176_-103.38114,Stop (ASSUMED location),20.631760,-103.381140
+assumed_treep_c12_stop_20.63222_-103.37838,Stop (ASSUMED location),20.632220,-103.378380
+assumed_treep_c12_stop_20.6318_-103.37587,Stop (ASSUMED location),20.631800,-103.375870
+assumed_treep_c12_stop_20.63152_-103.37424,Stop (ASSUMED location),20.631520,-103.374240
+assumed_treep_c12_stop_20.63117_-103.37214,Stop (ASSUMED location),20.631167,-103.372137
+assumed_treep_c12_stop_20.63078_-103.36969,Stop (ASSUMED location),20.630780,-103.369690
+assumed_treep_c12_stop_20.63197_-103.36766,Stop (ASSUMED location),20.631972,-103.367661
+assumed_treep_c12_stop_20.63462_-103.36651,Stop (ASSUMED location),20.634620,-103.366510
+assumed_treep_c12_stop_20.63863_-103.3648,Stop (ASSUMED location),20.638630,-103.364800
+assumed_treep_c12_stop_20.64136_-103.36363,Stop (ASSUMED location),20.641360,-103.363630
+assumed_treep_c12_stop_20.64411_-103.36246,Stop (ASSUMED location),20.644110,-103.362460
+assumed_treep_c12_stop_20.64665_-103.3614,Stop (ASSUMED location),20.646650,-103.361400
+assumed_treep_c12_stop_20.64841_-103.36061,Stop (ASSUMED location),20.648406,-103.360613
+assumed_treep_c12_stop_20.65018_-103.35986,Stop (ASSUMED location),20.650180,-103.359860
+assumed_treep_c12_stop_20.65426_-103.35813,Stop (ASSUMED location),20.654260,-103.358130
+assumed_treep_c12_stop_20.65691_-103.357,Stop (ASSUMED location),20.656909,-103.357004
+assumed_treep_c12_stop_20.66006_-103.35561,Stop (ASSUMED location),20.660060,-103.355610
+assumed_treep_c12_stop_20.66265_-103.35075,Stop (ASSUMED location),20.662648,-103.350753
+assumed_treep_c12_stop_20.66528_-103.34873,Stop (ASSUMED location),20.665279,-103.348733
+assumed_treep_c12_stop_20.66752_-103.34798,Stop (ASSUMED location),20.667515,-103.347982
+assumed_treep_c12_stop_20.66961_-103.34732,Stop (ASSUMED location),20.669607,-103.347316
+assumed_treep_c12_stop_20.67195_-103.34742,Stop (ASSUMED location),20.671948,-103.347416
+assumed_treep_c58_terminal_20.6718_-103.34729,Terminal (ASSUMED location),20.671797,-103.347293
+assumed_treep_c58_stop_20.67043_-103.34412,Stop (ASSUMED location),20.670434,-103.344117
+assumed_treep_c58_stop_20.66923_-103.34128,Stop (ASSUMED location),20.669231,-103.341277
+assumed_treep_c58_stop_20.66827_-103.33865,Stop (ASSUMED location),20.668273,-103.338653
+assumed_treep_c58_stop_20.66773_-103.33713,Stop (ASSUMED location),20.667728,-103.337125
+assumed_treep_c58_stop_20.66711_-103.33545,Stop (ASSUMED location),20.667111,-103.335455
+assumed_treep_c58_stop_20.66524_-103.33316,Stop (ASSUMED location),20.665242,-103.333159
+assumed_treep_c58_stop_20.66222_-103.33263,Stop (ASSUMED location),20.662221,-103.332628
+assumed_treep_c58_stop_20.65942_-103.33053,Stop (ASSUMED location),20.659422,-103.330529
+assumed_treep_c58_stop_20.65758_-103.32914,Stop (ASSUMED location),20.657583,-103.329137
+assumed_treep_c58_stop_20.6559_-103.32791,Stop (ASSUMED location),20.655900,-103.327906
+assumed_treep_c58_stop_20.65342_-103.32604,Stop (ASSUMED location),20.653420,-103.326044
+assumed_treep_c58_stop_20.65207_-103.32506,Stop (ASSUMED location),20.652072,-103.325057
+assumed_treep_c58_stop_20.65004_-103.32324,Stop (ASSUMED location),20.650035,-103.323236
+assumed_treep_c58_stop_20.64927_-103.32102,Stop (ASSUMED location),20.649271,-103.321022
+assumed_treep_c58_stop_20.64846_-103.31863,Stop (ASSUMED location),20.648459,-103.318625
+assumed_treep_c58_stop_20.64798_-103.31717,Stop (ASSUMED location),20.647979,-103.317166
+assumed_treep_c58_stop_20.64678_-103.31369,Stop (ASSUMED location),20.646782,-103.313687
+assumed_treep_c58_stop_20.64604_-103.31148,Stop (ASSUMED location),20.646039,-103.311479
+assumed_treep_c58_stop_20.64513_-103.30883,Stop (ASSUMED location),20.645131,-103.308834
+assumed_treep_c58_stop_20.64447_-103.30689,Stop (ASSUMED location),20.644471,-103.306890
+assumed_treep_c58_stop_20.64265_-103.30698,Stop (ASSUMED location),20.642650,-103.306980
+assumed_treep_c58_stop_20.64117_-103.30622,Stop (ASSUMED location),20.641166,-103.306216
+assumed_treep_c58_stop_20.63926_-103.30464,Stop (ASSUMED location),20.639255,-103.304636
+assumed_treep_c58_stop_20.63808_-103.30356,Stop (ASSUMED location),20.638081,-103.303564
+assumed_treep_c58_stop_20.63811_-103.30068,Stop (ASSUMED location),20.638111,-103.300678
+assumed_treep_c58_stop_20.63696_-103.29974,Stop (ASSUMED location),20.636955,-103.299739
+assumed_treep_c58_stop_20.63455_-103.29806,Stop (ASSUMED location),20.634550,-103.298060
+assumed_treep_c58_stop_20.6328_-103.29685,Stop (ASSUMED location),20.632805,-103.296848
+assumed_treep_c58_paraderointerpolated_20.62899_-103.29458,Paradero (interpolated) (ASSUMED location),20.628986,-103.294580
+assumed_treep_c58_paraderointerpolated_20.62554_-103.29173,Paradero (interpolated) (ASSUMED location),20.625538,-103.291728
+assumed_treep_c58_stop_20.62197_-103.28942,Stop (ASSUMED location),20.621972,-103.289424
+assumed_treep_c58_stop_20.61859_-103.28707,Stop (ASSUMED location),20.618587,-103.287072
+assumed_treep_c58_stop_20.61674_-103.28576,Stop (ASSUMED location),20.616735,-103.285762
+assumed_treep_c58_stop_20.61448_-103.28423,Stop (ASSUMED location),20.614480,-103.284230
+assumed_treep_c58_stop_20.61231_-103.28264,Stop (ASSUMED location),20.612313,-103.282644
+assumed_treep_c58_paraderointerpolated_20.61032_-103.27871,Paradero (interpolated) (ASSUMED location),20.610320,-103.278713
+assumed_treep_c58_stop_20.61004_-103.27569,Stop (ASSUMED location),20.610038,-103.275691
+assumed_treep_c58_stop_20.60913_-103.27198,Stop (ASSUMED location),20.609134,-103.271983
+assumed_treep_c58_stop_20.60679_-103.26463,Stop (ASSUMED location),20.606786,-103.264631
+assumed_treep_c58_stop_20.60588_-103.26204,Stop (ASSUMED location),20.605878,-103.262036
+assumed_treep_c58_stop_20.60536_-103.25891,Stop (ASSUMED location),20.605359,-103.258912
+assumed_treep_c58_stop_20.60506_-103.25608,Stop (ASSUMED location),20.605061,-103.256081
+assumed_treep_c58_stop_20.60458_-103.25249,Stop (ASSUMED location),20.604581,-103.252491
+assumed_treep_c58_stop_20.60368_-103.24831,Stop (ASSUMED location),20.603684,-103.248305
+assumed_treep_c58_stop_20.60294_-103.24575,Stop (ASSUMED location),20.602937,-103.245754
+assumed_treep_c58_stop_20.60215_-103.24312,Stop (ASSUMED location),20.602145,-103.243122
+assumed_treep_c58_stop_20.60111_-103.23968,Stop (ASSUMED location),20.601108,-103.239678
+assumed_treep_c58_stop_20.59902_-103.23234,Stop (ASSUMED location),20.599020,-103.232340
+assumed_treep_c58_stop_20.5941_-103.22685,Stop (ASSUMED location),20.594101,-103.226848
+assumed_treep_c58_stop_20.59343_-103.22824,Stop (ASSUMED location),20.593434,-103.228243
+assumed_treep_c58_stop_20.59238_-103.22922,Stop (ASSUMED location),20.592380,-103.229220
+assumed_treep_c58_stop_20.59031_-103.22914,Stop (ASSUMED location),20.590311,-103.229145
+assumed_treep_c58_stop_20.58778_-103.2286,Stop (ASSUMED location),20.587780,-103.228597
+assumed_treep_c58_stop_20.58743_-103.22698,Stop (ASSUMED location),20.587430,-103.226981
+assumed_treep_c58_stop_20.58563_-103.22597,Stop (ASSUMED location),20.585630,-103.225968
+assumed_treep_c58_stop_20.58266_-103.22624,Stop (ASSUMED location),20.582663,-103.226236
+assumed_treep_c58_stop_20.58123_-103.2291,Stop (ASSUMED location),20.581233,-103.229102
+assumed_treep_c58_stop_20.57995_-103.23107,Stop (ASSUMED location),20.579952,-103.231065
+assumed_treep_c58_stop_20.57681_-103.23018,Stop (ASSUMED location),20.576807,-103.230178
+assumed_treep_c58_stop_20.57389_-103.22971,Stop (ASSUMED location),20.573892,-103.229708
+assumed_treep_c58_stop_20.5707_-103.22914,Stop (ASSUMED location),20.570700,-103.229144
+assumed_treep_c58_stop_20.56855_-103.22742,Stop (ASSUMED location),20.568546,-103.227418
+assumed_treep_c1112_terminal_20.48766_-103.40384,Terminal (ASSUMED location),20.487658,-103.403838
+assumed_treep_c1112_stop_20.4904_-103.4026,Stop (ASSUMED location),20.490400,-103.402600
+assumed_treep_c1112_stop_20.49213_-103.40126,Stop (ASSUMED location),20.492127,-103.401258
+assumed_treep_c1112_stop_20.49345_-103.40392,Stop (ASSUMED location),20.493454,-103.403921
+assumed_treep_c1112_stop_20.49353_-103.4058,Stop (ASSUMED location),20.493529,-103.405796
+assumed_treep_c1112_stop_20.49356_-103.40877,Stop (ASSUMED location),20.493560,-103.408770
+assumed_treep_c1112_stop_20.4932_-103.41338,Stop (ASSUMED location),20.493200,-103.413380
+assumed_treep_c1112_stop_20.49341_-103.41715,Stop (ASSUMED location),20.493410,-103.417150
+assumed_treep_c1112_stop_20.49866_-103.41631,Stop (ASSUMED location),20.498660,-103.416310
+assumed_treep_c1112_stop_20.50184_-103.41497,Stop (ASSUMED location),20.501838,-103.414973
+assumed_treep_c1112_stop_20.50685_-103.4137,Stop (ASSUMED location),20.506852,-103.413697
+assumed_treep_c1112_stop_20.51429_-103.41143,Stop (ASSUMED location),20.514290,-103.411430
+assumed_treep_c1112_stop_20.52237_-103.40902,Stop (ASSUMED location),20.522366,-103.409017
+assumed_treep_c1112_stop_20.52796_-103.40727,Stop (ASSUMED location),20.527964,-103.407269
+assumed_treep_c1112_stop_20.53029_-103.40652,Stop (ASSUMED location),20.530290,-103.406520
+assumed_treep_c1112_stop_20.53784_-103.40419,Stop (ASSUMED location),20.537843,-103.404194
+assumed_treep_c1112_stop_20.54494_-103.40174,Stop (ASSUMED location),20.544943,-103.401743
+assumed_treep_c1112_paraderointerpolated_20.54942_-103.40025,Paradero (interpolated) (ASSUMED location),20.549425,-103.400247
+assumed_treep_c1112_stop_20.55294_-103.39765,Stop (ASSUMED location),20.552936,-103.397655
+assumed_treep_c1112_paraderointerpolated_20.55816_-103.39468,Paradero (interpolated) (ASSUMED location),20.558162,-103.394682
+assumed_treep_c1112_stop_20.56281_-103.39219,Stop (ASSUMED location),20.562810,-103.392190
+assumed_treep_c1112_stop_20.56981_-103.39119,Stop (ASSUMED location),20.569810,-103.391190
+assumed_treep_c1112_paraderointerpolated_20.57468_-103.38961,Paradero (interpolated) (ASSUMED location),20.574676,-103.389613
+assumed_treep_c1112_stop_20.57982_-103.38701,Stop (ASSUMED location),20.579820,-103.387010
+assumed_treep_c1112_stop_20.58226_-103.38548,Stop (ASSUMED location),20.582260,-103.385480
+assumed_treep_c1112_paraderointerpolated_20.58693_-103.38438,Paradero (interpolated) (ASSUMED location),20.586932,-103.384380
+assumed_treep_c1112_paraderointerpolated_20.5908_-103.38169,Paradero (interpolated) (ASSUMED location),20.590805,-103.381687
+assumed_treep_c1112_paraderointerpolated_20.59459_-103.38044,Paradero (interpolated) (ASSUMED location),20.594589,-103.380438
+assumed_treep_c1112_stop_20.59984_-103.37879,Stop (ASSUMED location),20.599835,-103.378792
+assumed_treep_c1112_stop_20.60193_-103.37818,Stop (ASSUMED location),20.601926,-103.378183
+assumed_treep_c1112_stop_20.6038_-103.37765,Stop (ASSUMED location),20.603805,-103.377651
+assumed_treep_c1112_stop_20.6064_-103.37692,Stop (ASSUMED location),20.606400,-103.376917
+assumed_treep_c1112_stop_20.60845_-103.37635,Stop (ASSUMED location),20.608455,-103.376351
+assumed_treep_c1112_stop_20.61044_-103.37575,Stop (ASSUMED location),20.610436,-103.375746
+assumed_treep_c1112_stop_20.61258_-103.37515,Stop (ASSUMED location),20.612584,-103.375146
+assumed_treep_c1112_stop_20.61502_-103.37448,Stop (ASSUMED location),20.615025,-103.374475
+assumed_treep_c1112_stop_20.61762_-103.37374,Stop (ASSUMED location),20.617616,-103.373741
+assumed_treep_c1112_stop_20.61931_-103.37297,Stop (ASSUMED location),20.619310,-103.372970
+assumed_treep_c1112_stop_20.62136_-103.37211,Stop (ASSUMED location),20.621360,-103.372110
+assumed_treep_c1112_stop_20.62307_-103.37136,Stop (ASSUMED location),20.623070,-103.371360
+assumed_treep_c1112_stop_20.62584_-103.37023,Stop (ASSUMED location),20.625840,-103.370230
+assumed_treep_c1112_stop_20.62736_-103.36961,Stop (ASSUMED location),20.627360,-103.369610
+assumed_treep_c1112_stop_20.6289_-103.36896,Stop (ASSUMED location),20.628900,-103.368960
+assumed_treep_c1112_stop_20.63033_-103.36831,Stop (ASSUMED location),20.630333,-103.368306
+assumed_treep_c1112_stop_20.63197_-103.36766,Stop (ASSUMED location),20.631972,-103.367661
+assumed_treep_c1112_stop_20.63462_-103.36651,Stop (ASSUMED location),20.634620,-103.366510
+assumed_treep_c1112_stop_20.63863_-103.3648,Stop (ASSUMED location),20.638630,-103.364800
+assumed_treep_c1112_stop_20.64136_-103.36363,Stop (ASSUMED location),20.641360,-103.363630
+assumed_treep_c1112_stop_20.64411_-103.36246,Stop (ASSUMED location),20.644110,-103.362460
+assumed_treep_c1112_stop_20.64848_-103.36288,Stop (ASSUMED location),20.648480,-103.362880
+assumed_treep_c1112_stop_20.64942_-103.36465,Stop (ASSUMED location),20.649420,-103.364650
+assumed_treep_c1112_stop_20.6502_-103.36606,Stop (ASSUMED location),20.650195,-103.366058
+assumed_treep_c1112_stop_20.65213_-103.36525,Stop (ASSUMED location),20.652128,-103.365247
+assumed_treep_c1112_stop_20.65376_-103.36387,Stop (ASSUMED location),20.653764,-103.363873
+assumed_treep_c1112_stop_20.65604_-103.3621,Stop (ASSUMED location),20.656038,-103.362098
+assumed_treep_c1112_stop_20.66281_-103.35649,Stop (ASSUMED location),20.662807,-103.356495
+assumed_treep_c1112_stop_20.66547_-103.35567,Stop (ASSUMED location),20.665466,-103.355668
+assumed_treep_c1112_stop_20.66725_-103.35513,Stop (ASSUMED location),20.667247,-103.355132
+assumed_treep_c1112_stop_20.66947_-103.35461,Stop (ASSUMED location),20.669474,-103.354605
+assumed_treep_c1112_stop_20.67133_-103.35462,Stop (ASSUMED location),20.671331,-103.354616
+assumed_treep_c1112_stop_20.67269_-103.35363,Stop (ASSUMED location),20.672692,-103.353630
+assumed_treep_c1112_stop_20.67275_-103.35174,Stop (ASSUMED location),20.672750,-103.351740
+assumed_treep_c1112_stop_20.67277_-103.34974,Stop (ASSUMED location),20.672770,-103.349740
+assumed_treep_c1112_stop_20.6728_-103.3481,Stop (ASSUMED location),20.672800,-103.348100
+assumed_treep_c51v1_terminal_20.6497_-103.40104,Terminal (ASSUMED location),20.649695,-103.401036
+assumed_treep_c51v1_stop_20.6483_-103.40135,Stop (ASSUMED location),20.648299,-103.401354
+assumed_treep_c51v1_stop_20.64392_-103.40042,Stop (ASSUMED location),20.643920,-103.400418
+assumed_treep_c51v1_stop_20.64057_-103.40236,Stop (ASSUMED location),20.640569,-103.402365
+assumed_treep_c51v1_stop_20.63844_-103.40388,Stop (ASSUMED location),20.638438,-103.403884
+assumed_treep_c51v1_stop_20.64008_-103.40718,Stop (ASSUMED location),20.640077,-103.407176
+assumed_treep_c51v1_stop_20.6376_-103.40876,Stop (ASSUMED location),20.637604,-103.408759
+assumed_treep_c51v1_stop_20.63613_-103.40895,Stop (ASSUMED location),20.636132,-103.408947
+assumed_treep_c51v1_stop_20.63435_-103.40874,Stop (ASSUMED location),20.634351,-103.408737
+assumed_treep_c51v1_stop_20.63273_-103.40851,Stop (ASSUMED location),20.632727,-103.408506
+assumed_treep_c51v1_stop_20.63024_-103.40623,Stop (ASSUMED location),20.630242,-103.406230
+assumed_treep_c51v1_stop_20.62931_-103.40468,Stop (ASSUMED location),20.629310,-103.404682
+assumed_treep_c51v1_stop_20.62841_-103.40313,Stop (ASSUMED location),20.628410,-103.403126
+assumed_treep_c51v1_stop_20.62835_-103.39876,Stop (ASSUMED location),20.628346,-103.398761
+assumed_treep_c51v1_stop_20.62825_-103.39687,Stop (ASSUMED location),20.628245,-103.396869
+assumed_treep_c51v1_stop_20.62835_-103.39369,Stop (ASSUMED location),20.628349,-103.393686
+assumed_treep_c51v1_stop_20.62756_-103.39112,Stop (ASSUMED location),20.627562,-103.391118
+assumed_treep_c51v1_stop_20.62665_-103.38868,Stop (ASSUMED location),20.626649,-103.388678
+assumed_treep_c51v1_stop_20.62532_-103.38253,Stop (ASSUMED location),20.625318,-103.382532
+assumed_treep_c51v1_stop_20.6247_-103.3794,Stop (ASSUMED location),20.624703,-103.379401
+assumed_treep_c51v1_stop_20.62431_-103.37727,Stop (ASSUMED location),20.624313,-103.377273
+assumed_treep_c51v1_stop_20.62368_-103.37404,Stop (ASSUMED location),20.623684,-103.374044
+assumed_treep_c51v1_stop_20.62326_-103.37174,Stop (ASSUMED location),20.623264,-103.371738
+assumed_treep_c51v1_stop_20.62159_-103.37175,Stop (ASSUMED location),20.621586,-103.371754
+assumed_treep_c51v1_stop_20.62059_-103.36981,Stop (ASSUMED location),20.620592,-103.369812
+assumed_treep_c51v1_stop_20.62012_-103.36797,Stop (ASSUMED location),20.620115,-103.367972
+assumed_treep_c51v1_stop_20.62015_-103.36613,Stop (ASSUMED location),20.620153,-103.366127
+assumed_treep_c51v1_stop_20.62063_-103.36365,Stop (ASSUMED location),20.620632,-103.363647
+assumed_treep_c51v1_stop_20.6214_-103.36215,Stop (ASSUMED location),20.621404,-103.362154
+assumed_treep_c51v1_stop_20.62102_-103.3601,Stop (ASSUMED location),20.621019,-103.360100
+assumed_treep_c51v1_stop_20.62073_-103.35822,Stop (ASSUMED location),20.620728,-103.358221
+assumed_treep_c51v1_stop_20.62035_-103.3564,Stop (ASSUMED location),20.620346,-103.356404
+assumed_treep_c51v1_stop_20.61973_-103.35238,Stop (ASSUMED location),20.619731,-103.352380
+assumed_treep_c51v1_stop_20.62024_-103.35071,Stop (ASSUMED location),20.620238,-103.350706
+assumed_treep_c51v1_stop_20.62159_-103.34706,Stop (ASSUMED location),20.621588,-103.347061
+assumed_treep_c51v1_stop_20.61984_-103.34596,Stop (ASSUMED location),20.619845,-103.345955
+assumed_treep_c51v1_stop_20.6181_-103.34487,Stop (ASSUMED location),20.618103,-103.344872
+assumed_treep_c51v1_stop_20.61598_-103.34701,Stop (ASSUMED location),20.615980,-103.347007
+assumed_treep_c51v1_stop_20.6144_-103.3501,Stop (ASSUMED location),20.614402,-103.350102
+assumed_treep_c51v1_stop_20.61291_-103.3505,Stop (ASSUMED location),20.612912,-103.350497
+assumed_treep_c51v1_stop_20.613_-103.34744,Stop (ASSUMED location),20.612998,-103.347439
+assumed_treep_c51v1_stop_20.61379_-103.34565,Stop (ASSUMED location),20.613787,-103.345652
+assumed_treep_c51v1_stop_20.61504_-103.34286,Stop (ASSUMED location),20.615038,-103.342856
+assumed_treep_c51v1_stop_20.61325_-103.34201,Stop (ASSUMED location),20.613245,-103.342009
+assumed_treep_c51v1_stop_20.61036_-103.34099,Stop (ASSUMED location),20.610359,-103.340991
+assumed_treep_c51v1_stop_20.60733_-103.34114,Stop (ASSUMED location),20.607332,-103.341136
+assumed_treep_c51v1_stop_20.60437_-103.34496,Stop (ASSUMED location),20.604372,-103.344956
+assumed_treep_c51v1_stop_20.60488_-103.34805,Stop (ASSUMED location),20.604877,-103.348055
+assumed_treep_c51v1_stop_20.60606_-103.34923,Stop (ASSUMED location),20.606064,-103.349226
+assumed_treep_c51v1_stop_20.60709_-103.35184,Stop (ASSUMED location),20.607087,-103.351841
+assumed_treep_c96v1_terminal_20.5813_-103.26549,Terminal (ASSUMED location),20.581295,-103.265486
+assumed_treep_c96v1_stop_20.5829_-103.2659,Stop (ASSUMED location),20.582904,-103.265900
+assumed_treep_c96v1_stop_20.58459_-103.26675,Stop (ASSUMED location),20.584591,-103.266753
+assumed_treep_c96v1_stop_20.58602_-103.26776,Stop (ASSUMED location),20.586020,-103.267756
+assumed_treep_c96v1_stop_20.58742_-103.26823,Stop (ASSUMED location),20.587420,-103.268230
+assumed_treep_c96v1_stop_20.58863_-103.26573,Stop (ASSUMED location),20.588632,-103.265728
+assumed_treep_c96v1_stop_20.59028_-103.26576,Stop (ASSUMED location),20.590281,-103.265761
+assumed_treep_c96v1_stop_20.59209_-103.26521,Stop (ASSUMED location),20.592094,-103.265211
+assumed_treep_c96v1_stop_20.59259_-103.26655,Stop (ASSUMED location),20.592586,-103.266554
+assumed_treep_c96v1_stop_20.59239_-103.26936,Stop (ASSUMED location),20.592389,-103.269356
+assumed_treep_c96v1_stop_20.59234_-103.27084,Stop (ASSUMED location),20.592339,-103.270838
+assumed_treep_c96v1_stop_20.59233_-103.27304,Stop (ASSUMED location),20.592327,-103.273036
+assumed_treep_c96v1_stop_20.59222_-103.27463,Stop (ASSUMED location),20.592220,-103.274628
+assumed_treep_c96v1_stop_20.59236_-103.27671,Stop (ASSUMED location),20.592356,-103.276709
+assumed_treep_c96v1_stop_20.59251_-103.27918,Stop (ASSUMED location),20.592511,-103.279185
+assumed_treep_c96v1_stop_20.59278_-103.28255,Stop (ASSUMED location),20.592783,-103.282552
+assumed_treep_c96v1_stop_20.59575_-103.28337,Stop (ASSUMED location),20.595751,-103.283374
+assumed_treep_c96v1_stop_20.59691_-103.28596,Stop (ASSUMED location),20.596911,-103.285957
+assumed_treep_c96v1_stop_20.59698_-103.28756,Stop (ASSUMED location),20.596975,-103.287560
+assumed_treep_c96v1_stop_20.59947_-103.28806,Stop (ASSUMED location),20.599469,-103.288058
+assumed_treep_c96v1_stop_20.60168_-103.28786,Stop (ASSUMED location),20.601679,-103.287856
+assumed_treep_c96v1_stop_20.60508_-103.28741,Stop (ASSUMED location),20.605080,-103.287409
+assumed_treep_c96v1_stop_20.60692_-103.2871,Stop (ASSUMED location),20.606915,-103.287102
+assumed_treep_c96v1_stop_20.60904_-103.28636,Stop (ASSUMED location),20.609041,-103.286360
+assumed_treep_c96v1_stop_20.61202_-103.28566,Stop (ASSUMED location),20.612015,-103.285660
+assumed_treep_c96v1_stop_20.61409_-103.28503,Stop (ASSUMED location),20.614086,-103.285031
+assumed_treep_c96v1_stop_20.61599_-103.28612,Stop (ASSUMED location),20.615990,-103.286118
+assumed_treep_c96v1_stop_20.61676_-103.28231,Stop (ASSUMED location),20.616760,-103.282312
+assumed_treep_c96v1_paraderointerpolated_20.61776_-103.28608,Paradero (interpolated) (ASSUMED location),20.617756,-103.286080
+assumed_treep_c96v1_stop_20.62202_-103.28898,Stop (ASSUMED location),20.622015,-103.288978
+assumed_treep_c96v1_paraderointerpolated_20.62721_-103.29265,Paradero (interpolated) (ASSUMED location),20.627212,-103.292647
+assumed_treep_c96v1_stop_20.63241_-103.29616,Stop (ASSUMED location),20.632409,-103.296159
+assumed_treep_c96v1_stop_20.63409_-103.29739,Stop (ASSUMED location),20.634093,-103.297395
+assumed_treep_c96v1_stop_20.63584_-103.29848,Stop (ASSUMED location),20.635839,-103.298481
+assumed_treep_c96v1_stop_20.63802_-103.30005,Stop (ASSUMED location),20.638019,-103.300053
+assumed_treep_c96v1_stop_20.63918_-103.30275,Stop (ASSUMED location),20.639181,-103.302745
+assumed_treep_c96v1_stop_20.63918_-103.30435,Stop (ASSUMED location),20.639179,-103.304354
+assumed_treep_c96v1_stop_20.63923_-103.30724,Stop (ASSUMED location),20.639235,-103.307238
+assumed_treep_c96v1_stop_20.64093_-103.30747,Stop (ASSUMED location),20.640933,-103.307472
+assumed_treep_c96v1_stop_20.64202_-103.30854,Stop (ASSUMED location),20.642021,-103.308542
+assumed_treep_c96v1_stop_20.64198_-103.31012,Stop (ASSUMED location),20.641983,-103.310123
+assumed_treep_c96v1_stop_20.64196_-103.31251,Stop (ASSUMED location),20.641965,-103.312513
+assumed_treep_c96v1_stop_20.64193_-103.31455,Stop (ASSUMED location),20.641933,-103.314551
+assumed_treep_c96v1_stop_20.64148_-103.31693,Stop (ASSUMED location),20.641481,-103.316934
+assumed_treep_c96v1_stop_20.64349_-103.31847,Stop (ASSUMED location),20.643495,-103.318472
+assumed_treep_c96v1_stop_20.64609_-103.3204,Stop (ASSUMED location),20.646092,-103.320395
+assumed_treep_c96v1_stop_20.64723_-103.32121,Stop (ASSUMED location),20.647230,-103.321207
+assumed_treep_c96v1_stop_20.64965_-103.323,Stop (ASSUMED location),20.649652,-103.323001
+assumed_treep_c96v1_stop_20.65143_-103.32436,Stop (ASSUMED location),20.651427,-103.324358
+assumed_treep_c96v1_stop_20.65375_-103.3261,Stop (ASSUMED location),20.653749,-103.326097
+assumed_treep_c96v1_stop_20.65612_-103.32785,Stop (ASSUMED location),20.656123,-103.327849
+assumed_treep_c96v1_stop_20.65968_-103.33051,Stop (ASSUMED location),20.659677,-103.330508
+assumed_treep_c96v1_stop_20.66166_-103.332,Stop (ASSUMED location),20.661656,-103.331999
+assumed_treep_c96v1_stop_20.6632_-103.33315,Stop (ASSUMED location),20.663201,-103.333148
+assumed_treep_c96v1_stop_20.66623_-103.33393,Stop (ASSUMED location),20.666231,-103.333929
+assumed_treep_c96v1_stop_20.66713_-103.3351,Stop (ASSUMED location),20.667134,-103.335101
+assumed_treep_c96v1_stop_20.66801_-103.33717,Stop (ASSUMED location),20.668013,-103.337171
+assumed_treep_c96v1_stop_20.66884_-103.33942,Stop (ASSUMED location),20.668841,-103.339419
+assumed_treep_c96v1_stop_20.66972_-103.3418,Stop (ASSUMED location),20.669719,-103.341799
+assumed_treep_c96v1_stop_20.67052_-103.3437,Stop (ASSUMED location),20.670523,-103.343702
+assumed_treep_c96v1_stop_20.67195_-103.34742,Stop (ASSUMED location),20.671948,-103.347416
+assumed_treep_t062_terminal_20.68735_-103.41002,Terminal (ASSUMED location),20.687352,-103.410021
+assumed_treep_t062_stop_20.68609_-103.41416,Stop (ASSUMED location),20.686092,-103.414156
+assumed_treep_t062_stop_20.68391_-103.41325,Stop (ASSUMED location),20.683908,-103.413253
+assumed_treep_t062_stop_20.68155_-103.41266,Stop (ASSUMED location),20.681546,-103.412660
+assumed_treep_t062_stop_20.68104_-103.41131,Stop (ASSUMED location),20.681040,-103.411313
+assumed_treep_t062_stop_20.68003_-103.40864,Stop (ASSUMED location),20.680026,-103.408635
+assumed_treep_t062_stop_20.68068_-103.40734,Stop (ASSUMED location),20.680677,-103.407335
+assumed_treep_t062_stop_20.67794_-103.40259,Stop (ASSUMED location),20.677944,-103.402585
+assumed_treep_t062_stop_20.67817_-103.40057,Stop (ASSUMED location),20.678170,-103.400567
+assumed_treep_t062_stop_20.67846_-103.39752,Stop (ASSUMED location),20.678459,-103.397520
+assumed_treep_t062_stop_20.67879_-103.39454,Stop (ASSUMED location),20.678792,-103.394538
+assumed_treep_t062_stop_20.67939_-103.39119,Stop (ASSUMED location),20.679390,-103.391190
+assumed_treep_t062_stop_20.67951_-103.38744,Stop (ASSUMED location),20.679510,-103.387440
+assumed_treep_t062_stop_20.67941_-103.38461,Stop (ASSUMED location),20.679410,-103.384610
+assumed_treep_t062_stop_20.68112_-103.38278,Stop (ASSUMED location),20.681120,-103.382780
+assumed_treep_t062_stop_20.68244_-103.38009,Stop (ASSUMED location),20.682439,-103.380093
+assumed_treep_t062_stop_20.68237_-103.37754,Stop (ASSUMED location),20.682369,-103.377541
+assumed_treep_t062_stop_20.68232_-103.37559,Stop (ASSUMED location),20.682318,-103.375592
+assumed_treep_t062_stop_20.68226_-103.37381,Stop (ASSUMED location),20.682264,-103.373813
+assumed_treep_t062_stop_20.68217_-103.37091,Stop (ASSUMED location),20.682166,-103.370910
+assumed_treep_t062_stop_20.68209_-103.36839,Stop (ASSUMED location),20.682086,-103.368394
+assumed_treep_t062_stop_20.682_-103.36633,Stop (ASSUMED location),20.682005,-103.366332
+assumed_treep_t062_stop_20.68193_-103.36395,Stop (ASSUMED location),20.681930,-103.363951
+assumed_treep_t062_stop_20.68189_-103.36225,Stop (ASSUMED location),20.681893,-103.362251
+assumed_treep_t062_stop_20.68186_-103.35945,Stop (ASSUMED location),20.681859,-103.359450
+assumed_treep_t062_stop_20.68185_-103.3574,Stop (ASSUMED location),20.681848,-103.357404
+assumed_treep_t062_stop_20.68186_-103.35534,Stop (ASSUMED location),20.681860,-103.355341
+assumed_treep_t062_stop_20.68372_-103.35434,Stop (ASSUMED location),20.683724,-103.354342
+assumed_treep_t062_stop_20.68367_-103.35233,Stop (ASSUMED location),20.683671,-103.352330
+assumed_treep_t062_stop_20.6818_-103.35054,Stop (ASSUMED location),20.681799,-103.350543
+assumed_treep_t062_stop_20.68182_-103.34688,Stop (ASSUMED location),20.681824,-103.346875
+assumed_treep_t062_stop_20.68194_-103.3421,Stop (ASSUMED location),20.681940,-103.342100
+assumed_treep_t062_stop_20.68197_-103.34047,Stop (ASSUMED location),20.681966,-103.340468
+assumed_treep_t062_stop_20.68197_-103.33861,Stop (ASSUMED location),20.681970,-103.338610
+assumed_treep_t062_stop_20.68202_-103.33683,Stop (ASSUMED location),20.682024,-103.336827
+assumed_treep_t062_stop_20.68203_-103.33538,Stop (ASSUMED location),20.682033,-103.335380
+assumed_treep_t062_stop_20.68206_-103.33385,Stop (ASSUMED location),20.682064,-103.333853
+assumed_treep_t062_stop_20.68197_-103.33153,Stop (ASSUMED location),20.681970,-103.331530
+assumed_treep_t062_stop_20.68167_-103.32984,Stop (ASSUMED location),20.681670,-103.329840
+assumed_treep_t062_stop_20.68174_-103.32775,Stop (ASSUMED location),20.681740,-103.327748
+assumed_treep_t062_stop_20.68168_-103.32474,Stop (ASSUMED location),20.681680,-103.324740
+assumed_treep_t062_stop_20.68149_-103.32215,Stop (ASSUMED location),20.681490,-103.322150
+assumed_treep_t062_stop_20.68061_-103.31924,Stop (ASSUMED location),20.680610,-103.319240
+assumed_treep_t062_stop_20.68007_-103.31745,Stop (ASSUMED location),20.680070,-103.317450
+assumed_treep_t062_stop_20.67921_-103.31465,Stop (ASSUMED location),20.679210,-103.314650
+assumed_treep_t062_stop_20.67869_-103.31291,Stop (ASSUMED location),20.678690,-103.312910
+assumed_treep_t062_stop_20.67758_-103.30918,Stop (ASSUMED location),20.677580,-103.309180
+assumed_treep_t062_stop_20.67702_-103.3073,Stop (ASSUMED location),20.677020,-103.307300
+assumed_treep_t062_stop_20.67647_-103.30548,Stop (ASSUMED location),20.676470,-103.305480
+assumed_treep_t062_stop_20.67594_-103.30373,Stop (ASSUMED location),20.675940,-103.303730
+assumed_treep_t062_stop_20.67546_-103.30212,Stop (ASSUMED location),20.675460,-103.302120
+assumed_treep_t062_stop_20.67469_-103.29977,Stop (ASSUMED location),20.674690,-103.299770
+assumed_treep_t062_stop_20.6741_-103.29777,Stop (ASSUMED location),20.674100,-103.297770
+assumed_treep_t062_stop_20.67392_-103.29597,Stop (ASSUMED location),20.673920,-103.295970
+assumed_treep_t062_stop_20.6738_-103.29245,Stop (ASSUMED location),20.673799,-103.292448
+assumed_treep_t062_stop_20.67378_-103.28906,Stop (ASSUMED location),20.673780,-103.289060
+assumed_treep_t062_stop_20.67376_-103.28625,Stop (ASSUMED location),20.673757,-103.286246
+assumed_treep_t062_stop_20.67378_-103.28395,Stop (ASSUMED location),20.673780,-103.283950
+assumed_treep_t062_stop_20.67378_-103.28103,Stop (ASSUMED location),20.673780,-103.281030
+assumed_treep_t062_stop_20.6739_-103.2793,Stop (ASSUMED location),20.673900,-103.279300
+assumed_treep_t062_stop_20.67425_-103.27776,Stop (ASSUMED location),20.674250,-103.277760
+assumed_treep_t062_stop_20.67462_-103.27614,Stop (ASSUMED location),20.674620,-103.276140
+assumed_treep_t062_stop_20.6751_-103.27422,Stop (ASSUMED location),20.675100,-103.274220
+assumed_treep_t062_stop_20.67838_-103.27165,Stop (ASSUMED location),20.678380,-103.271650
+assumed_treep_t062_stop_20.67948_-103.2699,Stop (ASSUMED location),20.679480,-103.269900
+assumed_treep_t062_stop_20.67918_-103.26787,Stop (ASSUMED location),20.679180,-103.267870
+assumed_treep_t062_stop_20.67796_-103.26624,Stop (ASSUMED location),20.677960,-103.266240
+assumed_treep_t062_stop_20.67721_-103.26394,Stop (ASSUMED location),20.677206,-103.263942
+assumed_treep_t062_stop_20.67687_-103.26135,Stop (ASSUMED location),20.676870,-103.261350
+assumed_treep_t062_stop_20.67712_-103.25793,Stop (ASSUMED location),20.677118,-103.257928
+assumed_treep_t062_stop_20.67923_-103.25773,Stop (ASSUMED location),20.679230,-103.257730
+assumed_treep_t062_stop_20.6811_-103.25786,Stop (ASSUMED location),20.681102,-103.257855
+assumed_treep_t062_stop_20.68352_-103.25804,Stop (ASSUMED location),20.683520,-103.258040
+assumed_treep_t16bc04_terminal_20.71237_-103.3754,Terminal (ASSUMED location),20.712366,-103.375401
+assumed_treep_t16bc04_stop_20.7144_-103.37808,Stop (ASSUMED location),20.714399,-103.378083
+assumed_treep_t16bc04_stop_20.71581_-103.38031,Stop (ASSUMED location),20.715808,-103.380307
+assumed_treep_t16bc04_stop_20.71805_-103.38388,Stop (ASSUMED location),20.718054,-103.383877
+assumed_treep_t16bc04_stop_20.72043_-103.38655,Stop (ASSUMED location),20.720432,-103.386547
+assumed_treep_t16bc04_stop_20.72227_-103.38745,Stop (ASSUMED location),20.722272,-103.387447
+assumed_treep_t16bc04_stop_20.72417_-103.38704,Stop (ASSUMED location),20.724167,-103.387045
+assumed_treep_t16bc04_stop_20.72746_-103.38613,Stop (ASSUMED location),20.727462,-103.386134
+assumed_treep_t16bc04_stop_20.72905_-103.38961,Stop (ASSUMED location),20.729049,-103.389614
+assumed_treep_t16bc04_stop_20.73136_-103.39356,Stop (ASSUMED location),20.731357,-103.393555
+assumed_treep_t16bc04_stop_20.73368_-103.39675,Stop (ASSUMED location),20.733684,-103.396747
+assumed_treep_t16bc04_stop_20.73542_-103.39911,Stop (ASSUMED location),20.735420,-103.399111
+assumed_treep_t16bc04_stop_20.73721_-103.40161,Stop (ASSUMED location),20.737208,-103.401611
+assumed_treep_t16bc04_stop_20.74175_-103.40769,Stop (ASSUMED location),20.741745,-103.407691
+assumed_treep_t16bc04_stop_20.74389_-103.41054,Stop (ASSUMED location),20.743892,-103.410539
+assumed_treep_t16bc04_stop_20.74518_-103.41241,Stop (ASSUMED location),20.745178,-103.412407
+assumed_treep_t16bc04_stop_20.7472_-103.41515,Stop (ASSUMED location),20.747202,-103.415153
+assumed_treep_t16bc04_stop_20.74862_-103.41731,Stop (ASSUMED location),20.748620,-103.417314
+assumed_treep_t16bc04_stop_20.75092_-103.42044,Stop (ASSUMED location),20.750922,-103.420440
+assumed_treep_t16bc04_stop_20.75409_-103.42486,Stop (ASSUMED location),20.754092,-103.424860
+assumed_treep_t16bc04_stop_20.75588_-103.42729,Stop (ASSUMED location),20.755883,-103.427289
+assumed_treep_t16bc04_stop_20.75796_-103.43017,Stop (ASSUMED location),20.757963,-103.430166
+assumed_treep_t16bc04_stop_20.75883_-103.4313,Stop (ASSUMED location),20.758827,-103.431305
+assumed_treep_t16bc04_stop_20.76192_-103.43557,Stop (ASSUMED location),20.761919,-103.435574
+assumed_treep_t16bc04_stop_20.76298_-103.43707,Stop (ASSUMED location),20.762983,-103.437070
+assumed_treep_t16bc04_stop_20.76447_-103.43906,Stop (ASSUMED location),20.764470,-103.439061
+assumed_treep_t16bc04_stop_20.76564_-103.44071,Stop (ASSUMED location),20.765643,-103.440712
+assumed_treep_t16bc04_stop_20.76809_-103.4441,Stop (ASSUMED location),20.768092,-103.444101
+assumed_treep_t16bc04_stop_20.7697_-103.44632,Stop (ASSUMED location),20.769704,-103.446318
+assumed_treep_t16bc04_stop_20.77208_-103.44959,Stop (ASSUMED location),20.772080,-103.449588
+assumed_treep_t16bc04_stop_20.77388_-103.45201,Stop (ASSUMED location),20.773883,-103.452013
+assumed_treep_t16bc04_stop_20.77642_-103.45561,Stop (ASSUMED location),20.776421,-103.455613
+assumed_treep_t16bc04_stop_20.7783_-103.45296,Stop (ASSUMED location),20.778302,-103.452957
+assumed_treep_t16bc04_stop_20.77859_-103.44959,Stop (ASSUMED location),20.778590,-103.449588
+assumed_treep_t16bc04_stop_20.7786_-103.44794,Stop (ASSUMED location),20.778595,-103.447944
+assumed_treep_t16bc04_stop_20.77864_-103.44646,Stop (ASSUMED location),20.778635,-103.446456
+assumed_treep_t16bc04_stop_20.78263_-103.4451,Stop (ASSUMED location),20.782627,-103.445104
+assumed_treep_t16bc04_stop_20.78499_-103.44394,Stop (ASSUMED location),20.784990,-103.443937
+assumed_treep_t16bc04_stop_20.78444_-103.44941,Stop (ASSUMED location),20.784438,-103.449410
+assumed_treep_t16bc04_stop_20.78779_-103.44989,Stop (ASSUMED location),20.787789,-103.449890
+assumed_treep_t16bc04_stop_20.79016_-103.45031,Stop (ASSUMED location),20.790160,-103.450306
+assumed_treep_t16bc04_stop_20.79168_-103.45053,Stop (ASSUMED location),20.791680,-103.450531
+assumed_treep_t16bc05_terminal_20.79976_-103.47035,Terminal (ASSUMED location),20.799764,-103.470354
+assumed_treep_t16bc05_stop_20.79724_-103.46877,Stop (ASSUMED location),20.797237,-103.468766
+assumed_treep_t16bc05_stop_20.79535_-103.46861,Stop (ASSUMED location),20.795346,-103.468611
+assumed_treep_t16bc05_stop_20.79209_-103.46857,Stop (ASSUMED location),20.792091,-103.468573
+assumed_treep_t16bc05_stop_20.79027_-103.46856,Stop (ASSUMED location),20.790266,-103.468557
+assumed_treep_t16bc05_stop_20.789_-103.47251,Stop (ASSUMED location),20.788997,-103.472505
+assumed_treep_t16bc05_stop_20.78667_-103.4704,Stop (ASSUMED location),20.786667,-103.470402
+assumed_treep_t16bc05_stop_20.7845_-103.4674,Stop (ASSUMED location),20.784498,-103.467403
+assumed_treep_t16bc05_stop_20.78188_-103.46387,Stop (ASSUMED location),20.781876,-103.463870
+assumed_treep_t16bc05_stop_20.77703_-103.45708,Stop (ASSUMED location),20.777031,-103.457077
+assumed_treep_t16bc05_stop_20.77346_-103.45219,Stop (ASSUMED location),20.773459,-103.452186
+assumed_treep_t16bc05_stop_20.7715_-103.44948,Stop (ASSUMED location),20.771498,-103.449477
+assumed_treep_t16bc05_stop_20.7694_-103.44657,Stop (ASSUMED location),20.769401,-103.446574
+assumed_treep_t16bc05_stop_20.76823_-103.44498,Stop (ASSUMED location),20.768235,-103.444979
+assumed_treep_t16bc05_stop_20.76658_-103.44269,Stop (ASSUMED location),20.766577,-103.442687
+assumed_treep_t16bc05_stop_20.76459_-103.43995,Stop (ASSUMED location),20.764587,-103.439947
+assumed_treep_t16bc05_stop_20.76316_-103.43799,Stop (ASSUMED location),20.763163,-103.437993
+assumed_treep_t16bc05_stop_20.7615_-103.43568,Stop (ASSUMED location),20.761501,-103.435683
+assumed_treep_t16bc05_stop_20.75909_-103.43234,Stop (ASSUMED location),20.759086,-103.432341
+assumed_treep_t16bc05_stop_20.75726_-103.42989,Stop (ASSUMED location),20.757258,-103.429888
+assumed_treep_t16bc05_stop_20.75579_-103.42789,Stop (ASSUMED location),20.755789,-103.427887
+assumed_treep_t16bc05_stop_20.75406_-103.42545,Stop (ASSUMED location),20.754055,-103.425451
+assumed_treep_t16bc05_stop_20.75255_-103.42341,Stop (ASSUMED location),20.752545,-103.423411
+assumed_treep_t16bc05_stop_20.75003_-103.41999,Stop (ASSUMED location),20.750031,-103.419994
+assumed_treep_t16bc05_stop_20.74828_-103.41776,Stop (ASSUMED location),20.748285,-103.417759
+assumed_treep_t16bc05_stop_20.74725_-103.41632,Stop (ASSUMED location),20.747250,-103.416318
+assumed_treep_t16bc05_stop_20.74379_-103.41158,Stop (ASSUMED location),20.743792,-103.411580
+assumed_treep_t16bc05_stop_20.74127_-103.40811,Stop (ASSUMED location),20.741271,-103.408108
+assumed_treep_t16bc05_stop_20.73728_-103.40243,Stop (ASSUMED location),20.737283,-103.402432
+assumed_treep_t16bc05_stop_20.73538_-103.39979,Stop (ASSUMED location),20.735378,-103.399790
+assumed_treep_t16bc05_stop_20.73297_-103.39649,Stop (ASSUMED location),20.732971,-103.396494
+assumed_treep_t16bc05_stop_20.73135_-103.39426,Stop (ASSUMED location),20.731345,-103.394258
+assumed_treep_t16bc05_stop_20.72911_-103.39114,Stop (ASSUMED location),20.729106,-103.391140
+assumed_treep_t16bc05_stop_20.72867_-103.38971,Stop (ASSUMED location),20.728673,-103.389711
+assumed_treep_t16bc05_stop_20.72734_-103.38661,Stop (ASSUMED location),20.727339,-103.386607
+assumed_treep_t16bc05_stop_20.72548_-103.38709,Stop (ASSUMED location),20.725478,-103.387090
+assumed_treep_t16bc05_stop_20.72365_-103.38758,Stop (ASSUMED location),20.723655,-103.387584
+assumed_treep_t16bc05_stop_20.72192_-103.38771,Stop (ASSUMED location),20.721919,-103.387708
+assumed_treep_t16bc05_stop_20.71802_-103.38434,Stop (ASSUMED location),20.718025,-103.384340
+assumed_treep_t16bc05_stop_20.71559_-103.38055,Stop (ASSUMED location),20.715592,-103.380547
+assumed_treep_t16bc05_stop_20.71335_-103.37704,Stop (ASSUMED location),20.713352,-103.377043
+assumed_treep_t16bc05_paraderointerpolated_20.71216_-103.37508,Paradero (interpolated) (ASSUMED location),20.712158,-103.375084
+assumed_treep_t16bc05_stop_20.70924_-103.37057,Stop (ASSUMED location),20.709240,-103.370570
+assumed_treep_t16bc05_stop_20.70822_-103.36903,Stop (ASSUMED location),20.708219,-103.369029
+assumed_treep_t16bc05_stop_20.70625_-103.36603,Stop (ASSUMED location),20.706252,-103.366033
+assumed_treep_t16bc05_stop_20.70537_-103.3646,Stop (ASSUMED location),20.705375,-103.364600
+assumed_treep_t16bc05_stop_20.70381_-103.36214,Stop (ASSUMED location),20.703810,-103.362140
+assumed_treep_t16bc05_stop_20.70268_-103.36025,Stop (ASSUMED location),20.702680,-103.360250
+assumed_treep_t16bc05_stop_20.70113_-103.35795,Stop (ASSUMED location),20.701130,-103.357950
+assumed_treep_t16bc05_stop_20.69946_-103.35539,Stop (ASSUMED location),20.699464,-103.355388
+assumed_treep_t16bc05_stop_20.69786_-103.35284,Stop (ASSUMED location),20.697865,-103.352839
+assumed_treep_t16bc05_stop_20.69589_-103.34979,Stop (ASSUMED location),20.695890,-103.349790
+assumed_treep_t16bc05_stop_20.69446_-103.3499,Stop (ASSUMED location),20.694457,-103.349903
+assumed_treep_t16bc05_stop_20.69261_-103.3519,Stop (ASSUMED location),20.692608,-103.351899
+assumed_treep_t16bc05_stop_20.69006_-103.35202,Stop (ASSUMED location),20.690059,-103.352021
+assumed_treep_t16bc05_stop_20.68895_-103.34985,Stop (ASSUMED location),20.688955,-103.349848
+assumed_treep_t16bc05_stop_20.68702_-103.34962,Stop (ASSUMED location),20.687020,-103.349620
+assumed_treep_t16bc05_stop_20.6854_-103.3495,Stop (ASSUMED location),20.685400,-103.349500
+assumed_treep_t16bc05_stop_20.68378_-103.3494,Stop (ASSUMED location),20.683779,-103.349403
+assumed_treep_t16bc05_stop_20.68204_-103.34927,Stop (ASSUMED location),20.682040,-103.349270
+assumed_treep_t16bc05_stop_20.68048_-103.34919,Stop (ASSUMED location),20.680480,-103.349190
+assumed_treep_c72_terminal_20.72114_-103.36389,Terminal (ASSUMED location),20.721141,-103.363886
+assumed_treep_c72_avenidaatemajac_20.72155_-103.36778,Avenida Atemajac (ASSUMED location),20.721550,-103.367780
+assumed_treep_c72_paraderointerpolated_20.72195_-103.37426,Paradero (interpolated) (ASSUMED location),20.721947,-103.374263
+assumed_treep_c72_paraderointerpolated_20.72237_-103.38068,Paradero (interpolated) (ASSUMED location),20.722368,-103.380685
+assumed_treep_c72_avenidaaurelioortega_20.72119_-103.38701,Avenida Aurelio Ortega (ASSUMED location),20.721190,-103.387010
+assumed_treep_c72_callehidalgo_20.72165_-103.39017,Calle Hidalgo (ASSUMED location),20.721650,-103.390170
+assumed_treep_c72_callehidalgo_20.72199_-103.39336,Calle Hidalgo (ASSUMED location),20.721990,-103.393360
+assumed_treep_c72_callehidalgo_20.72259_-103.39704,Calle Hidalgo (ASSUMED location),20.722590,-103.397040
+assumed_treep_c72_independencia_20.72631_-103.39933,Independencia (ASSUMED location),20.726310,-103.399330
+assumed_treep_c72_sanfranciscodesales_20.72843_-103.40133,San Francisco de Sales (ASSUMED location),20.728430,-103.401330
+assumed_treep_c72_santateresa_20.73084_-103.40392,Santa Teresa (ASSUMED location),20.730840,-103.403920
+assumed_treep_c72_casuarinas_20.73158_-103.40657,Casuarinas (ASSUMED location),20.731580,-103.406570
+assumed_treep_c72_perifericonorte_20.73119_-103.41108,Periferico Norte (ASSUMED location),20.731190,-103.411080
+assumed_treep_c72_avenidasantamargarit_20.73077_-103.41371,Avenida Santa Margarita (ASSUMED location),20.730770,-103.413710
+assumed_treep_c72_avenidasantamargarit_20.73053_-103.41892,Avenida Santa Margarita (ASSUMED location),20.730530,-103.418920
+assumed_treep_c72_lamora_20.73002_-103.42569,La Mora (ASSUMED location),20.730020,-103.425690
+assumed_treep_c72_avenidasantamargarit_20.73008_-103.429,Avenida Santa Margarita (ASSUMED location),20.730080,-103.429000
+assumed_treep_c72_paraderointerpolated_20.72981_-103.4339,Paradero (interpolated) (ASSUMED location),20.729810,-103.433897
+assumed_treep_c72_parada170b_20.72981_-103.43907,Parada 170-B (ASSUMED location),20.729814,-103.439069
+assumed_treep_c72_paradero_20.73027_-103.44542,Paradero (ASSUMED location),20.730270,-103.445418
+assumed_treep_c72_paradero_20.73092_-103.45051,Paradero (ASSUMED location),20.730923,-103.450513
+assumed_treep_c72_paraderointerpolated_20.732_-103.4565,Paradero (interpolated) (ASSUMED location),20.732003,-103.456502
+assumed_treep_c72_paraderointerpolated_20.73349_-103.46308,Paradero (interpolated) (ASSUMED location),20.733494,-103.463077
+assumed_treep_c72_paraderointerpolated_20.7347_-103.46934,Paradero (interpolated) (ASSUMED location),20.734696,-103.469340
+assumed_treep_c72_paraderointerpolated_20.73596_-103.47561,Paradero (interpolated) (ASSUMED location),20.735962,-103.475614
+assumed_treep_c72_paraderointerpolated_20.73757_-103.48258,Paradero (interpolated) (ASSUMED location),20.737574,-103.482579
+assumed_treep_c72_paraderointerpolated_20.73892_-103.48831,Paradero (interpolated) (ASSUMED location),20.738917,-103.488314
+assumed_treep_c72_paraderointerpolated_20.74_-103.49233,Paradero (interpolated) (ASSUMED location),20.739996,-103.492328
+assumed_treep_c72_paraderointerpolated_20.74537_-103.49892,Paradero (interpolated) (ASSUMED location),20.745371,-103.498921
+assumed_treep_c72_paraderointerpolated_20.74923_-103.50424,Paradero (interpolated) (ASSUMED location),20.749232,-103.504236
+assumed_treep_c72_paraderointerpolated_20.75479_-103.51033,Paradero (interpolated) (ASSUMED location),20.754786,-103.510335
+assumed_treep_c72_paraderointerpolated_20.75763_-103.51355,Paradero (interpolated) (ASSUMED location),20.757625,-103.513545
+assumed_treep_c72_paraderointerpolated_20.76306_-103.51745,Paradero (interpolated) (ASSUMED location),20.763061,-103.517452
+assumed_treep_c72_paraderointerpolated_20.76539_-103.52284,Paradero (interpolated) (ASSUMED location),20.765388,-103.522839
+assumed_treep_c72_paraderointerpolated_20.76112_-103.52702,Paradero (interpolated) (ASSUMED location),20.761125,-103.527020
+assumed_treep_c72_paraderointerpolated_20.75797_-103.53236,Paradero (interpolated) (ASSUMED location),20.757972,-103.532362
+assumed_treep_c72_paraderointerpolated_20.75325_-103.53669,Paradero (interpolated) (ASSUMED location),20.753252,-103.536695
+assumed_treep_c72_paraderointerpolated_20.74742_-103.53746,Paradero (interpolated) (ASSUMED location),20.747421,-103.537464
+assumed_treep_c72_paraderointerpolated_20.74032_-103.53863,Paradero (interpolated) (ASSUMED location),20.740317,-103.538634
+assumed_treep_c72_paraderointerpolated_20.73496_-103.53937,Paradero (interpolated) (ASSUMED location),20.734957,-103.539365
+assumed_treep_c72_cruceronextipac_20.72905_-103.53992,CRUCERO NEXTIPAC (ASSUMED location),20.729053,-103.539922
+assumed_treep_c72_paradero_20.72761_-103.54484,Paradero (ASSUMED location),20.727608,-103.544843
+assumed_treep_c72_ejido_20.72823_-103.55195,EJIDO (ASSUMED location),20.728227,-103.551949
+assumed_treep_c72_laprimavera_20.72718_-103.56114,LA PRIMAVERA (ASSUMED location),20.727175,-103.561139
+assumed_treep_c72_paraderointerpolated_20.72632_-103.5638,Paradero (interpolated) (ASSUMED location),20.726322,-103.563799
+assumed_treep_c72_paraderointerpolated_20.72302_-103.56556,Paradero (interpolated) (ASSUMED location),20.723023,-103.565561
+assumed_treep_c72_terminal_20.719_-103.56753,Terminal (ASSUMED location),20.718997,-103.567526

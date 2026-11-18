@@ -1,0 +1,9 @@
+shape_id,shape_pt_lat,shape_pt_lon,shape_pt_sequence
+assumed_line4_tren_shape,20.607964,-103.340769,1
+assumed_line4_tren_shape,20.575989,-103.355219,2
+assumed_line4_tren_shape,20.558890,-103.365908,3
+assumed_line4_tren_shape,20.527139,-103.384939,4
+assumed_line4_tren_shape,20.507628,-103.393408,5
+assumed_line4_tren_shape,20.485647,-103.405039,6
+assumed_line4_tren_shape,20.468958,-103.415219,7
+assumed_line4_tren_shape,20.469389,-103.436583,8

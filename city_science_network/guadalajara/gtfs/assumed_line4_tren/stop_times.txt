@@ -1,0 +1,17 @@
+trip_id,arrival_time,departure_time,stop_id,stop_sequence
+assumed_line4_tren_0,00:00:00,00:00:00,assumed_line4_tren_lasjuntas_20.60796_-103.34077,1
+assumed_line4_tren_0,00:07:30,00:07:30,assumed_line4_tren_jalisco200anos_20.57599_-103.35522,2
+assumed_line4_tren_0,00:11:47,00:11:47,assumed_line4_tren_realdelvalle_20.55889_-103.36591,3
+assumed_line4_tren_0,00:19:40,00:19:40,assumed_line4_tren_concepciondelvalle_20.52714_-103.38494,4
+assumed_line4_tren_0,00:24:13,00:24:13,assumed_line4_tren_elcuervo_20.50763_-103.39341,5
+assumed_line4_tren_0,00:29:31,00:29:31,assumed_line4_tren_lomasdelsur_20.48565_-103.40504,6
+assumed_line4_tren_0,00:33:40,00:33:40,assumed_line4_tren_cutlajo_20.46896_-103.41522,7
+assumed_line4_tren_0,00:38:00,00:38:00,assumed_line4_tren_tlajomulcocentro_20.46939_-103.43658,8
+assumed_line4_tren_1,00:00:00,00:00:00,assumed_line4_tren_tlajomulcocentro_20.46939_-103.43658,1
+assumed_line4_tren_1,00:04:20,00:04:20,assumed_line4_tren_cutlajo_20.46896_-103.41522,2
+assumed_line4_tren_1,00:08:29,00:08:29,assumed_line4_tren_lomasdelsur_20.48565_-103.40504,3
+assumed_line4_tren_1,00:13:47,00:13:47,assumed_line4_tren_elcuervo_20.50763_-103.39341,4
+assumed_line4_tren_1,00:18:20,00:18:20,assumed_line4_tren_concepciondelvalle_20.52714_-103.38494,5
+assumed_line4_tren_1,00:26:13,00:26:13,assumed_line4_tren_realdelvalle_20.55889_-103.36591,6
+assumed_line4_tren_1,00:30:30,00:30:30,assumed_line4_tren_jalisco200anos_20.57599_-103.35522,7
+assumed_line4_tren_1,00:38:00,00:38:00,assumed_line4_tren_lasjuntas_20.60796_-103.34077,8

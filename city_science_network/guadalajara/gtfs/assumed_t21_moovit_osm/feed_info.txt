@@ -1,0 +1,2 @@
+feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_version
+ASSUMED (Moovit stop names + OpenStreetMap + El Ciudadano Jalisco 2023),https://github.com,es,20260101,20271231,assumed-1

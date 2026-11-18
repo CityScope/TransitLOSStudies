@@ -1,0 +1,105 @@
+stop_id,stop_name,stop_lat,stop_lon
+assumed_401_terminal_-36.60415_-72.96914,Terminal (ASSUMED location),-36.604152,-72.969135
+assumed_401_paraderointerpolated_-36.60853_-72.96603,Paradero (interpolated) (ASSUMED location),-36.608528,-72.966032
+assumed_401_paraderointerpolated_-36.61405_-72.96333,Paradero (interpolated) (ASSUMED location),-36.614053,-72.963333
+assumed_401_paraderointerpolated_-36.61703_-72.95865,Paradero (interpolated) (ASSUMED location),-36.617033,-72.958653
+assumed_401_paraderointerpolated_-36.61995_-72.95741,Paradero (interpolated) (ASSUMED location),-36.619949,-72.957414
+assumed_401_paraderointerpolated_-36.62611_-72.95593,Paradero (interpolated) (ASSUMED location),-36.626111,-72.955928
+assumed_401_paraderointerpolated_-36.63213_-72.95601,Paradero (interpolated) (ASSUMED location),-36.632131,-72.956011
+assumed_401_paraderointerpolated_-36.63793_-72.95879,Paradero (interpolated) (ASSUMED location),-36.637929,-72.958786
+assumed_401_paraderointerpolated_-36.6437_-72.96027,Paradero (interpolated) (ASSUMED location),-36.643704,-72.960269
+assumed_401_paraderointerpolated_-36.64714_-72.96133,Paradero (interpolated) (ASSUMED location),-36.647136,-72.961331
+assumed_401_paraderointerpolated_-36.65094_-72.95563,Paradero (interpolated) (ASSUMED location),-36.650942,-72.955626
+assumed_401_paraderointerpolated_-36.65685_-72.95453,Paradero (interpolated) (ASSUMED location),-36.656847,-72.954532
+assumed_401_paraderointerpolated_-36.66229_-72.95815,Paradero (interpolated) (ASSUMED location),-36.662290,-72.958148
+assumed_401_paraderointerpolated_-36.6686_-72.95769,Paradero (interpolated) (ASSUMED location),-36.668595,-72.957685
+assumed_401_paraderointerpolated_-36.67462_-72.95797,Paradero (interpolated) (ASSUMED location),-36.674620,-72.957970
+assumed_401_paraderointerpolated_-36.67991_-72.96112,Paradero (interpolated) (ASSUMED location),-36.679905,-72.961121
+assumed_401_paraderointerpolated_-36.68521_-72.9657,Paradero (interpolated) (ASSUMED location),-36.685209,-72.965696
+assumed_401_paraderointerpolated_-36.69201_-72.96857,Paradero (interpolated) (ASSUMED location),-36.692011,-72.968567
+assumed_401_paraderointerpolated_-36.69676_-72.96923,Paradero (interpolated) (ASSUMED location),-36.696756,-72.969226
+assumed_401_paraderointerpolated_-36.70213_-72.97274,Paradero (interpolated) (ASSUMED location),-36.702131,-72.972738
+assumed_401_paraderointerpolated_-36.70731_-72.97616,Paradero (interpolated) (ASSUMED location),-36.707306,-72.976162
+assumed_401_paraderointerpolated_-36.71171_-72.97391,Paradero (interpolated) (ASSUMED location),-36.711711,-72.973908
+assumed_401_paraderointerpolated_-36.7176_-72.97461,Paradero (interpolated) (ASSUMED location),-36.717596,-72.974613
+assumed_401_paraderointerpolated_-36.72346_-72.97882,Paradero (interpolated) (ASSUMED location),-36.723465,-72.978824
+assumed_401_paraderointerpolated_-36.7286_-72.98049,Paradero (interpolated) (ASSUMED location),-36.728595,-72.980493
+assumed_401_paraderointerpolated_-36.7327_-72.98616,Paradero (interpolated) (ASSUMED location),-36.732699,-72.986164
+assumed_401_paraderointerpolated_-36.73678_-72.9894,Paradero (interpolated) (ASSUMED location),-36.736777,-72.989402
+assumed_401_maipuesqcruz_-36.74105_-72.99174,Maipú esq. Cruz (ASSUMED location),-36.741046,-72.991740
+assumed_401_paraderointerpolated_-36.74705_-72.99337,Paradero (interpolated) (ASSUMED location),-36.747054,-72.993374
+assumed_401_paraderointerpolated_-36.7511_-72.99777,Paradero (interpolated) (ASSUMED location),-36.751100,-72.997771
+assumed_401_paraderointerpolated_-36.75559_-73.00155,Paradero (interpolated) (ASSUMED location),-36.755592,-73.001554
+assumed_401_paraderointerpolated_-36.75962_-73.00589,Paradero (interpolated) (ASSUMED location),-36.759617,-73.005895
+assumed_401_paraderointerpolated_-36.76659_-73.01159,Paradero (interpolated) (ASSUMED location),-36.766586,-73.011593
+assumed_401_paraderointerpolated_-36.77064_-73.01397,Paradero (interpolated) (ASSUMED location),-36.770641,-73.013968
+assumed_401_paraderointerpolated_-36.77676_-73.01758,Paradero (interpolated) (ASSUMED location),-36.776762,-73.017584
+assumed_401_portonesdecosmito_-36.78175_-73.02066,Portones de Cosmito (ASSUMED location),-36.781751,-73.020659
+assumed_401_paraderointerpolated_-36.78708_-73.0231,Paradero (interpolated) (ASSUMED location),-36.787078,-73.023101
+assumed_401_paraderointerpolated_-36.79237_-73.02523,Paradero (interpolated) (ASSUMED location),-36.792370,-73.025233
+assumed_401_paraderointerpolated_-36.79775_-73.02575,Paradero (interpolated) (ASSUMED location),-36.797750,-73.025746
+assumed_401_paraderointerpolated_-36.80353_-73.02511,Paradero (interpolated) (ASSUMED location),-36.803535,-73.025108
+assumed_401_paraderointerpolated_-36.80916_-73.02579,Paradero (interpolated) (ASSUMED location),-36.809159,-73.025793
+assumed_401_avsanjuanboscoregimi_-36.81346_-73.02955,Av. San Juan Bosco - Regimiento Chacabuco (ASSUMED location),-36.813463,-73.029545
+assumed_401_paraderointerpolated_-36.81768_-73.03359,Paradero (interpolated) (ASSUMED location),-36.817678,-73.033591
+assumed_401_paraderointerpolated_-36.822_-73.03613,Paradero (interpolated) (ASSUMED location),-36.821998,-73.036125
+assumed_401_avchacabucojanequeo_-36.82642_-73.03826,Av. Chacabuco - Janequeo (ASSUMED location),-36.826422,-73.038260
+assumed_401_avchacabucotucapels_-36.82892_-73.04384,Av. Chacabuco - Tucapel (S) (ASSUMED location),-36.828921,-73.043837
+assumed_401_terminal_-36.82879_-73.04358,Terminal (ASSUMED location),-36.828795,-73.043584
+assumed_411_terminal_-36.54863_-72.93638,Terminal (ASSUMED location),-36.548632,-72.936377
+assumed_411_paraderointerpolated_-36.55414_-72.93928,Paradero (interpolated) (ASSUMED location),-36.554137,-72.939277
+assumed_411_paraderointerpolated_-36.55854_-72.94465,Paradero (interpolated) (ASSUMED location),-36.558538,-72.944647
+assumed_411_paraderointerpolated_-36.56381_-72.94571,Paradero (interpolated) (ASSUMED location),-36.563812,-72.945708
+assumed_411_paraderointerpolated_-36.56853_-72.94831,Paradero (interpolated) (ASSUMED location),-36.568525,-72.948308
+assumed_411_paraderointerpolated_-36.56992_-72.95371,Paradero (interpolated) (ASSUMED location),-36.569917,-72.953708
+assumed_411_paraderointerpolated_-36.57617_-72.95636,Paradero (interpolated) (ASSUMED location),-36.576169,-72.956363
+assumed_411_paraderointerpolated_-36.58174_-72.95468,Paradero (interpolated) (ASSUMED location),-36.581739,-72.954680
+assumed_411_paraderointerpolated_-36.58789_-72.95591,Paradero (interpolated) (ASSUMED location),-36.587892,-72.955909
+assumed_411_paraderointerpolated_-36.59382_-72.9537,Paradero (interpolated) (ASSUMED location),-36.593824,-72.953701
+assumed_411_paraderointerpolated_-36.59922_-72.9527,Paradero (interpolated) (ASSUMED location),-36.599216,-72.952700
+assumed_411_paraderointerpolated_-36.60513_-72.95409,Paradero (interpolated) (ASSUMED location),-36.605133,-72.954088
+assumed_411_paraderointerpolated_-36.61042_-72.95504,Paradero (interpolated) (ASSUMED location),-36.610419,-72.955039
+assumed_411_paraderointerpolated_-36.61584_-72.95704,Paradero (interpolated) (ASSUMED location),-36.615837,-72.957044
+assumed_411_paraderointerpolated_-36.62035_-72.95754,Paradero (interpolated) (ASSUMED location),-36.620353,-72.957539
+assumed_411_paraderointerpolated_-36.62646_-72.95582,Paradero (interpolated) (ASSUMED location),-36.626459,-72.955820
+assumed_411_paraderointerpolated_-36.63252_-72.95613,Paradero (interpolated) (ASSUMED location),-36.632523,-72.956131
+assumed_411_paraderointerpolated_-36.63793_-72.95879,Paradero (interpolated) (ASSUMED location),-36.637929,-72.958786
+assumed_411_paraderointerpolated_-36.64429_-72.96028,Paradero (interpolated) (ASSUMED location),-36.644293,-72.960278
+assumed_411_paraderointerpolated_-36.64754_-72.9613,Paradero (interpolated) (ASSUMED location),-36.647536,-72.961298
+assumed_411_paraderointerpolated_-36.65131_-72.95518,Paradero (interpolated) (ASSUMED location),-36.651306,-72.955179
+assumed_411_paraderointerpolated_-36.65717_-72.95476,Paradero (interpolated) (ASSUMED location),-36.657170,-72.954756
+assumed_411_paraderointerpolated_-36.66251_-72.95815,Paradero (interpolated) (ASSUMED location),-36.662514,-72.958149
+assumed_411_paraderointerpolated_-36.6686_-72.95769,Paradero (interpolated) (ASSUMED location),-36.668595,-72.957685
+assumed_411_paraderointerpolated_-36.6748_-72.95798,Paradero (interpolated) (ASSUMED location),-36.674800,-72.957983
+assumed_411_paraderointerpolated_-36.68059_-72.96142,Paradero (interpolated) (ASSUMED location),-36.680589,-72.961422
+assumed_411_paraderointerpolated_-36.68521_-72.9657,Paradero (interpolated) (ASSUMED location),-36.685209,-72.965696
+assumed_411_paraderointerpolated_-36.69201_-72.96857,Paradero (interpolated) (ASSUMED location),-36.692011,-72.968567
+assumed_411_paraderointerpolated_-36.69695_-72.96935,Paradero (interpolated) (ASSUMED location),-36.696947,-72.969351
+assumed_411_paraderointerpolated_-36.70224_-72.97298,Paradero (interpolated) (ASSUMED location),-36.702238,-72.972976
+assumed_411_paraderointerpolated_-36.70731_-72.97616,Paradero (interpolated) (ASSUMED location),-36.707306,-72.976162
+assumed_411_paraderointerpolated_-36.71193_-72.97389,Paradero (interpolated) (ASSUMED location),-36.711933,-72.973890
+assumed_411_paraderointerpolated_-36.71833_-72.9747,Paradero (interpolated) (ASSUMED location),-36.718326,-72.974702
+assumed_411_paraderointerpolated_-36.72346_-72.97882,Paradero (interpolated) (ASSUMED location),-36.723465,-72.978824
+assumed_411_paraderointerpolated_-36.72872_-72.98058,Paradero (interpolated) (ASSUMED location),-36.728719,-72.980585
+assumed_411_paraderointerpolated_-36.7327_-72.98616,Paradero (interpolated) (ASSUMED location),-36.732699,-72.986164
+assumed_411_paraderointerpolated_-36.73678_-72.9894,Paradero (interpolated) (ASSUMED location),-36.736777,-72.989402
+assumed_411_maipuesqcruz_-36.74105_-72.99174,Maipú esq. Cruz (ASSUMED location),-36.741046,-72.991740
+assumed_411_paraderointerpolated_-36.74705_-72.99337,Paradero (interpolated) (ASSUMED location),-36.747054,-72.993374
+assumed_411_paraderointerpolated_-36.7511_-72.99777,Paradero (interpolated) (ASSUMED location),-36.751100,-72.997771
+assumed_411_paraderointerpolated_-36.75559_-73.00155,Paradero (interpolated) (ASSUMED location),-36.755592,-73.001554
+assumed_411_paraderointerpolated_-36.75962_-73.00589,Paradero (interpolated) (ASSUMED location),-36.759617,-73.005895
+assumed_411_paraderointerpolated_-36.76659_-73.01159,Paradero (interpolated) (ASSUMED location),-36.766586,-73.011593
+assumed_411_paraderointerpolated_-36.77064_-73.01397,Paradero (interpolated) (ASSUMED location),-36.770641,-73.013968
+assumed_411_paraderointerpolated_-36.77676_-73.01758,Paradero (interpolated) (ASSUMED location),-36.776762,-73.017584
+assumed_411_portonesdecosmito_-36.78175_-73.02066,Portones de Cosmito (ASSUMED location),-36.781751,-73.020659
+assumed_411_paraderointerpolated_-36.78708_-73.0231,Paradero (interpolated) (ASSUMED location),-36.787078,-73.023101
+assumed_411_paraderointerpolated_-36.79237_-73.02523,Paradero (interpolated) (ASSUMED location),-36.792370,-73.025233
+assumed_411_paraderointerpolated_-36.79775_-73.02575,Paradero (interpolated) (ASSUMED location),-36.797750,-73.025746
+assumed_411_paraderointerpolated_-36.80353_-73.02511,Paradero (interpolated) (ASSUMED location),-36.803535,-73.025108
+assumed_411_paraderointerpolated_-36.80916_-73.02579,Paradero (interpolated) (ASSUMED location),-36.809159,-73.025793
+assumed_411_avsanjuanboscoregimi_-36.81346_-73.02955,Av. San Juan Bosco - Regimiento Chacabuco (ASSUMED location),-36.813463,-73.029545
+assumed_411_paraderointerpolated_-36.81768_-73.03359,Paradero (interpolated) (ASSUMED location),-36.817678,-73.033591
+assumed_411_paraderointerpolated_-36.822_-73.03613,Paradero (interpolated) (ASSUMED location),-36.821998,-73.036125
+assumed_411_avchacabucojanequeo_-36.82642_-73.03826,Av. Chacabuco - Janequeo (ASSUMED location),-36.826422,-73.038260
+assumed_411_avchacabucotucapels_-36.82892_-73.04384,Av. Chacabuco - Tucapel (S) (ASSUMED location),-36.828921,-73.043837
+assumed_411_terminal_-36.82879_-73.04358,Terminal (ASSUMED location),-36.828795,-73.043584

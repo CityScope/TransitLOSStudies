@@ -1,0 +1,3 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type
+assumed_nlt_centro,assumed,NLT,Nueva Los Tilos Tomé - Concepción,"ASSUMED: terminals from OpenStreetMap, road path, OSM bus stops within 35 m; every 30 min (spokesman of the line, El Conquistador, 25 Jul 2023); hours assumed like the 401",3
+assumed_nlt_coliumo,assumed,NLT-C,Nueva Los Tilos Coliumo - Tomé,"ASSUMED: terminals from OpenStreetMap, road path, OSM bus stops within 35 m; every 45 min (spokesman of the line, El Conquistador, 25 Jul 2023); hours assumed like the 401",3

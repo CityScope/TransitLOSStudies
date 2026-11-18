@@ -1,0 +1,1303 @@
+stop_id,stop_name,stop_lat,stop_lon
+assumed_osm_c14_13990900_c14175acentrometropo_20.47503_-103.45205,C14 - 175A: Centro Metropolitano stop 1 (ASSUMED location),20.475030,-103.452050
+assumed_osm_c14_13990900_c14175acentrometropo_20.47679_-103.4524,C14 - 175A: Centro Metropolitano stop 2 (ASSUMED location),20.476790,-103.452400
+assumed_osm_c14_13990900_c14175acentrometropo_20.47666_-103.45106,C14 - 175A: Centro Metropolitano stop 3 (ASSUMED location),20.476660,-103.451060
+assumed_osm_c14_13990900_c14175acentrometropo_20.47651_-103.44996,C14 - 175A: Centro Metropolitano stop 4 (ASSUMED location),20.476510,-103.449960
+assumed_osm_c14_13990900_c14175acentrometropo_20.47635_-103.44876,C14 - 175A: Centro Metropolitano stop 5 (ASSUMED location),20.476350,-103.448760
+assumed_osm_c14_13990900_c14175acentrometropo_20.4762_-103.44759,C14 - 175A: Centro Metropolitano stop 6 (ASSUMED location),20.476200,-103.447590
+assumed_osm_c14_13990900_c14175acentrometropo_20.47613_-103.44711,C14 - 175A: Centro Metropolitano stop 7 (ASSUMED location),20.476130,-103.447110
+assumed_osm_c14_13990900_c14175acentrometropo_20.47604_-103.44651,C14 - 175A: Centro Metropolitano stop 8 (ASSUMED location),20.476040,-103.446510
+assumed_osm_c14_13990900_c14175acentrometropo_20.47589_-103.44535,C14 - 175A: Centro Metropolitano stop 9 (ASSUMED location),20.475890,-103.445350
+assumed_osm_c14_13990900_c14175acentrometropo_20.47573_-103.44422,C14 - 175A: Centro Metropolitano stop 10 (ASSUMED location),20.475730,-103.444220
+assumed_osm_c14_13990900_c14175acentrometropo_20.4756_-103.44317,C14 - 175A: Centro Metropolitano stop 11 (ASSUMED location),20.475600,-103.443170
+assumed_osm_c14_13990900_c14175acentrometropo_20.47552_-103.44124,C14 - 175A: Centro Metropolitano stop 12 (ASSUMED location),20.475520,-103.441240
+assumed_osm_c14_13990900_c14175acentrometropo_20.47682_-103.44264,C14 - 175A: Centro Metropolitano stop 13 (ASSUMED location),20.476820,-103.442640
+assumed_osm_c14_13990900_c14175acentrometropo_20.47577_-103.44306,C14 - 175A: Centro Metropolitano stop 14 (ASSUMED location),20.475770,-103.443060
+assumed_osm_c14_13990900_c14175acentrometropo_20.47447_-103.44325,C14 - 175A: Centro Metropolitano stop 15 (ASSUMED location),20.474470,-103.443250
+assumed_osm_c14_13990900_c14175acentrometropo_20.47306_-103.44236,C14 - 175A: Centro Metropolitano stop 16 (ASSUMED location),20.473060,-103.442360
+assumed_osm_c14_13990900_c14175acentrometropo_20.47143_-103.44171,C14 - 175A: Centro Metropolitano stop 17 (ASSUMED location),20.471430,-103.441710
+assumed_osm_c14_13990900_c14175acentrometropo_20.47102_-103.43876,C14 - 175A: Centro Metropolitano stop 18 (ASSUMED location),20.471020,-103.438760
+assumed_osm_c14_13990900_c14175acentrometropo_20.46557_-103.42667,C14 - 175A: Centro Metropolitano stop 19 (ASSUMED location),20.465570,-103.426670
+assumed_osm_c14_13990900_c14175acentrometropo_20.46577_-103.42355,C14 - 175A: Centro Metropolitano stop 20 (ASSUMED location),20.465770,-103.423550
+assumed_osm_c14_13990900_c14175acentrometropo_20.46817_-103.41669,C14 - 175A: Centro Metropolitano stop 21 (ASSUMED location),20.468168,-103.416687
+assumed_osm_c14_13990900_c14175acentrometropo_20.46864_-103.41549,C14 - 175A: Centro Metropolitano stop 22 (ASSUMED location),20.468640,-103.415490
+assumed_osm_c14_13990900_c14175acentrometropo_20.47165_-103.40832,C14 - 175A: Centro Metropolitano stop 23 (ASSUMED location),20.471650,-103.408320
+assumed_osm_c14_13990900_c14175acentrometropo_20.47593_-103.40671,C14 - 175A: Centro Metropolitano stop 24 (ASSUMED location),20.475930,-103.406710
+assumed_osm_c14_13990900_c14175acentrometropo_20.48561_-103.40471,C14 - 175A: Centro Metropolitano stop 25 (ASSUMED location),20.485610,-103.404710
+assumed_osm_c14_13990900_c14175acentrometropo_20.4874_-103.40328,C14 - 175A: Centro Metropolitano stop 26 (ASSUMED location),20.487400,-103.403280
+assumed_osm_c14_13990900_c14175acentrometropo_20.48805_-103.40426,C14 - 175A: Centro Metropolitano stop 27 (ASSUMED location),20.488050,-103.404260
+assumed_osm_c14_13990900_c14175acentrometropo_20.49204_-103.40132,C14 - 175A: Centro Metropolitano stop 28 (ASSUMED location),20.492040,-103.401320
+assumed_osm_c14_13990900_c14175acentrometropo_20.49284_-103.40217,C14 - 175A: Centro Metropolitano stop 29 (ASSUMED location),20.492840,-103.402170
+assumed_osm_c14_13990900_c14175acentrometropo_20.49355_-103.40564,C14 - 175A: Centro Metropolitano stop 30 (ASSUMED location),20.493550,-103.405640
+assumed_osm_c14_13990900_c14175acentrometropo_20.49356_-103.40877,C14 - 175A: Centro Metropolitano stop 31 (ASSUMED location),20.493560,-103.408770
+assumed_osm_c14_13990900_c14175acentrometropo_20.49319_-103.41157,C14 - 175A: Centro Metropolitano stop 32 (ASSUMED location),20.493190,-103.411570
+assumed_osm_c14_13990900_c14175acentrometropo_20.4932_-103.41338,C14 - 175A: Centro Metropolitano stop 33 (ASSUMED location),20.493200,-103.413380
+assumed_osm_c14_13990900_c14175acentrometropo_20.49323_-103.41489,C14 - 175A: Centro Metropolitano stop 34 (ASSUMED location),20.493230,-103.414890
+assumed_osm_c14_13990900_c14175acentrometropo_20.49333_-103.41604,C14 - 175A: Centro Metropolitano stop 35 (ASSUMED location),20.493330,-103.416040
+assumed_osm_c14_13990900_c14175acentrometropo_20.49341_-103.41715,C14 - 175A: Centro Metropolitano stop 36 (ASSUMED location),20.493410,-103.417150
+assumed_osm_c14_13990900_c14175acentrometropo_20.49866_-103.41631,C14 - 175A: Centro Metropolitano stop 37 (ASSUMED location),20.498660,-103.416310
+assumed_osm_c14_13990900_c14175acentrometropo_20.51429_-103.41143,C14 - 175A: Centro Metropolitano stop 38 (ASSUMED location),20.514290,-103.411430
+assumed_osm_c14_13990900_c14175acentrometropo_20.51742_-103.4148,C14 - 175A: Centro Metropolitano stop 39 (ASSUMED location),20.517420,-103.414800
+assumed_osm_c14_13990900_c14175acentrometropo_20.51993_-103.41919,C14 - 175A: Centro Metropolitano stop 40 (ASSUMED location),20.519930,-103.419190
+assumed_osm_c14_13990900_c14175acentrometropo_20.52219_-103.42299,C14 - 175A: Centro Metropolitano stop 41 (ASSUMED location),20.522190,-103.422990
+assumed_osm_c14_13990900_c14175acentrometropo_20.52558_-103.42443,C14 - 175A: Centro Metropolitano stop 42 (ASSUMED location),20.525580,-103.424430
+assumed_osm_c14_13990900_c14175acentrometropo_20.52803_-103.42406,C14 - 175A: Centro Metropolitano stop 43 (ASSUMED location),20.528030,-103.424060
+assumed_osm_c14_13990900_c14175acentrometropo_20.52979_-103.42391,C14 - 175A: Centro Metropolitano stop 44 (ASSUMED location),20.529790,-103.423910
+assumed_osm_c14_13990900_c14175acentrometropo_20.53159_-103.42457,C14 - 175A: Centro Metropolitano stop 45 (ASSUMED location),20.531590,-103.424570
+assumed_osm_c14_13990900_c14175acentrometropo_20.53354_-103.42404,C14 - 175A: Centro Metropolitano stop 46 (ASSUMED location),20.533540,-103.424040
+assumed_osm_c14_13990900_c14175acentrometropo_20.53432_-103.42379,C14 - 175A: Centro Metropolitano stop 47 (ASSUMED location),20.534320,-103.423790
+assumed_osm_c14_13990900_c14175acentrometropo_20.53734_-103.42262,C14 - 175A: Centro Metropolitano stop 48 (ASSUMED location),20.537340,-103.422620
+assumed_osm_c14_13990900_c14175acentrometropo_20.54185_-103.42121,C14 - 175A: Centro Metropolitano stop 49 (ASSUMED location),20.541850,-103.421210
+assumed_osm_c14_13990900_c14175acentrometropo_20.55234_-103.41917,C14 - 175A: Centro Metropolitano stop 50 (ASSUMED location),20.552340,-103.419170
+assumed_osm_c14_13990900_c14175acentrometropo_20.55883_-103.41681,C14 - 175A: Centro Metropolitano stop 51 (ASSUMED location),20.558830,-103.416810
+assumed_osm_c14_13990900_c14175acentrometropo_20.56357_-103.41337,C14 - 175A: Centro Metropolitano stop 52 (ASSUMED location),20.563570,-103.413370
+assumed_osm_c14_13990900_c14175acentrometropo_20.56591_-103.41086,C14 - 175A: Centro Metropolitano stop 53 (ASSUMED location),20.565910,-103.410860
+assumed_osm_c14_13990900_c14175acentrometropo_20.57391_-103.40529,C14 - 175A: Centro Metropolitano stop 54 (ASSUMED location),20.573910,-103.405290
+assumed_osm_c14_13990900_c14175acentrometropo_20.57948_-103.40291,C14 - 175A: Centro Metropolitano stop 55 (ASSUMED location),20.579480,-103.402910
+assumed_osm_c14_13990900_c14175acentrometropo_20.58236_-103.40222,C14 - 175A: Centro Metropolitano stop 56 (ASSUMED location),20.582360,-103.402220
+assumed_osm_c14_13990900_c14175acentrometropo_20.58676_-103.40047,C14 - 175A: Centro Metropolitano stop 57 (ASSUMED location),20.586760,-103.400470
+assumed_osm_c14_13990900_c14175acentrometropo_20.59304_-103.39891,C14 - 175A: Centro Metropolitano stop 58 (ASSUMED location),20.593040,-103.398910
+assumed_osm_c14_13990900_c14175acentrometropo_20.59746_-103.40014,C14 - 175A: Centro Metropolitano stop 59 (ASSUMED location),20.597460,-103.400140
+assumed_osm_c14_13990900_c14175acentrometropo_20.59942_-103.39999,C14 - 175A: Centro Metropolitano stop 60 (ASSUMED location),20.599420,-103.399990
+assumed_osm_c14_13990900_c14175acentrometropo_20.60047_-103.40115,C14 - 175A: Centro Metropolitano stop 61 (ASSUMED location),20.600470,-103.401150
+assumed_osm_c14_13990900_c14175acentrometropo_20.60137_-103.40342,C14 - 175A: Centro Metropolitano stop 62 (ASSUMED location),20.601370,-103.403420
+assumed_osm_c14_13990900_c14175acentrometropo_20.60426_-103.4018,C14 - 175A: Centro Metropolitano stop 63 (ASSUMED location),20.604260,-103.401800
+assumed_osm_c14_13990900_c14175acentrometropo_20.60536_-103.40049,C14 - 175A: Centro Metropolitano stop 64 (ASSUMED location),20.605360,-103.400490
+assumed_osm_c14_13990900_c14175acentrometropo_20.60442_-103.39854,C14 - 175A: Centro Metropolitano stop 65 (ASSUMED location),20.604420,-103.398540
+assumed_osm_c14_13990900_c14175acentrometropo_20.60536_-103.39958,C14 - 175A: Centro Metropolitano stop 66 (ASSUMED location),20.605360,-103.399580
+assumed_osm_c14_13990900_c14175acentrometropo_20.60971_-103.39859,C14 - 175A: Centro Metropolitano stop 67 (ASSUMED location),20.609710,-103.398590
+assumed_osm_c14_13990900_c14175acentrometropo_20.61266_-103.39599,C14 - 175A: Centro Metropolitano stop 68 (ASSUMED location),20.612660,-103.395990
+assumed_osm_c14_13990900_c14175acentrometropo_20.62576_-103.38538,C14 - 175A: Centro Metropolitano stop 69 (ASSUMED location),20.625760,-103.385380
+assumed_osm_c14_13990900_c14175acentrometropo_20.63176_-103.38114,C14 - 175A: Centro Metropolitano stop 70 (ASSUMED location),20.631760,-103.381140
+assumed_osm_c14_13990900_c14175acentrometropo_20.63244_-103.37952,C14 - 175A: Centro Metropolitano stop 71 (ASSUMED location),20.632440,-103.379520
+assumed_osm_c14_13990900_c14175acentrometropo_20.63222_-103.37838,C14 - 175A: Centro Metropolitano stop 72 (ASSUMED location),20.632220,-103.378380
+assumed_osm_c14_13990900_c14175acentrometropo_20.6318_-103.37587,C14 - 175A: Centro Metropolitano stop 73 (ASSUMED location),20.631800,-103.375870
+assumed_osm_c14_13990900_c14175acentrometropo_20.63152_-103.37424,C14 - 175A: Centro Metropolitano stop 74 (ASSUMED location),20.631520,-103.374240
+assumed_osm_c14_13990900_c14175acentrometropo_20.63116_-103.37203,C14 - 175A: Centro Metropolitano stop 75 (ASSUMED location),20.631160,-103.372030
+assumed_osm_c14_13990900_c14175acentrometropo_20.63078_-103.36969,C14 - 175A: Centro Metropolitano stop 76 (ASSUMED location),20.630780,-103.369690
+assumed_osm_c14_13990900_c14175acentrometropo_20.63059_-103.36858,C14 - 175A: Centro Metropolitano stop 77 (ASSUMED location),20.630590,-103.368580
+assumed_osm_c14_13990900_c14175acentrometropo_20.63338_-103.36701,C14 - 175A: Centro Metropolitano stop 78 (ASSUMED location),20.633380,-103.367010
+assumed_osm_c14_13990900_c14175acentrometropo_20.63462_-103.36651,C14 - 175A: Centro Metropolitano stop 79 (ASSUMED location),20.634620,-103.366510
+assumed_osm_c14_13990900_c14175acentrometropo_20.63863_-103.3648,C14 - 175A: Centro Metropolitano stop 80 (ASSUMED location),20.638630,-103.364800
+assumed_osm_c14_13990900_c14175acentrometropo_20.64136_-103.36363,C14 - 175A: Centro Metropolitano stop 81 (ASSUMED location),20.641360,-103.363630
+assumed_osm_c14_13990900_c14175acentrometropo_20.64411_-103.36246,C14 - 175A: Centro Metropolitano stop 82 (ASSUMED location),20.644110,-103.362460
+assumed_osm_c14_13990900_c14175acentrometropo_20.64665_-103.3614,C14 - 175A: Centro Metropolitano stop 83 (ASSUMED location),20.646650,-103.361400
+assumed_osm_c14_13990900_c14175acentrometropo_20.64846_-103.36059,C14 - 175A: Centro Metropolitano stop 84 (ASSUMED location),20.648460,-103.360590
+assumed_osm_c14_13990900_c14175acentrometropo_20.65018_-103.35986,C14 - 175A: Centro Metropolitano stop 85 (ASSUMED location),20.650180,-103.359860
+assumed_osm_c14_13990900_c14175acentrometropo_20.65196_-103.3591,C14 - 175A: Centro Metropolitano stop 86 (ASSUMED location),20.651960,-103.359100
+assumed_osm_c14_13990900_c14175acentrometropo_20.65426_-103.35813,C14 - 175A: Centro Metropolitano stop 87 (ASSUMED location),20.654260,-103.358130
+assumed_osm_c14_13990900_c14175acentrometropo_20.66006_-103.35561,C14 - 175A: Centro Metropolitano stop 88 (ASSUMED location),20.660060,-103.355610
+assumed_osm_c14_13990900_c14175acentrometropo_20.66195_-103.35401,C14 - 175A: Centro Metropolitano stop 89 (ASSUMED location),20.661950,-103.354010
+assumed_osm_c14_13990900_c14175acentrometropo_20.66331_-103.35296,C14 - 175A: Centro Metropolitano stop 90 (ASSUMED location),20.663310,-103.352960
+assumed_osm_c14_13990900_c14175acentrometropo_20.66462_-103.35236,C14 - 175A: Centro Metropolitano stop 91 (ASSUMED location),20.664620,-103.352360
+assumed_osm_c14_13990900_c14175acentrometropo_20.66631_-103.3512,C14 - 175A: Centro Metropolitano stop 92 (ASSUMED location),20.666310,-103.351200
+assumed_osm_c14_13990900_c14175acentrometropo_20.66708_-103.34852,C14 - 175A: Centro Metropolitano stop 93 (ASSUMED location),20.667080,-103.348520
+assumed_osm_c14_13990900_c14175acentrometropo_20.6678_-103.34789,C14 - 175A: Centro Metropolitano stop 94 (ASSUMED location),20.667800,-103.347890
+assumed_osm_c14_13990900_c14175acentrometropo_20.67065_-103.34716,C14 - 175A: Centro Metropolitano stop 95 (ASSUMED location),20.670650,-103.347160
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.49235_-103.35859,Alimentadora Mi Macro Periférico A05-2: Colón stop 1 (ASSUMED location),20.492350,-103.358590
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.50012_-103.36376,Alimentadora Mi Macro Periférico A05-2: Colón stop 2 (ASSUMED location),20.500120,-103.363760
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.50695_-103.37088,Alimentadora Mi Macro Periférico A05-2: Colón stop 3 (ASSUMED location),20.506950,-103.370880
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.51213_-103.37345,Alimentadora Mi Macro Periférico A05-2: Colón stop 4 (ASSUMED location),20.512130,-103.373450
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.52915_-103.37866,Alimentadora Mi Macro Periférico A05-2: Colón stop 5 (ASSUMED location),20.529150,-103.378660
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.52477_-103.38784,Alimentadora Mi Macro Periférico A05-2: Colón stop 6 (ASSUMED location),20.524770,-103.387840
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.51531_-103.39199,Alimentadora Mi Macro Periférico A05-2: Colón stop 7 (ASSUMED location),20.515310,-103.391990
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.50775_-103.3953,Alimentadora Mi Macro Periférico A05-2: Colón stop 8 (ASSUMED location),20.507746,-103.395299
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.50965_-103.40121,Alimentadora Mi Macro Periférico A05-2: Colón stop 9 (ASSUMED location),20.509650,-103.401210
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.51516_-103.41083,Alimentadora Mi Macro Periférico A05-2: Colón stop 10 (ASSUMED location),20.515160,-103.410830
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.51742_-103.4148,Alimentadora Mi Macro Periférico A05-2: Colón stop 11 (ASSUMED location),20.517420,-103.414800
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.52219_-103.42299,Alimentadora Mi Macro Periférico A05-2: Colón stop 12 (ASSUMED location),20.522190,-103.422990
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.53159_-103.42457,Alimentadora Mi Macro Periférico A05-2: Colón stop 13 (ASSUMED location),20.531590,-103.424570
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.53927_-103.43366,Alimentadora Mi Macro Periférico A05-2: Colón stop 14 (ASSUMED location),20.539270,-103.433660
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.55168_-103.43937,Alimentadora Mi Macro Periférico A05-2: Colón stop 15 (ASSUMED location),20.551680,-103.439370
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.55313_-103.44478,Alimentadora Mi Macro Periférico A05-2: Colón stop 16 (ASSUMED location),20.553130,-103.444780
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.55457_-103.44903,Alimentadora Mi Macro Periférico A05-2: Colón stop 17 (ASSUMED location),20.554570,-103.449030
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.55569_-103.45251,Alimentadora Mi Macro Periférico A05-2: Colón stop 18 (ASSUMED location),20.555690,-103.452510
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.56014_-103.44945,Alimentadora Mi Macro Periférico A05-2: Colón stop 19 (ASSUMED location),20.560140,-103.449450
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.56613_-103.4437,Alimentadora Mi Macro Periférico A05-2: Colón stop 20 (ASSUMED location),20.566130,-103.443700
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.57566_-103.44268,Alimentadora Mi Macro Periférico A05-2: Colón stop 21 (ASSUMED location),20.575660,-103.442680
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.58079_-103.44825,Alimentadora Mi Macro Periférico A05-2: Colón stop 22 (ASSUMED location),20.580790,-103.448250
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.58987_-103.44309,Alimentadora Mi Macro Periférico A05-2: Colón stop 23 (ASSUMED location),20.589870,-103.443090
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.5963_-103.43888,Alimentadora Mi Macro Periférico A05-2: Colón stop 24 (ASSUMED location),20.596300,-103.438880
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.60491_-103.43317,Alimentadora Mi Macro Periférico A05-2: Colón stop 25 (ASSUMED location),20.604910,-103.433170
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.61143_-103.42885,Alimentadora Mi Macro Periférico A05-2: Colón stop 26 (ASSUMED location),20.611430,-103.428850
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.61243_-103.42377,Alimentadora Mi Macro Periférico A05-2: Colón stop 27 (ASSUMED location),20.612430,-103.423770
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.61128_-103.42031,Alimentadora Mi Macro Periférico A05-2: Colón stop 28 (ASSUMED location),20.611280,-103.420310
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.6102_-103.41519,Alimentadora Mi Macro Periférico A05-2: Colón stop 29 (ASSUMED location),20.610196,-103.415193
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.60935_-103.41241,Alimentadora Mi Macro Periférico A05-2: Colón stop 30 (ASSUMED location),20.609350,-103.412410
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.60832_-103.40774,Alimentadora Mi Macro Periférico A05-2: Colón stop 31 (ASSUMED location),20.608324,-103.407739
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.60735_-103.40414,Alimentadora Mi Macro Periférico A05-2: Colón stop 32 (ASSUMED location),20.607350,-103.404140
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.60589_-103.40109,Alimentadora Mi Macro Periférico A05-2: Colón stop 33 (ASSUMED location),20.605890,-103.401090
+assumed_osm_mpa052_14012587_alimentadoramimacrop_20.60573_-103.40067,Alimentadora Mi Macro Periférico A05-2: Colón stop 34 (ASSUMED location),20.605730,-103.400670
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.65991_-103.35757,T18-Lopez: Washington-Canada stop 1 (ASSUMED location),20.659910,-103.357570
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.66215_-103.36339,T18-Lopez: Washington-Canada stop 2 (ASSUMED location),20.662150,-103.363390
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.66382_-103.3678,T18-Lopez: Washington-Canada stop 3 (ASSUMED location),20.663820,-103.367800
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.66572_-103.37289,T18-Lopez: Washington-Canada stop 4 (ASSUMED location),20.665720,-103.372890
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.66737_-103.37718,T18-Lopez: Washington-Canada stop 5 (ASSUMED location),20.667370,-103.377180
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.66885_-103.38114,T18-Lopez: Washington-Canada stop 6 (ASSUMED location),20.668850,-103.381140
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.67009_-103.38398,T18-Lopez: Washington-Canada stop 7 (ASSUMED location),20.670090,-103.383980
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.67201_-103.38553,T18-Lopez: Washington-Canada stop 8 (ASSUMED location),20.672010,-103.385530
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.67311_-103.3863,T18-Lopez: Washington-Canada stop 9 (ASSUMED location),20.673110,-103.386300
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.67525_-103.38664,T18-Lopez: Washington-Canada stop 10 (ASSUMED location),20.675250,-103.386640
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.67647_-103.38587,T18-Lopez: Washington-Canada stop 11 (ASSUMED location),20.676470,-103.385870
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.67745_-103.3852,T18-Lopez: Washington-Canada stop 12 (ASSUMED location),20.677450,-103.385200
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.67923_-103.38376,T18-Lopez: Washington-Canada stop 13 (ASSUMED location),20.679229,-103.383759
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.68016_-103.38342,T18-Lopez: Washington-Canada stop 14 (ASSUMED location),20.680160,-103.383420
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.68097_-103.38287,T18-Lopez: Washington-Canada stop 15 (ASSUMED location),20.680970,-103.382870
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.68414_-103.38075,T18-Lopez: Washington-Canada stop 16 (ASSUMED location),20.684140,-103.380750
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.68975_-103.37706,T18-Lopez: Washington-Canada stop 17 (ASSUMED location),20.689750,-103.377060
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69104_-103.37621,T18-Lopez: Washington-Canada stop 18 (ASSUMED location),20.691040,-103.376210
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69413_-103.37416,T18-Lopez: Washington-Canada stop 19 (ASSUMED location),20.694130,-103.374160
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69693_-103.37334,T18-Lopez: Washington-Canada stop 20 (ASSUMED location),20.696930,-103.373340
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69888_-103.37439,T18-Lopez: Washington-Canada stop 21 (ASSUMED location),20.698880,-103.374390
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.7018_-103.37558,T18-Lopez: Washington-Canada stop 22 (ASSUMED location),20.701800,-103.375580
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.70338_-103.37614,T18-Lopez: Washington-Canada stop 23 (ASSUMED location),20.703380,-103.376140
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.70835_-103.37778,T18-Lopez: Washington-Canada stop 24 (ASSUMED location),20.708350,-103.377778
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71183_-103.3761,T18-Lopez: Washington-Canada stop 25 (ASSUMED location),20.711830,-103.376100
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71329_-103.37343,T18-Lopez: Washington-Canada stop 26 (ASSUMED location),20.713290,-103.373430
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71319_-103.36947,T18-Lopez: Washington-Canada stop 27 (ASSUMED location),20.713190,-103.369470
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71307_-103.36797,T18-Lopez: Washington-Canada stop 28 (ASSUMED location),20.713070,-103.367970
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71284_-103.36471,T18-Lopez: Washington-Canada stop 29 (ASSUMED location),20.712840,-103.364710
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.7131_-103.36118,T18-Lopez: Washington-Canada stop 30 (ASSUMED location),20.713100,-103.361180
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71386_-103.35877,T18-Lopez: Washington-Canada stop 31 (ASSUMED location),20.713860,-103.358770
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71532_-103.35483,T18-Lopez: Washington-Canada stop 32 (ASSUMED location),20.715320,-103.354830
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71299_-103.3523,T18-Lopez: Washington-Canada stop 33 (ASSUMED location),20.712990,-103.352300
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71269_-103.35023,T18-Lopez: Washington-Canada stop 34 (ASSUMED location),20.712690,-103.350230
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71252_-103.34912,T18-Lopez: Washington-Canada stop 35 (ASSUMED location),20.712520,-103.349120
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71225_-103.34706,T18-Lopez: Washington-Canada stop 36 (ASSUMED location),20.712250,-103.347060
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71198_-103.34513,T18-Lopez: Washington-Canada stop 37 (ASSUMED location),20.711980,-103.345130
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.7118_-103.34366,T18-Lopez: Washington-Canada stop 38 (ASSUMED location),20.711800,-103.343660
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71161_-103.34217,T18-Lopez: Washington-Canada stop 39 (ASSUMED location),20.711610,-103.342170
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71124_-103.33931,T18-Lopez: Washington-Canada stop 40 (ASSUMED location),20.711240,-103.339310
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.71024_-103.33692,T18-Lopez: Washington-Canada stop 41 (ASSUMED location),20.710240,-103.336920
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.70839_-103.33309,T18-Lopez: Washington-Canada stop 42 (ASSUMED location),20.708390,-103.333090
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.7078_-103.33183,T18-Lopez: Washington-Canada stop 43 (ASSUMED location),20.707800,-103.331830
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.70653_-103.32918,T18-Lopez: Washington-Canada stop 44 (ASSUMED location),20.706530,-103.329180
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.705_-103.32603,T18-Lopez: Washington-Canada stop 45 (ASSUMED location),20.705000,-103.326030
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.70506_-103.32446,T18-Lopez: Washington-Canada stop 46 (ASSUMED location),20.705060,-103.324460
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.70374_-103.32369,T18-Lopez: Washington-Canada stop 47 (ASSUMED location),20.703740,-103.323690
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.70114_-103.32226,T18-Lopez: Washington-Canada stop 48 (ASSUMED location),20.701140,-103.322260
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.6998_-103.32151,T18-Lopez: Washington-Canada stop 49 (ASSUMED location),20.699800,-103.321510
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69886_-103.32014,T18-Lopez: Washington-Canada stop 50 (ASSUMED location),20.698860,-103.320140
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69978_-103.31919,T18-Lopez: Washington-Canada stop 51 (ASSUMED location),20.699780,-103.319190
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69852_-103.31658,T18-Lopez: Washington-Canada stop 52 (ASSUMED location),20.698520,-103.316580
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69769_-103.31507,T18-Lopez: Washington-Canada stop 53 (ASSUMED location),20.697690,-103.315070
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69669_-103.31315,T18-Lopez: Washington-Canada stop 54 (ASSUMED location),20.696690,-103.313150
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69575_-103.31136,T18-Lopez: Washington-Canada stop 55 (ASSUMED location),20.695750,-103.311360
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69525_-103.31042,T18-Lopez: Washington-Canada stop 56 (ASSUMED location),20.695250,-103.310420
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.6949_-103.30965,T18-Lopez: Washington-Canada stop 57 (ASSUMED location),20.694900,-103.309650
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69318_-103.30864,T18-Lopez: Washington-Canada stop 58 (ASSUMED location),20.693180,-103.308640
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69313_-103.30677,T18-Lopez: Washington-Canada stop 59 (ASSUMED location),20.693130,-103.306770
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.69134_-103.30738,T18-Lopez: Washington-Canada stop 60 (ASSUMED location),20.691340,-103.307380
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.68926_-103.30809,T18-Lopez: Washington-Canada stop 61 (ASSUMED location),20.689260,-103.308090
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.68625_-103.30912,T18-Lopez: Washington-Canada stop 62 (ASSUMED location),20.686250,-103.309120
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.68497_-103.30956,T18-Lopez: Washington-Canada stop 63 (ASSUMED location),20.684970,-103.309560
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.68068_-103.31102,T18-Lopez: Washington-Canada stop 64 (ASSUMED location),20.680680,-103.311020
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.67759_-103.31207,T18-Lopez: Washington-Canada stop 65 (ASSUMED location),20.677590,-103.312070
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.67377_-103.31338,T18-Lopez: Washington-Canada stop 66 (ASSUMED location),20.673770,-103.313380
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.6694_-103.31488,T18-Lopez: Washington-Canada stop 67 (ASSUMED location),20.669400,-103.314880
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.66625_-103.31593,T18-Lopez: Washington-Canada stop 68 (ASSUMED location),20.666250,-103.315930
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.66461_-103.31651,T18-Lopez: Washington-Canada stop 69 (ASSUMED location),20.664610,-103.316510
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.66195_-103.31745,T18-Lopez: Washington-Canada stop 70 (ASSUMED location),20.661950,-103.317450
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.65996_-103.31815,T18-Lopez: Washington-Canada stop 71 (ASSUMED location),20.659960,-103.318150
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.65729_-103.31906,T18-Lopez: Washington-Canada stop 72 (ASSUMED location),20.657290,-103.319060
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.65511_-103.32162,T18-Lopez: Washington-Canada stop 73 (ASSUMED location),20.655110,-103.321620
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.65357_-103.32527,T18-Lopez: Washington-Canada stop 74 (ASSUMED location),20.653570,-103.325270
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.65239_-103.32809,T18-Lopez: Washington-Canada stop 75 (ASSUMED location),20.652390,-103.328090
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.6512_-103.33088,T18-Lopez: Washington-Canada stop 76 (ASSUMED location),20.651200,-103.330880
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.65094_-103.33542,T18-Lopez: Washington-Canada stop 77 (ASSUMED location),20.650940,-103.335420
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.6488_-103.33999,T18-Lopez: Washington-Canada stop 78 (ASSUMED location),20.648800,-103.339990
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.65724_-103.35056,T18-Lopez: Washington-Canada stop 79 (ASSUMED location),20.657240,-103.350560
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.65897_-103.35237,T18-Lopez: Washington-Canada stop 80 (ASSUMED location),20.658972,-103.352367
+assumed_osm_t18lopez_14012781_t18lopezwashingtonca_20.65922_-103.35571,T18-Lopez: Washington-Canada stop 81 (ASSUMED location),20.659220,-103.355710
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.67192_-103.3474,C14 - 175A: Tlajomulco de Zuñiga stop 1 (ASSUMED location),20.671920,-103.347400
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.67083_-103.3474,C14 - 175A: Tlajomulco de Zuñiga stop 2 (ASSUMED location),20.670830,-103.347400
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.67036_-103.34737,C14 - 175A: Tlajomulco de Zuñiga stop 3 (ASSUMED location),20.670360,-103.347370
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.66875_-103.34775,C14 - 175A: Tlajomulco de Zuñiga stop 4 (ASSUMED location),20.668751,-103.347747
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.66673_-103.3485,C14 - 175A: Tlajomulco de Zuñiga stop 5 (ASSUMED location),20.666730,-103.348500
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.66412_-103.34939,C14 - 175A: Tlajomulco de Zuñiga stop 6 (ASSUMED location),20.664120,-103.349390
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.66119_-103.35047,C14 - 175A: Tlajomulco de Zuñiga stop 7 (ASSUMED location),20.661190,-103.350470
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.65923_-103.35121,C14 - 175A: Tlajomulco de Zuñiga stop 8 (ASSUMED location),20.659230,-103.351210
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.65963_-103.35347,C14 - 175A: Tlajomulco de Zuñiga stop 9 (ASSUMED location),20.659630,-103.353470
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.66027_-103.35528,C14 - 175A: Tlajomulco de Zuñiga stop 10 (ASSUMED location),20.660270,-103.355280
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.65949_-103.35616,C14 - 175A: Tlajomulco de Zuñiga stop 11 (ASSUMED location),20.659490,-103.356160
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.6572_-103.35711,C14 - 175A: Tlajomulco de Zuñiga stop 12 (ASSUMED location),20.657200,-103.357110
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.65486_-103.3581,C14 - 175A: Tlajomulco de Zuñiga stop 13 (ASSUMED location),20.654860,-103.358100
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.65319_-103.35884,C14 - 175A: Tlajomulco de Zuñiga stop 14 (ASSUMED location),20.653185,-103.358844
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.65227_-103.3592,C14 - 175A: Tlajomulco de Zuñiga stop 15 (ASSUMED location),20.652270,-103.359200
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.65079_-103.35985,C14 - 175A: Tlajomulco de Zuñiga stop 16 (ASSUMED location),20.650792,-103.359847
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.64832_-103.36085,C14 - 175A: Tlajomulco de Zuñiga stop 17 (ASSUMED location),20.648320,-103.360850
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.64462_-103.36253,C14 - 175A: Tlajomulco de Zuñiga stop 18 (ASSUMED location),20.644620,-103.362530
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.6419_-103.36364,C14 - 175A: Tlajomulco de Zuñiga stop 19 (ASSUMED location),20.641900,-103.363640
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.63913_-103.36484,C14 - 175A: Tlajomulco de Zuñiga stop 20 (ASSUMED location),20.639130,-103.364840
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.63538_-103.36644,C14 - 175A: Tlajomulco de Zuñiga stop 21 (ASSUMED location),20.635380,-103.366440
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.63396_-103.36704,C14 - 175A: Tlajomulco de Zuñiga stop 22 (ASSUMED location),20.633960,-103.367040
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.63086_-103.36835,C14 - 175A: Tlajomulco de Zuñiga stop 23 (ASSUMED location),20.630860,-103.368350
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.62933_-103.36901,C14 - 175A: Tlajomulco de Zuñiga stop 24 (ASSUMED location),20.629330,-103.369010
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.62776_-103.36965,C14 - 175A: Tlajomulco de Zuñiga stop 25 (ASSUMED location),20.627760,-103.369650
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.63158_-103.38014,C14 - 175A: Tlajomulco de Zuñiga stop 26 (ASSUMED location),20.631580,-103.380140
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.63079_-103.38229,C14 - 175A: Tlajomulco de Zuñiga stop 27 (ASSUMED location),20.630790,-103.382290
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.62645_-103.38557,C14 - 175A: Tlajomulco de Zuñiga stop 28 (ASSUMED location),20.626450,-103.385570
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.62448_-103.38742,C14 - 175A: Tlajomulco de Zuñiga stop 29 (ASSUMED location),20.624480,-103.387420
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.62139_-103.38974,C14 - 175A: Tlajomulco de Zuñiga stop 30 (ASSUMED location),20.621390,-103.389740
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.61402_-103.39581,C14 - 175A: Tlajomulco de Zuñiga stop 31 (ASSUMED location),20.614020,-103.395810
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.61048_-103.39862,C14 - 175A: Tlajomulco de Zuñiga stop 32 (ASSUMED location),20.610480,-103.398620
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.60752_-103.40117,C14 - 175A: Tlajomulco de Zuñiga stop 33 (ASSUMED location),20.607520,-103.401170
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.60762_-103.40257,C14 - 175A: Tlajomulco de Zuñiga stop 34 (ASSUMED location),20.607620,-103.402570
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.60822_-103.40478,C14 - 175A: Tlajomulco de Zuñiga stop 35 (ASSUMED location),20.608220,-103.404780
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.6102_-103.41519,C14 - 175A: Tlajomulco de Zuñiga stop 36 (ASSUMED location),20.610196,-103.415193
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.60935_-103.41241,C14 - 175A: Tlajomulco de Zuñiga stop 37 (ASSUMED location),20.609350,-103.412410
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.60832_-103.40774,C14 - 175A: Tlajomulco de Zuñiga stop 38 (ASSUMED location),20.608324,-103.407739
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.60735_-103.40414,C14 - 175A: Tlajomulco de Zuñiga stop 39 (ASSUMED location),20.607350,-103.404140
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.60683_-103.40256,C14 - 175A: Tlajomulco de Zuñiga stop 40 (ASSUMED location),20.606830,-103.402560
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.60589_-103.40109,C14 - 175A: Tlajomulco de Zuñiga stop 41 (ASSUMED location),20.605890,-103.401090
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.60536_-103.40049,C14 - 175A: Tlajomulco de Zuñiga stop 42 (ASSUMED location),20.605360,-103.400490
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.60316_-103.39849,C14 - 175A: Tlajomulco de Zuñiga stop 43 (ASSUMED location),20.603160,-103.398490
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.60079_-103.4014,C14 - 175A: Tlajomulco de Zuñiga stop 44 (ASSUMED location),20.600790,-103.401400
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.5999_-103.40071,C14 - 175A: Tlajomulco de Zuñiga stop 45 (ASSUMED location),20.599900,-103.400710
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.59965_-103.40019,C14 - 175A: Tlajomulco de Zuñiga stop 46 (ASSUMED location),20.599650,-103.400190
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.59733_-103.40026,C14 - 175A: Tlajomulco de Zuñiga stop 47 (ASSUMED location),20.597330,-103.400260
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.59436_-103.39919,C14 - 175A: Tlajomulco de Zuñiga stop 48 (ASSUMED location),20.594360,-103.399190
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.58706_-103.40051,C14 - 175A: Tlajomulco de Zuñiga stop 49 (ASSUMED location),20.587060,-103.400510
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.58215_-103.40245,C14 - 175A: Tlajomulco de Zuñiga stop 50 (ASSUMED location),20.582150,-103.402450
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.57948_-103.40312,C14 - 175A: Tlajomulco de Zuñiga stop 51 (ASSUMED location),20.579480,-103.403120
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.57391_-103.40542,C14 - 175A: Tlajomulco de Zuñiga stop 52 (ASSUMED location),20.573910,-103.405420
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.56634_-103.41056,C14 - 175A: Tlajomulco de Zuñiga stop 53 (ASSUMED location),20.566340,-103.410560
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.55887_-103.41696,C14 - 175A: Tlajomulco de Zuñiga stop 54 (ASSUMED location),20.558870,-103.416960
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.55261_-103.41925,C14 - 175A: Tlajomulco de Zuñiga stop 55 (ASSUMED location),20.552610,-103.419250
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.54586_-103.42083,C14 - 175A: Tlajomulco de Zuñiga stop 56 (ASSUMED location),20.545860,-103.420830
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.54183_-103.42144,C14 - 175A: Tlajomulco de Zuñiga stop 57 (ASSUMED location),20.541830,-103.421440
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.53755_-103.42282,C14 - 175A: Tlajomulco de Zuñiga stop 58 (ASSUMED location),20.537550,-103.422820
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.53376_-103.42406,C14 - 175A: Tlajomulco de Zuñiga stop 59 (ASSUMED location),20.533760,-103.424060
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.53112_-103.42453,C14 - 175A: Tlajomulco de Zuñiga stop 60 (ASSUMED location),20.531120,-103.424530
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.52979_-103.42391,C14 - 175A: Tlajomulco de Zuñiga stop 61 (ASSUMED location),20.529790,-103.423910
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.52807_-103.4242,C14 - 175A: Tlajomulco de Zuñiga stop 62 (ASSUMED location),20.528070,-103.424200
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.52633_-103.42465,C14 - 175A: Tlajomulco de Zuñiga stop 63 (ASSUMED location),20.526330,-103.424650
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.52212_-103.42313,C14 - 175A: Tlajomulco de Zuñiga stop 64 (ASSUMED location),20.522120,-103.423130
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.52002_-103.41971,C14 - 175A: Tlajomulco de Zuñiga stop 65 (ASSUMED location),20.520020,-103.419710
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.51747_-103.41523,C14 - 175A: Tlajomulco de Zuñiga stop 66 (ASSUMED location),20.517470,-103.415230
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.51538_-103.41157,C14 - 175A: Tlajomulco de Zuñiga stop 67 (ASSUMED location),20.515380,-103.411570
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.51434_-103.41163,C14 - 175A: Tlajomulco de Zuñiga stop 68 (ASSUMED location),20.514340,-103.411630
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.50678_-103.41388,C14 - 175A: Tlajomulco de Zuñiga stop 69 (ASSUMED location),20.506780,-103.413880
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.50162_-103.41519,C14 - 175A: Tlajomulco de Zuñiga stop 70 (ASSUMED location),20.501620,-103.415190
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.49901_-103.41636,C14 - 175A: Tlajomulco de Zuñiga stop 71 (ASSUMED location),20.499010,-103.416360
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.49311_-103.4163,C14 - 175A: Tlajomulco de Zuñiga stop 72 (ASSUMED location),20.493110,-103.416300
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.49298_-103.41417,C14 - 175A: Tlajomulco de Zuñiga stop 73 (ASSUMED location),20.492980,-103.414170
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.49325_-103.40914,C14 - 175A: Tlajomulco de Zuñiga stop 74 (ASSUMED location),20.493250,-103.409140
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.49333_-103.40609,C14 - 175A: Tlajomulco de Zuñiga stop 75 (ASSUMED location),20.493330,-103.406090
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.49325_-103.40441,C14 - 175A: Tlajomulco de Zuñiga stop 76 (ASSUMED location),20.493250,-103.404410
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.49282_-103.40272,C14 - 175A: Tlajomulco de Zuñiga stop 77 (ASSUMED location),20.492820,-103.402720
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.49229_-103.4015,C14 - 175A: Tlajomulco de Zuñiga stop 78 (ASSUMED location),20.492290,-103.401500
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.49064_-103.40262,C14 - 175A: Tlajomulco de Zuñiga stop 79 (ASSUMED location),20.490640,-103.402620
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.48978_-103.40332,C14 - 175A: Tlajomulco de Zuñiga stop 80 (ASSUMED location),20.489780,-103.403320
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.48804_-103.40451,C14 - 175A: Tlajomulco de Zuñiga stop 81 (ASSUMED location),20.488040,-103.404510
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.4874_-103.40374,C14 - 175A: Tlajomulco de Zuñiga stop 82 (ASSUMED location),20.487400,-103.403740
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.47589_-103.40693,C14 - 175A: Tlajomulco de Zuñiga stop 83 (ASSUMED location),20.475890,-103.406930
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.47177_-103.40843,C14 - 175A: Tlajomulco de Zuñiga stop 84 (ASSUMED location),20.471770,-103.408430
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.46917_-103.4146,C14 - 175A: Tlajomulco de Zuñiga stop 85 (ASSUMED location),20.469170,-103.414600
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.46887_-103.41536,C14 - 175A: Tlajomulco de Zuñiga stop 86 (ASSUMED location),20.468870,-103.415360
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.46839_-103.41658,C14 - 175A: Tlajomulco de Zuñiga stop 87 (ASSUMED location),20.468388,-103.416577
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.46598_-103.42342,C14 - 175A: Tlajomulco de Zuñiga stop 88 (ASSUMED location),20.465980,-103.423420
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.4658_-103.42676,C14 - 175A: Tlajomulco de Zuñiga stop 89 (ASSUMED location),20.465800,-103.426760
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.47128_-103.43681,C14 - 175A: Tlajomulco de Zuñiga stop 90 (ASSUMED location),20.471280,-103.436810
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.47274_-103.4402,C14 - 175A: Tlajomulco de Zuñiga stop 91 (ASSUMED location),20.472740,-103.440200
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.47264_-103.44206,C14 - 175A: Tlajomulco de Zuñiga stop 92 (ASSUMED location),20.472640,-103.442060
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.47324_-103.4444,C14 - 175A: Tlajomulco de Zuñiga stop 93 (ASSUMED location),20.473240,-103.444400
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.47338_-103.44539,C14 - 175A: Tlajomulco de Zuñiga stop 94 (ASSUMED location),20.473380,-103.445390
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.47356_-103.44666,C14 - 175A: Tlajomulco de Zuñiga stop 95 (ASSUMED location),20.473560,-103.446660
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.47371_-103.44779,C14 - 175A: Tlajomulco de Zuñiga stop 96 (ASSUMED location),20.473710,-103.447790
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.47385_-103.44878,C14 - 175A: Tlajomulco de Zuñiga stop 97 (ASSUMED location),20.473850,-103.448780
+assumed_osm_c14_14017311_c14175atlajomulcodez_20.47403_-103.45009,C14 - 175A: Tlajomulco de Zuñiga stop 98 (ASSUMED location),20.474030,-103.450090
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.60589_-103.40109,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 1 (ASSUMED location),20.605890,-103.401090
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.60822_-103.40478,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 2 (ASSUMED location),20.608220,-103.404780
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.61276_-103.42329,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 3 (ASSUMED location),20.612760,-103.423290
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.61221_-103.42878,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 4 (ASSUMED location),20.612210,-103.428780
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.60857_-103.43118,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 5 (ASSUMED location),20.608570,-103.431180
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.58734_-103.44516,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 6 (ASSUMED location),20.587340,-103.445160
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.56921_-103.441,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 7 (ASSUMED location),20.569210,-103.441000
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.55866_-103.45109,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 8 (ASSUMED location),20.558660,-103.451090
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.55262_-103.44396,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 9 (ASSUMED location),20.552620,-103.443960
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.54636_-103.44116,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 10 (ASSUMED location),20.546360,-103.441160
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.54328_-103.43874,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 11 (ASSUMED location),20.543280,-103.438740
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.53212_-103.4316,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 12 (ASSUMED location),20.532120,-103.431600
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.53001_-103.42414,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 13 (ASSUMED location),20.530010,-103.424140
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.52633_-103.42465,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 14 (ASSUMED location),20.526330,-103.424650
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.52002_-103.41971,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 15 (ASSUMED location),20.520020,-103.419710
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.50805_-103.39872,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 16 (ASSUMED location),20.508050,-103.398720
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.50761_-103.3953,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 17 (ASSUMED location),20.507614,-103.395299
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.52206_-103.39041,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 18 (ASSUMED location),20.522060,-103.390410
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.52606_-103.38597,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 19 (ASSUMED location),20.526058,-103.385967
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.52722_-103.37819,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 20 (ASSUMED location),20.527220,-103.378190
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.52181_-103.37776,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 21 (ASSUMED location),20.521810,-103.377760
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.51216_-103.37644,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 22 (ASSUMED location),20.512160,-103.376440
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.51007_-103.37116,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 23 (ASSUMED location),20.510070,-103.371160
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.50669_-103.36939,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 24 (ASSUMED location),20.506690,-103.369390
+assumed_osm_mpa052_14036349_alimentadoramimacrop_20.49313_-103.3588,Alimentadora Mi Macro Periférico A05-2: Cerro Copey stop 25 (ASSUMED location),20.493130,-103.358800
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.50494_-103.17098,T13A-1: Centro Metropolitano stop 1 (ASSUMED location),20.504940,-103.170980
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.50673_-103.17061,T13A-1: Centro Metropolitano stop 2 (ASSUMED location),20.506730,-103.170610
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.509_-103.17029,T13A-1: Centro Metropolitano stop 3 (ASSUMED location),20.509000,-103.170290
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.50932_-103.17147,T13A-1: Centro Metropolitano stop 4 (ASSUMED location),20.509320,-103.171470
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.5109_-103.17153,T13A-1: Centro Metropolitano stop 5 (ASSUMED location),20.510900,-103.171530
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.51177_-103.17328,T13A-1: Centro Metropolitano stop 6 (ASSUMED location),20.511770,-103.173280
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.51331_-103.17892,T13A-1: Centro Metropolitano stop 7 (ASSUMED location),20.513310,-103.178920
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.51394_-103.18752,T13A-1: Centro Metropolitano stop 8 (ASSUMED location),20.513940,-103.187520
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.50979_-103.19943,T13A-1: Centro Metropolitano stop 9 (ASSUMED location),20.509790,-103.199430
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.50658_-103.20846,T13A-1: Centro Metropolitano stop 10 (ASSUMED location),20.506580,-103.208460
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.50253_-103.21988,T13A-1: Centro Metropolitano stop 11 (ASSUMED location),20.502530,-103.219880
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.5048_-103.23272,T13A-1: Centro Metropolitano stop 12 (ASSUMED location),20.504800,-103.232720
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.50894_-103.23461,T13A-1: Centro Metropolitano stop 13 (ASSUMED location),20.508940,-103.234610
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.51161_-103.23666,T13A-1: Centro Metropolitano stop 14 (ASSUMED location),20.511610,-103.236660
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.51349_-103.23815,T13A-1: Centro Metropolitano stop 15 (ASSUMED location),20.513490,-103.238150
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.51741_-103.241,T13A-1: Centro Metropolitano stop 16 (ASSUMED location),20.517410,-103.241000
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.52025_-103.24346,T13A-1: Centro Metropolitano stop 17 (ASSUMED location),20.520250,-103.243460
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.5235_-103.24665,T13A-1: Centro Metropolitano stop 18 (ASSUMED location),20.523500,-103.246650
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.52578_-103.2486,T13A-1: Centro Metropolitano stop 19 (ASSUMED location),20.525780,-103.248600
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.52791_-103.25024,T13A-1: Centro Metropolitano stop 20 (ASSUMED location),20.527910,-103.250240
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.53101_-103.25277,T13A-1: Centro Metropolitano stop 21 (ASSUMED location),20.531010,-103.252770
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.53467_-103.25564,T13A-1: Centro Metropolitano stop 22 (ASSUMED location),20.534670,-103.255640
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.54327_-103.26243,T13A-1: Centro Metropolitano stop 23 (ASSUMED location),20.543270,-103.262430
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.54613_-103.26473,T13A-1: Centro Metropolitano stop 24 (ASSUMED location),20.546130,-103.264730
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.55067_-103.26835,T13A-1: Centro Metropolitano stop 25 (ASSUMED location),20.550670,-103.268350
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.55732_-103.27361,T13A-1: Centro Metropolitano stop 26 (ASSUMED location),20.557320,-103.273610
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.56018_-103.27587,T13A-1: Centro Metropolitano stop 27 (ASSUMED location),20.560180,-103.275870
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.56224_-103.28308,T13A-1: Centro Metropolitano stop 28 (ASSUMED location),20.562240,-103.283080
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.56499_-103.29481,T13A-1: Centro Metropolitano stop 29 (ASSUMED location),20.564990,-103.294810
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.57142_-103.3082,T13A-1: Centro Metropolitano stop 30 (ASSUMED location),20.571420,-103.308200
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.57511_-103.31399,T13A-1: Centro Metropolitano stop 31 (ASSUMED location),20.575110,-103.313990
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.58279_-103.31767,T13A-1: Centro Metropolitano stop 32 (ASSUMED location),20.582790,-103.317670
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.58708_-103.31961,T13A-1: Centro Metropolitano stop 33 (ASSUMED location),20.587078,-103.319609
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.58955_-103.3209,T13A-1: Centro Metropolitano stop 34 (ASSUMED location),20.589550,-103.320904
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.59326_-103.32264,T13A-1: Centro Metropolitano stop 35 (ASSUMED location),20.593260,-103.322640
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.60596_-103.31569,T13A-1: Centro Metropolitano stop 36 (ASSUMED location),20.605960,-103.315690
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.60929_-103.31521,T13A-1: Centro Metropolitano stop 37 (ASSUMED location),20.609290,-103.315210
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.62041_-103.32142,T13A-1: Centro Metropolitano stop 38 (ASSUMED location),20.620410,-103.321420
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.62747_-103.32114,T13A-1: Centro Metropolitano stop 39 (ASSUMED location),20.627470,-103.321140
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.6291_-103.3222,T13A-1: Centro Metropolitano stop 40 (ASSUMED location),20.629100,-103.322200
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.63166_-103.3238,T13A-1: Centro Metropolitano stop 41 (ASSUMED location),20.631660,-103.323800
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.63319_-103.32482,T13A-1: Centro Metropolitano stop 42 (ASSUMED location),20.633190,-103.324820
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.63813_-103.32797,T13A-1: Centro Metropolitano stop 43 (ASSUMED location),20.638130,-103.327970
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.64827_-103.33447,T13A-1: Centro Metropolitano stop 44 (ASSUMED location),20.648270,-103.334470
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.65032_-103.33578,T13A-1: Centro Metropolitano stop 45 (ASSUMED location),20.650320,-103.335780
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.65782_-103.34387,T13A-1: Centro Metropolitano stop 46 (ASSUMED location),20.657820,-103.343870
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.65897_-103.34524,T13A-1: Centro Metropolitano stop 47 (ASSUMED location),20.658970,-103.345240
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.66196_-103.34806,T13A-1: Centro Metropolitano stop 48 (ASSUMED location),20.661960,-103.348060
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.66308_-103.34949,T13A-1: Centro Metropolitano stop 49 (ASSUMED location),20.663080,-103.349490
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.66593_-103.34852,T13A-1: Centro Metropolitano stop 50 (ASSUMED location),20.665930,-103.348520
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.6678_-103.34789,T13A-1: Centro Metropolitano stop 51 (ASSUMED location),20.667800,-103.347890
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.66932_-103.3474,T13A-1: Centro Metropolitano stop 52 (ASSUMED location),20.669323,-103.347395
+assumed_osm_t13a1_14052671_t13a1centrometropoli_20.67065_-103.34716,T13A-1: Centro Metropolitano stop 53 (ASSUMED location),20.670650,-103.347160
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.66799_-103.34675,T13A-1: Juanacatlan stop 1 (ASSUMED location),20.667990,-103.346750
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.66644_-103.34604,T13A-1: Juanacatlan stop 2 (ASSUMED location),20.666440,-103.346040
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.66565_-103.34602,T13A-1: Juanacatlan stop 3 (ASSUMED location),20.665650,-103.346020
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.66431_-103.34594,T13A-1: Juanacatlan stop 4 (ASSUMED location),20.664310,-103.345940
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.6614_-103.34581,T13A-1: Juanacatlan stop 5 (ASSUMED location),20.661400,-103.345810
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.6596_-103.34573,T13A-1: Juanacatlan stop 6 (ASSUMED location),20.659600,-103.345730
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.65811_-103.34572,T13A-1: Juanacatlan stop 7 (ASSUMED location),20.658110,-103.345717
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.65522_-103.34495,T13A-1: Juanacatlan stop 8 (ASSUMED location),20.655220,-103.344950
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.65306_-103.34358,T13A-1: Juanacatlan stop 9 (ASSUMED location),20.653060,-103.343580
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.65073_-103.34207,T13A-1: Juanacatlan stop 10 (ASSUMED location),20.650730,-103.342070
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.64863_-103.34074,T13A-1: Juanacatlan stop 11 (ASSUMED location),20.648630,-103.340740
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.64623_-103.33924,T13A-1: Juanacatlan stop 12 (ASSUMED location),20.646230,-103.339240
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.64494_-103.33844,T13A-1: Juanacatlan stop 13 (ASSUMED location),20.644940,-103.338440
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.64356_-103.33754,T13A-1: Juanacatlan stop 14 (ASSUMED location),20.643560,-103.337540
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.64132_-103.33596,T13A-1: Juanacatlan stop 15 (ASSUMED location),20.641320,-103.335960
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.63835_-103.33304,T13A-1: Juanacatlan stop 16 (ASSUMED location),20.638350,-103.333040
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.63655_-103.33175,T13A-1: Juanacatlan stop 17 (ASSUMED location),20.636550,-103.331750
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.63473_-103.33017,T13A-1: Juanacatlan stop 18 (ASSUMED location),20.634730,-103.330170
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.63097_-103.3269,T13A-1: Juanacatlan stop 19 (ASSUMED location),20.630970,-103.326900
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.62811_-103.32491,T13A-1: Juanacatlan stop 20 (ASSUMED location),20.628110,-103.324910
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.62685_-103.32254,T13A-1: Juanacatlan stop 21 (ASSUMED location),20.626850,-103.322540
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.62095_-103.32174,T13A-1: Juanacatlan stop 22 (ASSUMED location),20.620950,-103.321740
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.61722_-103.32201,T13A-1: Juanacatlan stop 23 (ASSUMED location),20.617220,-103.322010
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.61321_-103.32333,T13A-1: Juanacatlan stop 24 (ASSUMED location),20.613207,-103.323333
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.60798_-103.32822,T13A-1: Juanacatlan stop 25 (ASSUMED location),20.607980,-103.328220
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.59696_-103.32476,T13A-1: Juanacatlan stop 26 (ASSUMED location),20.596960,-103.324760
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.58937_-103.32123,T13A-1: Juanacatlan stop 27 (ASSUMED location),20.589370,-103.321230
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.58307_-103.31829,T13A-1: Juanacatlan stop 28 (ASSUMED location),20.583072,-103.318287
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.57508_-103.31447,T13A-1: Juanacatlan stop 29 (ASSUMED location),20.575080,-103.314471
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.57078_-103.3074,T13A-1: Juanacatlan stop 30 (ASSUMED location),20.570780,-103.307400
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.56966_-103.30512,T13A-1: Juanacatlan stop 31 (ASSUMED location),20.569660,-103.305120
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.56746_-103.3006,T13A-1: Juanacatlan stop 32 (ASSUMED location),20.567460,-103.300600
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.565_-103.29553,T13A-1: Juanacatlan stop 33 (ASSUMED location),20.565000,-103.295530
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.56208_-103.28586,T13A-1: Juanacatlan stop 34 (ASSUMED location),20.562080,-103.285860
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.56196_-103.28372,T13A-1: Juanacatlan stop 35 (ASSUMED location),20.561960,-103.283720
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.5618_-103.27947,T13A-1: Juanacatlan stop 36 (ASSUMED location),20.561800,-103.279470
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.55992_-103.27602,T13A-1: Juanacatlan stop 37 (ASSUMED location),20.559920,-103.276020
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.5575_-103.27413,T13A-1: Juanacatlan stop 38 (ASSUMED location),20.557500,-103.274130
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.55541_-103.27245,T13A-1: Juanacatlan stop 39 (ASSUMED location),20.555410,-103.272450
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.55055_-103.2686,T13A-1: Juanacatlan stop 40 (ASSUMED location),20.550550,-103.268600
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.54601_-103.26499,T13A-1: Juanacatlan stop 41 (ASSUMED location),20.546010,-103.264990
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.53098_-103.25312,T13A-1: Juanacatlan stop 42 (ASSUMED location),20.530980,-103.253120
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.52757_-103.25038,T13A-1: Juanacatlan stop 43 (ASSUMED location),20.527570,-103.250380
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.52466_-103.24806,T13A-1: Juanacatlan stop 44 (ASSUMED location),20.524660,-103.248060
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.52006_-103.24375,T13A-1: Juanacatlan stop 45 (ASSUMED location),20.520060,-103.243750
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.51775_-103.24184,T13A-1: Juanacatlan stop 46 (ASSUMED location),20.517750,-103.241840
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.51524_-103.23987,T13A-1: Juanacatlan stop 47 (ASSUMED location),20.515240,-103.239870
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.51353_-103.23856,T13A-1: Juanacatlan stop 48 (ASSUMED location),20.513530,-103.238560
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.51182_-103.23718,T13A-1: Juanacatlan stop 49 (ASSUMED location),20.511820,-103.237180
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.50899_-103.23502,T13A-1: Juanacatlan stop 50 (ASSUMED location),20.508990,-103.235020
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.50407_-103.23284,T13A-1: Juanacatlan stop 51 (ASSUMED location),20.504070,-103.232840
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.50392_-103.21536,T13A-1: Juanacatlan stop 52 (ASSUMED location),20.503920,-103.215360
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.50715_-103.20616,T13A-1: Juanacatlan stop 53 (ASSUMED location),20.507150,-103.206160
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.51245_-103.19091,T13A-1: Juanacatlan stop 54 (ASSUMED location),20.512450,-103.190910
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.51389_-103.18682,T13A-1: Juanacatlan stop 55 (ASSUMED location),20.513890,-103.186820
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.51289_-103.18429,T13A-1: Juanacatlan stop 56 (ASSUMED location),20.512890,-103.184290
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.51126_-103.18283,T13A-1: Juanacatlan stop 57 (ASSUMED location),20.511260,-103.182830
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.51296_-103.17899,T13A-1: Juanacatlan stop 58 (ASSUMED location),20.512960,-103.178990
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.51093_-103.17073,T13A-1: Juanacatlan stop 59 (ASSUMED location),20.510930,-103.170730
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.50938_-103.17109,T13A-1: Juanacatlan stop 60 (ASSUMED location),20.509380,-103.171090
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.5068_-103.17164,T13A-1: Juanacatlan stop 61 (ASSUMED location),20.506800,-103.171640
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.505_-103.17274,T13A-1: Juanacatlan stop 62 (ASSUMED location),20.505000,-103.172740
+assumed_osm_t13a1_14052694_t13a1juanacatlanstop_20.50514_-103.17399,T13A-1: Juanacatlan stop 63 (ASSUMED location),20.505140,-103.173990
+assumed_osm_stl1b_14302608_sitrenl1bcucbastop1_20.70318_-103.46055,SiTren L1B: CUCBA stop 1 (ASSUMED location),20.703185,-103.460551
+assumed_osm_stl1b_14302608_sitrenl1bcucbastop2_20.70768_-103.46504,SiTren L1B: CUCBA stop 2 (ASSUMED location),20.707675,-103.465044
+assumed_osm_stl1b_14302608_sitrenl1bcucbastop3_20.71079_-103.46773,SiTren L1B: CUCBA stop 3 (ASSUMED location),20.710789,-103.467734
+assumed_osm_stl1b_14302608_sitrenl1bcucbastop4_20.71372_-103.47029,SiTren L1B: CUCBA stop 4 (ASSUMED location),20.713717,-103.470288
+assumed_osm_stl1b_14302608_sitrenl1bcucbastop5_20.71776_-103.48029,SiTren L1B: CUCBA stop 5 (ASSUMED location),20.717755,-103.480289
+assumed_osm_stl1b_14302608_sitrenl1bcucbastop6_20.72019_-103.48908,SiTren L1B: CUCBA stop 6 (ASSUMED location),20.720187,-103.489082
+assumed_osm_stl1b_14302608_sitrenl1bcucbastop7_20.7221_-103.49593,SiTren L1B: CUCBA stop 7 (ASSUMED location),20.722098,-103.495933
+assumed_osm_stl1b_14302608_sitrenl1bcucbastop8_20.72356_-103.50134,SiTren L1B: CUCBA stop 8 (ASSUMED location),20.723558,-103.501339
+assumed_osm_stl1b_14302608_sitrenl1bcucbastop9_20.72864_-103.51556,SiTren L1B: CUCBA stop 9 (ASSUMED location),20.728638,-103.515560
+assumed_osm_stl1b_14302608_sitrenl1bcucbastop10_20.73509_-103.51447,SiTren L1B: CUCBA stop 10 (ASSUMED location),20.735091,-103.514468
+assumed_osm_stl1b_14302608_sitrenl1bcucbastop11_20.74262_-103.51282,SiTren L1B: CUCBA stop 11 (ASSUMED location),20.742623,-103.512815
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.74262_-103.51282,SiTren L1B: Aviación stop 1 (ASSUMED location),20.742623,-103.512815
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.73449_-103.51467,SiTren L1B: Aviación stop 2 (ASSUMED location),20.734488,-103.514670
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72805_-103.51617,SiTren L1B: Aviación stop 3 (ASSUMED location),20.728050,-103.516165
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72909_-103.52302,SiTren L1B: Aviación stop 4 (ASSUMED location),20.729091,-103.523019
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72905_-103.53992,SiTren L1B: Aviación stop 5 (ASSUMED location),20.729053,-103.539922
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72806_-103.54414,SiTren L1B: Aviación stop 6 (ASSUMED location),20.728061,-103.544137
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72823_-103.55195,SiTren L1B: Aviación stop 7 (ASSUMED location),20.728227,-103.551949
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72718_-103.56114,SiTren L1B: Aviación stop 8 (ASSUMED location),20.727175,-103.561139
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72744_-103.54998,SiTren L1B: Aviación stop 9 (ASSUMED location),20.727438,-103.549978
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72775_-103.54422,SiTren L1B: Aviación stop 10 (ASSUMED location),20.727753,-103.544225
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72849_-103.54096,SiTren L1B: Aviación stop 11 (ASSUMED location),20.728487,-103.540963
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72953_-103.53067,SiTren L1B: Aviación stop 12 (ASSUMED location),20.729526,-103.530674
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72888_-103.52375,SiTren L1B: Aviación stop 13 (ASSUMED location),20.728884,-103.523751
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72777_-103.51676,SiTren L1B: Aviación stop 14 (ASSUMED location),20.727766,-103.516761
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72403_-103.50416,SiTren L1B: Aviación stop 15 (ASSUMED location),20.724027,-103.504161
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.72119_-103.49402,SiTren L1B: Aviación stop 16 (ASSUMED location),20.721187,-103.494016
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.7201_-103.48993,SiTren L1B: Aviación stop 17 (ASSUMED location),20.720097,-103.489928
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.7181_-103.48281,SiTren L1B: Aviación stop 18 (ASSUMED location),20.718098,-103.482813
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.71156_-103.46889,SiTren L1B: Aviación stop 19 (ASSUMED location),20.711561,-103.468888
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.70908_-103.46671,SiTren L1B: Aviación stop 20 (ASSUMED location),20.709080,-103.466710
+assumed_osm_stl1b_14302626_sitrenl1baviacionsto_20.70318_-103.46055,SiTren L1B: Aviación stop 21 (ASSUMED location),20.703185,-103.460551
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.51086_-103.42565,175-Roca: Plaza Centro Sur stop 1 (ASSUMED location),20.510860,-103.425650
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.51237_-103.42548,175-Roca: Plaza Centro Sur stop 2 (ASSUMED location),20.512370,-103.425480
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.5147_-103.42593,175-Roca: Plaza Centro Sur stop 3 (ASSUMED location),20.514700,-103.425930
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.51646_-103.42566,175-Roca: Plaza Centro Sur stop 4 (ASSUMED location),20.516460,-103.425660
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.51954_-103.42498,175-Roca: Plaza Centro Sur stop 5 (ASSUMED location),20.519540,-103.424980
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.52193_-103.42491,175-Roca: Plaza Centro Sur stop 6 (ASSUMED location),20.521930,-103.424910
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.52558_-103.42443,175-Roca: Plaza Centro Sur stop 7 (ASSUMED location),20.525580,-103.424430
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.52803_-103.42406,175-Roca: Plaza Centro Sur stop 8 (ASSUMED location),20.528030,-103.424060
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.52979_-103.42391,175-Roca: Plaza Centro Sur stop 9 (ASSUMED location),20.529790,-103.423910
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.53159_-103.42457,175-Roca: Plaza Centro Sur stop 10 (ASSUMED location),20.531590,-103.424570
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.53354_-103.42404,175-Roca: Plaza Centro Sur stop 11 (ASSUMED location),20.533540,-103.424040
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.5352_-103.42352,175-Roca: Plaza Centro Sur stop 12 (ASSUMED location),20.535200,-103.423520
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.53734_-103.42262,175-Roca: Plaza Centro Sur stop 13 (ASSUMED location),20.537340,-103.422620
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.54185_-103.42121,175-Roca: Plaza Centro Sur stop 14 (ASSUMED location),20.541850,-103.421210
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.55234_-103.41917,175-Roca: Plaza Centro Sur stop 15 (ASSUMED location),20.552340,-103.419170
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.55883_-103.41681,175-Roca: Plaza Centro Sur stop 16 (ASSUMED location),20.558830,-103.416810
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.56357_-103.41337,175-Roca: Plaza Centro Sur stop 17 (ASSUMED location),20.563570,-103.413370
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.56591_-103.41086,175-Roca: Plaza Centro Sur stop 18 (ASSUMED location),20.565910,-103.410860
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.57391_-103.40529,175-Roca: Plaza Centro Sur stop 19 (ASSUMED location),20.573910,-103.405290
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.57948_-103.40291,175-Roca: Plaza Centro Sur stop 20 (ASSUMED location),20.579480,-103.402910
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.58236_-103.40222,175-Roca: Plaza Centro Sur stop 21 (ASSUMED location),20.582360,-103.402220
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.58676_-103.40047,175-Roca: Plaza Centro Sur stop 22 (ASSUMED location),20.586760,-103.400470
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.59304_-103.39891,175-Roca: Plaza Centro Sur stop 23 (ASSUMED location),20.593040,-103.398910
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.59746_-103.40014,175-Roca: Plaza Centro Sur stop 24 (ASSUMED location),20.597460,-103.400140
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.59942_-103.39999,175-Roca: Plaza Centro Sur stop 25 (ASSUMED location),20.599420,-103.399990
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.60047_-103.40115,175-Roca: Plaza Centro Sur stop 26 (ASSUMED location),20.600470,-103.401150
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.60137_-103.40342,175-Roca: Plaza Centro Sur stop 27 (ASSUMED location),20.601370,-103.403420
+assumed_osm_175roca_14302770_175rocaplazacentrosu_20.60426_-103.4018,175-Roca: Plaza Centro Sur stop 28 (ASSUMED location),20.604260,-103.401800
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.60536_-103.40049,175-Roca: Arcos de San Sebastian stop 1 (ASSUMED location),20.605360,-103.400490
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.60316_-103.39849,175-Roca: Arcos de San Sebastian stop 2 (ASSUMED location),20.603160,-103.398490
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.60079_-103.4014,175-Roca: Arcos de San Sebastian stop 3 (ASSUMED location),20.600790,-103.401400
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.59965_-103.40019,175-Roca: Arcos de San Sebastian stop 4 (ASSUMED location),20.599650,-103.400190
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.59733_-103.40026,175-Roca: Arcos de San Sebastian stop 5 (ASSUMED location),20.597330,-103.400260
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.59497_-103.39922,175-Roca: Arcos de San Sebastian stop 6 (ASSUMED location),20.594970,-103.399220
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.59436_-103.39919,175-Roca: Arcos de San Sebastian stop 7 (ASSUMED location),20.594360,-103.399190
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.58706_-103.40051,175-Roca: Arcos de San Sebastian stop 8 (ASSUMED location),20.587060,-103.400510
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.58215_-103.40245,175-Roca: Arcos de San Sebastian stop 9 (ASSUMED location),20.582150,-103.402450
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.57948_-103.40312,175-Roca: Arcos de San Sebastian stop 10 (ASSUMED location),20.579480,-103.403120
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.57391_-103.40542,175-Roca: Arcos de San Sebastian stop 11 (ASSUMED location),20.573910,-103.405420
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.56634_-103.41056,175-Roca: Arcos de San Sebastian stop 12 (ASSUMED location),20.566340,-103.410560
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.55887_-103.41696,175-Roca: Arcos de San Sebastian stop 13 (ASSUMED location),20.558870,-103.416960
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.55261_-103.41925,175-Roca: Arcos de San Sebastian stop 14 (ASSUMED location),20.552610,-103.419250
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.54586_-103.42083,175-Roca: Arcos de San Sebastian stop 15 (ASSUMED location),20.545860,-103.420830
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.54183_-103.42144,175-Roca: Arcos de San Sebastian stop 16 (ASSUMED location),20.541830,-103.421440
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.53755_-103.42282,175-Roca: Arcos de San Sebastian stop 17 (ASSUMED location),20.537550,-103.422820
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.53376_-103.42406,175-Roca: Arcos de San Sebastian stop 18 (ASSUMED location),20.533760,-103.424060
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.53112_-103.42453,175-Roca: Arcos de San Sebastian stop 19 (ASSUMED location),20.531120,-103.424530
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.52979_-103.42391,175-Roca: Arcos de San Sebastian stop 20 (ASSUMED location),20.529790,-103.423910
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.52807_-103.4242,175-Roca: Arcos de San Sebastian stop 21 (ASSUMED location),20.528070,-103.424200
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.52633_-103.42465,175-Roca: Arcos de San Sebastian stop 22 (ASSUMED location),20.526330,-103.424650
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.52205_-103.425,175-Roca: Arcos de San Sebastian stop 23 (ASSUMED location),20.522050,-103.425000
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.51977_-103.42503,175-Roca: Arcos de San Sebastian stop 24 (ASSUMED location),20.519770,-103.425030
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.51657_-103.42572,175-Roca: Arcos de San Sebastian stop 25 (ASSUMED location),20.516570,-103.425720
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.51453_-103.42606,175-Roca: Arcos de San Sebastian stop 26 (ASSUMED location),20.514530,-103.426060
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.51261_-103.42556,175-Roca: Arcos de San Sebastian stop 27 (ASSUMED location),20.512610,-103.425560
+assumed_osm_175roca_14302852_175rocaarcosdesanseb_20.51086_-103.42565,175-Roca: Arcos de San Sebastian stop 28 (ASSUMED location),20.510860,-103.425650
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66002_-103.35859,T18-Lopez: Washington-Minerva stop 1 (ASSUMED location),20.660020,-103.358590
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.65922_-103.35649,T18-Lopez: Washington-Minerva stop 2 (ASSUMED location),20.659220,-103.356490
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.65773_-103.35264,T18-Lopez: Washington-Minerva stop 3 (ASSUMED location),20.657730,-103.352640
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.65678_-103.35011,T18-Lopez: Washington-Minerva stop 4 (ASSUMED location),20.656780,-103.350110
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.6554_-103.34785,T18-Lopez: Washington-Minerva stop 5 (ASSUMED location),20.655400,-103.347850
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.65446_-103.34664,T18-Lopez: Washington-Minerva stop 6 (ASSUMED location),20.654460,-103.346640
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.65442_-103.34551,T18-Lopez: Washington-Minerva stop 7 (ASSUMED location),20.654420,-103.345510
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.65323_-103.34369,T18-Lopez: Washington-Minerva stop 8 (ASSUMED location),20.653230,-103.343690
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.64854_-103.34068,T18-Lopez: Washington-Minerva stop 9 (ASSUMED location),20.648540,-103.340680
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.64965_-103.33787,T18-Lopez: Washington-Minerva stop 10 (ASSUMED location),20.649650,-103.337870
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.65074_-103.33417,T18-Lopez: Washington-Minerva stop 11 (ASSUMED location),20.650740,-103.334170
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.65112_-103.3305,T18-Lopez: Washington-Minerva stop 12 (ASSUMED location),20.651120,-103.330500
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.6517_-103.32914,T18-Lopez: Washington-Minerva stop 13 (ASSUMED location),20.651700,-103.329140
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.65302_-103.32599,T18-Lopez: Washington-Minerva stop 14 (ASSUMED location),20.653020,-103.325990
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.65438_-103.32277,T18-Lopez: Washington-Minerva stop 15 (ASSUMED location),20.654380,-103.322770
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.6559_-103.31919,T18-Lopez: Washington-Minerva stop 16 (ASSUMED location),20.655900,-103.319190
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.65808_-103.31961,T18-Lopez: Washington-Minerva stop 17 (ASSUMED location),20.658080,-103.319610
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66_-103.31897,T18-Lopez: Washington-Minerva stop 18 (ASSUMED location),20.660000,-103.318970
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66184_-103.31834,T18-Lopez: Washington-Minerva stop 19 (ASSUMED location),20.661840,-103.318340
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66449_-103.31742,T18-Lopez: Washington-Minerva stop 20 (ASSUMED location),20.664490,-103.317420
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66606_-103.31689,T18-Lopez: Washington-Minerva stop 21 (ASSUMED location),20.666060,-103.316890
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66907_-103.31587,T18-Lopez: Washington-Minerva stop 22 (ASSUMED location),20.669070,-103.315870
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.67287_-103.31455,T18-Lopez: Washington-Minerva stop 23 (ASSUMED location),20.672870,-103.314550
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.67854_-103.31263,T18-Lopez: Washington-Minerva stop 24 (ASSUMED location),20.678540,-103.312630
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.6796_-103.31224,T18-Lopez: Washington-Minerva stop 25 (ASSUMED location),20.679600,-103.312240
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.68058_-103.3119,T18-Lopez: Washington-Minerva stop 26 (ASSUMED location),20.680580,-103.311900
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.68259_-103.31121,T18-Lopez: Washington-Minerva stop 27 (ASSUMED location),20.682590,-103.311210
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.68362_-103.31085,T18-Lopez: Washington-Minerva stop 28 (ASSUMED location),20.683620,-103.310850
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.68612_-103.31002,T18-Lopez: Washington-Minerva stop 29 (ASSUMED location),20.686120,-103.310020
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.68933_-103.31032,T18-Lopez: Washington-Minerva stop 30 (ASSUMED location),20.689330,-103.310320
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.69131_-103.31132,T18-Lopez: Washington-Minerva stop 31 (ASSUMED location),20.691310,-103.311320
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.69236_-103.31053,T18-Lopez: Washington-Minerva stop 32 (ASSUMED location),20.692360,-103.310530
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.69441_-103.3094,T18-Lopez: Washington-Minerva stop 33 (ASSUMED location),20.694410,-103.309400
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.69523_-103.31005,T18-Lopez: Washington-Minerva stop 34 (ASSUMED location),20.695230,-103.310050
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.69576_-103.31109,T18-Lopez: Washington-Minerva stop 35 (ASSUMED location),20.695760,-103.311090
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.69671_-103.31289,T18-Lopez: Washington-Minerva stop 36 (ASSUMED location),20.696710,-103.312890
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.69768_-103.31476,T18-Lopez: Washington-Minerva stop 37 (ASSUMED location),20.697680,-103.314760
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.69933_-103.31969,T18-Lopez: Washington-Minerva stop 38 (ASSUMED location),20.699330,-103.319690
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.69916_-103.32029,T18-Lopez: Washington-Minerva stop 39 (ASSUMED location),20.699160,-103.320290
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.7036_-103.32338,T18-Lopez: Washington-Minerva stop 40 (ASSUMED location),20.703600,-103.323380
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.7049_-103.3241,T18-Lopez: Washington-Minerva stop 41 (ASSUMED location),20.704900,-103.324100
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.70546_-103.32661,T18-Lopez: Washington-Minerva stop 42 (ASSUMED location),20.705460,-103.326610
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.70651_-103.32886,T18-Lopez: Washington-Minerva stop 43 (ASSUMED location),20.706510,-103.328860
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.7077_-103.33135,T18-Lopez: Washington-Minerva stop 44 (ASSUMED location),20.707705,-103.331345
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.70995_-103.33595,T18-Lopez: Washington-Minerva stop 45 (ASSUMED location),20.709950,-103.335950
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71123_-103.33859,T18-Lopez: Washington-Minerva stop 46 (ASSUMED location),20.711230,-103.338590
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71156_-103.34084,T18-Lopez: Washington-Minerva stop 47 (ASSUMED location),20.711560,-103.340840
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71172_-103.34193,T18-Lopez: Washington-Minerva stop 48 (ASSUMED location),20.711720,-103.341930
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71191_-103.34347,T18-Lopez: Washington-Minerva stop 49 (ASSUMED location),20.711910,-103.343470
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71222_-103.34587,T18-Lopez: Washington-Minerva stop 50 (ASSUMED location),20.712220,-103.345870
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71257_-103.34853,T18-Lopez: Washington-Minerva stop 51 (ASSUMED location),20.712570,-103.348530
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71293_-103.35105,T18-Lopez: Washington-Minerva stop 52 (ASSUMED location),20.712930,-103.351050
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71336_-103.35442,T18-Lopez: Washington-Minerva stop 53 (ASSUMED location),20.713360,-103.354420
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71568_-103.35507,T18-Lopez: Washington-Minerva stop 54 (ASSUMED location),20.715680,-103.355070
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71449_-103.35827,T18-Lopez: Washington-Minerva stop 55 (ASSUMED location),20.714490,-103.358270
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71349_-103.36098,T18-Lopez: Washington-Minerva stop 56 (ASSUMED location),20.713490,-103.360980
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71303_-103.36294,T18-Lopez: Washington-Minerva stop 57 (ASSUMED location),20.713030,-103.362940
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71318_-103.36504,T18-Lopez: Washington-Minerva stop 58 (ASSUMED location),20.713180,-103.365040
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71341_-103.36766,T18-Lopez: Washington-Minerva stop 59 (ASSUMED location),20.713410,-103.367660
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71354_-103.36947,T18-Lopez: Washington-Minerva stop 60 (ASSUMED location),20.713540,-103.369470
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71367_-103.37322,T18-Lopez: Washington-Minerva stop 61 (ASSUMED location),20.713670,-103.373220
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71321_-103.37753,T18-Lopez: Washington-Minerva stop 62 (ASSUMED location),20.713210,-103.377530
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.71097_-103.38038,T18-Lopez: Washington-Minerva stop 63 (ASSUMED location),20.710970,-103.380380
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.70848_-103.37817,T18-Lopez: Washington-Minerva stop 64 (ASSUMED location),20.708480,-103.378170
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.70665_-103.37726,T18-Lopez: Washington-Minerva stop 65 (ASSUMED location),20.706650,-103.377260
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.70567_-103.37708,T18-Lopez: Washington-Minerva stop 66 (ASSUMED location),20.705670,-103.377080
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.70363_-103.37651,T18-Lopez: Washington-Minerva stop 67 (ASSUMED location),20.703630,-103.376510
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.70324_-103.37635,T18-Lopez: Washington-Minerva stop 68 (ASSUMED location),20.703240,-103.376350
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.69993_-103.37524,T18-Lopez: Washington-Minerva stop 69 (ASSUMED location),20.699930,-103.375240
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.69467_-103.37422,T18-Lopez: Washington-Minerva stop 70 (ASSUMED location),20.694670,-103.374220
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.69226_-103.37581,T18-Lopez: Washington-Minerva stop 71 (ASSUMED location),20.692260,-103.375810
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.68975_-103.37747,T18-Lopez: Washington-Minerva stop 72 (ASSUMED location),20.689750,-103.377470
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.68557_-103.38022,T18-Lopez: Washington-Minerva stop 73 (ASSUMED location),20.685570,-103.380220
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.68194_-103.38262,T18-Lopez: Washington-Minerva stop 74 (ASSUMED location),20.681940,-103.382620
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.68027_-103.38373,T18-Lopez: Washington-Minerva stop 75 (ASSUMED location),20.680270,-103.383730
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.67883_-103.38467,T18-Lopez: Washington-Minerva stop 76 (ASSUMED location),20.678830,-103.384670
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.67597_-103.38658,T18-Lopez: Washington-Minerva stop 77 (ASSUMED location),20.675970,-103.386580
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.67341_-103.38681,T18-Lopez: Washington-Minerva stop 78 (ASSUMED location),20.673410,-103.386810
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66985_-103.38397,T18-Lopez: Washington-Minerva stop 79 (ASSUMED location),20.669850,-103.383970
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66875_-103.38151,T18-Lopez: Washington-Minerva stop 80 (ASSUMED location),20.668750,-103.381507
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66726_-103.37763,T18-Lopez: Washington-Minerva stop 81 (ASSUMED location),20.667260,-103.377630
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66573_-103.37345,T18-Lopez: Washington-Minerva stop 82 (ASSUMED location),20.665730,-103.373450
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66361_-103.36797,T18-Lopez: Washington-Minerva stop 83 (ASSUMED location),20.663610,-103.367970
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66257_-103.36529,T18-Lopez: Washington-Minerva stop 84 (ASSUMED location),20.662570,-103.365290
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.6621_-103.36408,T18-Lopez: Washington-Minerva stop 85 (ASSUMED location),20.662100,-103.364080
+assumed_osm_t18lopez_14305005_t18lopezwashingtonmi_20.66106_-103.36138,T18-Lopez: Washington-Minerva stop 86 (ASSUMED location),20.661060,-103.361380
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.65991_-103.35757,T18-Terranova: Washington-Canada stop 1 (ASSUMED location),20.659910,-103.357570
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.66215_-103.36339,T18-Terranova: Washington-Canada stop 2 (ASSUMED location),20.662150,-103.363390
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.66382_-103.3678,T18-Terranova: Washington-Canada stop 3 (ASSUMED location),20.663820,-103.367800
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.66572_-103.37289,T18-Terranova: Washington-Canada stop 4 (ASSUMED location),20.665720,-103.372890
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.66737_-103.37718,T18-Terranova: Washington-Canada stop 5 (ASSUMED location),20.667370,-103.377180
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.66885_-103.38114,T18-Terranova: Washington-Canada stop 6 (ASSUMED location),20.668850,-103.381140
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.67009_-103.38398,T18-Terranova: Washington-Canada stop 7 (ASSUMED location),20.670090,-103.383980
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.67201_-103.38553,T18-Terranova: Washington-Canada stop 8 (ASSUMED location),20.672010,-103.385530
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.67311_-103.3863,T18-Terranova: Washington-Canada stop 9 (ASSUMED location),20.673110,-103.386300
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.67525_-103.38664,T18-Terranova: Washington-Canada stop 10 (ASSUMED location),20.675250,-103.386640
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.67647_-103.38587,T18-Terranova: Washington-Canada stop 11 (ASSUMED location),20.676470,-103.385870
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.67745_-103.3852,T18-Terranova: Washington-Canada stop 12 (ASSUMED location),20.677450,-103.385200
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.67923_-103.38376,T18-Terranova: Washington-Canada stop 13 (ASSUMED location),20.679229,-103.383759
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.67975_-103.38681,T18-Terranova: Washington-Canada stop 14 (ASSUMED location),20.679750,-103.386810
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.68114_-103.38697,T18-Terranova: Washington-Canada stop 15 (ASSUMED location),20.681140,-103.386970
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.68464_-103.38693,T18-Terranova: Washington-Canada stop 16 (ASSUMED location),20.684640,-103.386930
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.6873_-103.3869,T18-Terranova: Washington-Canada stop 17 (ASSUMED location),20.687300,-103.386900
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.68936_-103.38687,T18-Terranova: Washington-Canada stop 18 (ASSUMED location),20.689360,-103.386870
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.6914_-103.38665,T18-Terranova: Washington-Canada stop 19 (ASSUMED location),20.691400,-103.386650
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69373_-103.38625,T18-Terranova: Washington-Canada stop 20 (ASSUMED location),20.693730,-103.386250
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69569_-103.38624,T18-Terranova: Washington-Canada stop 21 (ASSUMED location),20.695690,-103.386240
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69771_-103.3862,T18-Terranova: Washington-Canada stop 22 (ASSUMED location),20.697710,-103.386200
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69943_-103.38541,T18-Terranova: Washington-Canada stop 23 (ASSUMED location),20.699430,-103.385410
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.70063_-103.38231,T18-Terranova: Washington-Canada stop 24 (ASSUMED location),20.700630,-103.382310
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.70232_-103.37879,T18-Terranova: Washington-Canada stop 25 (ASSUMED location),20.702320,-103.378790
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.70835_-103.37778,T18-Terranova: Washington-Canada stop 26 (ASSUMED location),20.708350,-103.377778
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71183_-103.3761,T18-Terranova: Washington-Canada stop 27 (ASSUMED location),20.711830,-103.376100
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71329_-103.37343,T18-Terranova: Washington-Canada stop 28 (ASSUMED location),20.713290,-103.373430
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71319_-103.36947,T18-Terranova: Washington-Canada stop 29 (ASSUMED location),20.713190,-103.369470
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71307_-103.36797,T18-Terranova: Washington-Canada stop 30 (ASSUMED location),20.713070,-103.367970
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71284_-103.36471,T18-Terranova: Washington-Canada stop 31 (ASSUMED location),20.712840,-103.364710
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.7131_-103.36118,T18-Terranova: Washington-Canada stop 32 (ASSUMED location),20.713100,-103.361180
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71386_-103.35877,T18-Terranova: Washington-Canada stop 33 (ASSUMED location),20.713860,-103.358770
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71532_-103.35483,T18-Terranova: Washington-Canada stop 34 (ASSUMED location),20.715320,-103.354830
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71299_-103.3523,T18-Terranova: Washington-Canada stop 35 (ASSUMED location),20.712990,-103.352300
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71269_-103.35023,T18-Terranova: Washington-Canada stop 36 (ASSUMED location),20.712690,-103.350230
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71252_-103.34912,T18-Terranova: Washington-Canada stop 37 (ASSUMED location),20.712520,-103.349120
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71225_-103.34706,T18-Terranova: Washington-Canada stop 38 (ASSUMED location),20.712250,-103.347060
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71198_-103.34513,T18-Terranova: Washington-Canada stop 39 (ASSUMED location),20.711980,-103.345130
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.7118_-103.34366,T18-Terranova: Washington-Canada stop 40 (ASSUMED location),20.711800,-103.343660
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71161_-103.34217,T18-Terranova: Washington-Canada stop 41 (ASSUMED location),20.711610,-103.342170
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71124_-103.33931,T18-Terranova: Washington-Canada stop 42 (ASSUMED location),20.711240,-103.339310
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.71024_-103.33692,T18-Terranova: Washington-Canada stop 43 (ASSUMED location),20.710240,-103.336920
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.70839_-103.33309,T18-Terranova: Washington-Canada stop 44 (ASSUMED location),20.708390,-103.333090
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.7078_-103.33183,T18-Terranova: Washington-Canada stop 45 (ASSUMED location),20.707800,-103.331830
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.70653_-103.32918,T18-Terranova: Washington-Canada stop 46 (ASSUMED location),20.706530,-103.329180
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.705_-103.32603,T18-Terranova: Washington-Canada stop 47 (ASSUMED location),20.705000,-103.326030
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.70506_-103.32446,T18-Terranova: Washington-Canada stop 48 (ASSUMED location),20.705060,-103.324460
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.70374_-103.32369,T18-Terranova: Washington-Canada stop 49 (ASSUMED location),20.703740,-103.323690
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.70114_-103.32226,T18-Terranova: Washington-Canada stop 50 (ASSUMED location),20.701140,-103.322260
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.6998_-103.32151,T18-Terranova: Washington-Canada stop 51 (ASSUMED location),20.699800,-103.321510
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69886_-103.32014,T18-Terranova: Washington-Canada stop 52 (ASSUMED location),20.698860,-103.320140
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69978_-103.31919,T18-Terranova: Washington-Canada stop 53 (ASSUMED location),20.699780,-103.319190
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69852_-103.31658,T18-Terranova: Washington-Canada stop 54 (ASSUMED location),20.698520,-103.316580
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69769_-103.31507,T18-Terranova: Washington-Canada stop 55 (ASSUMED location),20.697690,-103.315070
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69669_-103.31315,T18-Terranova: Washington-Canada stop 56 (ASSUMED location),20.696690,-103.313150
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69575_-103.31136,T18-Terranova: Washington-Canada stop 57 (ASSUMED location),20.695750,-103.311360
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69525_-103.31042,T18-Terranova: Washington-Canada stop 58 (ASSUMED location),20.695250,-103.310420
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.6949_-103.30965,T18-Terranova: Washington-Canada stop 59 (ASSUMED location),20.694900,-103.309650
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69318_-103.30864,T18-Terranova: Washington-Canada stop 60 (ASSUMED location),20.693180,-103.308640
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69313_-103.30677,T18-Terranova: Washington-Canada stop 61 (ASSUMED location),20.693130,-103.306770
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.69134_-103.30738,T18-Terranova: Washington-Canada stop 62 (ASSUMED location),20.691340,-103.307380
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.68926_-103.30809,T18-Terranova: Washington-Canada stop 63 (ASSUMED location),20.689260,-103.308090
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.68625_-103.30912,T18-Terranova: Washington-Canada stop 64 (ASSUMED location),20.686250,-103.309120
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.68497_-103.30956,T18-Terranova: Washington-Canada stop 65 (ASSUMED location),20.684970,-103.309560
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.68068_-103.31102,T18-Terranova: Washington-Canada stop 66 (ASSUMED location),20.680680,-103.311020
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.67759_-103.31207,T18-Terranova: Washington-Canada stop 67 (ASSUMED location),20.677590,-103.312070
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.67377_-103.31338,T18-Terranova: Washington-Canada stop 68 (ASSUMED location),20.673770,-103.313380
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.6694_-103.31488,T18-Terranova: Washington-Canada stop 69 (ASSUMED location),20.669400,-103.314880
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.66625_-103.31593,T18-Terranova: Washington-Canada stop 70 (ASSUMED location),20.666250,-103.315930
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.66461_-103.31651,T18-Terranova: Washington-Canada stop 71 (ASSUMED location),20.664610,-103.316510
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.66195_-103.31745,T18-Terranova: Washington-Canada stop 72 (ASSUMED location),20.661950,-103.317450
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.65996_-103.31815,T18-Terranova: Washington-Canada stop 73 (ASSUMED location),20.659960,-103.318150
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.65729_-103.31906,T18-Terranova: Washington-Canada stop 74 (ASSUMED location),20.657290,-103.319060
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.65511_-103.32162,T18-Terranova: Washington-Canada stop 75 (ASSUMED location),20.655110,-103.321620
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.65357_-103.32527,T18-Terranova: Washington-Canada stop 76 (ASSUMED location),20.653570,-103.325270
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.65239_-103.32809,T18-Terranova: Washington-Canada stop 77 (ASSUMED location),20.652390,-103.328090
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.6512_-103.33088,T18-Terranova: Washington-Canada stop 78 (ASSUMED location),20.651200,-103.330880
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.65094_-103.33542,T18-Terranova: Washington-Canada stop 79 (ASSUMED location),20.650940,-103.335420
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.6488_-103.33999,T18-Terranova: Washington-Canada stop 80 (ASSUMED location),20.648800,-103.339990
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.65724_-103.35056,T18-Terranova: Washington-Canada stop 81 (ASSUMED location),20.657240,-103.350560
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.65897_-103.35237,T18-Terranova: Washington-Canada stop 82 (ASSUMED location),20.658972,-103.352367
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.65922_-103.35571,T18-Terranova: Washington-Canada stop 83 (ASSUMED location),20.659220,-103.355710
+assumed_osm_t18terranova_14305070_t18terranovawashingt_20.65974_-103.35708,T18-Terranova: Washington-Canada stop 84 (ASSUMED location),20.659740,-103.357080
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66002_-103.35859,T18-Terranova: Washington-Minerva stop 1 (ASSUMED location),20.660020,-103.358590
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.65922_-103.35649,T18-Terranova: Washington-Minerva stop 2 (ASSUMED location),20.659220,-103.356490
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.65773_-103.35264,T18-Terranova: Washington-Minerva stop 3 (ASSUMED location),20.657730,-103.352640
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.65678_-103.35011,T18-Terranova: Washington-Minerva stop 4 (ASSUMED location),20.656780,-103.350110
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.6554_-103.34785,T18-Terranova: Washington-Minerva stop 5 (ASSUMED location),20.655400,-103.347850
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.65446_-103.34664,T18-Terranova: Washington-Minerva stop 6 (ASSUMED location),20.654460,-103.346640
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.65442_-103.34551,T18-Terranova: Washington-Minerva stop 7 (ASSUMED location),20.654420,-103.345510
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.65323_-103.34369,T18-Terranova: Washington-Minerva stop 8 (ASSUMED location),20.653230,-103.343690
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.64854_-103.34068,T18-Terranova: Washington-Minerva stop 9 (ASSUMED location),20.648540,-103.340680
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.64965_-103.33787,T18-Terranova: Washington-Minerva stop 10 (ASSUMED location),20.649650,-103.337870
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.65074_-103.33417,T18-Terranova: Washington-Minerva stop 11 (ASSUMED location),20.650740,-103.334170
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.65112_-103.3305,T18-Terranova: Washington-Minerva stop 12 (ASSUMED location),20.651120,-103.330500
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.6517_-103.32914,T18-Terranova: Washington-Minerva stop 13 (ASSUMED location),20.651700,-103.329140
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.65302_-103.32599,T18-Terranova: Washington-Minerva stop 14 (ASSUMED location),20.653020,-103.325990
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.65438_-103.32277,T18-Terranova: Washington-Minerva stop 15 (ASSUMED location),20.654380,-103.322770
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.6559_-103.31919,T18-Terranova: Washington-Minerva stop 16 (ASSUMED location),20.655900,-103.319190
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.65808_-103.31961,T18-Terranova: Washington-Minerva stop 17 (ASSUMED location),20.658080,-103.319610
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66_-103.31897,T18-Terranova: Washington-Minerva stop 18 (ASSUMED location),20.660000,-103.318970
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66184_-103.31834,T18-Terranova: Washington-Minerva stop 19 (ASSUMED location),20.661840,-103.318340
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66449_-103.31742,T18-Terranova: Washington-Minerva stop 20 (ASSUMED location),20.664490,-103.317420
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66606_-103.31689,T18-Terranova: Washington-Minerva stop 21 (ASSUMED location),20.666060,-103.316890
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66907_-103.31587,T18-Terranova: Washington-Minerva stop 22 (ASSUMED location),20.669070,-103.315870
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.67287_-103.31455,T18-Terranova: Washington-Minerva stop 23 (ASSUMED location),20.672870,-103.314550
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.67854_-103.31263,T18-Terranova: Washington-Minerva stop 24 (ASSUMED location),20.678540,-103.312630
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.6796_-103.31224,T18-Terranova: Washington-Minerva stop 25 (ASSUMED location),20.679600,-103.312240
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.68058_-103.3119,T18-Terranova: Washington-Minerva stop 26 (ASSUMED location),20.680580,-103.311900
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.68259_-103.31121,T18-Terranova: Washington-Minerva stop 27 (ASSUMED location),20.682590,-103.311210
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.68362_-103.31085,T18-Terranova: Washington-Minerva stop 28 (ASSUMED location),20.683620,-103.310850
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.68612_-103.31002,T18-Terranova: Washington-Minerva stop 29 (ASSUMED location),20.686120,-103.310020
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.68933_-103.31032,T18-Terranova: Washington-Minerva stop 30 (ASSUMED location),20.689330,-103.310320
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69131_-103.31132,T18-Terranova: Washington-Minerva stop 31 (ASSUMED location),20.691310,-103.311320
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69236_-103.31053,T18-Terranova: Washington-Minerva stop 32 (ASSUMED location),20.692360,-103.310530
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69441_-103.3094,T18-Terranova: Washington-Minerva stop 33 (ASSUMED location),20.694410,-103.309400
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69523_-103.31005,T18-Terranova: Washington-Minerva stop 34 (ASSUMED location),20.695230,-103.310050
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69576_-103.31109,T18-Terranova: Washington-Minerva stop 35 (ASSUMED location),20.695760,-103.311090
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69671_-103.31289,T18-Terranova: Washington-Minerva stop 36 (ASSUMED location),20.696710,-103.312890
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69768_-103.31476,T18-Terranova: Washington-Minerva stop 37 (ASSUMED location),20.697680,-103.314760
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69933_-103.31969,T18-Terranova: Washington-Minerva stop 38 (ASSUMED location),20.699330,-103.319690
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69916_-103.32029,T18-Terranova: Washington-Minerva stop 39 (ASSUMED location),20.699160,-103.320290
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.7036_-103.32338,T18-Terranova: Washington-Minerva stop 40 (ASSUMED location),20.703600,-103.323380
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.7049_-103.3241,T18-Terranova: Washington-Minerva stop 41 (ASSUMED location),20.704900,-103.324100
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.70546_-103.32661,T18-Terranova: Washington-Minerva stop 42 (ASSUMED location),20.705460,-103.326610
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.70651_-103.32886,T18-Terranova: Washington-Minerva stop 43 (ASSUMED location),20.706510,-103.328860
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.7077_-103.33135,T18-Terranova: Washington-Minerva stop 44 (ASSUMED location),20.707705,-103.331345
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.70995_-103.33595,T18-Terranova: Washington-Minerva stop 45 (ASSUMED location),20.709950,-103.335950
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71059_-103.33728,T18-Terranova: Washington-Minerva stop 46 (ASSUMED location),20.710590,-103.337280
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71123_-103.33859,T18-Terranova: Washington-Minerva stop 47 (ASSUMED location),20.711230,-103.338590
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71156_-103.34084,T18-Terranova: Washington-Minerva stop 48 (ASSUMED location),20.711560,-103.340840
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71172_-103.34193,T18-Terranova: Washington-Minerva stop 49 (ASSUMED location),20.711720,-103.341930
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71191_-103.34347,T18-Terranova: Washington-Minerva stop 50 (ASSUMED location),20.711910,-103.343470
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71222_-103.34587,T18-Terranova: Washington-Minerva stop 51 (ASSUMED location),20.712220,-103.345870
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71257_-103.34853,T18-Terranova: Washington-Minerva stop 52 (ASSUMED location),20.712570,-103.348530
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71293_-103.35105,T18-Terranova: Washington-Minerva stop 53 (ASSUMED location),20.712930,-103.351050
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71336_-103.35442,T18-Terranova: Washington-Minerva stop 54 (ASSUMED location),20.713360,-103.354420
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71568_-103.35507,T18-Terranova: Washington-Minerva stop 55 (ASSUMED location),20.715680,-103.355070
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71449_-103.35827,T18-Terranova: Washington-Minerva stop 56 (ASSUMED location),20.714490,-103.358270
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71349_-103.36098,T18-Terranova: Washington-Minerva stop 57 (ASSUMED location),20.713490,-103.360980
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71303_-103.36294,T18-Terranova: Washington-Minerva stop 58 (ASSUMED location),20.713030,-103.362940
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71318_-103.36504,T18-Terranova: Washington-Minerva stop 59 (ASSUMED location),20.713180,-103.365040
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71341_-103.36766,T18-Terranova: Washington-Minerva stop 60 (ASSUMED location),20.713410,-103.367660
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71354_-103.36947,T18-Terranova: Washington-Minerva stop 61 (ASSUMED location),20.713540,-103.369470
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71367_-103.37322,T18-Terranova: Washington-Minerva stop 62 (ASSUMED location),20.713670,-103.373220
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71322_-103.3775,T18-Terranova: Washington-Minerva stop 63 (ASSUMED location),20.713220,-103.377500
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.71097_-103.38038,T18-Terranova: Washington-Minerva stop 64 (ASSUMED location),20.710970,-103.380380
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.70848_-103.37817,T18-Terranova: Washington-Minerva stop 65 (ASSUMED location),20.708480,-103.378170
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.70665_-103.37726,T18-Terranova: Washington-Minerva stop 66 (ASSUMED location),20.706650,-103.377260
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.70567_-103.37708,T18-Terranova: Washington-Minerva stop 67 (ASSUMED location),20.705670,-103.377080
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.70363_-103.37651,T18-Terranova: Washington-Minerva stop 68 (ASSUMED location),20.703630,-103.376510
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.70271_-103.37838,T18-Terranova: Washington-Minerva stop 69 (ASSUMED location),20.702710,-103.378380
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.70047_-103.38296,T18-Terranova: Washington-Minerva stop 70 (ASSUMED location),20.700470,-103.382960
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69966_-103.38544,T18-Terranova: Washington-Minerva stop 71 (ASSUMED location),20.699660,-103.385440
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69824_-103.38644,T18-Terranova: Washington-Minerva stop 72 (ASSUMED location),20.698240,-103.386440
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.696_-103.38641,T18-Terranova: Washington-Minerva stop 73 (ASSUMED location),20.696000,-103.386410
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69419_-103.38643,T18-Terranova: Washington-Minerva stop 74 (ASSUMED location),20.694190,-103.386430
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.69186_-103.38677,T18-Terranova: Washington-Minerva stop 75 (ASSUMED location),20.691860,-103.386770
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.6897_-103.38709,T18-Terranova: Washington-Minerva stop 76 (ASSUMED location),20.689700,-103.387090
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.68766_-103.38712,T18-Terranova: Washington-Minerva stop 77 (ASSUMED location),20.687660,-103.387120
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.68507_-103.38716,T18-Terranova: Washington-Minerva stop 78 (ASSUMED location),20.685070,-103.387160
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.68142_-103.38723,T18-Terranova: Washington-Minerva stop 79 (ASSUMED location),20.681420,-103.387230
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.67944_-103.3862,T18-Terranova: Washington-Minerva stop 80 (ASSUMED location),20.679441,-103.386197
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.6794_-103.38469,T18-Terranova: Washington-Minerva stop 81 (ASSUMED location),20.679399,-103.384691
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.67882_-103.38461,T18-Terranova: Washington-Minerva stop 82 (ASSUMED location),20.678820,-103.384610
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.67597_-103.38658,T18-Terranova: Washington-Minerva stop 83 (ASSUMED location),20.675970,-103.386580
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.67341_-103.38681,T18-Terranova: Washington-Minerva stop 84 (ASSUMED location),20.673410,-103.386810
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.67236_-103.38603,T18-Terranova: Washington-Minerva stop 85 (ASSUMED location),20.672360,-103.386030
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66985_-103.38397,T18-Terranova: Washington-Minerva stop 86 (ASSUMED location),20.669850,-103.383970
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66875_-103.38151,T18-Terranova: Washington-Minerva stop 87 (ASSUMED location),20.668750,-103.381507
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66726_-103.37763,T18-Terranova: Washington-Minerva stop 88 (ASSUMED location),20.667260,-103.377630
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66573_-103.37345,T18-Terranova: Washington-Minerva stop 89 (ASSUMED location),20.665730,-103.373450
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66361_-103.36797,T18-Terranova: Washington-Minerva stop 90 (ASSUMED location),20.663610,-103.367970
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66257_-103.36529,T18-Terranova: Washington-Minerva stop 91 (ASSUMED location),20.662570,-103.365290
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.6621_-103.36408,T18-Terranova: Washington-Minerva stop 92 (ASSUMED location),20.662100,-103.364080
+assumed_osm_t18terranova_14305112_t18terranovawashingt_20.66106_-103.36138,T18-Terranova: Washington-Minerva stop 93 (ASSUMED location),20.661060,-103.361380
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.67073_-103.34638,T13B-C01-2: El Terrero stop 1 (ASSUMED location),20.670730,-103.346380
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.66799_-103.34675,T13B-C01-2: El Terrero stop 2 (ASSUMED location),20.667990,-103.346750
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.66644_-103.34604,T13B-C01-2: El Terrero stop 3 (ASSUMED location),20.666440,-103.346040
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.66561_-103.34602,T13B-C01-2: El Terrero stop 4 (ASSUMED location),20.665610,-103.346020
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.66431_-103.34594,T13B-C01-2: El Terrero stop 5 (ASSUMED location),20.664310,-103.345940
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.66134_-103.34581,T13B-C01-2: El Terrero stop 6 (ASSUMED location),20.661340,-103.345810
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.65811_-103.34572,T13B-C01-2: El Terrero stop 7 (ASSUMED location),20.658110,-103.345717
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.65518_-103.34492,T13B-C01-2: El Terrero stop 8 (ASSUMED location),20.655180,-103.344920
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.65323_-103.34369,T13B-C01-2: El Terrero stop 9 (ASSUMED location),20.653230,-103.343690
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.65079_-103.34211,T13B-C01-2: El Terrero stop 10 (ASSUMED location),20.650790,-103.342110
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.64863_-103.34074,T13B-C01-2: El Terrero stop 11 (ASSUMED location),20.648630,-103.340740
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.64623_-103.33924,T13B-C01-2: El Terrero stop 12 (ASSUMED location),20.646230,-103.339240
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.64356_-103.33754,T13B-C01-2: El Terrero stop 13 (ASSUMED location),20.643560,-103.337540
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.64132_-103.33596,T13B-C01-2: El Terrero stop 14 (ASSUMED location),20.641320,-103.335960
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.63835_-103.33304,T13B-C01-2: El Terrero stop 15 (ASSUMED location),20.638350,-103.333040
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.63596_-103.33126,T13B-C01-2: El Terrero stop 16 (ASSUMED location),20.635960,-103.331260
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.63398_-103.32954,T13B-C01-2: El Terrero stop 17 (ASSUMED location),20.633980,-103.329540
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.63038_-103.3264,T13B-C01-2: El Terrero stop 18 (ASSUMED location),20.630380,-103.326400
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62811_-103.32491,T13B-C01-2: El Terrero stop 19 (ASSUMED location),20.628110,-103.324910
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62685_-103.32254,T13B-C01-2: El Terrero stop 20 (ASSUMED location),20.626850,-103.322540
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62543_-103.30385,T13B-C01-2: El Terrero stop 21 (ASSUMED location),20.625430,-103.303850
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62716_-103.2993,T13B-C01-2: El Terrero stop 22 (ASSUMED location),20.627160,-103.299300
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62769_-103.29059,T13B-C01-2: El Terrero stop 23 (ASSUMED location),20.627690,-103.290590
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62394_-103.28645,T13B-C01-2: El Terrero stop 24 (ASSUMED location),20.623940,-103.286450
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62151_-103.28732,T13B-C01-2: El Terrero stop 25 (ASSUMED location),20.621510,-103.287320
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62065_-103.28673,T13B-C01-2: El Terrero stop 26 (ASSUMED location),20.620650,-103.286730
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.61976_-103.28611,T13B-C01-2: El Terrero stop 27 (ASSUMED location),20.619760,-103.286110
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.61982_-103.28507,T13B-C01-2: El Terrero stop 28 (ASSUMED location),20.619820,-103.285070
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62093_-103.28486,T13B-C01-2: El Terrero stop 29 (ASSUMED location),20.620930,-103.284860
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62193_-103.28468,T13B-C01-2: El Terrero stop 30 (ASSUMED location),20.621930,-103.284680
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62316_-103.28598,T13B-C01-2: El Terrero stop 31 (ASSUMED location),20.623160,-103.285981
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62401_-103.28696,T13B-C01-2: El Terrero stop 32 (ASSUMED location),20.624010,-103.286960
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62604_-103.30416,T13B-C01-2: El Terrero stop 33 (ASSUMED location),20.626040,-103.304160
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62452_-103.30812,T13B-C01-2: El Terrero stop 34 (ASSUMED location),20.624520,-103.308120
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62397_-103.31429,T13B-C01-2: El Terrero stop 35 (ASSUMED location),20.623970,-103.314290
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.62095_-103.32174,T13B-C01-2: El Terrero stop 36 (ASSUMED location),20.620950,-103.321740
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.60798_-103.32822,T13B-C01-2: El Terrero stop 37 (ASSUMED location),20.607980,-103.328220
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.59696_-103.32476,T13B-C01-2: El Terrero stop 38 (ASSUMED location),20.596960,-103.324760
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.58937_-103.32123,T13B-C01-2: El Terrero stop 39 (ASSUMED location),20.589370,-103.321230
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.58307_-103.31829,T13B-C01-2: El Terrero stop 40 (ASSUMED location),20.583072,-103.318287
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.57508_-103.31447,T13B-C01-2: El Terrero stop 41 (ASSUMED location),20.575080,-103.314471
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.56131_-103.30792,T13B-C01-2: El Terrero stop 42 (ASSUMED location),20.561306,-103.307922
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.55911_-103.30685,T13B-C01-2: El Terrero stop 43 (ASSUMED location),20.559110,-103.306850
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.55472_-103.30479,T13B-C01-2: El Terrero stop 44 (ASSUMED location),20.554720,-103.304790
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.54928_-103.30216,T13B-C01-2: El Terrero stop 45 (ASSUMED location),20.549280,-103.302160
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.54122_-103.29834,T13B-C01-2: El Terrero stop 46 (ASSUMED location),20.541220,-103.298340
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.53052_-103.29332,T13B-C01-2: El Terrero stop 47 (ASSUMED location),20.530524,-103.293318
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.52594_-103.29115,T13B-C01-2: El Terrero stop 48 (ASSUMED location),20.525940,-103.291150
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.53037_-103.29277,T13B-C01-2: El Terrero stop 49 (ASSUMED location),20.530370,-103.292770
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.54129_-103.29796,T13B-C01-2: El Terrero stop 50 (ASSUMED location),20.541290,-103.297960
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.54099_-103.29376,T13B-C01-2: El Terrero stop 51 (ASSUMED location),20.540990,-103.293760
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.54133_-103.29022,T13B-C01-2: El Terrero stop 52 (ASSUMED location),20.541330,-103.290220
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.54179_-103.28793,T13B-C01-2: El Terrero stop 53 (ASSUMED location),20.541790,-103.287930
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.54158_-103.2843,T13B-C01-2: El Terrero stop 54 (ASSUMED location),20.541580,-103.284300
+assumed_osm_t13bc012_14305584_t13bc012elterrerosto_20.54245_-103.27802,T13B-C01-2: El Terrero stop 55 (ASSUMED location),20.542450,-103.278020
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.54438_-103.27382,T13B-C01-2: Centro Metropolitano stop 1 (ASSUMED location),20.544380,-103.273820
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.54336_-103.27456,T13B-C01-2: Centro Metropolitano stop 2 (ASSUMED location),20.543360,-103.274560
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.54168_-103.27567,T13B-C01-2: Centro Metropolitano stop 3 (ASSUMED location),20.541680,-103.275670
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.54082_-103.27853,T13B-C01-2: Centro Metropolitano stop 4 (ASSUMED location),20.540820,-103.278530
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.5417_-103.28402,T13B-C01-2: Centro Metropolitano stop 5 (ASSUMED location),20.541700,-103.284020
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.54198_-103.28845,T13B-C01-2: Centro Metropolitano stop 6 (ASSUMED location),20.541980,-103.288450
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.5414_-103.29121,T13B-C01-2: Centro Metropolitano stop 7 (ASSUMED location),20.541400,-103.291210
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.54957_-103.30182,T13B-C01-2: Centro Metropolitano stop 8 (ASSUMED location),20.549570,-103.301820
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.55939_-103.30639,T13B-C01-2: Centro Metropolitano stop 9 (ASSUMED location),20.559391,-103.306385
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.56132_-103.30747,T13B-C01-2: Centro Metropolitano stop 10 (ASSUMED location),20.561320,-103.307470
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.56804_-103.31067,T13B-C01-2: Centro Metropolitano stop 11 (ASSUMED location),20.568040,-103.310670
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.57511_-103.31399,T13B-C01-2: Centro Metropolitano stop 12 (ASSUMED location),20.575110,-103.313990
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.58279_-103.31767,T13B-C01-2: Centro Metropolitano stop 13 (ASSUMED location),20.582790,-103.317670
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.58955_-103.3209,T13B-C01-2: Centro Metropolitano stop 14 (ASSUMED location),20.589550,-103.320904
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.59239_-103.32221,T13B-C01-2: Centro Metropolitano stop 15 (ASSUMED location),20.592390,-103.322210
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.59329_-103.32264,T13B-C01-2: Centro Metropolitano stop 16 (ASSUMED location),20.593290,-103.322640
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.60596_-103.31569,T13B-C01-2: Centro Metropolitano stop 17 (ASSUMED location),20.605960,-103.315690
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.60929_-103.31521,T13B-C01-2: Centro Metropolitano stop 18 (ASSUMED location),20.609290,-103.315210
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62041_-103.32142,T13B-C01-2: Centro Metropolitano stop 19 (ASSUMED location),20.620410,-103.321420
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62543_-103.30385,T13B-C01-2: Centro Metropolitano stop 20 (ASSUMED location),20.625430,-103.303850
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62716_-103.2993,T13B-C01-2: Centro Metropolitano stop 21 (ASSUMED location),20.627160,-103.299300
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62769_-103.29059,T13B-C01-2: Centro Metropolitano stop 22 (ASSUMED location),20.627690,-103.290590
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62442_-103.28752,T13B-C01-2: Centro Metropolitano stop 23 (ASSUMED location),20.624420,-103.287520
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62345_-103.28691,T13B-C01-2: Centro Metropolitano stop 24 (ASSUMED location),20.623450,-103.286910
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62283_-103.285,T13B-C01-2: Centro Metropolitano stop 25 (ASSUMED location),20.622830,-103.285000
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62305_-103.28399,T13B-C01-2: Centro Metropolitano stop 26 (ASSUMED location),20.623050,-103.283990
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62363_-103.28583,T13B-C01-2: Centro Metropolitano stop 27 (ASSUMED location),20.623630,-103.285830
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62402_-103.287,T13B-C01-2: Centro Metropolitano stop 28 (ASSUMED location),20.624023,-103.287004
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62604_-103.30416,T13B-C01-2: Centro Metropolitano stop 29 (ASSUMED location),20.626040,-103.304160
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62452_-103.30812,T13B-C01-2: Centro Metropolitano stop 30 (ASSUMED location),20.624520,-103.308120
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62397_-103.31429,T13B-C01-2: Centro Metropolitano stop 31 (ASSUMED location),20.623970,-103.314290
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.62747_-103.32114,T13B-C01-2: Centro Metropolitano stop 32 (ASSUMED location),20.627470,-103.321140
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.6291_-103.3222,T13B-C01-2: Centro Metropolitano stop 33 (ASSUMED location),20.629100,-103.322200
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.63164_-103.32382,T13B-C01-2: Centro Metropolitano stop 34 (ASSUMED location),20.631640,-103.323820
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.63319_-103.32482,T13B-C01-2: Centro Metropolitano stop 35 (ASSUMED location),20.633190,-103.324820
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.63813_-103.32797,T13B-C01-2: Centro Metropolitano stop 36 (ASSUMED location),20.638130,-103.327970
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.64827_-103.33447,T13B-C01-2: Centro Metropolitano stop 37 (ASSUMED location),20.648270,-103.334470
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.65032_-103.33578,T13B-C01-2: Centro Metropolitano stop 38 (ASSUMED location),20.650320,-103.335780
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.65782_-103.34387,T13B-C01-2: Centro Metropolitano stop 39 (ASSUMED location),20.657820,-103.343870
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.65897_-103.34524,T13B-C01-2: Centro Metropolitano stop 40 (ASSUMED location),20.658970,-103.345240
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.66211_-103.34818,T13B-C01-2: Centro Metropolitano stop 41 (ASSUMED location),20.662110,-103.348180
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.66357_-103.34933,T13B-C01-2: Centro Metropolitano stop 42 (ASSUMED location),20.663570,-103.349330
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.66593_-103.34852,T13B-C01-2: Centro Metropolitano stop 43 (ASSUMED location),20.665930,-103.348520
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.6678_-103.34789,T13B-C01-2: Centro Metropolitano stop 44 (ASSUMED location),20.667800,-103.347890
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.66932_-103.3474,T13B-C01-2: Centro Metropolitano stop 45 (ASSUMED location),20.669323,-103.347395
+assumed_osm_t13bc012_14305596_t13bc012centrometrop_20.6702_-103.34667,T13B-C01-2: Centro Metropolitano stop 46 (ASSUMED location),20.670200,-103.346670
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.67073_-103.34638,T13B-C02: Cima Serena stop 1 (ASSUMED location),20.670730,-103.346380
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.66799_-103.34675,T13B-C02: Cima Serena stop 2 (ASSUMED location),20.667990,-103.346750
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.66644_-103.34604,T13B-C02: Cima Serena stop 3 (ASSUMED location),20.666440,-103.346040
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.66561_-103.34602,T13B-C02: Cima Serena stop 4 (ASSUMED location),20.665610,-103.346020
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.66431_-103.34594,T13B-C02: Cima Serena stop 5 (ASSUMED location),20.664310,-103.345940
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.66266_-103.34585,T13B-C02: Cima Serena stop 6 (ASSUMED location),20.662660,-103.345850
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.66138_-103.34579,T13B-C02: Cima Serena stop 7 (ASSUMED location),20.661380,-103.345790
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.65811_-103.34572,T13B-C02: Cima Serena stop 8 (ASSUMED location),20.658110,-103.345717
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.65518_-103.34492,T13B-C02: Cima Serena stop 9 (ASSUMED location),20.655180,-103.344920
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.65323_-103.34369,T13B-C02: Cima Serena stop 10 (ASSUMED location),20.653230,-103.343690
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.65079_-103.34211,T13B-C02: Cima Serena stop 11 (ASSUMED location),20.650790,-103.342110
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.64863_-103.34074,T13B-C02: Cima Serena stop 12 (ASSUMED location),20.648630,-103.340740
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.64574_-103.33892,T13B-C02: Cima Serena stop 13 (ASSUMED location),20.645740,-103.338920
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.64364_-103.33759,T13B-C02: Cima Serena stop 14 (ASSUMED location),20.643640,-103.337590
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.64132_-103.33596,T13B-C02: Cima Serena stop 15 (ASSUMED location),20.641320,-103.335960
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.63835_-103.33304,T13B-C02: Cima Serena stop 16 (ASSUMED location),20.638350,-103.333040
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.63596_-103.33126,T13B-C02: Cima Serena stop 17 (ASSUMED location),20.635960,-103.331260
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.63473_-103.33017,T13B-C02: Cima Serena stop 18 (ASSUMED location),20.634730,-103.330170
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.63038_-103.3264,T13B-C02: Cima Serena stop 19 (ASSUMED location),20.630380,-103.326400
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.62811_-103.32491,T13B-C02: Cima Serena stop 20 (ASSUMED location),20.628110,-103.324910
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.62685_-103.32254,T13B-C02: Cima Serena stop 21 (ASSUMED location),20.626850,-103.322540
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.62095_-103.32174,T13B-C02: Cima Serena stop 22 (ASSUMED location),20.620950,-103.321740
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.60798_-103.32822,T13B-C02: Cima Serena stop 23 (ASSUMED location),20.607980,-103.328220
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.59696_-103.32476,T13B-C02: Cima Serena stop 24 (ASSUMED location),20.596960,-103.324760
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.59317_-103.32306,T13B-C02: Cima Serena stop 25 (ASSUMED location),20.593170,-103.323060
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.58937_-103.32123,T13B-C02: Cima Serena stop 26 (ASSUMED location),20.589370,-103.321230
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.58307_-103.31829,T13B-C02: Cima Serena stop 27 (ASSUMED location),20.583072,-103.318287
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.57508_-103.31447,T13B-C02: Cima Serena stop 28 (ASSUMED location),20.575080,-103.314471
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.56795_-103.31103,T13B-C02: Cima Serena stop 29 (ASSUMED location),20.567950,-103.311030
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.56131_-103.30792,T13B-C02: Cima Serena stop 30 (ASSUMED location),20.561306,-103.307922
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.55911_-103.30685,T13B-C02: Cima Serena stop 31 (ASSUMED location),20.559110,-103.306850
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.55472_-103.30479,T13B-C02: Cima Serena stop 32 (ASSUMED location),20.554720,-103.304790
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.54928_-103.30216,T13B-C02: Cima Serena stop 33 (ASSUMED location),20.549280,-103.302160
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.54122_-103.29834,T13B-C02: Cima Serena stop 34 (ASSUMED location),20.541220,-103.298340
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.53052_-103.29332,T13B-C02: Cima Serena stop 35 (ASSUMED location),20.530524,-103.293318
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.52594_-103.29115,T13B-C02: Cima Serena stop 36 (ASSUMED location),20.525940,-103.291150
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.53037_-103.29277,T13B-C02: Cima Serena stop 37 (ASSUMED location),20.530370,-103.292770
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.527_-103.25013,T13B-C02: Cima Serena stop 38 (ASSUMED location),20.527000,-103.250130
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.52466_-103.24806,T13B-C02: Cima Serena stop 39 (ASSUMED location),20.524660,-103.248060
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.52006_-103.24375,T13B-C02: Cima Serena stop 40 (ASSUMED location),20.520060,-103.243750
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51775_-103.24184,T13B-C02: Cima Serena stop 41 (ASSUMED location),20.517750,-103.241840
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51524_-103.23987,T13B-C02: Cima Serena stop 42 (ASSUMED location),20.515240,-103.239870
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51375_-103.2387,T13B-C02: Cima Serena stop 43 (ASSUMED location),20.513750,-103.238700
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51182_-103.23718,T13B-C02: Cima Serena stop 44 (ASSUMED location),20.511820,-103.237180
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51311_-103.23647,T13B-C02: Cima Serena stop 45 (ASSUMED location),20.513110,-103.236470
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51486_-103.23598,T13B-C02: Cima Serena stop 46 (ASSUMED location),20.514860,-103.235980
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51501_-103.23475,T13B-C02: Cima Serena stop 47 (ASSUMED location),20.515010,-103.234750
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51506_-103.23342,T13B-C02: Cima Serena stop 48 (ASSUMED location),20.515060,-103.233420
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51487_-103.2318,T13B-C02: Cima Serena stop 49 (ASSUMED location),20.514870,-103.231800
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51465_-103.23111,T13B-C02: Cima Serena stop 50 (ASSUMED location),20.514650,-103.231110
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51638_-103.23074,T13B-C02: Cima Serena stop 51 (ASSUMED location),20.516380,-103.230740
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51739_-103.23037,T13B-C02: Cima Serena stop 52 (ASSUMED location),20.517390,-103.230370
+assumed_osm_t13bc02_14305637_t13bc02cimaserenasto_20.51875_-103.22974,T13B-C02: Cima Serena stop 53 (ASSUMED location),20.518750,-103.229740
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.5189_-103.22992,T13B-C02: Centro Metropolitano stop 1 (ASSUMED location),20.518900,-103.229920
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.51762_-103.23037,T13B-C02: Centro Metropolitano stop 2 (ASSUMED location),20.517620,-103.230370
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.51656_-103.23075,T13B-C02: Centro Metropolitano stop 3 (ASSUMED location),20.516560,-103.230750
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.51486_-103.23098,T13B-C02: Centro Metropolitano stop 4 (ASSUMED location),20.514860,-103.230980
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.51495_-103.23168,T13B-C02: Centro Metropolitano stop 5 (ASSUMED location),20.514950,-103.231680
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.51518_-103.23315,T13B-C02: Centro Metropolitano stop 6 (ASSUMED location),20.515180,-103.233150
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.51509_-103.23457,T13B-C02: Centro Metropolitano stop 7 (ASSUMED location),20.515090,-103.234570
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.515_-103.23591,T13B-C02: Centro Metropolitano stop 8 (ASSUMED location),20.515000,-103.235910
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.5133_-103.23652,T13B-C02: Centro Metropolitano stop 9 (ASSUMED location),20.513300,-103.236520
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.51205_-103.23686,T13B-C02: Centro Metropolitano stop 10 (ASSUMED location),20.512050,-103.236860
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.51349_-103.23815,T13B-C02: Centro Metropolitano stop 11 (ASSUMED location),20.513490,-103.238150
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.51735_-103.24095,T13B-C02: Centro Metropolitano stop 12 (ASSUMED location),20.517350,-103.240950
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.52025_-103.24346,T13B-C02: Centro Metropolitano stop 13 (ASSUMED location),20.520250,-103.243460
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.5234_-103.24662,T13B-C02: Centro Metropolitano stop 14 (ASSUMED location),20.523400,-103.246620
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.52578_-103.2486,T13B-C02: Centro Metropolitano stop 15 (ASSUMED location),20.525780,-103.248600
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.52769_-103.25008,T13B-C02: Centro Metropolitano stop 16 (ASSUMED location),20.527690,-103.250080
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.53467_-103.25564,T13B-C02: Centro Metropolitano stop 17 (ASSUMED location),20.534670,-103.255640
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.53098_-103.25312,T13B-C02: Centro Metropolitano stop 18 (ASSUMED location),20.530980,-103.253120
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.52757_-103.25038,T13B-C02: Centro Metropolitano stop 19 (ASSUMED location),20.527570,-103.250380
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.54129_-103.29796,T13B-C02: Centro Metropolitano stop 20 (ASSUMED location),20.541290,-103.297960
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.54957_-103.30182,T13B-C02: Centro Metropolitano stop 21 (ASSUMED location),20.549570,-103.301820
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.55939_-103.30639,T13B-C02: Centro Metropolitano stop 22 (ASSUMED location),20.559391,-103.306385
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.56132_-103.30747,T13B-C02: Centro Metropolitano stop 23 (ASSUMED location),20.561320,-103.307470
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.56804_-103.31067,T13B-C02: Centro Metropolitano stop 24 (ASSUMED location),20.568040,-103.310670
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.57511_-103.31399,T13B-C02: Centro Metropolitano stop 25 (ASSUMED location),20.575110,-103.313990
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.58279_-103.31767,T13B-C02: Centro Metropolitano stop 26 (ASSUMED location),20.582790,-103.317670
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.58955_-103.3209,T13B-C02: Centro Metropolitano stop 27 (ASSUMED location),20.589550,-103.320904
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.59239_-103.32221,T13B-C02: Centro Metropolitano stop 28 (ASSUMED location),20.592390,-103.322210
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.59329_-103.32264,T13B-C02: Centro Metropolitano stop 29 (ASSUMED location),20.593290,-103.322640
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.60596_-103.31569,T13B-C02: Centro Metropolitano stop 30 (ASSUMED location),20.605960,-103.315690
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.62041_-103.32142,T13B-C02: Centro Metropolitano stop 31 (ASSUMED location),20.620410,-103.321420
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.60929_-103.31521,T13B-C02: Centro Metropolitano stop 32 (ASSUMED location),20.609290,-103.315210
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.62752_-103.32118,T13B-C02: Centro Metropolitano stop 33 (ASSUMED location),20.627520,-103.321180
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.6291_-103.3222,T13B-C02: Centro Metropolitano stop 34 (ASSUMED location),20.629100,-103.322200
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.63164_-103.32382,T13B-C02: Centro Metropolitano stop 35 (ASSUMED location),20.631640,-103.323820
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.63319_-103.32482,T13B-C02: Centro Metropolitano stop 36 (ASSUMED location),20.633190,-103.324820
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.63813_-103.32797,T13B-C02: Centro Metropolitano stop 37 (ASSUMED location),20.638130,-103.327970
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.64827_-103.33447,T13B-C02: Centro Metropolitano stop 38 (ASSUMED location),20.648270,-103.334470
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.65032_-103.33578,T13B-C02: Centro Metropolitano stop 39 (ASSUMED location),20.650320,-103.335780
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.65782_-103.34387,T13B-C02: Centro Metropolitano stop 40 (ASSUMED location),20.657820,-103.343870
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.65897_-103.34524,T13B-C02: Centro Metropolitano stop 41 (ASSUMED location),20.658970,-103.345240
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.66214_-103.34821,T13B-C02: Centro Metropolitano stop 42 (ASSUMED location),20.662140,-103.348210
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.66308_-103.34949,T13B-C02: Centro Metropolitano stop 43 (ASSUMED location),20.663080,-103.349490
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.66593_-103.34852,T13B-C02: Centro Metropolitano stop 44 (ASSUMED location),20.665930,-103.348520
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.6678_-103.34789,T13B-C02: Centro Metropolitano stop 45 (ASSUMED location),20.667800,-103.347890
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.66932_-103.3474,T13B-C02: Centro Metropolitano stop 46 (ASSUMED location),20.669323,-103.347395
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.67027_-103.34651,T13B-C02: Centro Metropolitano stop 47 (ASSUMED location),20.670270,-103.346510
+assumed_osm_t13bc02_14305673_t13bc02centrometropo_20.67086_-103.3462,T13B-C02: Centro Metropolitano stop 48 (ASSUMED location),20.670860,-103.346200
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.6923_-103.26718,T13C-C04: Col. Jalisco II Seccion stop 1 (ASSUMED location),20.692300,-103.267180
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.69072_-103.26516,T13C-C04: Col. Jalisco II Seccion stop 2 (ASSUMED location),20.690720,-103.265160
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.69006_-103.26397,T13C-C04: Col. Jalisco II Seccion stop 3 (ASSUMED location),20.690060,-103.263970
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.68694_-103.26374,T13C-C04: Col. Jalisco II Seccion stop 4 (ASSUMED location),20.686940,-103.263740
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.68375_-103.25838,T13C-C04: Col. Jalisco II Seccion stop 5 (ASSUMED location),20.683750,-103.258380
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.68142_-103.25817,T13C-C04: Col. Jalisco II Seccion stop 6 (ASSUMED location),20.681420,-103.258170
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.67941_-103.25805,T13C-C04: Col. Jalisco II Seccion stop 7 (ASSUMED location),20.679410,-103.258050
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.67748_-103.25787,T13C-C04: Col. Jalisco II Seccion stop 8 (ASSUMED location),20.677480,-103.257870
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.67578_-103.23842,T13C-C04: Col. Jalisco II Seccion stop 9 (ASSUMED location),20.675780,-103.238420
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.67432_-103.23748,T13C-C04: Col. Jalisco II Seccion stop 10 (ASSUMED location),20.674320,-103.237480
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.67207_-103.23652,T13C-C04: Col. Jalisco II Seccion stop 11 (ASSUMED location),20.672070,-103.236520
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.66847_-103.23494,T13C-C04: Col. Jalisco II Seccion stop 12 (ASSUMED location),20.668470,-103.234940
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.66642_-103.23399,T13C-C04: Col. Jalisco II Seccion stop 13 (ASSUMED location),20.666420,-103.233990
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.66409_-103.23298,T13C-C04: Col. Jalisco II Seccion stop 14 (ASSUMED location),20.664090,-103.232980
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.66123_-103.23222,T13C-C04: Col. Jalisco II Seccion stop 15 (ASSUMED location),20.661230,-103.232220
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.65959_-103.23254,T13C-C04: Col. Jalisco II Seccion stop 16 (ASSUMED location),20.659590,-103.232540
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.65672_-103.23345,T13C-C04: Col. Jalisco II Seccion stop 17 (ASSUMED location),20.656720,-103.233450
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.65243_-103.23483,T13C-C04: Col. Jalisco II Seccion stop 18 (ASSUMED location),20.652430,-103.234830
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.63339_-103.24393,T13C-C04: Col. Jalisco II Seccion stop 19 (ASSUMED location),20.633390,-103.243930
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.63108_-103.24447,T13C-C04: Col. Jalisco II Seccion stop 20 (ASSUMED location),20.631080,-103.244470
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.62949_-103.24502,T13C-C04: Col. Jalisco II Seccion stop 21 (ASSUMED location),20.629490,-103.245020
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.62829_-103.24532,T13C-C04: Col. Jalisco II Seccion stop 22 (ASSUMED location),20.628290,-103.245320
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.62629_-103.24593,T13C-C04: Col. Jalisco II Seccion stop 23 (ASSUMED location),20.626290,-103.245930
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.62255_-103.24706,T13C-C04: Col. Jalisco II Seccion stop 24 (ASSUMED location),20.622550,-103.247060
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.62124_-103.24748,T13C-C04: Col. Jalisco II Seccion stop 25 (ASSUMED location),20.621240,-103.247480
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.61916_-103.24806,T13C-C04: Col. Jalisco II Seccion stop 26 (ASSUMED location),20.619160,-103.248060
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.61873_-103.24739,T13C-C04: Col. Jalisco II Seccion stop 27 (ASSUMED location),20.618730,-103.247390
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.61889_-103.24539,T13C-C04: Col. Jalisco II Seccion stop 28 (ASSUMED location),20.618890,-103.245390
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.61926_-103.24407,T13C-C04: Col. Jalisco II Seccion stop 29 (ASSUMED location),20.619260,-103.244070
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.60932_-103.24248,T13C-C04: Col. Jalisco II Seccion stop 30 (ASSUMED location),20.609320,-103.242480
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.60155_-103.23962,T13C-C04: Col. Jalisco II Seccion stop 31 (ASSUMED location),20.601550,-103.239620
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.59902_-103.23234,T13C-C04: Col. Jalisco II Seccion stop 32 (ASSUMED location),20.599020,-103.232340
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.594_-103.22666,T13C-C04: Col. Jalisco II Seccion stop 33 (ASSUMED location),20.594000,-103.226660
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.58658_-103.22224,T13C-C04: Col. Jalisco II Seccion stop 34 (ASSUMED location),20.586580,-103.222240
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.58199_-103.2195,T13C-C04: Col. Jalisco II Seccion stop 35 (ASSUMED location),20.581990,-103.219500
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.58106_-103.21895,T13C-C04: Col. Jalisco II Seccion stop 36 (ASSUMED location),20.581060,-103.218950
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.5753_-103.21545,T13C-C04: Col. Jalisco II Seccion stop 37 (ASSUMED location),20.575300,-103.215450
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.5738_-103.21453,T13C-C04: Col. Jalisco II Seccion stop 38 (ASSUMED location),20.573800,-103.214530
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.57159_-103.21287,T13C-C04: Col. Jalisco II Seccion stop 39 (ASSUMED location),20.571590,-103.212870
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.57088_-103.21182,T13C-C04: Col. Jalisco II Seccion stop 40 (ASSUMED location),20.570880,-103.211820
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.57014_-103.21067,T13C-C04: Col. Jalisco II Seccion stop 41 (ASSUMED location),20.570140,-103.210670
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.56862_-103.20363,T13C-C04: Col. Jalisco II Seccion stop 42 (ASSUMED location),20.568620,-103.203630
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.56997_-103.19872,T13C-C04: Col. Jalisco II Seccion stop 43 (ASSUMED location),20.569970,-103.198720
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.57275_-103.1894,T13C-C04: Col. Jalisco II Seccion stop 44 (ASSUMED location),20.572750,-103.189400
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.57091_-103.18786,T13C-C04: Col. Jalisco II Seccion stop 45 (ASSUMED location),20.570910,-103.187860
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.56905_-103.18747,T13C-C04: Col. Jalisco II Seccion stop 46 (ASSUMED location),20.569050,-103.187470
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.56592_-103.1868,T13C-C04: Col. Jalisco II Seccion stop 47 (ASSUMED location),20.565920,-103.186800
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.56189_-103.18559,T13C-C04: Col. Jalisco II Seccion stop 48 (ASSUMED location),20.561890,-103.185590
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.55935_-103.1851,T13C-C04: Col. Jalisco II Seccion stop 49 (ASSUMED location),20.559350,-103.185100
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.55397_-103.18431,T13C-C04: Col. Jalisco II Seccion stop 50 (ASSUMED location),20.553970,-103.184310
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.54756_-103.18285,T13C-C04: Col. Jalisco II Seccion stop 51 (ASSUMED location),20.547560,-103.182850
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.54415_-103.1821,T13C-C04: Col. Jalisco II Seccion stop 52 (ASSUMED location),20.544150,-103.182100
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.54132_-103.18162,T13C-C04: Col. Jalisco II Seccion stop 53 (ASSUMED location),20.541320,-103.181620
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.52353_-103.18072,T13C-C04: Col. Jalisco II Seccion stop 54 (ASSUMED location),20.523530,-103.180720
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.52064_-103.1797,T13C-C04: Col. Jalisco II Seccion stop 55 (ASSUMED location),20.520640,-103.179700
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.50979_-103.19943,T13C-C04: Col. Jalisco II Seccion stop 56 (ASSUMED location),20.509790,-103.199430
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.50658_-103.20846,T13C-C04: Col. Jalisco II Seccion stop 57 (ASSUMED location),20.506580,-103.208460
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.50253_-103.21988,T13C-C04: Col. Jalisco II Seccion stop 58 (ASSUMED location),20.502530,-103.219880
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.5048_-103.23272,T13C-C04: Col. Jalisco II Seccion stop 59 (ASSUMED location),20.504800,-103.232720
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.50894_-103.23461,T13C-C04: Col. Jalisco II Seccion stop 60 (ASSUMED location),20.508940,-103.234610
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.51161_-103.23666,T13C-C04: Col. Jalisco II Seccion stop 61 (ASSUMED location),20.511610,-103.236660
+assumed_osm_t13cc04_14305772_t13cc04coljaliscoiis_20.51349_-103.23815,T13C-C04: Col. Jalisco II Seccion stop 62 (ASSUMED location),20.513490,-103.238150
+assumed_osm_t13cc04_14305774_t13cc04alamedastop1_20.51182_-103.23718,T13C-C04: Alameda stop 1 (ASSUMED location),20.511820,-103.237180
+assumed_osm_t13cc04_14305774_t13cc04alamedastop2_20.50899_-103.23502,T13C-C04: Alameda stop 2 (ASSUMED location),20.508990,-103.235020
+assumed_osm_t13cc04_14305774_t13cc04alamedastop3_20.50407_-103.23284,T13C-C04: Alameda stop 3 (ASSUMED location),20.504070,-103.232840
+assumed_osm_t13cc04_14305774_t13cc04alamedastop4_20.50392_-103.21536,T13C-C04: Alameda stop 4 (ASSUMED location),20.503920,-103.215360
+assumed_osm_t13cc04_14305774_t13cc04alamedastop5_20.50715_-103.20616,T13C-C04: Alameda stop 5 (ASSUMED location),20.507150,-103.206160
+assumed_osm_t13cc04_14305774_t13cc04alamedastop6_20.51245_-103.19091,T13C-C04: Alameda stop 6 (ASSUMED location),20.512450,-103.190910
+assumed_osm_t13cc04_14305774_t13cc04alamedastop7_20.51394_-103.18752,T13C-C04: Alameda stop 7 (ASSUMED location),20.513940,-103.187520
+assumed_osm_t13cc04_14305774_t13cc04alamedastop8_20.52674_-103.18181,T13C-C04: Alameda stop 8 (ASSUMED location),20.526740,-103.181810
+assumed_osm_t13cc04_14305774_t13cc04alamedastop9_20.52926_-103.18147,T13C-C04: Alameda stop 9 (ASSUMED location),20.529260,-103.181470
+assumed_osm_t13cc04_14305774_t13cc04alamedastop10_20.53106_-103.18139,T13C-C04: Alameda stop 10 (ASSUMED location),20.531060,-103.181390
+assumed_osm_t13cc04_14305774_t13cc04alamedastop11_20.54364_-103.1818,T13C-C04: Alameda stop 11 (ASSUMED location),20.543640,-103.181800
+assumed_osm_t13cc04_14305774_t13cc04alamedastop12_20.54752_-103.18272,T13C-C04: Alameda stop 12 (ASSUMED location),20.547520,-103.182720
+assumed_osm_t13cc04_14305774_t13cc04alamedastop13_20.55377_-103.18413,T13C-C04: Alameda stop 13 (ASSUMED location),20.553770,-103.184130
+assumed_osm_t13cc04_14305774_t13cc04alamedastop14_20.5589_-103.18477,T13C-C04: Alameda stop 14 (ASSUMED location),20.558900,-103.184770
+assumed_osm_t13cc04_14305774_t13cc04alamedastop15_20.562_-103.18538,T13C-C04: Alameda stop 15 (ASSUMED location),20.562000,-103.185380
+assumed_osm_t13cc04_14305774_t13cc04alamedastop16_20.56592_-103.18669,T13C-C04: Alameda stop 16 (ASSUMED location),20.565920,-103.186690
+assumed_osm_t13cc04_14305774_t13cc04alamedastop17_20.56909_-103.18738,T13C-C04: Alameda stop 17 (ASSUMED location),20.569090,-103.187380
+assumed_osm_t13cc04_14305774_t13cc04alamedastop18_20.57282_-103.18825,T13C-C04: Alameda stop 18 (ASSUMED location),20.572820,-103.188250
+assumed_osm_t13cc04_14305774_t13cc04alamedastop19_20.57047_-103.19824,T13C-C04: Alameda stop 19 (ASSUMED location),20.570470,-103.198240
+assumed_osm_t13cc04_14305774_t13cc04alamedastop20_20.56887_-103.20389,T13C-C04: Alameda stop 20 (ASSUMED location),20.568870,-103.203890
+assumed_osm_t13cc04_14305774_t13cc04alamedastop21_20.57025_-103.21044,T13C-C04: Alameda stop 21 (ASSUMED location),20.570250,-103.210440
+assumed_osm_t13cc04_14305774_t13cc04alamedastop22_20.5738_-103.21429,T13C-C04: Alameda stop 22 (ASSUMED location),20.573800,-103.214290
+assumed_osm_t13cc04_14305774_t13cc04alamedastop23_20.58123_-103.2188,T13C-C04: Alameda stop 23 (ASSUMED location),20.581230,-103.218800
+assumed_osm_t13cc04_14305774_t13cc04alamedastop24_20.58208_-103.21925,T13C-C04: Alameda stop 24 (ASSUMED location),20.582080,-103.219250
+assumed_osm_t13cc04_14305774_t13cc04alamedastop25_20.58674_-103.22205,T13C-C04: Alameda stop 25 (ASSUMED location),20.586740,-103.222050
+assumed_osm_t13cc04_14305774_t13cc04alamedastop26_20.59408_-103.2265,T13C-C04: Alameda stop 26 (ASSUMED location),20.594080,-103.226500
+assumed_osm_t13cc04_14305774_t13cc04alamedastop27_20.59917_-103.23217,T13C-C04: Alameda stop 27 (ASSUMED location),20.599170,-103.232170
+assumed_osm_t13cc04_14305774_t13cc04alamedastop28_20.60152_-103.23938,T13C-C04: Alameda stop 28 (ASSUMED location),20.601520,-103.239380
+assumed_osm_t13cc04_14305774_t13cc04alamedastop29_20.60914_-103.24212,T13C-C04: Alameda stop 29 (ASSUMED location),20.609140,-103.242120
+assumed_osm_t13cc04_14305774_t13cc04alamedastop30_20.61298_-103.24219,T13C-C04: Alameda stop 30 (ASSUMED location),20.612980,-103.242190
+assumed_osm_t13cc04_14305774_t13cc04alamedastop31_20.6192_-103.24246,T13C-C04: Alameda stop 31 (ASSUMED location),20.619200,-103.242460
+assumed_osm_t13cc04_14305774_t13cc04alamedastop32_20.61914_-103.24532,T13C-C04: Alameda stop 32 (ASSUMED location),20.619140,-103.245320
+assumed_osm_t13cc04_14305774_t13cc04alamedastop33_20.62016_-103.24758,T13C-C04: Alameda stop 33 (ASSUMED location),20.620160,-103.247580
+assumed_osm_t13cc04_14305774_t13cc04alamedastop34_20.62378_-103.24649,T13C-C04: Alameda stop 34 (ASSUMED location),20.623780,-103.246490
+assumed_osm_t13cc04_14305774_t13cc04alamedastop35_20.62703_-103.24551,T13C-C04: Alameda stop 35 (ASSUMED location),20.627030,-103.245510
+assumed_osm_t13cc04_14305774_t13cc04alamedastop36_20.62881_-103.24499,T13C-C04: Alameda stop 36 (ASSUMED location),20.628810,-103.244990
+assumed_osm_t13cc04_14305774_t13cc04alamedastop37_20.63094_-103.24433,T13C-C04: Alameda stop 37 (ASSUMED location),20.630940,-103.244330
+assumed_osm_t13cc04_14305774_t13cc04alamedastop38_20.63372_-103.2436,T13C-C04: Alameda stop 38 (ASSUMED location),20.633720,-103.243600
+assumed_osm_t13cc04_14305774_t13cc04alamedastop39_20.65233_-103.23453,T13C-C04: Alameda stop 39 (ASSUMED location),20.652330,-103.234530
+assumed_osm_t13cc04_14305774_t13cc04alamedastop40_20.65695_-103.23303,T13C-C04: Alameda stop 40 (ASSUMED location),20.656950,-103.233030
+assumed_osm_t13cc04_14305774_t13cc04alamedastop41_20.65917_-103.23235,T13C-C04: Alameda stop 41 (ASSUMED location),20.659170,-103.232350
+assumed_osm_t13cc04_14305774_t13cc04alamedastop42_20.66141_-103.23192,T13C-C04: Alameda stop 42 (ASSUMED location),20.661410,-103.231920
+assumed_osm_t13cc04_14305774_t13cc04alamedastop43_20.66449_-103.23283,T13C-C04: Alameda stop 43 (ASSUMED location),20.664490,-103.232830
+assumed_osm_t13cc04_14305774_t13cc04alamedastop44_20.66642_-103.23363,T13C-C04: Alameda stop 44 (ASSUMED location),20.666420,-103.233630
+assumed_osm_t13cc04_14305774_t13cc04alamedastop45_20.66823_-103.23447,T13C-C04: Alameda stop 45 (ASSUMED location),20.668230,-103.234470
+assumed_osm_t13cc04_14305774_t13cc04alamedastop46_20.67221_-103.23624,T13C-C04: Alameda stop 46 (ASSUMED location),20.672210,-103.236240
+assumed_osm_t13cc04_14305774_t13cc04alamedastop47_20.67417_-103.2371,T13C-C04: Alameda stop 47 (ASSUMED location),20.674170,-103.237100
+assumed_osm_t13cc04_14305774_t13cc04alamedastop48_20.67535_-103.23773,T13C-C04: Alameda stop 48 (ASSUMED location),20.675350,-103.237730
+assumed_osm_t13cc04_14305774_t13cc04alamedastop49_20.67936_-103.24707,T13C-C04: Alameda stop 49 (ASSUMED location),20.679360,-103.247070
+assumed_osm_t13cc04_14305774_t13cc04alamedastop50_20.6776_-103.2561,T13C-C04: Alameda stop 50 (ASSUMED location),20.677600,-103.256100
+assumed_osm_t13cc04_14305774_t13cc04alamedastop51_20.67827_-103.25766,T13C-C04: Alameda stop 51 (ASSUMED location),20.678270,-103.257660
+assumed_osm_t13cc04_14305774_t13cc04alamedastop52_20.67923_-103.25773,T13C-C04: Alameda stop 52 (ASSUMED location),20.679230,-103.257730
+assumed_osm_t13cc04_14305774_t13cc04alamedastop53_20.68352_-103.25804,T13C-C04: Alameda stop 53 (ASSUMED location),20.683520,-103.258040
+assumed_osm_t13cc04_14305774_t13cc04alamedastop54_20.68459_-103.26109,T13C-C04: Alameda stop 54 (ASSUMED location),20.684590,-103.261090
+assumed_osm_t13cc04_14305774_t13cc04alamedastop55_20.6859_-103.26361,T13C-C04: Alameda stop 55 (ASSUMED location),20.685900,-103.263610
+assumed_osm_t13cc04_14305774_t13cc04alamedastop56_20.68714_-103.26366,T13C-C04: Alameda stop 56 (ASSUMED location),20.687140,-103.263660
+assumed_osm_t13cc04_14305774_t13cc04alamedastop57_20.68946_-103.2637,T13C-C04: Alameda stop 57 (ASSUMED location),20.689460,-103.263700
+assumed_osm_c11_14308854_c11panteonguadalajar_20.67877_-103.3484,C11: Panteon Guadalajara stop 1 (ASSUMED location),20.678770,-103.348400
+assumed_osm_c11_14308854_c11panteonguadalajar_20.68105_-103.3452,C11: Panteon Guadalajara stop 2 (ASSUMED location),20.681050,-103.345200
+assumed_osm_c11_14308854_c11panteonguadalajar_20.68281_-103.34531,C11: Panteon Guadalajara stop 3 (ASSUMED location),20.682810,-103.345310
+assumed_osm_c11_14308854_c11panteonguadalajar_20.68509_-103.34541,C11: Panteon Guadalajara stop 4 (ASSUMED location),20.685090,-103.345410
+assumed_osm_c11_14308854_c11panteonguadalajar_20.68719_-103.34558,C11: Panteon Guadalajara stop 5 (ASSUMED location),20.687190,-103.345580
+assumed_osm_c11_14308854_c11panteonguadalajar_20.68853_-103.34566,C11: Panteon Guadalajara stop 6 (ASSUMED location),20.688530,-103.345660
+assumed_osm_c11_14308854_c11panteonguadalajar_20.69268_-103.34271,C11: Panteon Guadalajara stop 7 (ASSUMED location),20.692680,-103.342710
+assumed_osm_c11_14308854_c11panteonguadalajar_20.69753_-103.34272,C11: Panteon Guadalajara stop 8 (ASSUMED location),20.697530,-103.342720
+assumed_osm_c11_14308854_c11panteonguadalajar_20.7003_-103.34242,C11: Panteon Guadalajara stop 9 (ASSUMED location),20.700300,-103.342420
+assumed_osm_c11_14308854_c11panteonguadalajar_20.70194_-103.34226,C11: Panteon Guadalajara stop 10 (ASSUMED location),20.701940,-103.342260
+assumed_osm_c11_14308854_c11panteonguadalajar_20.70344_-103.34316,C11: Panteon Guadalajara stop 11 (ASSUMED location),20.703440,-103.343160
+assumed_osm_c11_14308854_c11panteonguadalajar_20.70466_-103.34259,C11: Panteon Guadalajara stop 12 (ASSUMED location),20.704660,-103.342590
+assumed_osm_c11_14308854_c11panteonguadalajar_20.70605_-103.34179,C11: Panteon Guadalajara stop 13 (ASSUMED location),20.706050,-103.341790
+assumed_osm_c11_14308854_c11panteonguadalajar_20.70786_-103.34072,C11: Panteon Guadalajara stop 14 (ASSUMED location),20.707860,-103.340720
+assumed_osm_c11_14308854_c11panteonguadalajar_20.70881_-103.34019,C11: Panteon Guadalajara stop 15 (ASSUMED location),20.708810,-103.340190
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71113_-103.33879,C11: Panteon Guadalajara stop 16 (ASSUMED location),20.711130,-103.338790
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71337_-103.33846,C11: Panteon Guadalajara stop 17 (ASSUMED location),20.713370,-103.338460
+assumed_osm_c11_14308854_c11panteonguadalajar_20.72151_-103.33494,C11: Panteon Guadalajara stop 18 (ASSUMED location),20.721510,-103.334940
+assumed_osm_c11_14308854_c11panteonguadalajar_20.72025_-103.33485,C11: Panteon Guadalajara stop 19 (ASSUMED location),20.720250,-103.334850
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71749_-103.33466,C11: Panteon Guadalajara stop 20 (ASSUMED location),20.717490,-103.334660
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71733_-103.3335,C11: Panteon Guadalajara stop 21 (ASSUMED location),20.717330,-103.333500
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71732_-103.33165,C11: Panteon Guadalajara stop 22 (ASSUMED location),20.717320,-103.331650
+assumed_osm_c11_14308854_c11panteonguadalajar_20.7172_-103.32991,C11: Panteon Guadalajara stop 23 (ASSUMED location),20.717200,-103.329910
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71714_-103.32788,C11: Panteon Guadalajara stop 24 (ASSUMED location),20.717140,-103.327880
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71712_-103.32489,C11: Panteon Guadalajara stop 25 (ASSUMED location),20.717120,-103.324890
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71711_-103.3234,C11: Panteon Guadalajara stop 26 (ASSUMED location),20.717110,-103.323400
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71653_-103.32027,C11: Panteon Guadalajara stop 27 (ASSUMED location),20.716530,-103.320270
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71613_-103.31892,C11: Panteon Guadalajara stop 28 (ASSUMED location),20.716130,-103.318920
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71601_-103.31759,C11: Panteon Guadalajara stop 29 (ASSUMED location),20.716010,-103.317590
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71396_-103.31774,C11: Panteon Guadalajara stop 30 (ASSUMED location),20.713960,-103.317740
+assumed_osm_c11_14308854_c11panteonguadalajar_20.71216_-103.31854,C11: Panteon Guadalajara stop 31 (ASSUMED location),20.712160,-103.318540
+assumed_osm_c11_14308854_c11panteonguadalajar_20.70956_-103.31868,C11: Panteon Guadalajara stop 32 (ASSUMED location),20.709560,-103.318680
+assumed_osm_c11_14308854_c11panteonguadalajar_20.70884_-103.31642,C11: Panteon Guadalajara stop 33 (ASSUMED location),20.708840,-103.316420
+assumed_osm_c11_14308854_c11panteonguadalajar_20.7081_-103.31408,C11: Panteon Guadalajara stop 34 (ASSUMED location),20.708100,-103.314080
+assumed_osm_c11_14308854_c11panteonguadalajar_20.70748_-103.3121,C11: Panteon Guadalajara stop 35 (ASSUMED location),20.707480,-103.312100
+assumed_osm_c11_14308854_c11panteonguadalajar_20.70698_-103.31056,C11: Panteon Guadalajara stop 36 (ASSUMED location),20.706980,-103.310560
+assumed_osm_c11_14308865_c11centrometropolita_20.70681_-103.30957,C11: Centro Metropolitano stop 1 (ASSUMED location),20.706810,-103.309570
+assumed_osm_c11_14308865_c11centrometropolita_20.70729_-103.3111,C11: Centro Metropolitano stop 2 (ASSUMED location),20.707290,-103.311100
+assumed_osm_c11_14308865_c11centrometropolita_20.70754_-103.31188,C11: Centro Metropolitano stop 3 (ASSUMED location),20.707540,-103.311880
+assumed_osm_c11_14308865_c11centrometropolita_20.70801_-103.31333,C11: Centro Metropolitano stop 4 (ASSUMED location),20.708010,-103.313330
+assumed_osm_c11_14308865_c11centrometropolita_20.71256_-103.31659,C11: Centro Metropolitano stop 5 (ASSUMED location),20.712560,-103.316590
+assumed_osm_c11_14308865_c11centrometropolita_20.71316_-103.31641,C11: Centro Metropolitano stop 6 (ASSUMED location),20.713160,-103.316410
+assumed_osm_c11_14308865_c11centrometropolita_20.71607_-103.31657,C11: Centro Metropolitano stop 7 (ASSUMED location),20.716070,-103.316570
+assumed_osm_c11_14308865_c11centrometropolita_20.71636_-103.319,C11: Centro Metropolitano stop 8 (ASSUMED location),20.716360,-103.319000
+assumed_osm_c11_14308865_c11centrometropolita_20.71724_-103.3226,C11: Centro Metropolitano stop 9 (ASSUMED location),20.717240,-103.322600
+assumed_osm_c11_14308865_c11centrometropolita_20.71725_-103.32435,C11: Centro Metropolitano stop 10 (ASSUMED location),20.717250,-103.324350
+assumed_osm_c11_14308865_c11centrometropolita_20.71727_-103.32599,C11: Centro Metropolitano stop 11 (ASSUMED location),20.717270,-103.325990
+assumed_osm_c11_14308865_c11centrometropolita_20.71728_-103.3282,C11: Centro Metropolitano stop 12 (ASSUMED location),20.717280,-103.328200
+assumed_osm_c11_14308865_c11centrometropolita_20.71428_-103.33852,C11: Centro Metropolitano stop 13 (ASSUMED location),20.714280,-103.338520
+assumed_osm_c11_14308865_c11centrometropolita_20.71262_-103.33865,C11: Centro Metropolitano stop 14 (ASSUMED location),20.712620,-103.338650
+assumed_osm_c11_14308865_c11centrometropolita_20.71143_-103.33882,C11: Centro Metropolitano stop 15 (ASSUMED location),20.711430,-103.338820
+assumed_osm_c11_14308865_c11centrometropolita_20.70513_-103.34066,C11: Centro Metropolitano stop 16 (ASSUMED location),20.705130,-103.340660
+assumed_osm_c11_14308865_c11centrometropolita_20.7034_-103.34163,C11: Centro Metropolitano stop 17 (ASSUMED location),20.703400,-103.341630
+assumed_osm_c11_14308865_c11centrometropolita_20.70062_-103.34251,C11: Centro Metropolitano stop 18 (ASSUMED location),20.700620,-103.342510
+assumed_osm_c11_14308865_c11centrometropolita_20.69832_-103.34278,C11: Centro Metropolitano stop 19 (ASSUMED location),20.698320,-103.342780
+assumed_osm_c11_14308865_c11centrometropolita_20.69161_-103.34372,C11: Centro Metropolitano stop 20 (ASSUMED location),20.691610,-103.343720
+assumed_osm_c11_14308865_c11centrometropolita_20.68695_-103.3464,C11: Centro Metropolitano stop 21 (ASSUMED location),20.686950,-103.346400
+assumed_osm_c11_14308865_c11centrometropolita_20.68563_-103.34633,C11: Centro Metropolitano stop 22 (ASSUMED location),20.685630,-103.346330
+assumed_osm_c11_14308865_c11centrometropolita_20.683_-103.34619,C11: Centro Metropolitano stop 23 (ASSUMED location),20.683000,-103.346190
+assumed_osm_c11_14308865_c11centrometropolita_20.68044_-103.34605,C11: Centro Metropolitano stop 24 (ASSUMED location),20.680440,-103.346050
+assumed_osm_c11_14308865_c11centrometropolita_20.67967_-103.34657,C11: Centro Metropolitano stop 25 (ASSUMED location),20.679670,-103.346570
+assumed_osm_c11_14308865_c11centrometropolita_20.67966_-103.34738,C11: Centro Metropolitano stop 26 (ASSUMED location),20.679660,-103.347380
+assumed_osm_c11_14308865_c11centrometropolita_20.67958_-103.34896,C11: Centro Metropolitano stop 27 (ASSUMED location),20.679580,-103.348960
+assumed_osm_t19c06_14311366_t19c06lafortunastop1_20.48095_-103.39803,T19-C06: La Fortuna stop 1 (ASSUMED location),20.480950,-103.398030
+assumed_osm_t19c06_14311366_t19c06lafortunastop2_20.48239_-103.39765,T19-C06: La Fortuna stop 2 (ASSUMED location),20.482390,-103.397650
+assumed_osm_t19c06_14311366_t19c06lafortunastop3_20.48341_-103.39738,T19-C06: La Fortuna stop 3 (ASSUMED location),20.483410,-103.397380
+assumed_osm_t19c06_14311366_t19c06lafortunastop4_20.48401_-103.39848,T19-C06: La Fortuna stop 4 (ASSUMED location),20.484010,-103.398480
+assumed_osm_t19c06_14311366_t19c06lafortunastop5_20.48437_-103.40005,T19-C06: La Fortuna stop 5 (ASSUMED location),20.484370,-103.400050
+assumed_osm_t19c06_14311366_t19c06lafortunastop6_20.4874_-103.40328,T19-C06: La Fortuna stop 6 (ASSUMED location),20.487400,-103.403280
+assumed_osm_t19c06_14311366_t19c06lafortunastop7_20.48805_-103.40426,T19-C06: La Fortuna stop 7 (ASSUMED location),20.488050,-103.404260
+assumed_osm_t19c06_14311366_t19c06lafortunastop8_20.49204_-103.40132,T19-C06: La Fortuna stop 8 (ASSUMED location),20.492040,-103.401320
+assumed_osm_t19c06_14311366_t19c06lafortunastop9_20.49284_-103.40217,T19-C06: La Fortuna stop 9 (ASSUMED location),20.492840,-103.402170
+assumed_osm_t19c06_14311366_t19c06lafortunastop1_20.49355_-103.40564,T19-C06: La Fortuna stop 10 (ASSUMED location),20.493550,-103.405640
+assumed_osm_t19c06_14311366_t19c06lafortunastop1_20.49356_-103.40877,T19-C06: La Fortuna stop 11 (ASSUMED location),20.493560,-103.408770
+assumed_osm_t19c06_14311366_t19c06lafortunastop1_20.49319_-103.41157,T19-C06: La Fortuna stop 12 (ASSUMED location),20.493190,-103.411570
+assumed_osm_t19c06_14311366_t19c06lafortunastop1_20.4932_-103.41338,T19-C06: La Fortuna stop 13 (ASSUMED location),20.493200,-103.413380
+assumed_osm_t19c06_14311366_t19c06lafortunastop1_20.49323_-103.41489,T19-C06: La Fortuna stop 14 (ASSUMED location),20.493230,-103.414890
+assumed_osm_t19c06_14311366_t19c06lafortunastop1_20.49333_-103.41604,T19-C06: La Fortuna stop 15 (ASSUMED location),20.493330,-103.416040
+assumed_osm_t19c06_14311366_t19c06lafortunastop1_20.49341_-103.41715,T19-C06: La Fortuna stop 16 (ASSUMED location),20.493410,-103.417150
+assumed_osm_t19c06_14311366_t19c06lafortunastop1_20.49866_-103.41631,T19-C06: La Fortuna stop 17 (ASSUMED location),20.498660,-103.416310
+assumed_osm_t19c06_14311366_t19c06lafortunastop1_20.51429_-103.41143,T19-C06: La Fortuna stop 18 (ASSUMED location),20.514290,-103.411430
+assumed_osm_t19c06_14311366_t19c06lafortunastop1_20.52785_-103.40733,T19-C06: La Fortuna stop 19 (ASSUMED location),20.527850,-103.407330
+assumed_osm_t19c06_14311366_t19c06lafortunastop2_20.53029_-103.40652,T19-C06: La Fortuna stop 20 (ASSUMED location),20.530290,-103.406520
+assumed_osm_t19c06_14311366_t19c06lafortunastop2_20.53417_-103.40529,T19-C06: La Fortuna stop 21 (ASSUMED location),20.534170,-103.405290
+assumed_osm_t19c06_14311366_t19c06lafortunastop2_20.53823_-103.404,T19-C06: La Fortuna stop 22 (ASSUMED location),20.538230,-103.404000
+assumed_osm_t19c06_14311366_t19c06lafortunastop2_20.55413_-103.3971,T19-C06: La Fortuna stop 23 (ASSUMED location),20.554130,-103.397100
+assumed_osm_t19c06_14311366_t19c06lafortunastop2_20.558_-103.39475,T19-C06: La Fortuna stop 24 (ASSUMED location),20.558000,-103.394750
+assumed_osm_t19c06_14311366_t19c06lafortunastop2_20.56281_-103.39219,T19-C06: La Fortuna stop 25 (ASSUMED location),20.562810,-103.392190
+assumed_osm_t19c06_14311366_t19c06lafortunastop2_20.56981_-103.39119,T19-C06: La Fortuna stop 26 (ASSUMED location),20.569810,-103.391190
+assumed_osm_t19c06_14311366_t19c06lafortunastop2_20.576_-103.38858,T19-C06: La Fortuna stop 27 (ASSUMED location),20.576000,-103.388580
+assumed_osm_t19c06_14311366_t19c06lafortunastop2_20.58214_-103.38563,T19-C06: La Fortuna stop 28 (ASSUMED location),20.582140,-103.385630
+assumed_osm_t19c06_14311366_t19c06lafortunastop2_20.5915_-103.38137,T19-C06: La Fortuna stop 29 (ASSUMED location),20.591500,-103.381370
+assumed_osm_t19c06_14311366_t19c06lafortunastop3_20.59148_-103.38175,T19-C06: La Fortuna stop 30 (ASSUMED location),20.591480,-103.381750
+assumed_osm_t19c06_14311366_t19c06lafortunastop3_20.58839_-103.38369,T19-C06: La Fortuna stop 31 (ASSUMED location),20.588390,-103.383690
+assumed_osm_t19c06_14311366_t19c06lafortunastop3_20.59103_-103.38595,T19-C06: La Fortuna stop 32 (ASSUMED location),20.591030,-103.385950
+assumed_osm_t19c06_14311366_t19c06lafortunastop3_20.59816_-103.3919,T19-C06: La Fortuna stop 33 (ASSUMED location),20.598160,-103.391900
+assumed_osm_t19c06_14311366_t19c06lafortunastop3_20.60079_-103.39464,T19-C06: La Fortuna stop 34 (ASSUMED location),20.600790,-103.394640
+assumed_osm_t19c06_14311366_t19c06lafortunastop3_20.60442_-103.39854,T19-C06: La Fortuna stop 35 (ASSUMED location),20.604420,-103.398540
+assumed_osm_t19c06_14311366_t19c06lafortunastop3_20.60536_-103.39958,T19-C06: La Fortuna stop 36 (ASSUMED location),20.605360,-103.399580
+assumed_osm_t19c06_14311366_t19c06lafortunastop3_20.60642_-103.40072,T19-C06: La Fortuna stop 37 (ASSUMED location),20.606420,-103.400720
+assumed_osm_t19c06_14311366_t19c06lafortunastop3_20.60685_-103.40125,T19-C06: La Fortuna stop 38 (ASSUMED location),20.606850,-103.401250
+assumed_osm_t19c06_14311366_t19c06lafortunastop3_20.60762_-103.40257,T19-C06: La Fortuna stop 39 (ASSUMED location),20.607620,-103.402570
+assumed_osm_t19c06_14311366_t19c06lafortunastop4_20.60822_-103.40478,T19-C06: La Fortuna stop 40 (ASSUMED location),20.608220,-103.404780
+assumed_osm_t19c06_14311366_t19c06lafortunastop4_20.61042_-103.41458,T19-C06: La Fortuna stop 41 (ASSUMED location),20.610420,-103.414580
+assumed_osm_t19c06_14311366_t19c06lafortunastop4_20.61276_-103.42329,T19-C06: La Fortuna stop 42 (ASSUMED location),20.612760,-103.423290
+assumed_osm_t19c06_14311366_t19c06lafortunastop4_20.61693_-103.42878,T19-C06: La Fortuna stop 43 (ASSUMED location),20.616930,-103.428780
+assumed_osm_t19c06_14311366_t19c06lafortunastop4_20.62038_-103.43071,T19-C06: La Fortuna stop 44 (ASSUMED location),20.620380,-103.430710
+assumed_osm_t19c06_14311366_t19c06lafortunastop4_20.62573_-103.43367,T19-C06: La Fortuna stop 45 (ASSUMED location),20.625730,-103.433670
+assumed_osm_t19c06_14311366_t19c06lafortunastop4_20.63021_-103.43546,T19-C06: La Fortuna stop 46 (ASSUMED location),20.630210,-103.435460
+assumed_osm_t19c06_14311366_t19c06lafortunastop4_20.63481_-103.4374,T19-C06: La Fortuna stop 47 (ASSUMED location),20.634810,-103.437400
+assumed_osm_t19c06_14311366_t19c06lafortunastop4_20.64231_-103.44062,T19-C06: La Fortuna stop 48 (ASSUMED location),20.642310,-103.440620
+assumed_osm_t19c06_14311366_t19c06lafortunastop4_20.64864_-103.44306,T19-C06: La Fortuna stop 49 (ASSUMED location),20.648637,-103.443055
+assumed_osm_t19c06_14311366_t19c06lafortunastop5_20.65875_-103.44708,T19-C06: La Fortuna stop 50 (ASSUMED location),20.658753,-103.447085
+assumed_osm_t19c06_14311366_t19c06lafortunastop5_20.66629_-103.45067,T19-C06: La Fortuna stop 51 (ASSUMED location),20.666290,-103.450670
+assumed_osm_t19c06_14311366_t19c06lafortunastop5_20.67034_-103.45283,T19-C06: La Fortuna stop 52 (ASSUMED location),20.670340,-103.452830
+assumed_osm_t19c06_14311366_t19c06lafortunastop5_20.67744_-103.45499,T19-C06: La Fortuna stop 53 (ASSUMED location),20.677440,-103.454990
+assumed_osm_t19c06_14311366_t19c06lafortunastop5_20.67989_-103.45501,T19-C06: La Fortuna stop 54 (ASSUMED location),20.679890,-103.455010
+assumed_osm_t19c06_14311366_t19c06lafortunastop5_20.68241_-103.45507,T19-C06: La Fortuna stop 55 (ASSUMED location),20.682413,-103.455075
+assumed_osm_t19c06_14311366_t19c06lafortunastop5_20.69654_-103.45422,T19-C06: La Fortuna stop 56 (ASSUMED location),20.696540,-103.454215
+assumed_osm_t19c06_14311366_t19c06lafortunastop5_20.69882_-103.45228,T19-C06: La Fortuna stop 57 (ASSUMED location),20.698820,-103.452280
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.69681_-103.45454,T19-C06: San Juan de Ocotan stop 1 (ASSUMED location),20.696815,-103.454536
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.68071_-103.45542,T19-C06: San Juan de Ocotan stop 2 (ASSUMED location),20.680710,-103.455420
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.67508_-103.45538,T19-C06: San Juan de Ocotan stop 3 (ASSUMED location),20.675080,-103.455380
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.67018_-103.45321,T19-C06: San Juan de Ocotan stop 4 (ASSUMED location),20.670180,-103.453210
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.66617_-103.45098,T19-C06: San Juan de Ocotan stop 5 (ASSUMED location),20.666170,-103.450980
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.65909_-103.44845,T19-C06: San Juan de Ocotan stop 6 (ASSUMED location),20.659093,-103.448451
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.65775_-103.44792,T19-C06: San Juan de Ocotan stop 7 (ASSUMED location),20.657750,-103.447920
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.65403_-103.44594,T19-C06: San Juan de Ocotan stop 8 (ASSUMED location),20.654030,-103.445940
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.64345_-103.44176,T19-C06: San Juan de Ocotan stop 9 (ASSUMED location),20.643445,-103.441758
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.6415_-103.44113,T19-C06: San Juan de Ocotan stop 10 (ASSUMED location),20.641496,-103.441131
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.63132_-103.43655,T19-C06: San Juan de Ocotan stop 11 (ASSUMED location),20.631319,-103.436552
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.63003_-103.43613,T19-C06: San Juan de Ocotan stop 12 (ASSUMED location),20.630030,-103.436130
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.62555_-103.43395,T19-C06: San Juan de Ocotan stop 13 (ASSUMED location),20.625550,-103.433950
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.6238_-103.43299,T19-C06: San Juan de Ocotan stop 14 (ASSUMED location),20.623800,-103.432990
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.6169_-103.42926,T19-C06: San Juan de Ocotan stop 15 (ASSUMED location),20.616900,-103.429260
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.61243_-103.42377,T19-C06: San Juan de Ocotan stop 16 (ASSUMED location),20.612430,-103.423770
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.61128_-103.42031,T19-C06: San Juan de Ocotan stop 17 (ASSUMED location),20.611280,-103.420310
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.6102_-103.41519,T19-C06: San Juan de Ocotan stop 18 (ASSUMED location),20.610196,-103.415193
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.60935_-103.41241,T19-C06: San Juan de Ocotan stop 19 (ASSUMED location),20.609350,-103.412410
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.60832_-103.40774,T19-C06: San Juan de Ocotan stop 20 (ASSUMED location),20.608324,-103.407739
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.60735_-103.40414,T19-C06: San Juan de Ocotan stop 21 (ASSUMED location),20.607350,-103.404140
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.60683_-103.40256,T19-C06: San Juan de Ocotan stop 22 (ASSUMED location),20.606830,-103.402560
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.60536_-103.40049,T19-C06: San Juan de Ocotan stop 23 (ASSUMED location),20.605360,-103.400490
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.60337_-103.39836,T19-C06: San Juan de Ocotan stop 24 (ASSUMED location),20.603370,-103.398360
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.6005_-103.3949,T19-C06: San Juan de Ocotan stop 25 (ASSUMED location),20.600500,-103.394900
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.59785_-103.39209,T19-C06: San Juan de Ocotan stop 26 (ASSUMED location),20.597850,-103.392090
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.59406_-103.38896,T19-C06: San Juan de Ocotan stop 27 (ASSUMED location),20.594060,-103.388960
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.59147_-103.38677,T19-C06: San Juan de Ocotan stop 28 (ASSUMED location),20.591470,-103.386770
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.58347_-103.38558,T19-C06: San Juan de Ocotan stop 29 (ASSUMED location),20.583470,-103.385580
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.5823_-103.38594,T19-C06: San Juan de Ocotan stop 30 (ASSUMED location),20.582300,-103.385940
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.57982_-103.38746,T19-C06: San Juan de Ocotan stop 31 (ASSUMED location),20.579820,-103.387460
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.57609_-103.38893,T19-C06: San Juan de Ocotan stop 32 (ASSUMED location),20.576090,-103.388930
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.56726_-103.39194,T19-C06: San Juan de Ocotan stop 33 (ASSUMED location),20.567260,-103.391940
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.56314_-103.39238,T19-C06: San Juan de Ocotan stop 34 (ASSUMED location),20.563140,-103.392380
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.55856_-103.39462,T19-C06: San Juan de Ocotan stop 35 (ASSUMED location),20.558560,-103.394620
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.55336_-103.39774,T19-C06: San Juan de Ocotan stop 36 (ASSUMED location),20.553360,-103.397740
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.54517_-103.40191,T19-C06: San Juan de Ocotan stop 37 (ASSUMED location),20.545170,-103.401910
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.5381_-103.40429,T19-C06: San Juan de Ocotan stop 38 (ASSUMED location),20.538100,-103.404290
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.53074_-103.40657,T19-C06: San Juan de Ocotan stop 39 (ASSUMED location),20.530740,-103.406570
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.52861_-103.40724,T19-C06: San Juan de Ocotan stop 40 (ASSUMED location),20.528609,-103.407237
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.51538_-103.41157,T19-C06: San Juan de Ocotan stop 41 (ASSUMED location),20.515380,-103.411570
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.51434_-103.41163,T19-C06: San Juan de Ocotan stop 42 (ASSUMED location),20.514340,-103.411630
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.50678_-103.41388,T19-C06: San Juan de Ocotan stop 43 (ASSUMED location),20.506780,-103.413880
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.50162_-103.41519,T19-C06: San Juan de Ocotan stop 44 (ASSUMED location),20.501620,-103.415190
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.49901_-103.41636,T19-C06: San Juan de Ocotan stop 45 (ASSUMED location),20.499010,-103.416360
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.49311_-103.4163,T19-C06: San Juan de Ocotan stop 46 (ASSUMED location),20.493110,-103.416300
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.49298_-103.41417,T19-C06: San Juan de Ocotan stop 47 (ASSUMED location),20.492980,-103.414170
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.49325_-103.40914,T19-C06: San Juan de Ocotan stop 48 (ASSUMED location),20.493250,-103.409140
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.49333_-103.40609,T19-C06: San Juan de Ocotan stop 49 (ASSUMED location),20.493330,-103.406090
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.49325_-103.40441,T19-C06: San Juan de Ocotan stop 50 (ASSUMED location),20.493250,-103.404410
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.49282_-103.40272,T19-C06: San Juan de Ocotan stop 51 (ASSUMED location),20.492820,-103.402720
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.49229_-103.4015,T19-C06: San Juan de Ocotan stop 52 (ASSUMED location),20.492290,-103.401500
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.49064_-103.40262,T19-C06: San Juan de Ocotan stop 53 (ASSUMED location),20.490640,-103.402620
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.48978_-103.40332,T19-C06: San Juan de Ocotan stop 54 (ASSUMED location),20.489780,-103.403320
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.48804_-103.40451,T19-C06: San Juan de Ocotan stop 55 (ASSUMED location),20.488040,-103.404510
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.4874_-103.40374,T19-C06: San Juan de Ocotan stop 56 (ASSUMED location),20.487400,-103.403740
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.4848_-103.40236,T19-C06: San Juan de Ocotan stop 57 (ASSUMED location),20.484800,-103.402360
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.48435_-103.40044,T19-C06: San Juan de Ocotan stop 58 (ASSUMED location),20.484350,-103.400440
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.48385_-103.39888,T19-C06: San Juan de Ocotan stop 59 (ASSUMED location),20.483850,-103.398880
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.48195_-103.39934,T19-C06: San Juan de Ocotan stop 60 (ASSUMED location),20.481950,-103.399340
+assumed_osm_t19c06_14311472_t19c06sanjuandeocota_20.48065_-103.39968,T19-C06: San Juan de Ocotan stop 61 (ASSUMED location),20.480650,-103.399680

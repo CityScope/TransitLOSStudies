@@ -130,7 +130,53 @@ def _weighted_speed(distances: list[float], times: list[float]) -> Optional[floa
     return (total_d / 1000.0) / (total_t / 3600.0)
 
 
-def best_subset_stop_scores(
+def feed_route_modes(feed: Feed, route_modes: pl.DataFrame) -> pl.DataFrame:
+    """`route_id, scoring_mode` for the route ids the `Feed` really uses.
+
+    When several feeds are loaded together the Feed renames a route id that exists in more than one of them to `<id>_file_<n>` (and
+    trims padding / odd whitespace). `route_modes` is keyed by the ids written in each feed's own routes.txt, so joining it on the final
+    id silently misses every renamed or padded route -- and a missing mode used to default to "bus" (rail lines such as Renfe C1 or the
+    LIRR came out as buses). Here every final id is first mapped back to its feed's own id (via the Feed's `file_id`) and looked up there;
+    a route still without a mode takes the mode of its real GTFS `route_type`, never "bus" by default.
+    """
+    from transitlos.scoring.mrc import mode_category
+
+    routes = feed.routes.lf.select(["route_id", "file_id", "route_type"]).collect() if feed.routes is not None else None
+    if routes is None or routes.is_empty():
+        return route_modes.select(["route_id", "scoring_mode"])
+    routes = routes.with_columns(pl.col("route_id").cast(pl.Utf8), pl.col("file_id").cast(pl.Int64))
+    suffix = pl.format("_file_{}", pl.col("file_id"))
+    routes = routes.with_columns(
+        pl.when(pl.col("route_id").str.ends_with(suffix)).then(pl.col("route_id").str.head(pl.col("route_id").str.len_chars() - suffix.str.len_chars()))
+        .otherwise(pl.col("route_id")).alias("_orig_id")
+    ).with_columns(pl.col("_orig_id").str.strip_chars())
+    rm = route_modes.with_columns(pl.col("route_id").cast(pl.Utf8).str.strip_chars().alias("_orig_id"))
+    if "file_id" in rm.columns:
+        keys = ["_orig_id", "file_id"]
+        if "route_type" in rm.columns:
+            # The route_type must agree too: when the Feed skips a feed folder (no stop inside the AOI) the later feeds' file ids no
+            # longer match their position in the list the modes were built from, and an id such as "1" then picked up another feed's
+            # mode (NJ Transit / PATH rail scored as buses in the 2026-11 rescore). A route without an agreeing row takes its own type.
+            routes = routes.with_columns(pl.col("route_type").cast(pl.Int64, strict=False).alias("_rt"))
+            rm = rm.with_columns(pl.col("route_type").cast(pl.Int64, strict=False).alias("_rt"))
+            keys = keys + ["_rt"]
+        rm = rm.with_columns(pl.col("file_id").cast(pl.Int64)).select(keys + ["scoring_mode"]).unique(keys, keep="first")
+        joined = routes.join(rm, on=keys, how="left")
+    else:
+        rm = rm.select(["_orig_id", "scoring_mode"]).unique("_orig_id", keep="first")
+        joined = routes.join(rm, on="_orig_id", how="left")
+
+    def by_type(rt):
+        try:
+            return "tram" if int(rt) == 702 else mode_category(int(rt))   # 702 = the BRT marker (pyGTFSHandler.downloaders.usa.brt)
+        except (TypeError, ValueError):
+            return "bus"
+
+    fallback = pl.Series([by_type(v) for v in joined["route_type"].to_list()], dtype=pl.Utf8)
+    return joined.with_columns(pl.coalesce([pl.col("scoring_mode"), fallback]).alias("scoring_mode")).select(["route_id", "scoring_mode"])
+
+
+def best_subset_stop_scores_route_based(
     feed: Feed,
     analysis_date: Union[date, datetime],
     route_modes: pl.DataFrame,
@@ -162,6 +208,10 @@ def best_subset_stop_scores(
         combination at all (e.g. every route has null headway/speed) is
         omitted.
     """
+    # The service day is selected: trips that publish the same service twice (feeds repeated, frequencies next to timetables) are
+    # removed once, before any headway is computed (no-op when the Feed was loaded for this one day).
+    if hasattr(feed, "dedupe_trips_for_day"):
+        feed.dedupe_trips_for_day(analysis_date)
     # One expensive pass each: every route's own per-direction headway
     # (the atomic values the real "add" algorithm combines -- see module
     # docstring), and every route's speed components (for candidate
@@ -186,11 +236,11 @@ def best_subset_stop_scores(
     # separate so summing speed components for a kept-route subset never
     # double-counts a route with more than one direction.
     speed = speed.join(
-        route_modes.select(["route_id", "scoring_mode"]).with_columns(pl.col("route_id").cast(pl.Utf8)),
+        feed_route_modes(feed, route_modes).unique("route_id", keep="first"),
         on="route_id",
         how="left",
     )
-    speed = speed.with_columns(pl.col("scoring_mode").fill_null("bus"))
+    speed = speed.with_columns(pl.col("scoring_mode").fill_null("bus"))   # only reached for routes the Feed's own table lacks
     speed = speed.with_columns(
         (pl.col("distance_weight") / 1000.0 / (pl.col("time_weight") / 3600.0)).alias("route_speed_kmh")
     )
@@ -277,3 +327,21 @@ def best_subset_stop_scores(
             results.append(best)
 
     return pd.DataFrame(results)
+
+
+def best_subset_stop_scores(
+    feed: Feed,
+    analysis_date: Union[date, datetime],
+    route_modes: pl.DataFrame,
+    start_time: Union[datetime, time] = time(6, 0),
+    end_time: Union[datetime, time] = time(22, 0),
+    region: str = "global",
+) -> pd.DataFrame:
+    """Best mode-tier / minimum-trip-speed combination per parent_station, from the MERGED departures of all routes split in the two
+    directions of travel (`transitlos.scoring.direction_subset`): route ids play no role, simultaneous departures count once and a
+    duplicated timetable changes nothing. Same output columns as `best_subset_stop_scores_route_based` (the previous route-level search)."""
+    from transitlos.scoring.direction_subset import best_stop_scores_by_direction
+
+    if hasattr(feed, "dedupe_trips_for_day"):
+        feed.dedupe_trips_for_day(analysis_date)
+    return best_stop_scores_by_direction(feed, analysis_date, feed_route_modes(feed, route_modes), start_time, end_time, region)

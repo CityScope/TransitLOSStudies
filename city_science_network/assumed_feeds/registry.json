@@ -1,0 +1,164 @@
+{
+ "guadalajara/gtfs/assumed_t21_moovit_osm": {
+  "publisher": "Moovit stop names + OpenStreetMap + El Ciudadano Jalisco 2023",
+  "routes": [
+   "assumed_T21_C01"
+  ],
+  "marker": "agency_name/feed_publisher_name start with ASSUMED, route_id starts with assumed_, route_desc starts with ASSUMED:"
+ },
+ "concepcion/gtfs/assumed_tome_401_411": {
+  "publisher": "OpenStreetMap + Seremi Transportes + Tomé bus federation + Rome2Rio",
+  "routes": [
+   "assumed_401",
+   "assumed_411"
+  ],
+  "marker": "agency_name/feed_publisher_name start with ASSUMED, route_id starts with assumed_, route_desc starts with ASSUMED:"
+ },
+ "guadalajara/gtfs/assumed_osm_routes": {
+  "publisher": "OpenStreetMap route relations",
+  "routes": [
+   "assumed_osm_c14_13990900",
+   "assumed_osm_mpa052_14012587",
+   "assumed_osm_t18lopez_14012781",
+   "assumed_osm_c14_14017311",
+   "assumed_osm_mpa052_14036349",
+   "assumed_osm_t13a1_14052671",
+   "assumed_osm_t13a1_14052694",
+   "assumed_osm_stl1b_14302608",
+   "assumed_osm_stl1b_14302626",
+   "assumed_osm_175roca_14302770",
+   "assumed_osm_175roca_14302852",
+   "assumed_osm_t18lopez_14305005",
+   "assumed_osm_t18terranova_14305070",
+   "assumed_osm_t18terranova_14305112",
+   "assumed_osm_t13bc012_14305584",
+   "assumed_osm_t13bc012_14305596",
+   "assumed_osm_t13bc02_14305637",
+   "assumed_osm_t13bc02_14305673",
+   "assumed_osm_t13cc04_14305772",
+   "assumed_osm_t13cc04_14305774",
+   "assumed_osm_c11_14308854",
+   "assumed_osm_c11_14308865",
+   "assumed_osm_t19c06_14311366",
+   "assumed_osm_t19c06_14311472"
+  ],
+  "marker": "agency_name/feed_publisher_name start with ASSUMED, route_id starts with assumed_, route_desc starts with ASSUMED:"
+ },
+ "concepcion/gtfs/assumed_osm_routes": {
+  "publisher": "OpenStreetMap route relations",
+  "routes": [
+   "assumed_osm_ctr0201_18354823",
+   "assumed_osm_ctr0201_18354824",
+   "assumed_osm_ctr0222_18354871",
+   "assumed_osm_ctr0222_18354872",
+   "assumed_osm_300regreso_16751162",
+   "assumed_osm_300ida_16817038",
+   "assumed_osm_302regreso_16751162",
+   "assumed_osm_302ida_16817038",
+   "assumed_osm_303regreso_16751162",
+   "assumed_osm_303ida_16817038",
+   "assumed_osm_304regreso_16751162",
+   "assumed_osm_304ida_16817038",
+   "assumed_osm_localregreso_16751162",
+   "assumed_osm_localida_16817038",
+   "assumed_osm_44e_16735770",
+   "assumed_osm_44a_20732635",
+   "assumed_osm_44b_20732636"
+  ],
+  "marker": "agency_name/feed_publisher_name start with ASSUMED, route_id starts with assumed_, route_desc starts with ASSUMED:"
+ },
+ "concepcion/gtfs/assumed_santa_juana": {
+  "publisher": "OpenStreetMap + DTPR Biobío 2025 fleet",
+  "routes": [
+   "assumed_santa_juana"
+  ],
+  "marker": "agency_name/feed_publisher_name start with ASSUMED, route_id starts with assumed_, route_desc starts with ASSUMED:"
+ },
+ "guadalajara/gtfs/assumed_treep_lines": {
+  "publisher": "treep.app Mi Transporte timetables + OpenStreetMap",
+  "routes": [
+   "assumed_treep_c52",
+   "assumed_treep_c87",
+   "assumed_treep_c84",
+   "assumed_treep_c121a",
+   "assumed_treep_c81",
+   "assumed_treep_t22v02",
+   "assumed_treep_c12",
+   "assumed_treep_c58",
+   "assumed_treep_c1112",
+   "assumed_treep_c51v1",
+   "assumed_treep_c96v1",
+   "assumed_treep_t062",
+   "assumed_treep_t16bc04",
+   "assumed_treep_t16bc05",
+   "assumed_treep_c72"
+  ],
+  "marker": "agency_name/feed_publisher_name start with ASSUMED, route_id starts with assumed_, route_desc starts with ASSUMED:"
+ },
+ "guadalajara/gtfs/assumed_line4_tren": {
+  "publisher": "SITEUR + Wikipedia station coordinates",
+  "routes": [
+   "assumed_line4_tren"
+  ],
+  "marker": "agency_name/feed_publisher_name start with ASSUMED, route_id starts with assumed_, route_desc starts with ASSUMED:"
+ },
+ "guadalajara/gtfs/assumed_line5_macro": {
+  "publisher": "SITEUR + Wikipedia station list + official feed stops + OpenStreetMap",
+  "routes": [
+   "assumed_line5_macro"
+  ],
+  "marker": "agency_name/feed_publisher_name start with ASSUMED, route_id starts with assumed_, route_desc starts with ASSUMED:"
+ },
+ "concepcion/gtfs/assumed_nueva_los_tilos": {
+  "publisher": "OpenStreetMap + El Conquistador (Concepción)",
+  "routes": [
+   "assumed_nlt_centro",
+   "assumed_nlt_coliumo"
+  ],
+  "marker": "agency_name/feed_publisher_name start with ASSUMED, route_id starts with assumed_, route_desc starts with ASSUMED:"
+ },
+ "shanghai/gtfs/assumed_intercity_rail": {
+  "publisher": "OpenStreetMap + news and Baidu sources, see ASSUMED.md",
+  "routes": [
+   "assumed_rail_huning",
+   "assumed_rail_jinghu",
+   "assumed_rail_huning_conv",
+   "assumed_rail_hukun_conv",
+   "assumed_rail_songjiang_shuttle",
+   "assumed_rail_xuanhang_conv",
+   "assumed_rail_ninghang",
+   "assumed_rail_xiaoyong_conv",
+   "assumed_rail_hangyong",
+   "assumed_rail_yongtai",
+   "assumed_rail_ningqi",
+   "assumed_rail_ningqi_east",
+   "assumed_rail_husutong",
+   "assumed_rail_huhu",
+   "assumed_rail_huhang",
+   "assumed_rail_jinshan"
+  ],
+  "marker": "agency_name/feed_publisher_name start with ASSUMED, route_id starts with assumed_, route_desc starts with ASSUMED:"
+ },
+ "shanghai/gtfs/assumed_osm_rapid_transit": {
+  "publisher": "OpenStreetMap + operator notices, see ASSUMED.md",
+  "routes": [
+   "assumed_rt_nb6",
+   "assumed_rt_nb7",
+   "assumed_rt_nb8",
+   "assumed_rt_nb12",
+   "assumed_rt_nb12x",
+   "assumed_rt_chuansha",
+   "assumed_rt_airport",
+   "assumed_rt_apm_e",
+   "assumed_rt_apm_w",
+   "assumed_rt_fengpu",
+   "assumed_rt_haiwan",
+   "assumed_rt_haining",
+   "assumed_rt_sj_t1",
+   "assumed_rt_sj_t2a",
+   "assumed_rt_sj_t2b",
+   "assumed_rt_jx_t1"
+  ],
+  "marker": "agency_name/feed_publisher_name start with ASSUMED, route_id starts with assumed_, route_desc starts with ASSUMED:"
+ }
+}

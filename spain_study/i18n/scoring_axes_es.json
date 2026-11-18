@@ -1,0 +1,13 @@
+{
+ "_about": "Scoring-function axis names (Discretization tab); every 'Y vs X' pair is translated from these.",
+ "strings": {
+  "Speed score": "Puntuación de velocidad",
+  "Frequency score": "Puntuación de frecuencia",
+  "Walk decay": "Descenso por distancia a pie",
+  "Level of service": "Nivel de servicio",
+  "Stop score": "Puntuación de parada",
+  "Average speed (km/h)": "Velocidad media (km/h)",
+  "Headway (min)": "Intervalo (min)",
+  "Walk time (min)": "Tiempo a pie (min)"
+ }
+}

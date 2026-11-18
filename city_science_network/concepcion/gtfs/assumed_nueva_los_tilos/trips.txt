@@ -1,0 +1,5 @@
+route_id,service_id,trip_id,trip_headsign,direction_id,shape_id
+assumed_nlt_centro,ALL,assumed_nlt_centro_0,Concepción,0,assumed_nlt_centro_shape
+assumed_nlt_centro,ALL,assumed_nlt_centro_1,Tomé,1,
+assumed_nlt_coliumo,ALL,assumed_nlt_coliumo_0,Tomé,0,assumed_nlt_coliumo_shape
+assumed_nlt_coliumo,ALL,assumed_nlt_coliumo_1,Coliumo,1,

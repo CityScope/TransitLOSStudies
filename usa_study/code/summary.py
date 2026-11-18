@@ -23,7 +23,16 @@ def write_ptlos_summary(data_dir: Path) -> dict:
         if pop.sum() <= 0:
             continue
         stops = state_dir / "stops.geoparquet"
+        vkm_file = state_dir / "vehicle_km.parquet"
+        if not vkm_file.is_file() and stops.is_file():
+            from .vehicle_km_usa import compute_state_vehicle_km
+            compute_state_vehicle_km(state_dir)
+        vkm = 0.0
+        if vkm_file.is_file():
+            v = pd.read_parquet(vkm_file)
+            vkm = float(v.loc[v["level"] == "county", "vehicle_km"].sum())
         rows.append({
+            "vehicle_km": vkm, "vehicle_km_per_1000_pop": vkm / pop.sum() * 1000,
             "state": state_dir.name, "pop": pop.sum(), "ptlos": (pop * los).sum() / pop.sum(),
             "served": pop[los > 0].sum() / pop.sum(),
             "stops": __import__("pyarrow.parquet").parquet.ParquetFile(stops).metadata.num_rows if stops.is_file() else 0,
@@ -36,6 +45,8 @@ def write_ptlos_summary(data_dir: Path) -> dict:
         "served_share": float((table["pop"] * table.served).sum() / table["pop"].sum()),
         "population": float(table["pop"].sum()), "states": len(table), "stops": int(table.stops.sum()),
         "counties": int(table.counties.sum()),
+        "vehicle_km": float(table["vehicle_km"].sum()),
+        "vehicle_km_per_1000_pop": float(table["vehicle_km"].sum() / table["pop"].sum() * 1000),
     }
     (data_dir / "ptlos_usa.json").write_text(json.dumps(usa, indent=1))
     return usa

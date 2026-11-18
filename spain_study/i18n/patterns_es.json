@@ -1,0 +1,85 @@
+{
+ "_about": "Texts with numbers: [regex, replacement] (JS replacement syntax: $1).",
+ "patterns": [
+  [
+   " - district (\\d+) section (\\d+)",
+   " - distrito $1, sección $2"
+  ],
+  [
+   " - district (\\d+)",
+   " - distrito $1"
+  ],
+  [
+   "^Transit score vs (.*)$",
+   "Puntuación de transporte frente a \\1"
+  ],
+  [
+   "^Hexagon \\(H3 res\\. (\\d+)\\)$",
+   "Hexágono (H3 res. \\1)"
+  ],
+  [
+   "^H3 cell (\\S+) · (\\d+) statistics$",
+   "Celda H3 \\1 · \\2 estadísticas"
+  ],
+  [
+   "^(\\S+) Show all (\\d+) statistics$",
+   "\\1 Mostrar las \\2 estadísticas"
+  ],
+  [
+   "^(\\S+) Hide all (\\d+) statistics$",
+   "\\1 Ocultar las \\2 estadísticas"
+  ],
+  [
+   "^Nation (\\d+)$",
+   "España \\1"
+  ],
+  [
+   "^Urban area (\\d+)$",
+   "Área urbana \\1"
+  ],
+  [
+   "^City core (\\d+)$",
+   "Núcleo urbano \\1"
+  ],
+  [
+   "^All places (\\d+)$",
+   "Todos los lugares \\1"
+  ],
+  [
+   "^Higher than (\\d+)% of the cells in this area$",
+   "Superior al \\1% de las celdas de esta zona"
+  ],
+  [
+   "^Percentile of the value among all cells of (.*)$",
+   "Percentil del valor entre todas las celdas de \\1"
+  ],
+  [
+   "^Show all (\\d+) census variables$",
+   "Mostrar las \\1 variables del censo"
+  ],
+  [
+   "^Hide all (\\d+) census variables$",
+   "Ocultar las \\1 variables del censo"
+  ],
+  [
+   "^Hex/circle/census opacity (\\d+%)$",
+   "Opacidad de hexágonos/círculos/censo \\1"
+  ],
+  [
+   "^Contrast (\\d+%)$",
+   "Contraste \\1"
+  ],
+  [
+   "^Basemap opacity (\\d+%)$",
+   "Opacidad del mapa base \\1"
+  ],
+  [
+   "^Circle size \\((.*)\\)$",
+   "Tamaño del círculo (\\1)"
+  ],
+  [
+   "^Opacity \\((.*)\\)$",
+   "Opacidad (\\1)"
+  ]
+ ]
+}

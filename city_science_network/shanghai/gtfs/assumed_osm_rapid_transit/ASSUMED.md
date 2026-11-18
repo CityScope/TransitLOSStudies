@@ -1,0 +1,22 @@
+# ASSUMED feed: rapid transit missing from the CPTOND dataset (Shanghai metro area)
+
+Not official data. Found by comparing every OpenStreetMap rail station and route relation of the area with the main feed (`shanghai_metro_area`); each service below is listed with the source of its stops, headway and speed.
+
+* **Ningbo 6**: ASSUMED: stops from OpenStreetMap; opened 2026-01-16 (phase 1); 6 min peak, 8 min off-peak, 10 min low, 06:00-22:00 (Ningbo Rail Transit opening notice); 38 km/h commercial speed assumed (design 80 km/h)
+* **Ningbo 7**: ASSUMED: stops from OpenStreetMap; opened 2025-08-29, GoA4, max 100 km/h; 6 min peak, 8 min off-peak, 10 min low, 06:00-22:00 (CREC / Ningbo notice); 40 km/h commercial speed assumed
+* **Ningbo 8**: ASSUMED: stops from OpenStreetMap; opened 2025-06-30; 6 min peak, 8 min off-peak, 10 min low, 06:00-22:00 (Ningbo government); 38 km/h commercial speed assumed (max 80-100 km/h)
+* **Ningbo 12**: ASSUMED: stops from OpenStreetMap; opened 2026-09-22 (first cross-sea suburban line, 61.45 km, 10 stations, 4-car type A, max 160 km/h; first/last trains 06:30-21:00/21:20 in the trial notice); NO headway published: ESTIMATE 12 min peak / 20 min off-peak (a 4-car suburban line serving Xiangshan, about 0.6M people); 72 km/h commercial speed estimated (stations 6.8 km apart, ~49 min end to end)
+* **Ningbo 12 Express**: ASSUMED: peak-only express that stops only at Danzheng in between and takes about 30 min end to end (Tencent News trial report, Sep 2026); every 30 min in the two peaks is an ESTIMATE
+* **Chuansha Express**: ASSUMED: stops from OpenStreetMap; NO timetable found: ESTIMATE of a Pudong district trunk express like the Haiwan Express (peak 12 min, off-peak 20 min, 05:30-22:00, 24 km/h); LOW CONFIDENCE
+* **Airport Link**: ASSUMED: stops from OpenStreetMap; opened 2024-12-27, single service, every 15 min 06:00-22:15 (Shanghai government / airport authority), 59 km in about 40 min = 88 km/h (design 160 km/h)
+* **Pudong APM East**: ASSUMED: stops from OpenStreetMap; opened 2019-09-16; every 5 min (reports say 5 min, one 2023 report 10), 2 min 30 s one way, max 80 km/h; hours assumed 05:30-23:30
+* **Pudong APM West**: ASSUMED: stops from OpenStreetMap; opened 2019-09-16; every 5 min (reports say 5 min, one 2023 report 10), 2 min 30 s one way, max 80 km/h; hours assumed 05:30-23:30
+* **Fengpu Express (BRT)**: ASSUMED: stops from OpenStreetMap (12 stops, 20.6 km); Shanghai's first BRT, opened 2018-04-20; peak 5-8 min, off-peak 8-15 min, 05:15-22:30 (Wenhui / Bendibao / Wikipedia), 45 min one way = 27 km/h (reported average 25 km/h); dedicated lanes 05:00-24:00; not in CPTOND
+* **Haiwan Express**: ASSUMED: stops from OpenStreetMap (14.3 km); opened 2023-12-26; peak 10-15 min, off-peak 20 min, 05:20-21:00 (Fengxian government notice, since reported extended to 23:40 at Nanqiao), about 30 min one way = 28 km/h; not in CPTOND
+* **Hangzhou-Haining**: ASSUMED: stops from OpenStreetMap; opened 2021-06-28; every 10 min 06:30-22:30 (Hangzhou Bendibao / Tencent), 6 pairs of express a day not modelled; 46 km, design speed 120 km/h, 55 km/h commercial speed assumed
+* **Songjiang T1**: ASSUMED: stops from OpenStreetMap; weekday 13 min peak and 16 min off-peak since 2025-05-01 (Sina / Songjiang tram notice); hours 06:00-22:00 assumed; 20 km/h assumed for a tram
+* **Songjiang T2 (Longma)**: ASSUMED: stops from OpenStreetMap; weekday 13 min peak and 16 min off-peak since 2025-05-01; hours 06:00-22:00 assumed; 20 km/h assumed for a tram
+* **Songjiang T2 (Gufulin)**: ASSUMED: stops from OpenStreetMap; weekday 13 min peak and 16 min off-peak since 2025-05-01; hours 06:00-22:00 assumed; 20 km/h assumed for a tram
+* **Jiaxing T1**: ASSUMED: stops = the OpenStreetMap tram stops of the line (12 of the real 16), chained from the south end; weekday peak 7 min 56 s, off-peak 10 min 52 s, 21:00-22:00 10 min (Jiaxing Bendibao 2024), hours 05:30-23:00; about 30 min end to end (operator 2022), 24 km/h assumed
+
+Not modelled: the Chuansha Express (an OSM relation exists but no timetable or headway was found), Changzhou B21 and Zhoushan Peak Express 5 (suspended in CPTOND), services not yet open in Nov 2026 (Shanghai Lines 13 west and 22, Jiaxing-Fengnan suburban railway due 2027-28, Wuxi Line 4 phase 2, Suzhou Line 2/4/7 northern extensions), the Hangzhou-Haining express (6 pairs a day) and the Zhangjiang tram (closed June 2023).

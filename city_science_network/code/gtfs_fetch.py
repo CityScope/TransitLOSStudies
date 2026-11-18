@@ -33,6 +33,19 @@ URL_FEEDS = {
     "hamburg": ("latest", "https://download.gtfs.de/germany/free/latest.zip"),
     "beerseba": ("israel_mot", "https://gtfs.mot.gov.il/gtfsfiles/israel-public-transportation.zip"),
 }
+# Official live feeds fetched IN ADDITION to the Mobility Database ids of a city: the archived copy of these in the Mobility
+# Database had already expired (SFMTA ended 2026-08-28, Renfe high-speed 2026-10-14), the agency's own URL serves the current one.
+EXTRA_URL_FEEDS = {
+    "san_francisco": [("sfmta_muni", "https://muni-gtfs.apps.sfmta.com/data/muni_gtfs-current.zip"),
+                      # operators of the metro area missing from the Mobility Database ids of the city (Marin, Tri-Valley, Union City, Altamont): live agency URL or the Mobility Database copy
+                      ("goldengate_transit", "https://realtime.goldengate.org/gtfsstatic/GTFSTransitData.zip"),
+                      ("lavta_wheels", "https://storage.googleapis.com/storage/v1/b/mdb-latest/o/us-california-livermore-amador-valley-transit-authority-gtfs-64.zip?alt=media"),
+                      ("union_city_transit", "https://storage.googleapis.com/storage/v1/b/mdb-latest/o/us-california-union-city-transit-gtfs-628.zip?alt=media"),
+                      ("smart_rail", "https://storage.googleapis.com/storage/v1/b/mdb-latest/o/us-california-sonoma-marin-area-rail-transit-smart-gtfs-815.zip?alt=media"),
+                      ("ace_rail", "https://storage.googleapis.com/storage/v1/b/mdb-latest/o/us-california-altamont-corridor-express-gtfs-1133.zip?alt=media"),
+                     ],
+    "gipuzkoa": [("renfe_alta_velocidad", "https://ssl.renfe.com/gtransit/Fichero_AV_LD/google_transit.zip")],
+}
 CPTOND_URL = "https://ndownloader.figshare.com/files/58153174"
 CPTOND_MD5 = "8b786408d8a9d4d16faa531f98cc9fc6"
 CPTOND_CITIES = ("shanghai", "suzhou", "wuxi", "changzhou", "nantong", "jiaxing", "huzhou", "ningbo", "zhoushan")
@@ -121,10 +134,44 @@ def _run_builder(key: str) -> None:
     subprocess.run([sys.executable, *cmd], cwd=ROOT, check=True)
 
 
+def restore_archives(gtfs: Path) -> None:
+    """Extract the feeds archived by `archive_feeds.py` (`<city>/gtfs_archive/<feed>.zip` or `<feed>.zip.001, .002, ...`) when `gtfs/<feed>/` is missing."""
+    arch = gtfs.parent / "gtfs_archive"
+    if not arch.is_dir():
+        return
+    names = {p.name.split(".zip")[0] for p in arch.iterdir() if ".zip" in p.name}
+    for name in sorted(names):
+        if (gtfs / name).is_dir() and any((gtfs / name).iterdir()):
+            continue
+        parts = sorted(arch.glob(f"{name}.zip.[0-9][0-9][0-9]"))
+        zpath = arch / f"{name}.zip"
+        tmp = None
+        if parts:
+            tmp = arch / f".{name}.joined.zip"
+            with open(tmp, "wb") as out:
+                for p in parts:
+                    out.write(p.read_bytes())
+            zpath = tmp
+        elif not zpath.is_file():
+            continue
+        if _is_flat_feed(zpath):
+            with zipfile.ZipFile(zpath) as zf:
+                zf.extractall(gtfs / name)
+        if tmp is not None:
+            tmp.unlink()
+        print(f"[gtfs] restored {gtfs.parent.name}/{name} from gtfs_archive", flush=True)
+
+
+def _is_flat_feed(zpath: Path) -> bool:
+    with zipfile.ZipFile(zpath) as zf:
+        return any(n == "routes.txt" or n == "stops.txt" for n in zf.namelist())
+
+
 def ensure_gtfs(key: str) -> bool:
     """Make sure `<key>/gtfs/` has its feeds; fetch/build whatever is missing. Returns False if the city can't run."""
     gtfs = ROOT / key / "gtfs"
     gtfs.mkdir(parents=True, exist_ok=True)
+    restore_archives(gtfs)
     try:
         if key in BUILDERS:
             if not _has_feed(gtfs, BUILDERS[key][0]):
@@ -149,7 +196,50 @@ def ensure_gtfs(key: str) -> bool:
             if missing:
                 print(f"[gtfs] {key}: downloading {len(missing)}/{len(ids)} Mobility Database feeds", flush=True)
                 _fetch_mdb(gtfs, missing)
+            for folder, url in EXTRA_URL_FEEDS.get(key, []):
+                if not _has_feed(gtfs, folder):
+                    _fetch_url_zip(gtfs, folder, url)
     except Exception as exc:  # noqa: BLE001 -- report, let main.py skip this city
         print(f"[gtfs] {key}: could not obtain GTFS: {exc!r}", flush=True)
+        return False
+    return True
+
+
+# ---- other shared inputs: WorldPop population raster and the OSM street extract of each city ----------------------------------
+from studytools.inputs import WORLDPOP_URL, fetch_file as _fetch_file  # noqa: E402  (shared with the other studies)
+#: Geofabrik path of every `CityConfig.pbf_filename` (the downloader would otherwise pick the smallest region covering the AOI, which for
+#: a hand-drawn polygon such as Andorra's can be all of Europe: 30+ GB).
+GEOFABRIK_PBF = {
+    "us_massachusetts.osm.pbf": "north-america/us/massachusetts-latest.osm.pbf",
+    "northern_california.osm.pbf": "north-america/us/california/norcal-latest.osm.pbf",
+    "mexico.osm.pbf": "north-america/mexico-latest.osm.pbf",
+    "spain_paisvasco.osm.pbf": "europe/spain/pais-vasco-latest.osm.pbf",
+    "canada_ontario.osm.pbf": "north-america/canada/ontario-latest.osm.pbf",
+    "andorra.osm.pbf": "europe/andorra-latest.osm.pbf",
+    "germany.osm.pbf": "europe/germany-latest.osm.pbf",
+    "taiwan.osm.pbf": "asia/taiwan-latest.osm.pbf",
+    "china.osm.pbf": "asia/china-latest.osm.pbf",
+    "israel_and_palestine.osm.pbf": "asia/israel-and-palestine-latest.osm.pbf",
+    "chile.osm.pbf": "south-america/chile-latest.osm.pbf",
+}
+
+
+def ensure_inputs(key: str) -> bool:
+    """Make sure the city's WorldPop raster (`worldpop/`) and OSM extract (`streets/`) are on disk; False if one can't be fetched."""
+    from code.city_config import CITY_CONFIGS
+
+    cfg = CITY_CONFIGS[key]
+    try:
+        tif = ROOT / "worldpop" / cfg.worldpop_filename
+        if not tif.is_file():
+            iso = cfg.worldpop_filename.split("_")[0]
+            print(f"[inputs] {key}: downloading WorldPop raster {tif.name}", flush=True)
+            _fetch_file(WORLDPOP_URL.format(ISO=iso.upper(), iso=iso), tif)
+        pbf = ROOT / "streets" / cfg.pbf_filename
+        if not pbf.is_file() and cfg.pbf_filename in GEOFABRIK_PBF:
+            print(f"[inputs] {key}: downloading OSM extract {pbf.name}", flush=True)
+            _fetch_file("https://download.geofabrik.de/" + GEOFABRIK_PBF[cfg.pbf_filename], pbf)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[inputs] {key}: could not obtain inputs: {exc!r}", flush=True)
         return False
     return True

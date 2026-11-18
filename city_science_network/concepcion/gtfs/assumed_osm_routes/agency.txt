@@ -1,0 +1,2 @@
+agency_id,agency_name,agency_url,agency_timezone,agency_lang
+assumed,ASSUMED - Gran Concepcion inter-town and rural routes from OpenStreetMap (assumed),https://github.com,America/Santiago,es

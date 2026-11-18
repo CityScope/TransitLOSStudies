@@ -1,0 +1,3 @@
+route_id,service_id,trip_id,trip_headsign,direction_id,shape_id
+assumed_T21_C01,ALL,assumed_T21_C01_0,Zapotlanejo,0,assumed_T21_C01_shape
+assumed_T21_C01,ALL,assumed_T21_C01_1,Central de Autobuses,1,

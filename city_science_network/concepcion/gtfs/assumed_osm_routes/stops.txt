@@ -1,0 +1,1067 @@
+stop_id,stop_name,stop_lat,stop_lon
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.16181_-72.90774,Talcamávida → Hualqui stop 1 (ASSUMED location),-37.161808,-72.907736
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.15887_-72.91328,Talcamávida → Hualqui stop 2 (ASSUMED location),-37.158865,-72.913276
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.15474_-72.91707,Talcamávida → Hualqui stop 3 (ASSUMED location),-37.154741,-72.917074
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.15006_-72.92004,Talcamávida → Hualqui stop 4 (ASSUMED location),-37.150062,-72.920042
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.14648_-72.92495,Talcamávida → Hualqui stop 5 (ASSUMED location),-37.146481,-72.924945
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.14354_-72.93061,Talcamávida → Hualqui stop 6 (ASSUMED location),-37.143536,-72.930610
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.13838_-72.93338,Talcamávida → Hualqui stop 7 (ASSUMED location),-37.138376,-72.933382
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.13327_-72.9359,Talcamávida → Hualqui stop 8 (ASSUMED location),-37.133273,-72.935896
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.12847_-72.93825,Talcamávida → Hualqui stop 9 (ASSUMED location),-37.128467,-72.938250
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.12457_-72.94278,Talcamávida → Hualqui stop 10 (ASSUMED location),-37.124571,-72.942780
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.11949_-72.94311,Talcamávida → Hualqui stop 11 (ASSUMED location),-37.119489,-72.943111
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.11871_-72.9423,Talcamávida → Hualqui stop 12 (ASSUMED location),-37.118710,-72.942302
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.12015_-72.94163,Talcamávida → Hualqui stop 13 (ASSUMED location),-37.120151,-72.941630
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.11871_-72.94495,Talcamávida → Hualqui stop 14 (ASSUMED location),-37.118714,-72.944946
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.11409_-72.94803,Talcamávida → Hualqui stop 15 (ASSUMED location),-37.114089,-72.948029
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.11088_-72.95217,Talcamávida → Hualqui stop 16 (ASSUMED location),-37.110876,-72.952166
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.10606_-72.95422,Talcamávida → Hualqui stop 17 (ASSUMED location),-37.106059,-72.954220
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.10098_-72.95227,Talcamávida → Hualqui stop 18 (ASSUMED location),-37.100976,-72.952267
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.09579_-72.9537,Talcamávida → Hualqui stop 19 (ASSUMED location),-37.095785,-72.953703
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.09069_-72.9551,Talcamávida → Hualqui stop 20 (ASSUMED location),-37.090686,-72.955098
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.08449_-72.95683,Talcamávida → Hualqui stop 21 (ASSUMED location),-37.084494,-72.956827
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.08029_-72.95807,Talcamávida → Hualqui stop 22 (ASSUMED location),-37.080293,-72.958071
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.0751_-72.95755,Talcamávida → Hualqui stop 23 (ASSUMED location),-37.075097,-72.957546
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.07075_-72.9614,Talcamávida → Hualqui stop 24 (ASSUMED location),-37.070747,-72.961399
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.0658_-72.96321,Talcamávida → Hualqui stop 25 (ASSUMED location),-37.065803,-72.963212
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.06054_-72.96314,Talcamávida → Hualqui stop 26 (ASSUMED location),-37.060545,-72.963143
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.05454_-72.96281,Talcamávida → Hualqui stop 27 (ASSUMED location),-37.054537,-72.962810
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.04978_-72.96248,Talcamávida → Hualqui stop 28 (ASSUMED location),-37.049782,-72.962478
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.04541_-72.96126,Talcamávida → Hualqui stop 29 (ASSUMED location),-37.045409,-72.961265
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.04178_-72.96575,Talcamávida → Hualqui stop 30 (ASSUMED location),-37.041776,-72.965746
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.03655_-72.96682,Talcamávida → Hualqui stop 31 (ASSUMED location),-37.036547,-72.966819
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.03159_-72.96917,Talcamávida → Hualqui stop 32 (ASSUMED location),-37.031591,-72.969171
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.02741_-72.97199,Talcamávida → Hualqui stop 33 (ASSUMED location),-37.027406,-72.971986
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.02065_-72.97306,Talcamávida → Hualqui stop 34 (ASSUMED location),-37.020655,-72.973057
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.01682_-72.97389,Talcamávida → Hualqui stop 35 (ASSUMED location),-37.016815,-72.973895
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.01363_-72.97144,Talcamávida → Hualqui stop 36 (ASSUMED location),-37.013626,-72.971440
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.01153_-72.96458,Talcamávida → Hualqui stop 37 (ASSUMED location),-37.011529,-72.964585
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.00742_-72.96051,Talcamávida → Hualqui stop 38 (ASSUMED location),-37.007417,-72.960510
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.00289_-72.95556,Talcamávida → Hualqui stop 39 (ASSUMED location),-37.002890,-72.955557
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-37.00076_-72.95115,Talcamávida → Hualqui stop 40 (ASSUMED location),-37.000758,-72.951150
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-36.9962_-72.94721,Talcamávida → Hualqui stop 41 (ASSUMED location),-36.996201,-72.947207
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-36.99139_-72.94457,Talcamávida → Hualqui stop 42 (ASSUMED location),-36.991393,-72.944568
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-36.98647_-72.94101,Talcamávida → Hualqui stop 43 (ASSUMED location),-36.986473,-72.941006
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-36.98142_-72.94034,Talcamávida → Hualqui stop 44 (ASSUMED location),-36.981416,-72.940342
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-36.97651_-72.9391,Talcamávida → Hualqui stop 45 (ASSUMED location),-36.976508,-72.939101
+assumed_osm_ctr0201_18354823_talcamavidahualquist_-36.97595_-72.93776,Talcamávida → Hualqui stop 46 (ASSUMED location),-36.975952,-72.937763
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-36.97595_-72.93776,Hualqui → Talcamávida stop 1 (ASSUMED location),-36.975952,-72.937763
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-36.97963_-72.94085,Hualqui → Talcamávida stop 2 (ASSUMED location),-36.979635,-72.940853
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-36.98447_-72.93999,Hualqui → Talcamávida stop 3 (ASSUMED location),-36.984469,-72.939988
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-36.98939_-72.94302,Hualqui → Talcamávida stop 4 (ASSUMED location),-36.989389,-72.943017
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-36.99402_-72.94612,Hualqui → Talcamávida stop 5 (ASSUMED location),-36.994020,-72.946121
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-36.99875_-72.94939,Hualqui → Talcamávida stop 6 (ASSUMED location),-36.998753,-72.949388
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.00195_-72.95415,Hualqui → Talcamávida stop 7 (ASSUMED location),-37.001950,-72.954150
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.00601_-72.95928,Hualqui → Talcamávida stop 8 (ASSUMED location),-37.006011,-72.959275
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.01018_-72.96295,Hualqui → Talcamávida stop 9 (ASSUMED location),-37.010181,-72.962946
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.01324_-72.96813,Hualqui → Talcamávida stop 10 (ASSUMED location),-37.013239,-72.968134
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.01439_-72.97366,Hualqui → Talcamávida stop 11 (ASSUMED location),-37.014391,-72.973664
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.01979_-72.97318,Hualqui → Talcamávida stop 12 (ASSUMED location),-37.019794,-72.973182
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.0251_-72.97256,Hualqui → Talcamávida stop 13 (ASSUMED location),-37.025101,-72.972556
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.03072_-72.96993,Hualqui → Talcamávida stop 14 (ASSUMED location),-37.030724,-72.969927
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.03467_-72.96736,Hualqui → Talcamávida stop 15 (ASSUMED location),-37.034668,-72.967359
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.03939_-72.9659,Hualqui → Talcamávida stop 16 (ASSUMED location),-37.039391,-72.965900
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.04342_-72.96267,Hualqui → Talcamávida stop 17 (ASSUMED location),-37.043424,-72.962669
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.04818_-72.9612,Hualqui → Talcamávida stop 18 (ASSUMED location),-37.048181,-72.961199
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.05285_-72.96286,Hualqui → Talcamávida stop 19 (ASSUMED location),-37.052852,-72.962861
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.05861_-72.96265,Hualqui → Talcamávida stop 20 (ASSUMED location),-37.058609,-72.962654
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.06331_-72.96317,Hualqui → Talcamávida stop 21 (ASSUMED location),-37.063311,-72.963167
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.06877_-72.96288,Hualqui → Talcamávida stop 22 (ASSUMED location),-37.068770,-72.962883
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.07321_-72.9586,Hualqui → Talcamávida stop 23 (ASSUMED location),-37.073211,-72.958600
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.07798_-72.95788,Hualqui → Talcamávida stop 24 (ASSUMED location),-37.077984,-72.957877
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.08351_-72.95711,Hualqui → Talcamávida stop 25 (ASSUMED location),-37.083508,-72.957109
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.08829_-72.95576,Hualqui → Talcamávida stop 26 (ASSUMED location),-37.088287,-72.955763
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.09426_-72.95412,Hualqui → Talcamávida stop 27 (ASSUMED location),-37.094260,-72.954118
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.09914_-72.95278,Hualqui → Talcamávida stop 28 (ASSUMED location),-37.099141,-72.952777
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.10393_-72.9523,Hualqui → Talcamávida stop 29 (ASSUMED location),-37.103926,-72.952299
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.10866_-72.95383,Hualqui → Talcamávida stop 30 (ASSUMED location),-37.108661,-72.953825
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.11316_-72.94993,Hualqui → Talcamávida stop 31 (ASSUMED location),-37.113156,-72.949927
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.11695_-72.94573,Hualqui → Talcamávida stop 32 (ASSUMED location),-37.116951,-72.945731
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.12098_-72.94206,Hualqui → Talcamávida stop 33 (ASSUMED location),-37.120976,-72.942057
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.11764_-72.94155,Hualqui → Talcamávida stop 34 (ASSUMED location),-37.117641,-72.941549
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.11952_-72.94283,Hualqui → Talcamávida stop 35 (ASSUMED location),-37.119519,-72.942825
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.12322_-72.94329,Hualqui → Talcamávida stop 36 (ASSUMED location),-37.123216,-72.943291
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.12716_-72.94034,Hualqui → Talcamávida stop 37 (ASSUMED location),-37.127161,-72.940338
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.13186_-72.93659,Hualqui → Talcamávida stop 38 (ASSUMED location),-37.131859,-72.936586
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.137_-72.93405,Hualqui → Talcamávida stop 39 (ASSUMED location),-37.136999,-72.934051
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.1424_-72.93139,Hualqui → Talcamávida stop 40 (ASSUMED location),-37.142399,-72.931394
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.14536_-72.92791,Hualqui → Talcamávida stop 41 (ASSUMED location),-37.145363,-72.927911
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.14846_-72.92191,Hualqui → Talcamávida stop 42 (ASSUMED location),-37.148456,-72.921909
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.15263_-72.91791,Hualqui → Talcamávida stop 43 (ASSUMED location),-37.152628,-72.917915
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.15695_-72.91508,Hualqui → Talcamávida stop 44 (ASSUMED location),-37.156948,-72.915084
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.16039_-72.91024,Hualqui → Talcamávida stop 45 (ASSUMED location),-37.160388,-72.910236
+assumed_osm_ctr0201_18354824_hualquitalcamavidast_-37.16181_-72.90774,Hualqui → Talcamávida stop 46 (ASSUMED location),-37.161808,-72.907736
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.71078_-73.1146,Talcahuano → Caleta Chome stop 1 (ASSUMED location),-36.710785,-73.114603
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.71512_-73.1176,Talcahuano → Caleta Chome stop 2 (ASSUMED location),-36.715121,-73.117600
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.72073_-73.11835,Talcahuano → Caleta Chome stop 3 (ASSUMED location),-36.720731,-73.118349
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.72499_-73.11793,Talcahuano → Caleta Chome stop 4 (ASSUMED location),-36.724989,-73.117926
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.72973_-73.11777,Talcahuano → Caleta Chome stop 5 (ASSUMED location),-36.729734,-73.117771
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.73759_-73.12075,Talcahuano → Caleta Chome stop 6 (ASSUMED location),-36.737595,-73.120751
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.74011_-73.12013,Talcahuano → Caleta Chome stop 7 (ASSUMED location),-36.740108,-73.120132
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.74487_-73.12177,Talcahuano → Caleta Chome stop 8 (ASSUMED location),-36.744866,-73.121773
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.74972_-73.12438,Talcahuano → Caleta Chome stop 9 (ASSUMED location),-36.749720,-73.124385
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.75483_-73.12325,Talcahuano → Caleta Chome stop 10 (ASSUMED location),-36.754833,-73.123254
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.75956_-73.12014,Talcahuano → Caleta Chome stop 11 (ASSUMED location),-36.759558,-73.120143
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.76673_-73.1162,Talcahuano → Caleta Chome stop 12 (ASSUMED location),-36.766734,-73.116202
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.76904_-73.11537,Talcahuano → Caleta Chome stop 13 (ASSUMED location),-36.769037,-73.115369
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.7753_-73.11348,Talcahuano → Caleta Chome stop 14 (ASSUMED location),-36.775301,-73.113484
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.7806_-73.11187,Talcahuano → Caleta Chome stop 15 (ASSUMED location),-36.780605,-73.111873
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78496_-73.11055,Talcahuano → Caleta Chome stop 16 (ASSUMED location),-36.784958,-73.110553
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78466_-73.10404,Talcahuano → Caleta Chome stop 17 (ASSUMED location),-36.784655,-73.104044
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78212_-73.09975,Talcahuano → Caleta Chome stop 18 (ASSUMED location),-36.782122,-73.099749
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78463_-73.09671,Talcahuano → Caleta Chome stop 19 (ASSUMED location),-36.784631,-73.096711
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78465_-73.10345,Talcahuano → Caleta Chome stop 20 (ASSUMED location),-36.784654,-73.103455
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78501_-73.1104,Talcahuano → Caleta Chome stop 21 (ASSUMED location),-36.785007,-73.110404
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.79004_-73.10902,Talcahuano → Caleta Chome stop 22 (ASSUMED location),-36.790036,-73.109015
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.79412_-73.10979,Talcahuano → Caleta Chome stop 23 (ASSUMED location),-36.794119,-73.109790
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.79097_-73.11376,Talcahuano → Caleta Chome stop 24 (ASSUMED location),-36.790974,-73.113763
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78697_-73.11657,Talcahuano → Caleta Chome stop 25 (ASSUMED location),-36.786966,-73.116572
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78898_-73.12098,Talcahuano → Caleta Chome stop 26 (ASSUMED location),-36.788979,-73.120983
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.7861_-73.13606,Talcahuano → Caleta Chome stop 27 (ASSUMED location),-36.786096,-73.136062
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78552_-73.13854,Talcahuano → Caleta Chome stop 28 (ASSUMED location),-36.785520,-73.138544
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78589_-73.14097,Talcahuano → Caleta Chome stop 29 (ASSUMED location),-36.785886,-73.140974
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78748_-73.14689,Talcahuano → Caleta Chome stop 30 (ASSUMED location),-36.787484,-73.146889
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78794_-73.15244,Talcahuano → Caleta Chome stop 31 (ASSUMED location),-36.787936,-73.152439
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78989_-73.15705,Talcahuano → Caleta Chome stop 32 (ASSUMED location),-36.789891,-73.157051
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78784_-73.16253,Talcahuano → Caleta Chome stop 33 (ASSUMED location),-36.787839,-73.162530
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.79234_-73.16696,Talcahuano → Caleta Chome stop 34 (ASSUMED location),-36.792344,-73.166965
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.79183_-73.17374,Talcahuano → Caleta Chome stop 35 (ASSUMED location),-36.791826,-73.173738
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.79011_-73.17927,Talcahuano → Caleta Chome stop 36 (ASSUMED location),-36.790110,-73.179269
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78583_-73.18202,Talcahuano → Caleta Chome stop 37 (ASSUMED location),-36.785831,-73.182021
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.78082_-73.18113,Talcahuano → Caleta Chome stop 38 (ASSUMED location),-36.780823,-73.181125
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.77695_-73.18399,Talcahuano → Caleta Chome stop 39 (ASSUMED location),-36.776946,-73.183993
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.77539_-73.19022,Talcahuano → Caleta Chome stop 40 (ASSUMED location),-36.775389,-73.190219
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.77418_-73.19493,Talcahuano → Caleta Chome stop 41 (ASSUMED location),-36.774185,-73.194928
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.77273_-73.19888,Talcahuano → Caleta Chome stop 42 (ASSUMED location),-36.772731,-73.198875
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.77585_-73.20413,Talcahuano → Caleta Chome stop 43 (ASSUMED location),-36.775853,-73.204127
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.77714_-73.20725,Talcahuano → Caleta Chome stop 44 (ASSUMED location),-36.777142,-73.207247
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.77434_-73.21058,Talcahuano → Caleta Chome stop 45 (ASSUMED location),-36.774343,-73.210577
+assumed_osm_ctr0222_18354871_talcahuanocaletachom_-36.77303_-73.21102,Talcahuano → Caleta Chome stop 46 (ASSUMED location),-36.773026,-73.211016
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.77606_-73.18602,Caleta Chome → Talcahuano stop 8 (ASSUMED location),-36.776058,-73.186020
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.77501_-73.19226,Caleta Chome → Talcahuano stop 2 (ASSUMED location),-36.775013,-73.192257
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.77228_-73.19576,Caleta Chome → Talcahuano stop 3 (ASSUMED location),-36.772280,-73.195761
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.77412_-73.20074,Caleta Chome → Talcahuano stop 4 (ASSUMED location),-36.774121,-73.200737
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.77788_-73.20486,Caleta Chome → Talcahuano stop 5 (ASSUMED location),-36.777883,-73.204857
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.77565_-73.20856,Caleta Chome → Talcahuano stop 6 (ASSUMED location),-36.775647,-73.208564
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.77333_-73.21117,Caleta Chome → Talcahuano stop 7 (ASSUMED location),-36.773329,-73.211167
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.77614_-73.18581,Caleta Chome → Talcahuano stop 9 (ASSUMED location),-36.776138,-73.185806
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.77628_-73.18555,Caleta Chome → Talcahuano stop 10 (ASSUMED location),-36.776277,-73.185554
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.77656_-73.18485,Caleta Chome → Talcahuano stop 11 (ASSUMED location),-36.776561,-73.184845
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78001_-73.18051,Caleta Chome → Talcahuano stop 12 (ASSUMED location),-36.780009,-73.180514
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78509_-73.18176,Caleta Chome → Talcahuano stop 13 (ASSUMED location),-36.785088,-73.181761
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.7898_-73.17984,Caleta Chome → Talcahuano stop 14 (ASSUMED location),-36.789803,-73.179840
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.79183_-73.17374,Caleta Chome → Talcahuano stop 15 (ASSUMED location),-36.791826,-73.173738
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.79269_-73.1676,Caleta Chome → Talcahuano stop 16 (ASSUMED location),-36.792692,-73.167603
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78853_-73.16326,Caleta Chome → Talcahuano stop 17 (ASSUMED location),-36.788527,-73.163262
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.79014_-73.15809,Caleta Chome → Talcahuano stop 18 (ASSUMED location),-36.790138,-73.158090
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78797_-73.15335,Caleta Chome → Talcahuano stop 19 (ASSUMED location),-36.787970,-73.153351
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78767_-73.14799,Caleta Chome → Talcahuano stop 20 (ASSUMED location),-36.787675,-73.147987
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78589_-73.14097,Caleta Chome → Talcahuano stop 21 (ASSUMED location),-36.785886,-73.140974
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78791_-73.12713,Caleta Chome → Talcahuano stop 22 (ASSUMED location),-36.787910,-73.127128
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78806_-73.12632,Caleta Chome → Talcahuano stop 23 (ASSUMED location),-36.788061,-73.126322
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78892_-73.12204,Caleta Chome → Talcahuano stop 24 (ASSUMED location),-36.788917,-73.122045
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78659_-73.1171,Caleta Chome → Talcahuano stop 25 (ASSUMED location),-36.786588,-73.117101
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.79053_-73.1143,Caleta Chome → Talcahuano stop 26 (ASSUMED location),-36.790532,-73.114298
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.7937_-73.11105,Caleta Chome → Talcahuano stop 27 (ASSUMED location),-36.793703,-73.111050
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.79107_-73.1087,Caleta Chome → Talcahuano stop 28 (ASSUMED location),-36.791074,-73.108701
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78503_-73.11053,Caleta Chome → Talcahuano stop 29 (ASSUMED location),-36.785032,-73.110531
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78466_-73.10464,Caleta Chome → Talcahuano stop 30 (ASSUMED location),-36.784656,-73.104635
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78464_-73.09792,Caleta Chome → Talcahuano stop 31 (ASSUMED location),-36.784635,-73.097915
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.7817_-73.09843,Caleta Chome → Talcahuano stop 32 (ASSUMED location),-36.781696,-73.098431
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78465_-73.10284,Caleta Chome → Talcahuano stop 33 (ASSUMED location),-36.784652,-73.102844
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.78489_-73.10981,Caleta Chome → Talcahuano stop 34 (ASSUMED location),-36.784891,-73.109805
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.7806_-73.11187,Caleta Chome → Talcahuano stop 35 (ASSUMED location),-36.780605,-73.111873
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.77517_-73.11332,Caleta Chome → Talcahuano stop 36 (ASSUMED location),-36.775170,-73.113317
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.77005_-73.11474,Caleta Chome → Talcahuano stop 37 (ASSUMED location),-36.770052,-73.114737
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.76426_-73.1171,Caleta Chome → Talcahuano stop 38 (ASSUMED location),-36.764262,-73.117101
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.75922_-73.12037,Caleta Chome → Talcahuano stop 39 (ASSUMED location),-36.759220,-73.120373
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.75548_-73.12283,Caleta Chome → Talcahuano stop 40 (ASSUMED location),-36.755479,-73.122825
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.75043_-73.12347,Caleta Chome → Talcahuano stop 41 (ASSUMED location),-36.750432,-73.123469
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.74574_-73.1222,Caleta Chome → Talcahuano stop 42 (ASSUMED location),-36.745740,-73.122202
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.74095_-73.11906,Caleta Chome → Talcahuano stop 43 (ASSUMED location),-36.740949,-73.119058
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.73445_-73.11954,Caleta Chome → Talcahuano stop 44 (ASSUMED location),-36.734445,-73.119544
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.73089_-73.11818,Caleta Chome → Talcahuano stop 45 (ASSUMED location),-36.730889,-73.118176
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.72553_-73.11746,Caleta Chome → Talcahuano stop 46 (ASSUMED location),-36.725532,-73.117464
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.72101_-73.11833,Caleta Chome → Talcahuano stop 47 (ASSUMED location),-36.721011,-73.118335
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.71608_-73.11836,Caleta Chome → Talcahuano stop 48 (ASSUMED location),-36.716079,-73.118359
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.71152_-73.11464,Caleta Chome → Talcahuano stop 49 (ASSUMED location),-36.711516,-73.114637
+assumed_osm_ctr0222_18354872_caletachometalcahuan_-36.71078_-73.1146,Caleta Chome → Talcahuano stop 50 (ASSUMED location),-36.710785,-73.114603
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.82169_-73.00738,300 regreso: Concepción → Lota stop 1 (ASSUMED location),-36.821686,-73.007381
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.82111_-73.01037,300 regreso: Concepción → Lota stop 2 (ASSUMED location),-36.821109,-73.010365
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.82022_-73.01417,300 regreso: Concepción → Lota stop 3 (ASSUMED location),-36.820223,-73.014168
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81922_-73.01798,300 regreso: Concepción → Lota stop 4 (ASSUMED location),-36.819216,-73.017985
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81879_-73.01917,300 regreso: Concepción → Lota stop 5 (ASSUMED location),-36.818794,-73.019170
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81813_-73.02097,300 regreso: Concepción → Lota stop 6 (ASSUMED location),-36.818130,-73.020966
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81689_-73.02428,300 regreso: Concepción → Lota stop 7 (ASSUMED location),-36.816885,-73.024280
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81483_-73.03009,300 regreso: Concepción → Lota stop 8 (ASSUMED location),-36.814826,-73.030086
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.8157_-73.03387,300 regreso: Concepción → Lota stop 9 (ASSUMED location),-36.815705,-73.033867
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81561_-73.03392,300 regreso: Concepción → Lota stop 10 (ASSUMED location),-36.815612,-73.033917
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81664_-73.03625,300 regreso: Concepción → Lota stop 11 (ASSUMED location),-36.816640,-73.036254
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81756_-73.03851,300 regreso: Concepción → Lota stop 12 (ASSUMED location),-36.817563,-73.038511
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81854_-73.04097,300 regreso: Concepción → Lota stop 13 (ASSUMED location),-36.818541,-73.040974
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81963_-73.04344,300 regreso: Concepción → Lota stop 14 (ASSUMED location),-36.819630,-73.043437
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.82076_-73.0462,300 regreso: Concepción → Lota stop 15 (ASSUMED location),-36.820759,-73.046198
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.82123_-73.04827,300 regreso: Concepción → Lota stop 16 (ASSUMED location),-36.821226,-73.048274
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81566_-73.05302,300 regreso: Concepción → Lota stop 17 (ASSUMED location),-36.815663,-73.053015
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81511_-73.06727,300 regreso: Concepción → Lota stop 18 (ASSUMED location),-36.815108,-73.067274
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81223_-73.07048,300 regreso: Concepción → Lota stop 19 (ASSUMED location),-36.812227,-73.070475
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.81016_-73.07458,300 regreso: Concepción → Lota stop 20 (ASSUMED location),-36.810162,-73.074581
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.80803_-73.07764,300 regreso: Concepción → Lota stop 21 (ASSUMED location),-36.808034,-73.077643
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.83854_-73.10079,300 regreso: Concepción → Lota stop 22 (ASSUMED location),-36.838536,-73.100791
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.83813_-73.10764,300 regreso: Concepción → Lota stop 23 (ASSUMED location),-36.838127,-73.107642
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.8377_-73.11513,300 regreso: Concepción → Lota stop 24 (ASSUMED location),-36.837702,-73.115127
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.83749_-73.11926,300 regreso: Concepción → Lota stop 25 (ASSUMED location),-36.837491,-73.119261
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.84139_-73.12923,300 regreso: Concepción → Lota stop 26 (ASSUMED location),-36.841385,-73.129226
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.84614_-73.13066,300 regreso: Concepción → Lota stop 27 (ASSUMED location),-36.846143,-73.130660
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.84811_-73.13114,300 regreso: Concepción → Lota stop 28 (ASSUMED location),-36.848106,-73.131137
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.85088_-73.1318,300 regreso: Concepción → Lota stop 29 (ASSUMED location),-36.850882,-73.131802
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.85555_-73.13294,300 regreso: Concepción → Lota stop 30 (ASSUMED location),-36.855553,-73.132939
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.86392_-73.13496,300 regreso: Concepción → Lota stop 31 (ASSUMED location),-36.863922,-73.134960
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.86988_-73.13641,300 regreso: Concepción → Lota stop 32 (ASSUMED location),-36.869878,-73.136407
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.87581_-73.13784,300 regreso: Concepción → Lota stop 33 (ASSUMED location),-36.875808,-73.137837
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.87775_-73.13832,300 regreso: Concepción → Lota stop 34 (ASSUMED location),-36.877753,-73.138323
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.88078_-73.13905,300 regreso: Concepción → Lota stop 35 (ASSUMED location),-36.880778,-73.139046
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.88382_-73.13977,300 regreso: Concepción → Lota stop 36 (ASSUMED location),-36.883822,-73.139774
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.88809_-73.1408,300 regreso: Concepción → Lota stop 37 (ASSUMED location),-36.888092,-73.140798
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.89169_-73.14167,300 regreso: Concepción → Lota stop 38 (ASSUMED location),-36.891688,-73.141672
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.89353_-73.14208,300 regreso: Concepción → Lota stop 39 (ASSUMED location),-36.893529,-73.142082
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.89745_-73.14306,300 regreso: Concepción → Lota stop 40 (ASSUMED location),-36.897453,-73.143060
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.90184_-73.1441,300 regreso: Concepción → Lota stop 41 (ASSUMED location),-36.901841,-73.144102
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.90468_-73.14479,300 regreso: Concepción → Lota stop 42 (ASSUMED location),-36.904683,-73.144794
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.91196_-73.1465,300 regreso: Concepción → Lota stop 43 (ASSUMED location),-36.911957,-73.146503
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.91884_-73.1482,300 regreso: Concepción → Lota stop 44 (ASSUMED location),-36.918839,-73.148200
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.92902_-73.15066,300 regreso: Concepción → Lota stop 45 (ASSUMED location),-36.929020,-73.150655
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.9377_-73.15275,300 regreso: Concepción → Lota stop 46 (ASSUMED location),-36.937699,-73.152753
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.94504_-73.15453,300 regreso: Concepción → Lota stop 47 (ASSUMED location),-36.945042,-73.154528
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.94723_-73.15503,300 regreso: Concepción → Lota stop 48 (ASSUMED location),-36.947225,-73.155029
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.95053_-73.15582,300 regreso: Concepción → Lota stop 49 (ASSUMED location),-36.950526,-73.155824
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.95471_-73.15686,300 regreso: Concepción → Lota stop 50 (ASSUMED location),-36.954706,-73.156857
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.95818_-73.1577,300 regreso: Concepción → Lota stop 51 (ASSUMED location),-36.958185,-73.157699
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.96546_-73.15942,300 regreso: Concepción → Lota stop 52 (ASSUMED location),-36.965457,-73.159423
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.98127_-73.16276,300 regreso: Concepción → Lota stop 53 (ASSUMED location),-36.981268,-73.162756
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.98489_-73.16289,300 regreso: Concepción → Lota stop 54 (ASSUMED location),-36.984887,-73.162895
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.98777_-73.163,300 regreso: Concepción → Lota stop 55 (ASSUMED location),-36.987766,-73.162997
+assumed_osm_300regreso_16751162_300regresoconcepcion_-36.99068_-73.16311,300 regreso: Concepción → Lota stop 56 (ASSUMED location),-36.990677,-73.163108
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.00754_-73.16019,300 regreso: Concepción → Lota stop 57 (ASSUMED location),-37.007536,-73.160192
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.01089_-73.15903,300 regreso: Concepción → Lota stop 58 (ASSUMED location),-37.010889,-73.159030
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.01303_-73.15834,300 regreso: Concepción → Lota stop 59 (ASSUMED location),-37.013032,-73.158340
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.01477_-73.15768,300 regreso: Concepción → Lota stop 60 (ASSUMED location),-37.014769,-73.157683
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.02237_-73.15377,300 regreso: Concepción → Lota stop 61 (ASSUMED location),-37.022368,-73.153769
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.02496_-73.15003,300 regreso: Concepción → Lota stop 62 (ASSUMED location),-37.024964,-73.150030
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.02617_-73.14893,300 regreso: Concepción → Lota stop 63 (ASSUMED location),-37.026169,-73.148932
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.02753_-73.14783,300 regreso: Concepción → Lota stop 64 (ASSUMED location),-37.027526,-73.147826
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.02829_-73.14735,300 regreso: Concepción → Lota stop 65 (ASSUMED location),-37.028290,-73.147345
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.02922_-73.1468,300 regreso: Concepción → Lota stop 66 (ASSUMED location),-37.029224,-73.146800
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.03434_-73.14482,300 regreso: Concepción → Lota stop 67 (ASSUMED location),-37.034341,-73.144824
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.03493_-73.1424,300 regreso: Concepción → Lota stop 68 (ASSUMED location),-37.034927,-73.142403
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.05_-73.1414,300 regreso: Concepción → Lota stop 69 (ASSUMED location),-37.049998,-73.141404
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.05505_-73.14035,300 regreso: Concepción → Lota stop 70 (ASSUMED location),-37.055047,-73.140350
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.0574_-73.1399,300 regreso: Concepción → Lota stop 71 (ASSUMED location),-37.057395,-73.139902
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.06255_-73.14146,300 regreso: Concepción → Lota stop 72 (ASSUMED location),-37.062548,-73.141459
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.06779_-73.1442,300 regreso: Concepción → Lota stop 73 (ASSUMED location),-37.067793,-73.144202
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.0753_-73.14829,300 regreso: Concepción → Lota stop 74 (ASSUMED location),-37.075297,-73.148291
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.07673_-73.15003,300 regreso: Concepción → Lota stop 75 (ASSUMED location),-37.076729,-73.150033
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.07735_-73.15284,300 regreso: Concepción → Lota stop 76 (ASSUMED location),-37.077346,-73.152839
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.07861_-73.15536,300 regreso: Concepción → Lota stop 77 (ASSUMED location),-37.078612,-73.155364
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.08001_-73.15695,300 regreso: Concepción → Lota stop 78 (ASSUMED location),-37.080013,-73.156950
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.08057_-73.15827,300 regreso: Concepción → Lota stop 79 (ASSUMED location),-37.080572,-73.158270
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.08144_-73.1599,300 regreso: Concepción → Lota stop 80 (ASSUMED location),-37.081443,-73.159900
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.08312_-73.16146,300 regreso: Concepción → Lota stop 81 (ASSUMED location),-37.083124,-73.161461
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.08441_-73.16192,300 regreso: Concepción → Lota stop 82 (ASSUMED location),-37.084414,-73.161917
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.08649_-73.16213,300 regreso: Concepción → Lota stop 83 (ASSUMED location),-37.086493,-73.162133
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.08911_-73.16159,300 regreso: Concepción → Lota stop 84 (ASSUMED location),-37.089106,-73.161588
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.0886_-73.15925,300 regreso: Concepción → Lota stop 85 (ASSUMED location),-37.088601,-73.159246
+assumed_osm_300regreso_16751162_300regresoconcepcion_-37.09134_-73.15699,300 regreso: Concepción → Lota stop 86 (ASSUMED location),-37.091345,-73.156992
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.09047_-73.15662,300 ida: Lota → Concepción stop 1 (ASSUMED location),-37.090470,-73.156625
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.08811_-73.15936,300 ida: Lota → Concepción stop 2 (ASSUMED location),-37.088111,-73.159359
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.08811_-73.16163,300 ida: Lota → Concepción stop 3 (ASSUMED location),-37.088109,-73.161634
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.08657_-73.16193,300 ida: Lota → Concepción stop 4 (ASSUMED location),-37.086575,-73.161933
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.08456_-73.16184,300 ida: Lota → Concepción stop 5 (ASSUMED location),-37.084559,-73.161842
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.0829_-73.16086,300 ida: Lota → Concepción stop 6 (ASSUMED location),-37.082897,-73.160865
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.08142_-73.15964,300 ida: Lota → Concepción stop 7 (ASSUMED location),-37.081417,-73.159643
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.08063_-73.15818,300 ida: Lota → Concepción stop 8 (ASSUMED location),-37.080635,-73.158185
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.07908_-73.15568,300 ida: Lota → Concepción stop 9 (ASSUMED location),-37.079083,-73.155675
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.07771_-73.15343,300 ida: Lota → Concepción stop 10 (ASSUMED location),-37.077714,-73.153430
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.07715_-73.15054,300 ida: Lota → Concepción stop 11 (ASSUMED location),-37.077151,-73.150540
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.0756_-73.14833,300 ida: Lota → Concepción stop 12 (ASSUMED location),-37.075604,-73.148331
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.06684_-73.14331,300 ida: Lota → Concepción stop 13 (ASSUMED location),-37.066838,-73.143310
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.06401_-73.14181,300 ida: Lota → Concepción stop 14 (ASSUMED location),-37.064011,-73.141807
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.05606_-73.13977,300 ida: Lota → Concepción stop 15 (ASSUMED location),-37.056060,-73.139771
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.0499_-73.14101,300 ida: Lota → Concepción stop 16 (ASSUMED location),-37.049902,-73.141010
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.03774_-73.14054,300 ida: Lota → Concepción stop 17 (ASSUMED location),-37.037737,-73.140540
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.03447_-73.14242,300 ida: Lota → Concepción stop 18 (ASSUMED location),-37.034471,-73.142425
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.03376_-73.14273,300 ida: Lota → Concepción stop 19 (ASSUMED location),-37.033760,-73.142732
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.02417_-73.1489,300 ida: Lota → Concepción stop 20 (ASSUMED location),-37.024169,-73.148896
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.02157_-73.1538,300 ida: Lota → Concepción stop 21 (ASSUMED location),-37.021575,-73.153796
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.00988_-73.15716,300 ida: Lota → Concepción stop 22 (ASSUMED location),-37.009879,-73.157160
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.00855_-73.15771,300 ida: Lota → Concepción stop 23 (ASSUMED location),-37.008553,-73.157709
+assumed_osm_300ida_16817038_300idalotaconcepcion_-37.0059_-73.15887,300 ida: Lota → Concepción stop 24 (ASSUMED location),-37.005903,-73.158867
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.99474_-73.1629,300 ida: Lota → Concepción stop 25 (ASSUMED location),-36.994736,-73.162902
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.99055_-73.1629,300 ida: Lota → Concepción stop 26 (ASSUMED location),-36.990554,-73.162895
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.9876_-73.16278,300 ida: Lota → Concepción stop 27 (ASSUMED location),-36.987599,-73.162779
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.98476_-73.16268,300 ida: Lota → Concepción stop 28 (ASSUMED location),-36.984763,-73.162681
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.98116_-73.16254,300 ida: Lota → Concepción stop 29 (ASSUMED location),-36.981161,-73.162536
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.97713_-73.16197,300 ida: Lota → Concepción stop 30 (ASSUMED location),-36.977130,-73.161969
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.97563_-73.16165,300 ida: Lota → Concepción stop 31 (ASSUMED location),-36.975625,-73.161650
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.9656_-73.15902,300 ida: Lota → Concepción stop 32 (ASSUMED location),-36.965597,-73.159019
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.95436_-73.15644,300 ida: Lota → Concepción stop 33 (ASSUMED location),-36.954364,-73.156437
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.94465_-73.15408,300 ida: Lota → Concepción stop 34 (ASSUMED location),-36.944648,-73.154084
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.94058_-73.15312,300 ida: Lota → Concepción stop 35 (ASSUMED location),-36.940581,-73.153123
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.93737_-73.15235,300 ida: Lota → Concepción stop 36 (ASSUMED location),-36.937368,-73.152350
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.93631_-73.15209,300 ida: Lota → Concepción stop 37 (ASSUMED location),-36.936307,-73.152088
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.91835_-73.14774,300 ida: Lota → Concepción stop 38 (ASSUMED location),-36.918347,-73.147736
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.91513_-73.14696,300 ida: Lota → Concepción stop 39 (ASSUMED location),-36.915129,-73.146961
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.91156_-73.14611,300 ida: Lota → Concepción stop 40 (ASSUMED location),-36.911560,-73.146114
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.90414_-73.14432,300 ida: Lota → Concepción stop 41 (ASSUMED location),-36.904140,-73.144319
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.9006_-73.14347,300 ida: Lota → Concepción stop 42 (ASSUMED location),-36.900596,-73.143466
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.89745_-73.14269,300 ida: Lota → Concepción stop 43 (ASSUMED location),-36.897452,-73.142694
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.89152_-73.14127,300 ida: Lota → Concepción stop 44 (ASSUMED location),-36.891524,-73.141272
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.88914_-73.1407,300 ida: Lota → Concepción stop 45 (ASSUMED location),-36.889136,-73.140702
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.88802_-73.14044,300 ida: Lota → Concepción stop 46 (ASSUMED location),-36.888024,-73.140440
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.88504_-73.13971,300 ida: Lota → Concepción stop 47 (ASSUMED location),-36.885038,-73.139709
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.88357_-73.13935,300 ida: Lota → Concepción stop 48 (ASSUMED location),-36.883569,-73.139351
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.87998_-73.13849,300 ida: Lota → Concepción stop 49 (ASSUMED location),-36.879983,-73.138486
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.87784_-73.13798,300 ida: Lota → Concepción stop 50 (ASSUMED location),-36.877838,-73.137982
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.87489_-73.13726,300 ida: Lota → Concepción stop 51 (ASSUMED location),-36.874889,-73.137256
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.86996_-73.13605,300 ida: Lota → Concepción stop 52 (ASSUMED location),-36.869958,-73.136047
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.8624_-73.13426,300 ida: Lota → Concepción stop 53 (ASSUMED location),-36.862396,-73.134264
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.8587_-73.13337,300 ida: Lota → Concepción stop 54 (ASSUMED location),-36.858705,-73.133366
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.85549_-73.13258,300 ida: Lota → Concepción stop 55 (ASSUMED location),-36.855492,-73.132577
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.85137_-73.13158,300 ida: Lota → Concepción stop 56 (ASSUMED location),-36.851366,-73.131585
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.84767_-73.13068,300 ida: Lota → Concepción stop 57 (ASSUMED location),-36.847670,-73.130677
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.84517_-73.13007,300 ida: Lota → Concepción stop 58 (ASSUMED location),-36.845173,-73.130073
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.84136_-73.12882,300 ida: Lota → Concepción stop 59 (ASSUMED location),-36.841356,-73.128820
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.83772_-73.11729,300 ida: Lota → Concepción stop 60 (ASSUMED location),-36.837717,-73.117286
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.83787_-73.11359,300 ida: Lota → Concepción stop 61 (ASSUMED location),-36.837869,-73.113590
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.83807_-73.10993,300 ida: Lota → Concepción stop 62 (ASSUMED location),-36.838067,-73.109932
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.83837_-73.10429,300 ida: Lota → Concepción stop 63 (ASSUMED location),-36.838372,-73.104287
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.83859_-73.1018,300 ida: Lota → Concepción stop 64 (ASSUMED location),-36.838592,-73.101798
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.83502_-73.10115,300 ida: Lota → Concepción stop 65 (ASSUMED location),-36.835024,-73.101153
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.83221_-73.09972,300 ida: Lota → Concepción stop 66 (ASSUMED location),-36.832208,-73.099725
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.81015_-73.08131,300 ida: Lota → Concepción stop 67 (ASSUMED location),-36.810146,-73.081312
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.80891_-73.07719,300 ida: Lota → Concepción stop 68 (ASSUMED location),-36.808906,-73.077189
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.81065_-73.07387,300 ida: Lota → Concepción stop 69 (ASSUMED location),-36.810650,-73.073873
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.81273_-73.06977,300 ida: Lota → Concepción stop 70 (ASSUMED location),-36.812730,-73.069770
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.81531_-73.0675,300 ida: Lota → Concepción stop 71 (ASSUMED location),-36.815306,-73.067496
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.823_-73.06017,300 ida: Lota → Concepción stop 72 (ASSUMED location),-36.823000,-73.060166
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.82209_-73.04875,300 ida: Lota → Concepción stop 73 (ASSUMED location),-36.822095,-73.048746
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.82148_-73.04723,300 ida: Lota → Concepción stop 74 (ASSUMED location),-36.821483,-73.047226
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.82058_-73.04507,300 ida: Lota → Concepción stop 75 (ASSUMED location),-36.820580,-73.045071
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.81978_-73.04318,300 ida: Lota → Concepción stop 76 (ASSUMED location),-36.819782,-73.043182
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.81891_-73.04101,300 ida: Lota → Concepción stop 77 (ASSUMED location),-36.818908,-73.041012
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.81781_-73.03839,300 ida: Lota → Concepción stop 78 (ASSUMED location),-36.817807,-73.038390
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.81676_-73.03595,300 ida: Lota → Concepción stop 79 (ASSUMED location),-36.816758,-73.035948
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.81617_-73.03155,300 ida: Lota → Concepción stop 80 (ASSUMED location),-36.816168,-73.031549
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.81828_-73.02374,300 ida: Lota → Concepción stop 81 (ASSUMED location),-36.818281,-73.023739
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.81896_-73.0219,300 ida: Lota → Concepción stop 82 (ASSUMED location),-36.818963,-73.021901
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.81978_-73.01946,300 ida: Lota → Concepción stop 83 (ASSUMED location),-36.819784,-73.019462
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.8205_-73.01382,300 ida: Lota → Concepción stop 84 (ASSUMED location),-36.820497,-73.013818
+assumed_osm_300ida_16817038_300idalotaconcepcion_-36.82158_-73.00934,300 ida: Lota → Concepción stop 85 (ASSUMED location),-36.821584,-73.009339
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.82169_-73.00738,300 regreso: Concepción → Lota stop 1 (ASSUMED location),-36.821686,-73.007381
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.82111_-73.01037,300 regreso: Concepción → Lota stop 2 (ASSUMED location),-36.821109,-73.010365
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.82022_-73.01417,300 regreso: Concepción → Lota stop 3 (ASSUMED location),-36.820223,-73.014168
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81922_-73.01798,300 regreso: Concepción → Lota stop 4 (ASSUMED location),-36.819216,-73.017985
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81879_-73.01917,300 regreso: Concepción → Lota stop 5 (ASSUMED location),-36.818794,-73.019170
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81813_-73.02097,300 regreso: Concepción → Lota stop 6 (ASSUMED location),-36.818130,-73.020966
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81689_-73.02428,300 regreso: Concepción → Lota stop 7 (ASSUMED location),-36.816885,-73.024280
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81483_-73.03009,300 regreso: Concepción → Lota stop 8 (ASSUMED location),-36.814826,-73.030086
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.8157_-73.03387,300 regreso: Concepción → Lota stop 9 (ASSUMED location),-36.815705,-73.033867
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81561_-73.03392,300 regreso: Concepción → Lota stop 10 (ASSUMED location),-36.815612,-73.033917
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81664_-73.03625,300 regreso: Concepción → Lota stop 11 (ASSUMED location),-36.816640,-73.036254
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81756_-73.03851,300 regreso: Concepción → Lota stop 12 (ASSUMED location),-36.817563,-73.038511
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81854_-73.04097,300 regreso: Concepción → Lota stop 13 (ASSUMED location),-36.818541,-73.040974
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81963_-73.04344,300 regreso: Concepción → Lota stop 14 (ASSUMED location),-36.819630,-73.043437
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.82076_-73.0462,300 regreso: Concepción → Lota stop 15 (ASSUMED location),-36.820759,-73.046198
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.82123_-73.04827,300 regreso: Concepción → Lota stop 16 (ASSUMED location),-36.821226,-73.048274
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81566_-73.05302,300 regreso: Concepción → Lota stop 17 (ASSUMED location),-36.815663,-73.053015
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81511_-73.06727,300 regreso: Concepción → Lota stop 18 (ASSUMED location),-36.815108,-73.067274
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81223_-73.07048,300 regreso: Concepción → Lota stop 19 (ASSUMED location),-36.812227,-73.070475
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.81016_-73.07458,300 regreso: Concepción → Lota stop 20 (ASSUMED location),-36.810162,-73.074581
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.80803_-73.07764,300 regreso: Concepción → Lota stop 21 (ASSUMED location),-36.808034,-73.077643
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.83854_-73.10079,300 regreso: Concepción → Lota stop 22 (ASSUMED location),-36.838536,-73.100791
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.83813_-73.10764,300 regreso: Concepción → Lota stop 23 (ASSUMED location),-36.838127,-73.107642
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.8377_-73.11513,300 regreso: Concepción → Lota stop 24 (ASSUMED location),-36.837702,-73.115127
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.83749_-73.11926,300 regreso: Concepción → Lota stop 25 (ASSUMED location),-36.837491,-73.119261
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.84139_-73.12923,300 regreso: Concepción → Lota stop 26 (ASSUMED location),-36.841385,-73.129226
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.84614_-73.13066,300 regreso: Concepción → Lota stop 27 (ASSUMED location),-36.846143,-73.130660
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.84811_-73.13114,300 regreso: Concepción → Lota stop 28 (ASSUMED location),-36.848106,-73.131137
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.85088_-73.1318,300 regreso: Concepción → Lota stop 29 (ASSUMED location),-36.850882,-73.131802
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.85555_-73.13294,300 regreso: Concepción → Lota stop 30 (ASSUMED location),-36.855553,-73.132939
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.86392_-73.13496,300 regreso: Concepción → Lota stop 31 (ASSUMED location),-36.863922,-73.134960
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.86988_-73.13641,300 regreso: Concepción → Lota stop 32 (ASSUMED location),-36.869878,-73.136407
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.87581_-73.13784,300 regreso: Concepción → Lota stop 33 (ASSUMED location),-36.875808,-73.137837
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.87775_-73.13832,300 regreso: Concepción → Lota stop 34 (ASSUMED location),-36.877753,-73.138323
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.88078_-73.13905,300 regreso: Concepción → Lota stop 35 (ASSUMED location),-36.880778,-73.139046
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.88382_-73.13977,300 regreso: Concepción → Lota stop 36 (ASSUMED location),-36.883822,-73.139774
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.88809_-73.1408,300 regreso: Concepción → Lota stop 37 (ASSUMED location),-36.888092,-73.140798
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.89169_-73.14167,300 regreso: Concepción → Lota stop 38 (ASSUMED location),-36.891688,-73.141672
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.89353_-73.14208,300 regreso: Concepción → Lota stop 39 (ASSUMED location),-36.893529,-73.142082
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.89745_-73.14306,300 regreso: Concepción → Lota stop 40 (ASSUMED location),-36.897453,-73.143060
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.90184_-73.1441,300 regreso: Concepción → Lota stop 41 (ASSUMED location),-36.901841,-73.144102
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.90468_-73.14479,300 regreso: Concepción → Lota stop 42 (ASSUMED location),-36.904683,-73.144794
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.91196_-73.1465,300 regreso: Concepción → Lota stop 43 (ASSUMED location),-36.911957,-73.146503
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.91884_-73.1482,300 regreso: Concepción → Lota stop 44 (ASSUMED location),-36.918839,-73.148200
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.92902_-73.15066,300 regreso: Concepción → Lota stop 45 (ASSUMED location),-36.929020,-73.150655
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.9377_-73.15275,300 regreso: Concepción → Lota stop 46 (ASSUMED location),-36.937699,-73.152753
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.94504_-73.15453,300 regreso: Concepción → Lota stop 47 (ASSUMED location),-36.945042,-73.154528
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.94723_-73.15503,300 regreso: Concepción → Lota stop 48 (ASSUMED location),-36.947225,-73.155029
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.95053_-73.15582,300 regreso: Concepción → Lota stop 49 (ASSUMED location),-36.950526,-73.155824
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.95471_-73.15686,300 regreso: Concepción → Lota stop 50 (ASSUMED location),-36.954706,-73.156857
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.95818_-73.1577,300 regreso: Concepción → Lota stop 51 (ASSUMED location),-36.958185,-73.157699
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.96546_-73.15942,300 regreso: Concepción → Lota stop 52 (ASSUMED location),-36.965457,-73.159423
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.98127_-73.16276,300 regreso: Concepción → Lota stop 53 (ASSUMED location),-36.981268,-73.162756
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.98489_-73.16289,300 regreso: Concepción → Lota stop 54 (ASSUMED location),-36.984887,-73.162895
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.98777_-73.163,300 regreso: Concepción → Lota stop 55 (ASSUMED location),-36.987766,-73.162997
+assumed_osm_302regreso_16751162_300regresoconcepcion_-36.99068_-73.16311,300 regreso: Concepción → Lota stop 56 (ASSUMED location),-36.990677,-73.163108
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.00754_-73.16019,300 regreso: Concepción → Lota stop 57 (ASSUMED location),-37.007536,-73.160192
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.01089_-73.15903,300 regreso: Concepción → Lota stop 58 (ASSUMED location),-37.010889,-73.159030
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.01303_-73.15834,300 regreso: Concepción → Lota stop 59 (ASSUMED location),-37.013032,-73.158340
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.01477_-73.15768,300 regreso: Concepción → Lota stop 60 (ASSUMED location),-37.014769,-73.157683
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.02237_-73.15377,300 regreso: Concepción → Lota stop 61 (ASSUMED location),-37.022368,-73.153769
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.02496_-73.15003,300 regreso: Concepción → Lota stop 62 (ASSUMED location),-37.024964,-73.150030
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.02617_-73.14893,300 regreso: Concepción → Lota stop 63 (ASSUMED location),-37.026169,-73.148932
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.02753_-73.14783,300 regreso: Concepción → Lota stop 64 (ASSUMED location),-37.027526,-73.147826
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.02829_-73.14735,300 regreso: Concepción → Lota stop 65 (ASSUMED location),-37.028290,-73.147345
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.02922_-73.1468,300 regreso: Concepción → Lota stop 66 (ASSUMED location),-37.029224,-73.146800
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.03434_-73.14482,300 regreso: Concepción → Lota stop 67 (ASSUMED location),-37.034341,-73.144824
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.03493_-73.1424,300 regreso: Concepción → Lota stop 68 (ASSUMED location),-37.034927,-73.142403
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.05_-73.1414,300 regreso: Concepción → Lota stop 69 (ASSUMED location),-37.049998,-73.141404
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.05505_-73.14035,300 regreso: Concepción → Lota stop 70 (ASSUMED location),-37.055047,-73.140350
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.0574_-73.1399,300 regreso: Concepción → Lota stop 71 (ASSUMED location),-37.057395,-73.139902
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.06255_-73.14146,300 regreso: Concepción → Lota stop 72 (ASSUMED location),-37.062548,-73.141459
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.06779_-73.1442,300 regreso: Concepción → Lota stop 73 (ASSUMED location),-37.067793,-73.144202
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.0753_-73.14829,300 regreso: Concepción → Lota stop 74 (ASSUMED location),-37.075297,-73.148291
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.07673_-73.15003,300 regreso: Concepción → Lota stop 75 (ASSUMED location),-37.076729,-73.150033
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.07735_-73.15284,300 regreso: Concepción → Lota stop 76 (ASSUMED location),-37.077346,-73.152839
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.07861_-73.15536,300 regreso: Concepción → Lota stop 77 (ASSUMED location),-37.078612,-73.155364
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.08001_-73.15695,300 regreso: Concepción → Lota stop 78 (ASSUMED location),-37.080013,-73.156950
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.08057_-73.15827,300 regreso: Concepción → Lota stop 79 (ASSUMED location),-37.080572,-73.158270
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.08144_-73.1599,300 regreso: Concepción → Lota stop 80 (ASSUMED location),-37.081443,-73.159900
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.08312_-73.16146,300 regreso: Concepción → Lota stop 81 (ASSUMED location),-37.083124,-73.161461
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.08441_-73.16192,300 regreso: Concepción → Lota stop 82 (ASSUMED location),-37.084414,-73.161917
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.08649_-73.16213,300 regreso: Concepción → Lota stop 83 (ASSUMED location),-37.086493,-73.162133
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.08911_-73.16159,300 regreso: Concepción → Lota stop 84 (ASSUMED location),-37.089106,-73.161588
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.0886_-73.15925,300 regreso: Concepción → Lota stop 85 (ASSUMED location),-37.088601,-73.159246
+assumed_osm_302regreso_16751162_300regresoconcepcion_-37.09134_-73.15699,300 regreso: Concepción → Lota stop 86 (ASSUMED location),-37.091345,-73.156992
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.09047_-73.15662,300 ida: Lota → Concepción stop 1 (ASSUMED location),-37.090470,-73.156625
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.08811_-73.15936,300 ida: Lota → Concepción stop 2 (ASSUMED location),-37.088111,-73.159359
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.08811_-73.16163,300 ida: Lota → Concepción stop 3 (ASSUMED location),-37.088109,-73.161634
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.08657_-73.16193,300 ida: Lota → Concepción stop 4 (ASSUMED location),-37.086575,-73.161933
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.08456_-73.16184,300 ida: Lota → Concepción stop 5 (ASSUMED location),-37.084559,-73.161842
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.0829_-73.16086,300 ida: Lota → Concepción stop 6 (ASSUMED location),-37.082897,-73.160865
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.08142_-73.15964,300 ida: Lota → Concepción stop 7 (ASSUMED location),-37.081417,-73.159643
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.08063_-73.15818,300 ida: Lota → Concepción stop 8 (ASSUMED location),-37.080635,-73.158185
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.07908_-73.15568,300 ida: Lota → Concepción stop 9 (ASSUMED location),-37.079083,-73.155675
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.07771_-73.15343,300 ida: Lota → Concepción stop 10 (ASSUMED location),-37.077714,-73.153430
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.07715_-73.15054,300 ida: Lota → Concepción stop 11 (ASSUMED location),-37.077151,-73.150540
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.0756_-73.14833,300 ida: Lota → Concepción stop 12 (ASSUMED location),-37.075604,-73.148331
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.06684_-73.14331,300 ida: Lota → Concepción stop 13 (ASSUMED location),-37.066838,-73.143310
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.06401_-73.14181,300 ida: Lota → Concepción stop 14 (ASSUMED location),-37.064011,-73.141807
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.05606_-73.13977,300 ida: Lota → Concepción stop 15 (ASSUMED location),-37.056060,-73.139771
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.0499_-73.14101,300 ida: Lota → Concepción stop 16 (ASSUMED location),-37.049902,-73.141010
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.03774_-73.14054,300 ida: Lota → Concepción stop 17 (ASSUMED location),-37.037737,-73.140540
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.03447_-73.14242,300 ida: Lota → Concepción stop 18 (ASSUMED location),-37.034471,-73.142425
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.03376_-73.14273,300 ida: Lota → Concepción stop 19 (ASSUMED location),-37.033760,-73.142732
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.02417_-73.1489,300 ida: Lota → Concepción stop 20 (ASSUMED location),-37.024169,-73.148896
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.02157_-73.1538,300 ida: Lota → Concepción stop 21 (ASSUMED location),-37.021575,-73.153796
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.00988_-73.15716,300 ida: Lota → Concepción stop 22 (ASSUMED location),-37.009879,-73.157160
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.00855_-73.15771,300 ida: Lota → Concepción stop 23 (ASSUMED location),-37.008553,-73.157709
+assumed_osm_302ida_16817038_300idalotaconcepcion_-37.0059_-73.15887,300 ida: Lota → Concepción stop 24 (ASSUMED location),-37.005903,-73.158867
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.99474_-73.1629,300 ida: Lota → Concepción stop 25 (ASSUMED location),-36.994736,-73.162902
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.99055_-73.1629,300 ida: Lota → Concepción stop 26 (ASSUMED location),-36.990554,-73.162895
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.9876_-73.16278,300 ida: Lota → Concepción stop 27 (ASSUMED location),-36.987599,-73.162779
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.98476_-73.16268,300 ida: Lota → Concepción stop 28 (ASSUMED location),-36.984763,-73.162681
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.98116_-73.16254,300 ida: Lota → Concepción stop 29 (ASSUMED location),-36.981161,-73.162536
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.97713_-73.16197,300 ida: Lota → Concepción stop 30 (ASSUMED location),-36.977130,-73.161969
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.97563_-73.16165,300 ida: Lota → Concepción stop 31 (ASSUMED location),-36.975625,-73.161650
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.9656_-73.15902,300 ida: Lota → Concepción stop 32 (ASSUMED location),-36.965597,-73.159019
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.95436_-73.15644,300 ida: Lota → Concepción stop 33 (ASSUMED location),-36.954364,-73.156437
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.94465_-73.15408,300 ida: Lota → Concepción stop 34 (ASSUMED location),-36.944648,-73.154084
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.94058_-73.15312,300 ida: Lota → Concepción stop 35 (ASSUMED location),-36.940581,-73.153123
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.93737_-73.15235,300 ida: Lota → Concepción stop 36 (ASSUMED location),-36.937368,-73.152350
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.93631_-73.15209,300 ida: Lota → Concepción stop 37 (ASSUMED location),-36.936307,-73.152088
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.91835_-73.14774,300 ida: Lota → Concepción stop 38 (ASSUMED location),-36.918347,-73.147736
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.91513_-73.14696,300 ida: Lota → Concepción stop 39 (ASSUMED location),-36.915129,-73.146961
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.91156_-73.14611,300 ida: Lota → Concepción stop 40 (ASSUMED location),-36.911560,-73.146114
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.90414_-73.14432,300 ida: Lota → Concepción stop 41 (ASSUMED location),-36.904140,-73.144319
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.9006_-73.14347,300 ida: Lota → Concepción stop 42 (ASSUMED location),-36.900596,-73.143466
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.89745_-73.14269,300 ida: Lota → Concepción stop 43 (ASSUMED location),-36.897452,-73.142694
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.89152_-73.14127,300 ida: Lota → Concepción stop 44 (ASSUMED location),-36.891524,-73.141272
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.88914_-73.1407,300 ida: Lota → Concepción stop 45 (ASSUMED location),-36.889136,-73.140702
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.88802_-73.14044,300 ida: Lota → Concepción stop 46 (ASSUMED location),-36.888024,-73.140440
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.88504_-73.13971,300 ida: Lota → Concepción stop 47 (ASSUMED location),-36.885038,-73.139709
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.88357_-73.13935,300 ida: Lota → Concepción stop 48 (ASSUMED location),-36.883569,-73.139351
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.87998_-73.13849,300 ida: Lota → Concepción stop 49 (ASSUMED location),-36.879983,-73.138486
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.87784_-73.13798,300 ida: Lota → Concepción stop 50 (ASSUMED location),-36.877838,-73.137982
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.87489_-73.13726,300 ida: Lota → Concepción stop 51 (ASSUMED location),-36.874889,-73.137256
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.86996_-73.13605,300 ida: Lota → Concepción stop 52 (ASSUMED location),-36.869958,-73.136047
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.8624_-73.13426,300 ida: Lota → Concepción stop 53 (ASSUMED location),-36.862396,-73.134264
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.8587_-73.13337,300 ida: Lota → Concepción stop 54 (ASSUMED location),-36.858705,-73.133366
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.85549_-73.13258,300 ida: Lota → Concepción stop 55 (ASSUMED location),-36.855492,-73.132577
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.85137_-73.13158,300 ida: Lota → Concepción stop 56 (ASSUMED location),-36.851366,-73.131585
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.84767_-73.13068,300 ida: Lota → Concepción stop 57 (ASSUMED location),-36.847670,-73.130677
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.84517_-73.13007,300 ida: Lota → Concepción stop 58 (ASSUMED location),-36.845173,-73.130073
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.84136_-73.12882,300 ida: Lota → Concepción stop 59 (ASSUMED location),-36.841356,-73.128820
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.83772_-73.11729,300 ida: Lota → Concepción stop 60 (ASSUMED location),-36.837717,-73.117286
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.83787_-73.11359,300 ida: Lota → Concepción stop 61 (ASSUMED location),-36.837869,-73.113590
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.83807_-73.10993,300 ida: Lota → Concepción stop 62 (ASSUMED location),-36.838067,-73.109932
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.83837_-73.10429,300 ida: Lota → Concepción stop 63 (ASSUMED location),-36.838372,-73.104287
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.83859_-73.1018,300 ida: Lota → Concepción stop 64 (ASSUMED location),-36.838592,-73.101798
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.83502_-73.10115,300 ida: Lota → Concepción stop 65 (ASSUMED location),-36.835024,-73.101153
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.83221_-73.09972,300 ida: Lota → Concepción stop 66 (ASSUMED location),-36.832208,-73.099725
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.81015_-73.08131,300 ida: Lota → Concepción stop 67 (ASSUMED location),-36.810146,-73.081312
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.80891_-73.07719,300 ida: Lota → Concepción stop 68 (ASSUMED location),-36.808906,-73.077189
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.81065_-73.07387,300 ida: Lota → Concepción stop 69 (ASSUMED location),-36.810650,-73.073873
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.81273_-73.06977,300 ida: Lota → Concepción stop 70 (ASSUMED location),-36.812730,-73.069770
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.81531_-73.0675,300 ida: Lota → Concepción stop 71 (ASSUMED location),-36.815306,-73.067496
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.823_-73.06017,300 ida: Lota → Concepción stop 72 (ASSUMED location),-36.823000,-73.060166
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.82209_-73.04875,300 ida: Lota → Concepción stop 73 (ASSUMED location),-36.822095,-73.048746
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.82148_-73.04723,300 ida: Lota → Concepción stop 74 (ASSUMED location),-36.821483,-73.047226
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.82058_-73.04507,300 ida: Lota → Concepción stop 75 (ASSUMED location),-36.820580,-73.045071
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.81978_-73.04318,300 ida: Lota → Concepción stop 76 (ASSUMED location),-36.819782,-73.043182
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.81891_-73.04101,300 ida: Lota → Concepción stop 77 (ASSUMED location),-36.818908,-73.041012
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.81781_-73.03839,300 ida: Lota → Concepción stop 78 (ASSUMED location),-36.817807,-73.038390
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.81676_-73.03595,300 ida: Lota → Concepción stop 79 (ASSUMED location),-36.816758,-73.035948
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.81617_-73.03155,300 ida: Lota → Concepción stop 80 (ASSUMED location),-36.816168,-73.031549
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.81828_-73.02374,300 ida: Lota → Concepción stop 81 (ASSUMED location),-36.818281,-73.023739
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.81896_-73.0219,300 ida: Lota → Concepción stop 82 (ASSUMED location),-36.818963,-73.021901
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.81978_-73.01946,300 ida: Lota → Concepción stop 83 (ASSUMED location),-36.819784,-73.019462
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.8205_-73.01382,300 ida: Lota → Concepción stop 84 (ASSUMED location),-36.820497,-73.013818
+assumed_osm_302ida_16817038_300idalotaconcepcion_-36.82158_-73.00934,300 ida: Lota → Concepción stop 85 (ASSUMED location),-36.821584,-73.009339
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.82169_-73.00738,300 regreso: Concepción → Lota stop 1 (ASSUMED location),-36.821686,-73.007381
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.82111_-73.01037,300 regreso: Concepción → Lota stop 2 (ASSUMED location),-36.821109,-73.010365
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.82022_-73.01417,300 regreso: Concepción → Lota stop 3 (ASSUMED location),-36.820223,-73.014168
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81922_-73.01798,300 regreso: Concepción → Lota stop 4 (ASSUMED location),-36.819216,-73.017985
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81879_-73.01917,300 regreso: Concepción → Lota stop 5 (ASSUMED location),-36.818794,-73.019170
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81813_-73.02097,300 regreso: Concepción → Lota stop 6 (ASSUMED location),-36.818130,-73.020966
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81689_-73.02428,300 regreso: Concepción → Lota stop 7 (ASSUMED location),-36.816885,-73.024280
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81483_-73.03009,300 regreso: Concepción → Lota stop 8 (ASSUMED location),-36.814826,-73.030086
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.8157_-73.03387,300 regreso: Concepción → Lota stop 9 (ASSUMED location),-36.815705,-73.033867
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81561_-73.03392,300 regreso: Concepción → Lota stop 10 (ASSUMED location),-36.815612,-73.033917
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81664_-73.03625,300 regreso: Concepción → Lota stop 11 (ASSUMED location),-36.816640,-73.036254
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81756_-73.03851,300 regreso: Concepción → Lota stop 12 (ASSUMED location),-36.817563,-73.038511
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81854_-73.04097,300 regreso: Concepción → Lota stop 13 (ASSUMED location),-36.818541,-73.040974
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81963_-73.04344,300 regreso: Concepción → Lota stop 14 (ASSUMED location),-36.819630,-73.043437
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.82076_-73.0462,300 regreso: Concepción → Lota stop 15 (ASSUMED location),-36.820759,-73.046198
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.82123_-73.04827,300 regreso: Concepción → Lota stop 16 (ASSUMED location),-36.821226,-73.048274
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81566_-73.05302,300 regreso: Concepción → Lota stop 17 (ASSUMED location),-36.815663,-73.053015
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81511_-73.06727,300 regreso: Concepción → Lota stop 18 (ASSUMED location),-36.815108,-73.067274
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81223_-73.07048,300 regreso: Concepción → Lota stop 19 (ASSUMED location),-36.812227,-73.070475
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.81016_-73.07458,300 regreso: Concepción → Lota stop 20 (ASSUMED location),-36.810162,-73.074581
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.80803_-73.07764,300 regreso: Concepción → Lota stop 21 (ASSUMED location),-36.808034,-73.077643
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.83854_-73.10079,300 regreso: Concepción → Lota stop 22 (ASSUMED location),-36.838536,-73.100791
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.83813_-73.10764,300 regreso: Concepción → Lota stop 23 (ASSUMED location),-36.838127,-73.107642
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.8377_-73.11513,300 regreso: Concepción → Lota stop 24 (ASSUMED location),-36.837702,-73.115127
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.83749_-73.11926,300 regreso: Concepción → Lota stop 25 (ASSUMED location),-36.837491,-73.119261
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.84139_-73.12923,300 regreso: Concepción → Lota stop 26 (ASSUMED location),-36.841385,-73.129226
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.84614_-73.13066,300 regreso: Concepción → Lota stop 27 (ASSUMED location),-36.846143,-73.130660
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.84811_-73.13114,300 regreso: Concepción → Lota stop 28 (ASSUMED location),-36.848106,-73.131137
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.85088_-73.1318,300 regreso: Concepción → Lota stop 29 (ASSUMED location),-36.850882,-73.131802
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.85555_-73.13294,300 regreso: Concepción → Lota stop 30 (ASSUMED location),-36.855553,-73.132939
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.86392_-73.13496,300 regreso: Concepción → Lota stop 31 (ASSUMED location),-36.863922,-73.134960
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.86988_-73.13641,300 regreso: Concepción → Lota stop 32 (ASSUMED location),-36.869878,-73.136407
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.87581_-73.13784,300 regreso: Concepción → Lota stop 33 (ASSUMED location),-36.875808,-73.137837
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.87775_-73.13832,300 regreso: Concepción → Lota stop 34 (ASSUMED location),-36.877753,-73.138323
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.88078_-73.13905,300 regreso: Concepción → Lota stop 35 (ASSUMED location),-36.880778,-73.139046
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.88382_-73.13977,300 regreso: Concepción → Lota stop 36 (ASSUMED location),-36.883822,-73.139774
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.88809_-73.1408,300 regreso: Concepción → Lota stop 37 (ASSUMED location),-36.888092,-73.140798
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.89169_-73.14167,300 regreso: Concepción → Lota stop 38 (ASSUMED location),-36.891688,-73.141672
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.89353_-73.14208,300 regreso: Concepción → Lota stop 39 (ASSUMED location),-36.893529,-73.142082
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.89745_-73.14306,300 regreso: Concepción → Lota stop 40 (ASSUMED location),-36.897453,-73.143060
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.90184_-73.1441,300 regreso: Concepción → Lota stop 41 (ASSUMED location),-36.901841,-73.144102
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.90468_-73.14479,300 regreso: Concepción → Lota stop 42 (ASSUMED location),-36.904683,-73.144794
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.91196_-73.1465,300 regreso: Concepción → Lota stop 43 (ASSUMED location),-36.911957,-73.146503
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.91884_-73.1482,300 regreso: Concepción → Lota stop 44 (ASSUMED location),-36.918839,-73.148200
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.92902_-73.15066,300 regreso: Concepción → Lota stop 45 (ASSUMED location),-36.929020,-73.150655
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.9377_-73.15275,300 regreso: Concepción → Lota stop 46 (ASSUMED location),-36.937699,-73.152753
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.94504_-73.15453,300 regreso: Concepción → Lota stop 47 (ASSUMED location),-36.945042,-73.154528
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.94723_-73.15503,300 regreso: Concepción → Lota stop 48 (ASSUMED location),-36.947225,-73.155029
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.95053_-73.15582,300 regreso: Concepción → Lota stop 49 (ASSUMED location),-36.950526,-73.155824
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.95471_-73.15686,300 regreso: Concepción → Lota stop 50 (ASSUMED location),-36.954706,-73.156857
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.95818_-73.1577,300 regreso: Concepción → Lota stop 51 (ASSUMED location),-36.958185,-73.157699
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.96546_-73.15942,300 regreso: Concepción → Lota stop 52 (ASSUMED location),-36.965457,-73.159423
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.98127_-73.16276,300 regreso: Concepción → Lota stop 53 (ASSUMED location),-36.981268,-73.162756
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.98489_-73.16289,300 regreso: Concepción → Lota stop 54 (ASSUMED location),-36.984887,-73.162895
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.98777_-73.163,300 regreso: Concepción → Lota stop 55 (ASSUMED location),-36.987766,-73.162997
+assumed_osm_303regreso_16751162_300regresoconcepcion_-36.99068_-73.16311,300 regreso: Concepción → Lota stop 56 (ASSUMED location),-36.990677,-73.163108
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.00754_-73.16019,300 regreso: Concepción → Lota stop 57 (ASSUMED location),-37.007536,-73.160192
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.01089_-73.15903,300 regreso: Concepción → Lota stop 58 (ASSUMED location),-37.010889,-73.159030
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.01303_-73.15834,300 regreso: Concepción → Lota stop 59 (ASSUMED location),-37.013032,-73.158340
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.01477_-73.15768,300 regreso: Concepción → Lota stop 60 (ASSUMED location),-37.014769,-73.157683
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.02237_-73.15377,300 regreso: Concepción → Lota stop 61 (ASSUMED location),-37.022368,-73.153769
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.02496_-73.15003,300 regreso: Concepción → Lota stop 62 (ASSUMED location),-37.024964,-73.150030
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.02617_-73.14893,300 regreso: Concepción → Lota stop 63 (ASSUMED location),-37.026169,-73.148932
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.02753_-73.14783,300 regreso: Concepción → Lota stop 64 (ASSUMED location),-37.027526,-73.147826
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.02829_-73.14735,300 regreso: Concepción → Lota stop 65 (ASSUMED location),-37.028290,-73.147345
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.02922_-73.1468,300 regreso: Concepción → Lota stop 66 (ASSUMED location),-37.029224,-73.146800
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.03434_-73.14482,300 regreso: Concepción → Lota stop 67 (ASSUMED location),-37.034341,-73.144824
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.03493_-73.1424,300 regreso: Concepción → Lota stop 68 (ASSUMED location),-37.034927,-73.142403
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.05_-73.1414,300 regreso: Concepción → Lota stop 69 (ASSUMED location),-37.049998,-73.141404
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.05505_-73.14035,300 regreso: Concepción → Lota stop 70 (ASSUMED location),-37.055047,-73.140350
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.0574_-73.1399,300 regreso: Concepción → Lota stop 71 (ASSUMED location),-37.057395,-73.139902
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.06255_-73.14146,300 regreso: Concepción → Lota stop 72 (ASSUMED location),-37.062548,-73.141459
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.06779_-73.1442,300 regreso: Concepción → Lota stop 73 (ASSUMED location),-37.067793,-73.144202
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.0753_-73.14829,300 regreso: Concepción → Lota stop 74 (ASSUMED location),-37.075297,-73.148291
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.07673_-73.15003,300 regreso: Concepción → Lota stop 75 (ASSUMED location),-37.076729,-73.150033
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.07735_-73.15284,300 regreso: Concepción → Lota stop 76 (ASSUMED location),-37.077346,-73.152839
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.07861_-73.15536,300 regreso: Concepción → Lota stop 77 (ASSUMED location),-37.078612,-73.155364
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.08001_-73.15695,300 regreso: Concepción → Lota stop 78 (ASSUMED location),-37.080013,-73.156950
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.08057_-73.15827,300 regreso: Concepción → Lota stop 79 (ASSUMED location),-37.080572,-73.158270
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.08144_-73.1599,300 regreso: Concepción → Lota stop 80 (ASSUMED location),-37.081443,-73.159900
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.08312_-73.16146,300 regreso: Concepción → Lota stop 81 (ASSUMED location),-37.083124,-73.161461
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.08441_-73.16192,300 regreso: Concepción → Lota stop 82 (ASSUMED location),-37.084414,-73.161917
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.08649_-73.16213,300 regreso: Concepción → Lota stop 83 (ASSUMED location),-37.086493,-73.162133
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.08911_-73.16159,300 regreso: Concepción → Lota stop 84 (ASSUMED location),-37.089106,-73.161588
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.0886_-73.15925,300 regreso: Concepción → Lota stop 85 (ASSUMED location),-37.088601,-73.159246
+assumed_osm_303regreso_16751162_300regresoconcepcion_-37.09134_-73.15699,300 regreso: Concepción → Lota stop 86 (ASSUMED location),-37.091345,-73.156992
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.09047_-73.15662,300 ida: Lota → Concepción stop 1 (ASSUMED location),-37.090470,-73.156625
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.08811_-73.15936,300 ida: Lota → Concepción stop 2 (ASSUMED location),-37.088111,-73.159359
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.08811_-73.16163,300 ida: Lota → Concepción stop 3 (ASSUMED location),-37.088109,-73.161634
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.08657_-73.16193,300 ida: Lota → Concepción stop 4 (ASSUMED location),-37.086575,-73.161933
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.08456_-73.16184,300 ida: Lota → Concepción stop 5 (ASSUMED location),-37.084559,-73.161842
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.0829_-73.16086,300 ida: Lota → Concepción stop 6 (ASSUMED location),-37.082897,-73.160865
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.08142_-73.15964,300 ida: Lota → Concepción stop 7 (ASSUMED location),-37.081417,-73.159643
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.08063_-73.15818,300 ida: Lota → Concepción stop 8 (ASSUMED location),-37.080635,-73.158185
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.07908_-73.15568,300 ida: Lota → Concepción stop 9 (ASSUMED location),-37.079083,-73.155675
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.07771_-73.15343,300 ida: Lota → Concepción stop 10 (ASSUMED location),-37.077714,-73.153430
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.07715_-73.15054,300 ida: Lota → Concepción stop 11 (ASSUMED location),-37.077151,-73.150540
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.0756_-73.14833,300 ida: Lota → Concepción stop 12 (ASSUMED location),-37.075604,-73.148331
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.06684_-73.14331,300 ida: Lota → Concepción stop 13 (ASSUMED location),-37.066838,-73.143310
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.06401_-73.14181,300 ida: Lota → Concepción stop 14 (ASSUMED location),-37.064011,-73.141807
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.05606_-73.13977,300 ida: Lota → Concepción stop 15 (ASSUMED location),-37.056060,-73.139771
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.0499_-73.14101,300 ida: Lota → Concepción stop 16 (ASSUMED location),-37.049902,-73.141010
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.03774_-73.14054,300 ida: Lota → Concepción stop 17 (ASSUMED location),-37.037737,-73.140540
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.03447_-73.14242,300 ida: Lota → Concepción stop 18 (ASSUMED location),-37.034471,-73.142425
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.03376_-73.14273,300 ida: Lota → Concepción stop 19 (ASSUMED location),-37.033760,-73.142732
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.02417_-73.1489,300 ida: Lota → Concepción stop 20 (ASSUMED location),-37.024169,-73.148896
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.02157_-73.1538,300 ida: Lota → Concepción stop 21 (ASSUMED location),-37.021575,-73.153796
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.00988_-73.15716,300 ida: Lota → Concepción stop 22 (ASSUMED location),-37.009879,-73.157160
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.00855_-73.15771,300 ida: Lota → Concepción stop 23 (ASSUMED location),-37.008553,-73.157709
+assumed_osm_303ida_16817038_300idalotaconcepcion_-37.0059_-73.15887,300 ida: Lota → Concepción stop 24 (ASSUMED location),-37.005903,-73.158867
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.99474_-73.1629,300 ida: Lota → Concepción stop 25 (ASSUMED location),-36.994736,-73.162902
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.99055_-73.1629,300 ida: Lota → Concepción stop 26 (ASSUMED location),-36.990554,-73.162895
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.9876_-73.16278,300 ida: Lota → Concepción stop 27 (ASSUMED location),-36.987599,-73.162779
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.98476_-73.16268,300 ida: Lota → Concepción stop 28 (ASSUMED location),-36.984763,-73.162681
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.98116_-73.16254,300 ida: Lota → Concepción stop 29 (ASSUMED location),-36.981161,-73.162536
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.97713_-73.16197,300 ida: Lota → Concepción stop 30 (ASSUMED location),-36.977130,-73.161969
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.97563_-73.16165,300 ida: Lota → Concepción stop 31 (ASSUMED location),-36.975625,-73.161650
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.9656_-73.15902,300 ida: Lota → Concepción stop 32 (ASSUMED location),-36.965597,-73.159019
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.95436_-73.15644,300 ida: Lota → Concepción stop 33 (ASSUMED location),-36.954364,-73.156437
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.94465_-73.15408,300 ida: Lota → Concepción stop 34 (ASSUMED location),-36.944648,-73.154084
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.94058_-73.15312,300 ida: Lota → Concepción stop 35 (ASSUMED location),-36.940581,-73.153123
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.93737_-73.15235,300 ida: Lota → Concepción stop 36 (ASSUMED location),-36.937368,-73.152350
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.93631_-73.15209,300 ida: Lota → Concepción stop 37 (ASSUMED location),-36.936307,-73.152088
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.91835_-73.14774,300 ida: Lota → Concepción stop 38 (ASSUMED location),-36.918347,-73.147736
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.91513_-73.14696,300 ida: Lota → Concepción stop 39 (ASSUMED location),-36.915129,-73.146961
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.91156_-73.14611,300 ida: Lota → Concepción stop 40 (ASSUMED location),-36.911560,-73.146114
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.90414_-73.14432,300 ida: Lota → Concepción stop 41 (ASSUMED location),-36.904140,-73.144319
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.9006_-73.14347,300 ida: Lota → Concepción stop 42 (ASSUMED location),-36.900596,-73.143466
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.89745_-73.14269,300 ida: Lota → Concepción stop 43 (ASSUMED location),-36.897452,-73.142694
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.89152_-73.14127,300 ida: Lota → Concepción stop 44 (ASSUMED location),-36.891524,-73.141272
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.88914_-73.1407,300 ida: Lota → Concepción stop 45 (ASSUMED location),-36.889136,-73.140702
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.88802_-73.14044,300 ida: Lota → Concepción stop 46 (ASSUMED location),-36.888024,-73.140440
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.88504_-73.13971,300 ida: Lota → Concepción stop 47 (ASSUMED location),-36.885038,-73.139709
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.88357_-73.13935,300 ida: Lota → Concepción stop 48 (ASSUMED location),-36.883569,-73.139351
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.87998_-73.13849,300 ida: Lota → Concepción stop 49 (ASSUMED location),-36.879983,-73.138486
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.87784_-73.13798,300 ida: Lota → Concepción stop 50 (ASSUMED location),-36.877838,-73.137982
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.87489_-73.13726,300 ida: Lota → Concepción stop 51 (ASSUMED location),-36.874889,-73.137256
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.86996_-73.13605,300 ida: Lota → Concepción stop 52 (ASSUMED location),-36.869958,-73.136047
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.8624_-73.13426,300 ida: Lota → Concepción stop 53 (ASSUMED location),-36.862396,-73.134264
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.8587_-73.13337,300 ida: Lota → Concepción stop 54 (ASSUMED location),-36.858705,-73.133366
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.85549_-73.13258,300 ida: Lota → Concepción stop 55 (ASSUMED location),-36.855492,-73.132577
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.85137_-73.13158,300 ida: Lota → Concepción stop 56 (ASSUMED location),-36.851366,-73.131585
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.84767_-73.13068,300 ida: Lota → Concepción stop 57 (ASSUMED location),-36.847670,-73.130677
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.84517_-73.13007,300 ida: Lota → Concepción stop 58 (ASSUMED location),-36.845173,-73.130073
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.84136_-73.12882,300 ida: Lota → Concepción stop 59 (ASSUMED location),-36.841356,-73.128820
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.83772_-73.11729,300 ida: Lota → Concepción stop 60 (ASSUMED location),-36.837717,-73.117286
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.83787_-73.11359,300 ida: Lota → Concepción stop 61 (ASSUMED location),-36.837869,-73.113590
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.83807_-73.10993,300 ida: Lota → Concepción stop 62 (ASSUMED location),-36.838067,-73.109932
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.83837_-73.10429,300 ida: Lota → Concepción stop 63 (ASSUMED location),-36.838372,-73.104287
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.83859_-73.1018,300 ida: Lota → Concepción stop 64 (ASSUMED location),-36.838592,-73.101798
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.83502_-73.10115,300 ida: Lota → Concepción stop 65 (ASSUMED location),-36.835024,-73.101153
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.83221_-73.09972,300 ida: Lota → Concepción stop 66 (ASSUMED location),-36.832208,-73.099725
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.81015_-73.08131,300 ida: Lota → Concepción stop 67 (ASSUMED location),-36.810146,-73.081312
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.80891_-73.07719,300 ida: Lota → Concepción stop 68 (ASSUMED location),-36.808906,-73.077189
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.81065_-73.07387,300 ida: Lota → Concepción stop 69 (ASSUMED location),-36.810650,-73.073873
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.81273_-73.06977,300 ida: Lota → Concepción stop 70 (ASSUMED location),-36.812730,-73.069770
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.81531_-73.0675,300 ida: Lota → Concepción stop 71 (ASSUMED location),-36.815306,-73.067496
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.823_-73.06017,300 ida: Lota → Concepción stop 72 (ASSUMED location),-36.823000,-73.060166
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.82209_-73.04875,300 ida: Lota → Concepción stop 73 (ASSUMED location),-36.822095,-73.048746
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.82148_-73.04723,300 ida: Lota → Concepción stop 74 (ASSUMED location),-36.821483,-73.047226
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.82058_-73.04507,300 ida: Lota → Concepción stop 75 (ASSUMED location),-36.820580,-73.045071
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.81978_-73.04318,300 ida: Lota → Concepción stop 76 (ASSUMED location),-36.819782,-73.043182
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.81891_-73.04101,300 ida: Lota → Concepción stop 77 (ASSUMED location),-36.818908,-73.041012
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.81781_-73.03839,300 ida: Lota → Concepción stop 78 (ASSUMED location),-36.817807,-73.038390
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.81676_-73.03595,300 ida: Lota → Concepción stop 79 (ASSUMED location),-36.816758,-73.035948
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.81617_-73.03155,300 ida: Lota → Concepción stop 80 (ASSUMED location),-36.816168,-73.031549
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.81828_-73.02374,300 ida: Lota → Concepción stop 81 (ASSUMED location),-36.818281,-73.023739
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.81896_-73.0219,300 ida: Lota → Concepción stop 82 (ASSUMED location),-36.818963,-73.021901
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.81978_-73.01946,300 ida: Lota → Concepción stop 83 (ASSUMED location),-36.819784,-73.019462
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.8205_-73.01382,300 ida: Lota → Concepción stop 84 (ASSUMED location),-36.820497,-73.013818
+assumed_osm_303ida_16817038_300idalotaconcepcion_-36.82158_-73.00934,300 ida: Lota → Concepción stop 85 (ASSUMED location),-36.821584,-73.009339
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.82169_-73.00738,300 regreso: Concepción → Lota stop 1 (ASSUMED location),-36.821686,-73.007381
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.82111_-73.01037,300 regreso: Concepción → Lota stop 2 (ASSUMED location),-36.821109,-73.010365
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.82022_-73.01417,300 regreso: Concepción → Lota stop 3 (ASSUMED location),-36.820223,-73.014168
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81922_-73.01798,300 regreso: Concepción → Lota stop 4 (ASSUMED location),-36.819216,-73.017985
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81879_-73.01917,300 regreso: Concepción → Lota stop 5 (ASSUMED location),-36.818794,-73.019170
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81813_-73.02097,300 regreso: Concepción → Lota stop 6 (ASSUMED location),-36.818130,-73.020966
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81689_-73.02428,300 regreso: Concepción → Lota stop 7 (ASSUMED location),-36.816885,-73.024280
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81483_-73.03009,300 regreso: Concepción → Lota stop 8 (ASSUMED location),-36.814826,-73.030086
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.8157_-73.03387,300 regreso: Concepción → Lota stop 9 (ASSUMED location),-36.815705,-73.033867
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81561_-73.03392,300 regreso: Concepción → Lota stop 10 (ASSUMED location),-36.815612,-73.033917
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81664_-73.03625,300 regreso: Concepción → Lota stop 11 (ASSUMED location),-36.816640,-73.036254
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81756_-73.03851,300 regreso: Concepción → Lota stop 12 (ASSUMED location),-36.817563,-73.038511
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81854_-73.04097,300 regreso: Concepción → Lota stop 13 (ASSUMED location),-36.818541,-73.040974
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81963_-73.04344,300 regreso: Concepción → Lota stop 14 (ASSUMED location),-36.819630,-73.043437
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.82076_-73.0462,300 regreso: Concepción → Lota stop 15 (ASSUMED location),-36.820759,-73.046198
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.82123_-73.04827,300 regreso: Concepción → Lota stop 16 (ASSUMED location),-36.821226,-73.048274
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81566_-73.05302,300 regreso: Concepción → Lota stop 17 (ASSUMED location),-36.815663,-73.053015
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81511_-73.06727,300 regreso: Concepción → Lota stop 18 (ASSUMED location),-36.815108,-73.067274
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81223_-73.07048,300 regreso: Concepción → Lota stop 19 (ASSUMED location),-36.812227,-73.070475
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.81016_-73.07458,300 regreso: Concepción → Lota stop 20 (ASSUMED location),-36.810162,-73.074581
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.80803_-73.07764,300 regreso: Concepción → Lota stop 21 (ASSUMED location),-36.808034,-73.077643
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.83854_-73.10079,300 regreso: Concepción → Lota stop 22 (ASSUMED location),-36.838536,-73.100791
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.83813_-73.10764,300 regreso: Concepción → Lota stop 23 (ASSUMED location),-36.838127,-73.107642
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.8377_-73.11513,300 regreso: Concepción → Lota stop 24 (ASSUMED location),-36.837702,-73.115127
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.83749_-73.11926,300 regreso: Concepción → Lota stop 25 (ASSUMED location),-36.837491,-73.119261
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.84139_-73.12923,300 regreso: Concepción → Lota stop 26 (ASSUMED location),-36.841385,-73.129226
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.84614_-73.13066,300 regreso: Concepción → Lota stop 27 (ASSUMED location),-36.846143,-73.130660
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.84811_-73.13114,300 regreso: Concepción → Lota stop 28 (ASSUMED location),-36.848106,-73.131137
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.85088_-73.1318,300 regreso: Concepción → Lota stop 29 (ASSUMED location),-36.850882,-73.131802
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.85555_-73.13294,300 regreso: Concepción → Lota stop 30 (ASSUMED location),-36.855553,-73.132939
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.86392_-73.13496,300 regreso: Concepción → Lota stop 31 (ASSUMED location),-36.863922,-73.134960
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.86988_-73.13641,300 regreso: Concepción → Lota stop 32 (ASSUMED location),-36.869878,-73.136407
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.87581_-73.13784,300 regreso: Concepción → Lota stop 33 (ASSUMED location),-36.875808,-73.137837
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.87775_-73.13832,300 regreso: Concepción → Lota stop 34 (ASSUMED location),-36.877753,-73.138323
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.88078_-73.13905,300 regreso: Concepción → Lota stop 35 (ASSUMED location),-36.880778,-73.139046
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.88382_-73.13977,300 regreso: Concepción → Lota stop 36 (ASSUMED location),-36.883822,-73.139774
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.88809_-73.1408,300 regreso: Concepción → Lota stop 37 (ASSUMED location),-36.888092,-73.140798
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.89169_-73.14167,300 regreso: Concepción → Lota stop 38 (ASSUMED location),-36.891688,-73.141672
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.89353_-73.14208,300 regreso: Concepción → Lota stop 39 (ASSUMED location),-36.893529,-73.142082
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.89745_-73.14306,300 regreso: Concepción → Lota stop 40 (ASSUMED location),-36.897453,-73.143060
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.90184_-73.1441,300 regreso: Concepción → Lota stop 41 (ASSUMED location),-36.901841,-73.144102
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.90468_-73.14479,300 regreso: Concepción → Lota stop 42 (ASSUMED location),-36.904683,-73.144794
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.91196_-73.1465,300 regreso: Concepción → Lota stop 43 (ASSUMED location),-36.911957,-73.146503
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.91884_-73.1482,300 regreso: Concepción → Lota stop 44 (ASSUMED location),-36.918839,-73.148200
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.92902_-73.15066,300 regreso: Concepción → Lota stop 45 (ASSUMED location),-36.929020,-73.150655
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.9377_-73.15275,300 regreso: Concepción → Lota stop 46 (ASSUMED location),-36.937699,-73.152753
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.94504_-73.15453,300 regreso: Concepción → Lota stop 47 (ASSUMED location),-36.945042,-73.154528
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.94723_-73.15503,300 regreso: Concepción → Lota stop 48 (ASSUMED location),-36.947225,-73.155029
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.95053_-73.15582,300 regreso: Concepción → Lota stop 49 (ASSUMED location),-36.950526,-73.155824
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.95471_-73.15686,300 regreso: Concepción → Lota stop 50 (ASSUMED location),-36.954706,-73.156857
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.95818_-73.1577,300 regreso: Concepción → Lota stop 51 (ASSUMED location),-36.958185,-73.157699
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.96546_-73.15942,300 regreso: Concepción → Lota stop 52 (ASSUMED location),-36.965457,-73.159423
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.98127_-73.16276,300 regreso: Concepción → Lota stop 53 (ASSUMED location),-36.981268,-73.162756
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.98489_-73.16289,300 regreso: Concepción → Lota stop 54 (ASSUMED location),-36.984887,-73.162895
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.98777_-73.163,300 regreso: Concepción → Lota stop 55 (ASSUMED location),-36.987766,-73.162997
+assumed_osm_304regreso_16751162_300regresoconcepcion_-36.99068_-73.16311,300 regreso: Concepción → Lota stop 56 (ASSUMED location),-36.990677,-73.163108
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.00754_-73.16019,300 regreso: Concepción → Lota stop 57 (ASSUMED location),-37.007536,-73.160192
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.01089_-73.15903,300 regreso: Concepción → Lota stop 58 (ASSUMED location),-37.010889,-73.159030
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.01303_-73.15834,300 regreso: Concepción → Lota stop 59 (ASSUMED location),-37.013032,-73.158340
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.01477_-73.15768,300 regreso: Concepción → Lota stop 60 (ASSUMED location),-37.014769,-73.157683
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.02237_-73.15377,300 regreso: Concepción → Lota stop 61 (ASSUMED location),-37.022368,-73.153769
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.02496_-73.15003,300 regreso: Concepción → Lota stop 62 (ASSUMED location),-37.024964,-73.150030
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.02617_-73.14893,300 regreso: Concepción → Lota stop 63 (ASSUMED location),-37.026169,-73.148932
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.02753_-73.14783,300 regreso: Concepción → Lota stop 64 (ASSUMED location),-37.027526,-73.147826
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.02829_-73.14735,300 regreso: Concepción → Lota stop 65 (ASSUMED location),-37.028290,-73.147345
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.02922_-73.1468,300 regreso: Concepción → Lota stop 66 (ASSUMED location),-37.029224,-73.146800
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.03434_-73.14482,300 regreso: Concepción → Lota stop 67 (ASSUMED location),-37.034341,-73.144824
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.03493_-73.1424,300 regreso: Concepción → Lota stop 68 (ASSUMED location),-37.034927,-73.142403
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.05_-73.1414,300 regreso: Concepción → Lota stop 69 (ASSUMED location),-37.049998,-73.141404
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.05505_-73.14035,300 regreso: Concepción → Lota stop 70 (ASSUMED location),-37.055047,-73.140350
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.0574_-73.1399,300 regreso: Concepción → Lota stop 71 (ASSUMED location),-37.057395,-73.139902
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.06255_-73.14146,300 regreso: Concepción → Lota stop 72 (ASSUMED location),-37.062548,-73.141459
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.06779_-73.1442,300 regreso: Concepción → Lota stop 73 (ASSUMED location),-37.067793,-73.144202
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.0753_-73.14829,300 regreso: Concepción → Lota stop 74 (ASSUMED location),-37.075297,-73.148291
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.07673_-73.15003,300 regreso: Concepción → Lota stop 75 (ASSUMED location),-37.076729,-73.150033
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.07735_-73.15284,300 regreso: Concepción → Lota stop 76 (ASSUMED location),-37.077346,-73.152839
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.07861_-73.15536,300 regreso: Concepción → Lota stop 77 (ASSUMED location),-37.078612,-73.155364
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.08001_-73.15695,300 regreso: Concepción → Lota stop 78 (ASSUMED location),-37.080013,-73.156950
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.08057_-73.15827,300 regreso: Concepción → Lota stop 79 (ASSUMED location),-37.080572,-73.158270
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.08144_-73.1599,300 regreso: Concepción → Lota stop 80 (ASSUMED location),-37.081443,-73.159900
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.08312_-73.16146,300 regreso: Concepción → Lota stop 81 (ASSUMED location),-37.083124,-73.161461
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.08441_-73.16192,300 regreso: Concepción → Lota stop 82 (ASSUMED location),-37.084414,-73.161917
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.08649_-73.16213,300 regreso: Concepción → Lota stop 83 (ASSUMED location),-37.086493,-73.162133
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.08911_-73.16159,300 regreso: Concepción → Lota stop 84 (ASSUMED location),-37.089106,-73.161588
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.0886_-73.15925,300 regreso: Concepción → Lota stop 85 (ASSUMED location),-37.088601,-73.159246
+assumed_osm_304regreso_16751162_300regresoconcepcion_-37.09134_-73.15699,300 regreso: Concepción → Lota stop 86 (ASSUMED location),-37.091345,-73.156992
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.09047_-73.15662,300 ida: Lota → Concepción stop 1 (ASSUMED location),-37.090470,-73.156625
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.08811_-73.15936,300 ida: Lota → Concepción stop 2 (ASSUMED location),-37.088111,-73.159359
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.08811_-73.16163,300 ida: Lota → Concepción stop 3 (ASSUMED location),-37.088109,-73.161634
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.08657_-73.16193,300 ida: Lota → Concepción stop 4 (ASSUMED location),-37.086575,-73.161933
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.08456_-73.16184,300 ida: Lota → Concepción stop 5 (ASSUMED location),-37.084559,-73.161842
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.0829_-73.16086,300 ida: Lota → Concepción stop 6 (ASSUMED location),-37.082897,-73.160865
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.08142_-73.15964,300 ida: Lota → Concepción stop 7 (ASSUMED location),-37.081417,-73.159643
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.08063_-73.15818,300 ida: Lota → Concepción stop 8 (ASSUMED location),-37.080635,-73.158185
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.07908_-73.15568,300 ida: Lota → Concepción stop 9 (ASSUMED location),-37.079083,-73.155675
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.07771_-73.15343,300 ida: Lota → Concepción stop 10 (ASSUMED location),-37.077714,-73.153430
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.07715_-73.15054,300 ida: Lota → Concepción stop 11 (ASSUMED location),-37.077151,-73.150540
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.0756_-73.14833,300 ida: Lota → Concepción stop 12 (ASSUMED location),-37.075604,-73.148331
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.06684_-73.14331,300 ida: Lota → Concepción stop 13 (ASSUMED location),-37.066838,-73.143310
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.06401_-73.14181,300 ida: Lota → Concepción stop 14 (ASSUMED location),-37.064011,-73.141807
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.05606_-73.13977,300 ida: Lota → Concepción stop 15 (ASSUMED location),-37.056060,-73.139771
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.0499_-73.14101,300 ida: Lota → Concepción stop 16 (ASSUMED location),-37.049902,-73.141010
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.03774_-73.14054,300 ida: Lota → Concepción stop 17 (ASSUMED location),-37.037737,-73.140540
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.03447_-73.14242,300 ida: Lota → Concepción stop 18 (ASSUMED location),-37.034471,-73.142425
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.03376_-73.14273,300 ida: Lota → Concepción stop 19 (ASSUMED location),-37.033760,-73.142732
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.02417_-73.1489,300 ida: Lota → Concepción stop 20 (ASSUMED location),-37.024169,-73.148896
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.02157_-73.1538,300 ida: Lota → Concepción stop 21 (ASSUMED location),-37.021575,-73.153796
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.00988_-73.15716,300 ida: Lota → Concepción stop 22 (ASSUMED location),-37.009879,-73.157160
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.00855_-73.15771,300 ida: Lota → Concepción stop 23 (ASSUMED location),-37.008553,-73.157709
+assumed_osm_304ida_16817038_300idalotaconcepcion_-37.0059_-73.15887,300 ida: Lota → Concepción stop 24 (ASSUMED location),-37.005903,-73.158867
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.99474_-73.1629,300 ida: Lota → Concepción stop 25 (ASSUMED location),-36.994736,-73.162902
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.99055_-73.1629,300 ida: Lota → Concepción stop 26 (ASSUMED location),-36.990554,-73.162895
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.9876_-73.16278,300 ida: Lota → Concepción stop 27 (ASSUMED location),-36.987599,-73.162779
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.98476_-73.16268,300 ida: Lota → Concepción stop 28 (ASSUMED location),-36.984763,-73.162681
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.98116_-73.16254,300 ida: Lota → Concepción stop 29 (ASSUMED location),-36.981161,-73.162536
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.97713_-73.16197,300 ida: Lota → Concepción stop 30 (ASSUMED location),-36.977130,-73.161969
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.97563_-73.16165,300 ida: Lota → Concepción stop 31 (ASSUMED location),-36.975625,-73.161650
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.9656_-73.15902,300 ida: Lota → Concepción stop 32 (ASSUMED location),-36.965597,-73.159019
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.95436_-73.15644,300 ida: Lota → Concepción stop 33 (ASSUMED location),-36.954364,-73.156437
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.94465_-73.15408,300 ida: Lota → Concepción stop 34 (ASSUMED location),-36.944648,-73.154084
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.94058_-73.15312,300 ida: Lota → Concepción stop 35 (ASSUMED location),-36.940581,-73.153123
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.93737_-73.15235,300 ida: Lota → Concepción stop 36 (ASSUMED location),-36.937368,-73.152350
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.93631_-73.15209,300 ida: Lota → Concepción stop 37 (ASSUMED location),-36.936307,-73.152088
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.91835_-73.14774,300 ida: Lota → Concepción stop 38 (ASSUMED location),-36.918347,-73.147736
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.91513_-73.14696,300 ida: Lota → Concepción stop 39 (ASSUMED location),-36.915129,-73.146961
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.91156_-73.14611,300 ida: Lota → Concepción stop 40 (ASSUMED location),-36.911560,-73.146114
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.90414_-73.14432,300 ida: Lota → Concepción stop 41 (ASSUMED location),-36.904140,-73.144319
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.9006_-73.14347,300 ida: Lota → Concepción stop 42 (ASSUMED location),-36.900596,-73.143466
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.89745_-73.14269,300 ida: Lota → Concepción stop 43 (ASSUMED location),-36.897452,-73.142694
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.89152_-73.14127,300 ida: Lota → Concepción stop 44 (ASSUMED location),-36.891524,-73.141272
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.88914_-73.1407,300 ida: Lota → Concepción stop 45 (ASSUMED location),-36.889136,-73.140702
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.88802_-73.14044,300 ida: Lota → Concepción stop 46 (ASSUMED location),-36.888024,-73.140440
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.88504_-73.13971,300 ida: Lota → Concepción stop 47 (ASSUMED location),-36.885038,-73.139709
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.88357_-73.13935,300 ida: Lota → Concepción stop 48 (ASSUMED location),-36.883569,-73.139351
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.87998_-73.13849,300 ida: Lota → Concepción stop 49 (ASSUMED location),-36.879983,-73.138486
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.87784_-73.13798,300 ida: Lota → Concepción stop 50 (ASSUMED location),-36.877838,-73.137982
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.87489_-73.13726,300 ida: Lota → Concepción stop 51 (ASSUMED location),-36.874889,-73.137256
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.86996_-73.13605,300 ida: Lota → Concepción stop 52 (ASSUMED location),-36.869958,-73.136047
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.8624_-73.13426,300 ida: Lota → Concepción stop 53 (ASSUMED location),-36.862396,-73.134264
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.8587_-73.13337,300 ida: Lota → Concepción stop 54 (ASSUMED location),-36.858705,-73.133366
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.85549_-73.13258,300 ida: Lota → Concepción stop 55 (ASSUMED location),-36.855492,-73.132577
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.85137_-73.13158,300 ida: Lota → Concepción stop 56 (ASSUMED location),-36.851366,-73.131585
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.84767_-73.13068,300 ida: Lota → Concepción stop 57 (ASSUMED location),-36.847670,-73.130677
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.84517_-73.13007,300 ida: Lota → Concepción stop 58 (ASSUMED location),-36.845173,-73.130073
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.84136_-73.12882,300 ida: Lota → Concepción stop 59 (ASSUMED location),-36.841356,-73.128820
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.83772_-73.11729,300 ida: Lota → Concepción stop 60 (ASSUMED location),-36.837717,-73.117286
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.83787_-73.11359,300 ida: Lota → Concepción stop 61 (ASSUMED location),-36.837869,-73.113590
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.83807_-73.10993,300 ida: Lota → Concepción stop 62 (ASSUMED location),-36.838067,-73.109932
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.83837_-73.10429,300 ida: Lota → Concepción stop 63 (ASSUMED location),-36.838372,-73.104287
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.83859_-73.1018,300 ida: Lota → Concepción stop 64 (ASSUMED location),-36.838592,-73.101798
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.83502_-73.10115,300 ida: Lota → Concepción stop 65 (ASSUMED location),-36.835024,-73.101153
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.83221_-73.09972,300 ida: Lota → Concepción stop 66 (ASSUMED location),-36.832208,-73.099725
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.81015_-73.08131,300 ida: Lota → Concepción stop 67 (ASSUMED location),-36.810146,-73.081312
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.80891_-73.07719,300 ida: Lota → Concepción stop 68 (ASSUMED location),-36.808906,-73.077189
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.81065_-73.07387,300 ida: Lota → Concepción stop 69 (ASSUMED location),-36.810650,-73.073873
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.81273_-73.06977,300 ida: Lota → Concepción stop 70 (ASSUMED location),-36.812730,-73.069770
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.81531_-73.0675,300 ida: Lota → Concepción stop 71 (ASSUMED location),-36.815306,-73.067496
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.823_-73.06017,300 ida: Lota → Concepción stop 72 (ASSUMED location),-36.823000,-73.060166
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.82209_-73.04875,300 ida: Lota → Concepción stop 73 (ASSUMED location),-36.822095,-73.048746
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.82148_-73.04723,300 ida: Lota → Concepción stop 74 (ASSUMED location),-36.821483,-73.047226
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.82058_-73.04507,300 ida: Lota → Concepción stop 75 (ASSUMED location),-36.820580,-73.045071
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.81978_-73.04318,300 ida: Lota → Concepción stop 76 (ASSUMED location),-36.819782,-73.043182
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.81891_-73.04101,300 ida: Lota → Concepción stop 77 (ASSUMED location),-36.818908,-73.041012
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.81781_-73.03839,300 ida: Lota → Concepción stop 78 (ASSUMED location),-36.817807,-73.038390
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.81676_-73.03595,300 ida: Lota → Concepción stop 79 (ASSUMED location),-36.816758,-73.035948
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.81617_-73.03155,300 ida: Lota → Concepción stop 80 (ASSUMED location),-36.816168,-73.031549
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.81828_-73.02374,300 ida: Lota → Concepción stop 81 (ASSUMED location),-36.818281,-73.023739
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.81896_-73.0219,300 ida: Lota → Concepción stop 82 (ASSUMED location),-36.818963,-73.021901
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.81978_-73.01946,300 ida: Lota → Concepción stop 83 (ASSUMED location),-36.819784,-73.019462
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.8205_-73.01382,300 ida: Lota → Concepción stop 84 (ASSUMED location),-36.820497,-73.013818
+assumed_osm_304ida_16817038_300idalotaconcepcion_-36.82158_-73.00934,300 ida: Lota → Concepción stop 85 (ASSUMED location),-36.821584,-73.009339
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.02496_-73.15003,300 regreso: Concepción → Lota stop 62 (ASSUMED location),-37.024964,-73.150030
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.02617_-73.14893,300 regreso: Concepción → Lota stop 63 (ASSUMED location),-37.026169,-73.148932
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.02753_-73.14783,300 regreso: Concepción → Lota stop 64 (ASSUMED location),-37.027526,-73.147826
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.02829_-73.14735,300 regreso: Concepción → Lota stop 65 (ASSUMED location),-37.028290,-73.147345
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.02922_-73.1468,300 regreso: Concepción → Lota stop 66 (ASSUMED location),-37.029224,-73.146800
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.03434_-73.14482,300 regreso: Concepción → Lota stop 67 (ASSUMED location),-37.034341,-73.144824
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.03493_-73.1424,300 regreso: Concepción → Lota stop 68 (ASSUMED location),-37.034927,-73.142403
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.05_-73.1414,300 regreso: Concepción → Lota stop 69 (ASSUMED location),-37.049998,-73.141404
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.05505_-73.14035,300 regreso: Concepción → Lota stop 70 (ASSUMED location),-37.055047,-73.140350
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.0574_-73.1399,300 regreso: Concepción → Lota stop 71 (ASSUMED location),-37.057395,-73.139902
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.06255_-73.14146,300 regreso: Concepción → Lota stop 72 (ASSUMED location),-37.062548,-73.141459
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.06779_-73.1442,300 regreso: Concepción → Lota stop 73 (ASSUMED location),-37.067793,-73.144202
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.0753_-73.14829,300 regreso: Concepción → Lota stop 74 (ASSUMED location),-37.075297,-73.148291
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.07673_-73.15003,300 regreso: Concepción → Lota stop 75 (ASSUMED location),-37.076729,-73.150033
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.07735_-73.15284,300 regreso: Concepción → Lota stop 76 (ASSUMED location),-37.077346,-73.152839
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.07861_-73.15536,300 regreso: Concepción → Lota stop 77 (ASSUMED location),-37.078612,-73.155364
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.08001_-73.15695,300 regreso: Concepción → Lota stop 78 (ASSUMED location),-37.080013,-73.156950
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.08057_-73.15827,300 regreso: Concepción → Lota stop 79 (ASSUMED location),-37.080572,-73.158270
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.08144_-73.1599,300 regreso: Concepción → Lota stop 80 (ASSUMED location),-37.081443,-73.159900
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.08312_-73.16146,300 regreso: Concepción → Lota stop 81 (ASSUMED location),-37.083124,-73.161461
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.08441_-73.16192,300 regreso: Concepción → Lota stop 82 (ASSUMED location),-37.084414,-73.161917
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.08649_-73.16213,300 regreso: Concepción → Lota stop 83 (ASSUMED location),-37.086493,-73.162133
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.08911_-73.16159,300 regreso: Concepción → Lota stop 84 (ASSUMED location),-37.089106,-73.161588
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.0886_-73.15925,300 regreso: Concepción → Lota stop 85 (ASSUMED location),-37.088601,-73.159246
+assumed_osm_localregreso_16751162_300regresoconcepcion_-37.09134_-73.15699,300 regreso: Concepción → Lota stop 86 (ASSUMED location),-37.091345,-73.156992
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.09047_-73.15662,300 ida: Lota → Concepción stop 1 (ASSUMED location),-37.090470,-73.156625
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.08811_-73.15936,300 ida: Lota → Concepción stop 2 (ASSUMED location),-37.088111,-73.159359
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.08811_-73.16163,300 ida: Lota → Concepción stop 3 (ASSUMED location),-37.088109,-73.161634
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.08657_-73.16193,300 ida: Lota → Concepción stop 4 (ASSUMED location),-37.086575,-73.161933
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.08456_-73.16184,300 ida: Lota → Concepción stop 5 (ASSUMED location),-37.084559,-73.161842
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.0829_-73.16086,300 ida: Lota → Concepción stop 6 (ASSUMED location),-37.082897,-73.160865
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.08142_-73.15964,300 ida: Lota → Concepción stop 7 (ASSUMED location),-37.081417,-73.159643
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.08063_-73.15818,300 ida: Lota → Concepción stop 8 (ASSUMED location),-37.080635,-73.158185
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.07908_-73.15568,300 ida: Lota → Concepción stop 9 (ASSUMED location),-37.079083,-73.155675
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.07771_-73.15343,300 ida: Lota → Concepción stop 10 (ASSUMED location),-37.077714,-73.153430
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.07715_-73.15054,300 ida: Lota → Concepción stop 11 (ASSUMED location),-37.077151,-73.150540
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.0756_-73.14833,300 ida: Lota → Concepción stop 12 (ASSUMED location),-37.075604,-73.148331
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.06684_-73.14331,300 ida: Lota → Concepción stop 13 (ASSUMED location),-37.066838,-73.143310
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.06401_-73.14181,300 ida: Lota → Concepción stop 14 (ASSUMED location),-37.064011,-73.141807
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.05606_-73.13977,300 ida: Lota → Concepción stop 15 (ASSUMED location),-37.056060,-73.139771
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.0499_-73.14101,300 ida: Lota → Concepción stop 16 (ASSUMED location),-37.049902,-73.141010
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.03774_-73.14054,300 ida: Lota → Concepción stop 17 (ASSUMED location),-37.037737,-73.140540
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.03447_-73.14242,300 ida: Lota → Concepción stop 18 (ASSUMED location),-37.034471,-73.142425
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.03376_-73.14273,300 ida: Lota → Concepción stop 19 (ASSUMED location),-37.033760,-73.142732
+assumed_osm_localida_16817038_300idalotaconcepcion_-37.02417_-73.1489,300 ida: Lota → Concepción stop 20 (ASSUMED location),-37.024169,-73.148896
+assumed_osm_44e_16735770_44ehualpenlomasstop1_-36.77865_-73.09817,44E: Hualpén → Lomas stop 1 (ASSUMED location),-36.778648,-73.098168
+assumed_osm_44e_16735770_44ehualpenlomasstop2_-36.77714_-73.09733,44E: Hualpén → Lomas stop 2 (ASSUMED location),-36.777144,-73.097328
+assumed_osm_44e_16735770_44ehualpenlomasstop3_-36.7773_-73.09428,44E: Hualpén → Lomas stop 3 (ASSUMED location),-36.777304,-73.094275
+assumed_osm_44e_16735770_44ehualpenlomasstop4_-36.77991_-73.09446,44E: Hualpén → Lomas stop 4 (ASSUMED location),-36.779911,-73.094464
+assumed_osm_44e_16735770_44ehualpenlomasstop5_-36.78094_-73.09632,44E: Hualpén → Lomas stop 5 (ASSUMED location),-36.780935,-73.096325
+assumed_osm_44e_16735770_44ehualpenlomasstop6_-36.78448_-73.0967,44E: Hualpén → Lomas stop 6 (ASSUMED location),-36.784483,-73.096704
+assumed_osm_44e_16735770_44ehualpenlomasstop7_-36.78673_-73.09915,44E: Hualpén → Lomas stop 7 (ASSUMED location),-36.786728,-73.099150
+assumed_osm_44e_16735770_44ehualpenlomasstop8_-36.78671_-73.09676,44E: Hualpén → Lomas stop 8 (ASSUMED location),-36.786711,-73.096759
+assumed_osm_44e_16735770_44ehualpenlomasstop9_-36.78761_-73.09447,44E: Hualpén → Lomas stop 9 (ASSUMED location),-36.787613,-73.094470
+assumed_osm_44e_16735770_44ehualpenlomasstop1_-36.78875_-73.09446,44E: Hualpén → Lomas stop 10 (ASSUMED location),-36.788754,-73.094455
+assumed_osm_44e_16735770_44ehualpenlomasstop1_-36.79029_-73.09446,44E: Hualpén → Lomas stop 11 (ASSUMED location),-36.790293,-73.094462
+assumed_osm_44e_16735770_44ehualpenlomasstop1_-36.79323_-73.09374,44E: Hualpén → Lomas stop 12 (ASSUMED location),-36.793233,-73.093744
+assumed_osm_44e_16735770_44ehualpenlomasstop1_-36.79557_-73.09351,44E: Hualpén → Lomas stop 13 (ASSUMED location),-36.795570,-73.093506
+assumed_osm_44e_16735770_44ehualpenlomasstop1_-36.80112_-73.08412,44E: Hualpén → Lomas stop 14 (ASSUMED location),-36.801117,-73.084123
+assumed_osm_44e_16735770_44ehualpenlomasstop1_-36.80406_-73.08099,44E: Hualpén → Lomas stop 15 (ASSUMED location),-36.804057,-73.080994
+assumed_osm_44e_16735770_44ehualpenlomasstop1_-36.8087_-73.07727,44E: Hualpén → Lomas stop 16 (ASSUMED location),-36.808703,-73.077272
+assumed_osm_44e_16735770_44ehualpenlomasstop1_-36.81065_-73.07387,44E: Hualpén → Lomas stop 17 (ASSUMED location),-36.810650,-73.073873
+assumed_osm_44e_16735770_44ehualpenlomasstop1_-36.81273_-73.06977,44E: Hualpén → Lomas stop 18 (ASSUMED location),-36.812730,-73.069770
+assumed_osm_44e_16735770_44ehualpenlomasstop1_-36.81531_-73.0675,44E: Hualpén → Lomas stop 19 (ASSUMED location),-36.815306,-73.067496
+assumed_osm_44e_16735770_44ehualpenlomasstop2_-36.82278_-73.06394,44E: Hualpén → Lomas stop 20 (ASSUMED location),-36.822784,-73.063943
+assumed_osm_44e_16735770_44ehualpenlomasstop2_-36.82613_-73.06171,44E: Hualpén → Lomas stop 21 (ASSUMED location),-36.826130,-73.061713
+assumed_osm_44e_16735770_44ehualpenlomasstop2_-36.82452_-73.05777,44E: Hualpén → Lomas stop 22 (ASSUMED location),-36.824519,-73.057772
+assumed_osm_44e_16735770_44ehualpenlomasstop2_-36.82398_-73.0564,44E: Hualpén → Lomas stop 23 (ASSUMED location),-36.823982,-73.056397
+assumed_osm_44e_16735770_44ehualpenlomasstop2_-36.82511_-73.05397,44E: Hualpén → Lomas stop 24 (ASSUMED location),-36.825112,-73.053974
+assumed_osm_44e_16735770_44ehualpenlomasstop2_-36.82583_-73.05352,44E: Hualpén → Lomas stop 25 (ASSUMED location),-36.825830,-73.053517
+assumed_osm_44e_16735770_44ehualpenlomasstop2_-36.82714_-73.05263,44E: Hualpén → Lomas stop 26 (ASSUMED location),-36.827137,-73.052634
+assumed_osm_44e_16735770_44ehualpenlomasstop2_-36.82921_-73.05133,44E: Hualpén → Lomas stop 27 (ASSUMED location),-36.829207,-73.051329
+assumed_osm_44e_16735770_44ehualpenlomasstop2_-36.83101_-73.04885,44E: Hualpén → Lomas stop 28 (ASSUMED location),-36.831015,-73.048850
+assumed_osm_44e_16735770_44ehualpenlomasstop2_-36.82996_-73.04633,44E: Hualpén → Lomas stop 29 (ASSUMED location),-36.829956,-73.046328
+assumed_osm_44e_16735770_44ehualpenlomasstop3_-36.82892_-73.04384,44E: Hualpén → Lomas stop 30 (ASSUMED location),-36.828921,-73.043837
+assumed_osm_44e_16735770_44ehualpenlomasstop3_-36.82787_-73.04128,44E: Hualpén → Lomas stop 31 (ASSUMED location),-36.827865,-73.041283
+assumed_osm_44e_16735770_44ehualpenlomasstop3_-36.82692_-73.03898,44E: Hualpén → Lomas stop 32 (ASSUMED location),-36.826922,-73.038983
+assumed_osm_44e_16735770_44ehualpenlomasstop3_-36.82404_-73.03657,44E: Hualpén → Lomas stop 33 (ASSUMED location),-36.824038,-73.036571
+assumed_osm_44e_16735770_44ehualpenlomasstop3_-36.82217_-73.03608,44E: Hualpén → Lomas stop 34 (ASSUMED location),-36.822172,-73.036083
+assumed_osm_44e_16735770_44ehualpenlomasstop3_-36.82043_-73.03583,44E: Hualpén → Lomas stop 35 (ASSUMED location),-36.820425,-73.035834
+assumed_osm_44e_16735770_44ehualpenlomasstop3_-36.8142_-73.03838,44E: Hualpén → Lomas stop 36 (ASSUMED location),-36.814197,-73.038378
+assumed_osm_44e_16735770_44ehualpenlomasstop3_-36.8106_-73.03525,44E: Hualpén → Lomas stop 37 (ASSUMED location),-36.810598,-73.035246
+assumed_osm_44e_16735770_44ehualpenlomasstop3_-36.80969_-73.03436,44E: Hualpén → Lomas stop 38 (ASSUMED location),-36.809686,-73.034363
+assumed_osm_44e_16735770_44ehualpenlomasstop3_-36.80162_-73.0298,44E: Hualpén → Lomas stop 39 (ASSUMED location),-36.801617,-73.029805
+assumed_osm_44e_16735770_44ehualpenlomasstop4_-36.79904_-73.03187,44E: Hualpén → Lomas stop 40 (ASSUMED location),-36.799041,-73.031868
+assumed_osm_44e_16735770_44ehualpenlomasstop4_-36.79727_-73.03291,44E: Hualpén → Lomas stop 41 (ASSUMED location),-36.797267,-73.032914
+assumed_osm_44e_16735770_44ehualpenlomasstop4_-36.79582_-73.03388,44E: Hualpén → Lomas stop 42 (ASSUMED location),-36.795817,-73.033882
+assumed_osm_44e_16735770_44ehualpenlomasstop4_-36.79485_-73.03448,44E: Hualpén → Lomas stop 43 (ASSUMED location),-36.794851,-73.034483
+assumed_osm_44e_16735770_44ehualpenlomasstop4_-36.7927_-73.03677,44E: Hualpén → Lomas stop 44 (ASSUMED location),-36.792700,-73.036766
+assumed_osm_44e_16735770_44ehualpenlomasstop4_-36.78983_-73.03438,44E: Hualpén → Lomas stop 45 (ASSUMED location),-36.789831,-73.034382
+assumed_osm_44e_16735770_44ehualpenlomasstop4_-36.78033_-73.04789,44E: Hualpén → Lomas stop 46 (ASSUMED location),-36.780332,-73.047890
+assumed_osm_44e_16735770_44ehualpenlomasstop4_-36.78046_-73.05862,44E: Hualpén → Lomas stop 47 (ASSUMED location),-36.780464,-73.058622
+assumed_osm_44e_16735770_44ehualpenlomasstop4_-36.78474_-73.05978,44E: Hualpén → Lomas stop 48 (ASSUMED location),-36.784744,-73.059775
+assumed_osm_44e_16735770_44ehualpenlomasstop4_-36.78906_-73.06171,44E: Hualpén → Lomas stop 49 (ASSUMED location),-36.789059,-73.061707
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.77865_-73.09817,44A: Hualpencillo → Lomas stop 1 (ASSUMED location),-36.778648,-73.098168
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.77714_-73.09733,44A: Hualpencillo → Lomas stop 2 (ASSUMED location),-36.777144,-73.097328
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.7773_-73.09428,44A: Hualpencillo → Lomas stop 3 (ASSUMED location),-36.777304,-73.094275
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.77991_-73.09446,44A: Hualpencillo → Lomas stop 4 (ASSUMED location),-36.779911,-73.094464
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.78094_-73.09632,44A: Hualpencillo → Lomas stop 5 (ASSUMED location),-36.780935,-73.096325
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.78448_-73.0967,44A: Hualpencillo → Lomas stop 6 (ASSUMED location),-36.784483,-73.096704
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.78673_-73.09915,44A: Hualpencillo → Lomas stop 7 (ASSUMED location),-36.786728,-73.099150
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.78671_-73.09676,44A: Hualpencillo → Lomas stop 8 (ASSUMED location),-36.786711,-73.096759
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.78761_-73.09447,44A: Hualpencillo → Lomas stop 9 (ASSUMED location),-36.787613,-73.094470
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.78875_-73.09446,44A: Hualpencillo → Lomas stop 10 (ASSUMED location),-36.788754,-73.094455
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.79029_-73.09446,44A: Hualpencillo → Lomas stop 11 (ASSUMED location),-36.790293,-73.094462
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.79323_-73.09374,44A: Hualpencillo → Lomas stop 12 (ASSUMED location),-36.793233,-73.093744
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.79557_-73.09351,44A: Hualpencillo → Lomas stop 13 (ASSUMED location),-36.795570,-73.093506
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.80112_-73.08412,44A: Hualpencillo → Lomas stop 14 (ASSUMED location),-36.801117,-73.084123
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.80406_-73.08099,44A: Hualpencillo → Lomas stop 15 (ASSUMED location),-36.804057,-73.080994
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.8087_-73.07727,44A: Hualpencillo → Lomas stop 16 (ASSUMED location),-36.808703,-73.077272
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.81065_-73.07387,44A: Hualpencillo → Lomas stop 17 (ASSUMED location),-36.810650,-73.073873
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.81273_-73.06977,44A: Hualpencillo → Lomas stop 18 (ASSUMED location),-36.812730,-73.069770
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.81531_-73.0675,44A: Hualpencillo → Lomas stop 19 (ASSUMED location),-36.815306,-73.067496
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82278_-73.06394,44A: Hualpencillo → Lomas stop 20 (ASSUMED location),-36.822784,-73.063943
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82613_-73.06171,44A: Hualpencillo → Lomas stop 21 (ASSUMED location),-36.826130,-73.061713
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82452_-73.05777,44A: Hualpencillo → Lomas stop 22 (ASSUMED location),-36.824519,-73.057772
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82398_-73.0564,44A: Hualpencillo → Lomas stop 23 (ASSUMED location),-36.823982,-73.056397
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82511_-73.05397,44A: Hualpencillo → Lomas stop 24 (ASSUMED location),-36.825112,-73.053974
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82583_-73.05352,44A: Hualpencillo → Lomas stop 25 (ASSUMED location),-36.825830,-73.053517
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82714_-73.05263,44A: Hualpencillo → Lomas stop 26 (ASSUMED location),-36.827137,-73.052634
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82921_-73.05133,44A: Hualpencillo → Lomas stop 27 (ASSUMED location),-36.829207,-73.051329
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.83101_-73.04885,44A: Hualpencillo → Lomas stop 28 (ASSUMED location),-36.831015,-73.048850
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82996_-73.04633,44A: Hualpencillo → Lomas stop 29 (ASSUMED location),-36.829956,-73.046328
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82892_-73.04384,44A: Hualpencillo → Lomas stop 30 (ASSUMED location),-36.828921,-73.043837
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82787_-73.04128,44A: Hualpencillo → Lomas stop 31 (ASSUMED location),-36.827865,-73.041283
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82692_-73.03898,44A: Hualpencillo → Lomas stop 32 (ASSUMED location),-36.826922,-73.038983
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82404_-73.03657,44A: Hualpencillo → Lomas stop 33 (ASSUMED location),-36.824038,-73.036571
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82217_-73.03608,44A: Hualpencillo → Lomas stop 34 (ASSUMED location),-36.822172,-73.036083
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.82043_-73.03583,44A: Hualpencillo → Lomas stop 35 (ASSUMED location),-36.820425,-73.035834
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.8142_-73.03838,44A: Hualpencillo → Lomas stop 36 (ASSUMED location),-36.814197,-73.038378
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.8106_-73.03525,44A: Hualpencillo → Lomas stop 37 (ASSUMED location),-36.810598,-73.035246
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.80969_-73.03436,44A: Hualpencillo → Lomas stop 38 (ASSUMED location),-36.809686,-73.034363
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.80162_-73.0298,44A: Hualpencillo → Lomas stop 39 (ASSUMED location),-36.801617,-73.029805
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.79904_-73.03187,44A: Hualpencillo → Lomas stop 40 (ASSUMED location),-36.799041,-73.031868
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.79727_-73.03291,44A: Hualpencillo → Lomas stop 41 (ASSUMED location),-36.797267,-73.032914
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.79582_-73.03388,44A: Hualpencillo → Lomas stop 42 (ASSUMED location),-36.795817,-73.033882
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.79485_-73.03448,44A: Hualpencillo → Lomas stop 43 (ASSUMED location),-36.794851,-73.034483
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.78904_-73.03829,44A: Hualpencillo → Lomas stop 44 (ASSUMED location),-36.789045,-73.038291
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.78033_-73.04789,44A: Hualpencillo → Lomas stop 45 (ASSUMED location),-36.780332,-73.047890
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.78046_-73.05862,44A: Hualpencillo → Lomas stop 46 (ASSUMED location),-36.780464,-73.058622
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.78474_-73.05978,44A: Hualpencillo → Lomas stop 47 (ASSUMED location),-36.784744,-73.059775
+assumed_osm_44a_20732635_44ahualpencillolomas_-36.78906_-73.06171,44A: Hualpencillo → Lomas stop 48 (ASSUMED location),-36.789059,-73.061707
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78322_-73.05881,44B: Lomas → Hualpencillo stop 1 (ASSUMED location),-36.783215,-73.058811
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78045_-73.04795,44B: Lomas → Hualpencillo stop 2 (ASSUMED location),-36.780449,-73.047947
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78038_-73.04162,44B: Lomas → Hualpencillo stop 3 (ASSUMED location),-36.780384,-73.041619
+assumed_osm_44b_20732636_44blomashualpencillo_-36.7815_-73.04207,44B: Lomas → Hualpencillo stop 4 (ASSUMED location),-36.781498,-73.042070
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78285_-73.04229,44B: Lomas → Hualpencillo stop 5 (ASSUMED location),-36.782845,-73.042293
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78402_-73.04277,44B: Lomas → Hualpencillo stop 6 (ASSUMED location),-36.784021,-73.042772
+assumed_osm_44b_20732636_44blomashualpencillo_-36.7888_-73.04295,44B: Lomas → Hualpencillo stop 7 (ASSUMED location),-36.788799,-73.042949
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78902_-73.0425,44B: Lomas → Hualpencillo stop 8 (ASSUMED location),-36.789016,-73.042496
+assumed_osm_44b_20732636_44blomashualpencillo_-36.7887_-73.04113,44B: Lomas → Hualpencillo stop 9 (ASSUMED location),-36.788700,-73.041126
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78909_-73.03845,44B: Lomas → Hualpencillo stop 10 (ASSUMED location),-36.789088,-73.038446
+assumed_osm_44b_20732636_44blomashualpencillo_-36.79117_-73.03779,44B: Lomas → Hualpencillo stop 11 (ASSUMED location),-36.791171,-73.037787
+assumed_osm_44b_20732636_44blomashualpencillo_-36.79243_-73.03695,44B: Lomas → Hualpencillo stop 12 (ASSUMED location),-36.792425,-73.036952
+assumed_osm_44b_20732636_44blomashualpencillo_-36.79368_-73.03581,44B: Lomas → Hualpencillo stop 13 (ASSUMED location),-36.793680,-73.035809
+assumed_osm_44b_20732636_44blomashualpencillo_-36.79525_-73.03453,44B: Lomas → Hualpencillo stop 14 (ASSUMED location),-36.795254,-73.034530
+assumed_osm_44b_20732636_44blomashualpencillo_-36.79683_-73.03349,44B: Lomas → Hualpencillo stop 15 (ASSUMED location),-36.796835,-73.033489
+assumed_osm_44b_20732636_44blomashualpencillo_-36.79746_-73.03312,44B: Lomas → Hualpencillo stop 16 (ASSUMED location),-36.797464,-73.033122
+assumed_osm_44b_20732636_44blomashualpencillo_-36.79928_-73.03194,44B: Lomas → Hualpencillo stop 17 (ASSUMED location),-36.799281,-73.031943
+assumed_osm_44b_20732636_44blomashualpencillo_-36.8023_-73.03101,44B: Lomas → Hualpencillo stop 18 (ASSUMED location),-36.802302,-73.031009
+assumed_osm_44b_20732636_44blomashualpencillo_-36.80342_-73.03003,44B: Lomas → Hualpencillo stop 19 (ASSUMED location),-36.803420,-73.030032
+assumed_osm_44b_20732636_44blomashualpencillo_-36.80709_-73.03226,44B: Lomas → Hualpencillo stop 20 (ASSUMED location),-36.807086,-73.032255
+assumed_osm_44b_20732636_44blomashualpencillo_-36.80823_-73.03323,44B: Lomas → Hualpencillo stop 21 (ASSUMED location),-36.808227,-73.033234
+assumed_osm_44b_20732636_44blomashualpencillo_-36.81006_-73.03502,44B: Lomas → Hualpencillo stop 22 (ASSUMED location),-36.810059,-73.035017
+assumed_osm_44b_20732636_44blomashualpencillo_-36.81266_-73.03732,44B: Lomas → Hualpencillo stop 23 (ASSUMED location),-36.812656,-73.037324
+assumed_osm_44b_20732636_44blomashualpencillo_-36.81405_-73.03925,44B: Lomas → Hualpencillo stop 24 (ASSUMED location),-36.814052,-73.039251
+assumed_osm_44b_20732636_44blomashualpencillo_-36.8172_-73.03825,44B: Lomas → Hualpencillo stop 25 (ASSUMED location),-36.817198,-73.038254
+assumed_osm_44b_20732636_44blomashualpencillo_-36.81938_-73.03679,44B: Lomas → Hualpencillo stop 26 (ASSUMED location),-36.819375,-73.036793
+assumed_osm_44b_20732636_44blomashualpencillo_-36.82098_-73.04033,44B: Lomas → Hualpencillo stop 27 (ASSUMED location),-36.820984,-73.040330
+assumed_osm_44b_20732636_44blomashualpencillo_-36.82312_-73.04539,44B: Lomas → Hualpencillo stop 28 (ASSUMED location),-36.823120,-73.045386
+assumed_osm_44b_20732636_44blomashualpencillo_-36.82505_-73.05007,44B: Lomas → Hualpencillo stop 29 (ASSUMED location),-36.825051,-73.050066
+assumed_osm_44b_20732636_44blomashualpencillo_-36.82657_-73.05375,44B: Lomas → Hualpencillo stop 30 (ASSUMED location),-36.826568,-73.053745
+assumed_osm_44b_20732636_44blomashualpencillo_-36.8282_-73.05766,44B: Lomas → Hualpencillo stop 31 (ASSUMED location),-36.828200,-73.057656
+assumed_osm_44b_20732636_44blomashualpencillo_-36.82848_-73.05954,44B: Lomas → Hualpencillo stop 32 (ASSUMED location),-36.828477,-73.059543
+assumed_osm_44b_20732636_44blomashualpencillo_-36.82616_-73.06108,44B: Lomas → Hualpencillo stop 33 (ASSUMED location),-36.826164,-73.061077
+assumed_osm_44b_20732636_44blomashualpencillo_-36.82333_-73.06295,44B: Lomas → Hualpencillo stop 34 (ASSUMED location),-36.823329,-73.062946
+assumed_osm_44b_20732636_44blomashualpencillo_-36.81511_-73.06727,44B: Lomas → Hualpencillo stop 35 (ASSUMED location),-36.815108,-73.067274
+assumed_osm_44b_20732636_44blomashualpencillo_-36.81223_-73.07048,44B: Lomas → Hualpencillo stop 36 (ASSUMED location),-36.812227,-73.070475
+assumed_osm_44b_20732636_44blomashualpencillo_-36.81016_-73.07458,44B: Lomas → Hualpencillo stop 37 (ASSUMED location),-36.810162,-73.074581
+assumed_osm_44b_20732636_44blomashualpencillo_-36.8086_-73.07714,44B: Lomas → Hualpencillo stop 38 (ASSUMED location),-36.808600,-73.077141
+assumed_osm_44b_20732636_44blomashualpencillo_-36.8033_-73.08156,44B: Lomas → Hualpencillo stop 39 (ASSUMED location),-36.803297,-73.081559
+assumed_osm_44b_20732636_44blomashualpencillo_-36.79998_-73.08482,44B: Lomas → Hualpencillo stop 40 (ASSUMED location),-36.799980,-73.084819
+assumed_osm_44b_20732636_44blomashualpencillo_-36.79587_-73.08805,44B: Lomas → Hualpencillo stop 41 (ASSUMED location),-36.795868,-73.088049
+assumed_osm_44b_20732636_44blomashualpencillo_-36.79581_-73.09047,44B: Lomas → Hualpencillo stop 42 (ASSUMED location),-36.795806,-73.090472
+assumed_osm_44b_20732636_44blomashualpencillo_-36.7915_-73.0943,44B: Lomas → Hualpencillo stop 43 (ASSUMED location),-36.791497,-73.094300
+assumed_osm_44b_20732636_44blomashualpencillo_-36.79059_-73.09432,44B: Lomas → Hualpencillo stop 44 (ASSUMED location),-36.790591,-73.094321
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78938_-73.09434,44B: Lomas → Hualpencillo stop 45 (ASSUMED location),-36.789383,-73.094336
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78801_-73.09434,44B: Lomas → Hualpencillo stop 46 (ASSUMED location),-36.788013,-73.094344
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78228_-73.09652,44B: Lomas → Hualpencillo stop 47 (ASSUMED location),-36.782284,-73.096525
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78656_-73.0967,44B: Lomas → Hualpencillo stop 48 (ASSUMED location),-36.786558,-73.096698
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78661_-73.09924,44B: Lomas → Hualpencillo stop 49 (ASSUMED location),-36.786608,-73.099236
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78476_-73.09951,44B: Lomas → Hualpencillo stop 50 (ASSUMED location),-36.784765,-73.099511
+assumed_osm_44b_20732636_44blomashualpencillo_-36.78132_-73.09629,44B: Lomas → Hualpencillo stop 51 (ASSUMED location),-36.781320,-73.096289
+assumed_osm_44b_20732636_44blomashualpencillo_-36.77988_-73.09658,44B: Lomas → Hualpencillo stop 52 (ASSUMED location),-36.779883,-73.096576
+assumed_osm_44b_20732636_44blomashualpencillo_-36.77844_-73.09605,44B: Lomas → Hualpencillo stop 53 (ASSUMED location),-36.778437,-73.096047

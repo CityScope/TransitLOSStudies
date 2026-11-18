@@ -29,7 +29,7 @@ into `city_science_network`.
 from __future__ import annotations
 
 from code.city_config import CITY_CONFIGS, CityConfig, _census_supported
-from code import pipeline as P
+from studytools import pipeline as P
 
 
 def test_gipuzkoa_routes_to_generic_spain():
@@ -60,9 +60,13 @@ def test_join_census_dispatches_generic_spain_for_gipuzkoa(monkeypatch, capsys):
     calls = {}
 
     def fake_join_polygon_stats(h3_grid, aoi, states, levels, cache_dir, loader, keep_columns, prefix):
-        calls["prefix"] = prefix
-        calls["keep_columns"] = keep_columns
-        calls["levels"] = levels
+        # _join_census joins several sources in turn (census, then extras such as Eustat or elections): keep the first
+        # call with a prefix, the main census join
+        calls.setdefault("all", []).append(prefix)
+        if "prefix" not in calls and prefix:
+            calls["prefix"] = prefix
+            calls["keep_columns"] = keep_columns
+            calls["levels"] = levels
         return h3_grid
 
     monkeypatch.setattr(P, "_join_polygon_stats", fake_join_polygon_stats)
@@ -119,16 +123,19 @@ def test_join_census_dispatches_germany(monkeypatch, capsys):
     # Germany was wired 2026-08-21: pycensus.countries.germany.destatis's
     # real GENESIS-Online token was verified live to authenticate and
     # retrieve real data once the host (no "www-" prefix) and auth
-    # transport (credentials as HTTP headers) were corrected -- see
-    # pyCensus/src/pycensus/countries/germany/destatis/README.md. So
+    # transport (credentials as HTTP headers) were corrected. So
     # country="DEU" must now dispatch to the real Germany join instead of
     # the generic "not yet supported" skip.
     calls = {}
 
     def fake_join_polygon_stats(h3_grid, aoi, states, levels, cache_dir, loader, keep_columns, prefix):
-        calls["prefix"] = prefix
-        calls["keep_columns"] = keep_columns
-        calls["levels"] = levels
+        # _join_census joins several sources in turn (census, then extras such as Eustat or elections): keep the first
+        # call with a prefix, the main census join
+        calls.setdefault("all", []).append(prefix)
+        if "prefix" not in calls and prefix:
+            calls["prefix"] = prefix
+            calls["keep_columns"] = keep_columns
+            calls["levels"] = levels
         return h3_grid
 
     monkeypatch.setattr(P, "_join_polygon_stats", fake_join_polygon_stats)
@@ -150,7 +157,7 @@ def test_join_census_dispatches_germany(monkeypatch, capsys):
     # grid level ("grid", now the finest entry in P.GERMANY_LEVELS, used by
     # the map's census dispatch instead) is joined separately by
     # `_join_zensus_grid_population`, not through this polygon-apportionment
-    # path (see `code.pipeline.GERMANY_ADMIN_LEVELS`'s docstring).
+    # path (see `studytools.pipeline.GERMANY_ADMIN_LEVELS`'s docstring).
     assert calls["levels"] == P.GERMANY_ADMIN_LEVELS
     captured = capsys.readouterr()
     assert "not yet supported" not in captured.out

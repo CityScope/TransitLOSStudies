@@ -1,6 +1,6 @@
 """Run every city's transit-LOS study, then build cross-city comparison figures.
 
-Defines `GLOBAL_PARAMS` (re-exported from `code.params`) as the single
+Defines `GLOBAL_PARAMS` (re-exported from `studytools.params`) as the single
 `StudyParams` instance every city script uses, guaranteeing identical
 parameters across cities. Explicitly excludes `boston_city_evolution`,
 which is its own separate study (see `boston_city_evolution/main.py`).
@@ -8,6 +8,7 @@ which is its own separate study (see `boston_city_evolution/main.py`).
 HOW TO RUN THIS FOR REAL (the whole multi-city roster, unattended):
 
     uv run python main.py
+    uv run python main.py --gtfs-only      # fetch/build the GTFS, audit the analysis dates, stop
 
 That's it -- just run it directly. It is safe to run repeatedly: each city
 is skipped automatically if its `map.html` is already newer than its
@@ -61,7 +62,7 @@ from pathlib import Path
 
 from code.city_config import CITY_CONFIGS
 from code.combined_map import build_combined_map
-from code.gtfs_fetch import ensure_gtfs
+from code.gtfs_fetch import ensure_gtfs, ensure_inputs
 
 # Conservative systemd-run memory limits for `_ensure_memory_safe_wrapper`,
 # below. Matches the values manually used to wrap this pipeline's real runs
@@ -277,8 +278,8 @@ def run_all_cities(
     skipped: list[str] = []
     for key in CITY_KEYS:
         extra_args: list[str] = []
-        if not map_only and not census_only and not ensure_gtfs(key):
-            print(f"[main] {key}: GTFS unavailable -- skipping", flush=True)
+        if not map_only and not census_only and not (ensure_gtfs(key) and ensure_inputs(key)):
+            print(f"[main] {key}: GTFS / WorldPop / OSM inputs unavailable -- skipping", flush=True)
             failed.append(key)
             continue
         if map_only:
@@ -347,7 +348,7 @@ def build_cross_city_figures() -> None:
     """
     import geopandas as gpd
 
-    from code.stats import linreg
+    from studytools.stats import linreg
 
     (ROOT / "figures").mkdir(parents=True, exist_ok=True)
     r2_by_city: dict[str, float] = {}
@@ -363,7 +364,7 @@ def build_cross_city_figures() -> None:
         flags = grid["equity_flag"].value_counts(normalize=True, dropna=True)
         transit_share_by_city[CITY_CONFIGS[key].display_name] = float(flags.get("more_transit", 0.0))
 
-    from code.figures import percent_area_bar
+    from studytools.figures import percent_area_bar
 
     if r2_by_city:
         percent_area_bar(r2_by_city, "R² (LOS vs population density) per city", str(ROOT / "figures" / "r2_per_city.jpg"))
@@ -402,7 +403,7 @@ def _parse_args() -> argparse.Namespace:
         help=(
             "Forward --map-only to every city's run.py: fast map/tiles-only "
             "rebuild from cached results, skipping the full pipeline "
-            "entirely (see code.pipeline.rebuild_map_only)."
+            "entirely (see studytools.pipeline.rebuild_map_only)."
         ),
     )
     parser.add_argument(
@@ -410,10 +411,29 @@ def _parse_args() -> argparse.Namespace:
         help=(
             "Forward --census-only to every city's run.py: re-run just the "
             "census join + stats/map rebuild from cached pipeline output "
-            "(see code.pipeline.refresh_census_only). Also happens "
+            "(see studytools.pipeline.refresh_census_only). Also happens "
             "automatically, per city, when that city's census module just "
             "became newly available -- see --no-auto-census-refresh."
         ),
+    )
+    parser.add_argument(
+        "--gtfs-only", dest="gtfs_only", action="store_true",
+        help=(
+            "Only download / build every city's GTFS (`code.gtfs_fetch.ensure_gtfs`), then audit the analysis date the pipeline "
+            "would pick for each city (code/gtfs_audit.py -> gtfs_date_audit.csv) and STOP, so the dates can be checked before the "
+            "long isochrone / map run. Combine with --cities to limit it."
+        ),
+    )
+    parser.add_argument(
+        "--vehicle-km", dest="vehicle_km", action="store_true",
+        help=(
+            "Only (re)compute each city's daily vehicle-km (metro + core) into <city>/results/vehicle_km.json "
+            "(code/vehicle_km.py; the pipeline also does this for every full city run), then stop. Use --cities to limit it."
+        ),
+    )
+    parser.add_argument(
+        "--cities", nargs="+", metavar="KEY", default=None,
+        help="Only these cities (default: the whole roster). Used by --gtfs-only.",
     )
     parser.add_argument(
         "--no-auto-census-refresh", dest="auto_census_refresh", action="store_false", default=True,
@@ -424,12 +444,56 @@ def _parse_args() -> argparse.Namespace:
             "this set, such a city is skipped like any other up-to-date city."
         ),
     )
+    parser.add_argument(
+        "--cache-dir", default=None,
+        help="Shared study cache folder (default TransitLOSStudies/cache; "
+             "also STUDY_CACHE_DIR). Exported to every city run.py.",
+    )
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     _ensure_memory_safe_wrapper()  # may re-exec + never return, see docstring above
     args = _parse_args()
+    from code.study_cache import apply_env, resolve_cache_dir
+
+    _cache = resolve_cache_dir(args.cache_dir)
+    os.environ["STUDY_CACHE_DIR"] = str(_cache)  # inherited by every city run.py subprocess
+    apply_env(_cache)
+    if args.gtfs_only:
+        keys = tuple(args.cities) if args.cities else CITY_KEYS
+        for key in keys:
+            print(f"[main] fetching / building GTFS for {key}", flush=True)
+            try:
+                ensure_gtfs(key)
+                ensure_inputs(key)
+            except Exception as exc:  # keep going: one unreachable source must not block the other cities
+                print(f"[main] WARNING: GTFS for {key} failed: {type(exc).__name__}: {exc}", flush=True)
+        from code.gtfs_audit import audit_all
+
+        audit_all(keys)
+        sys.exit(0)
+    if args.vehicle_km:
+        import geopandas as gpd
+
+        from studytools.city_core import resolve_core_boundary
+        from studytools.vehicle_km import compute_vehicle_km
+
+        for key in (tuple(args.cities) if args.cities else CITY_KEYS):
+            cfg = CITY_CONFIGS[key]
+            if not (ROOT / key / "gtfs").is_dir() or not any((ROOT / key / "gtfs").iterdir()):
+                print(f"[vehicle-km] {key}: no GTFS -- skipped", flush=True)
+                continue
+            try:
+                core = resolve_core_boundary(cfg.display_name, cfg.country == "USA",
+                                             state=cfg.census_states[0] if cfg.census_states else None, geocode_name=cfg.geocode_name)
+            except Exception as exc:  # noqa: BLE001 -- metro only
+                print(f"[vehicle-km] {key}: core boundary unavailable ({exc}); metro only", flush=True)
+                core = None
+            res = compute_vehicle_km(ROOT / key, gpd.read_file(ROOT / key / "aoi.gpkg"), core, stops_per_feed=cfg.stops_per_feed)
+            print(f"[vehicle-km] {key}: metro {res['metro']['vehicle_km']:,.0f} km/day"
+                  + (f", core {res['core']['vehicle_km']:,.0f} km/day" if "core" in res else ""), flush=True)
+        sys.exit(0)
     os.environ["TRANSITLOS_RENDERER"] = args.renderer
     run_all_cities(
         force=args.force, map_only=args.map_only, census_only=args.census_only,

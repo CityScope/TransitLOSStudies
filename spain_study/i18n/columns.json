@@ -1,0 +1,950 @@
+{
+ "_about": "Census column key -> [English label, Spanish label]. '(%)' is added automatically for share / pct / ratio columns; bracketed notes and dates are dropped from the short labels.",
+ "columns": [
+  [
+   "population",
+   "Population",
+   "Población"
+  ],
+  [
+   "ine_population",
+   "Population",
+   "Población"
+  ],
+  [
+   "ine_malePopulation",
+   "Male population",
+   "Población masculina"
+  ],
+  [
+   "ine_femalePopulation",
+   "Female population",
+   "Población femenina"
+  ],
+  [
+   "ine_households",
+   "Households",
+   "Hogares"
+  ],
+  [
+   "ine_educationPrimaryOrLessPopulation",
+   "Education: primary or less",
+   "Estudios: primarios o menos"
+  ],
+  [
+   "ine_educationSecondaryPopulation",
+   "Education: secondary",
+   "Estudios: secundarios"
+  ],
+  [
+   "ine_educationUniversityPopulation",
+   "Education: university",
+   "Estudios: universitarios"
+  ],
+  [
+   "ine_laborForce",
+   "Labour force",
+   "Población activa"
+  ],
+  [
+   "ine_employedResidents",
+   "Employed residents",
+   "Residentes ocupados"
+  ],
+  [
+   "ine_unemployedResidents",
+   "Unemployed residents",
+   "Residentes parados"
+  ],
+  [
+   "ine_foreignBornPopulation",
+   "Foreign-born population",
+   "Población nacida en el extranjero"
+  ],
+  [
+   "ine_incomeGrossHouseholdMean",
+   "Mean gross household income",
+   "Renta bruta media por hogar"
+  ],
+  [
+   "ine_incomeGrossPersonMean",
+   "Mean gross personal income",
+   "Renta bruta media por persona"
+  ],
+  [
+   "ine_incomeNetPersonMean",
+   "Mean net personal income",
+   "Renta neta media por persona"
+  ],
+  [
+   "ine_incomePerConsumptionUnitMean",
+   "Mean income per consumption unit",
+   "Renta media por unidad de consumo"
+  ],
+  [
+   "ine_incomePerConsumptionUnitMedian",
+   "Median income per consumption unit",
+   "Renta mediana por unidad de consumo"
+  ],
+  [
+   "ine_meanHouseholdIncome",
+   "Mean household income",
+   "Renta media del hogar"
+  ],
+  [
+   "ine_incomeSourceOtherShare",
+   "Income from other sources",
+   "Renta de otras fuentes"
+  ],
+  [
+   "ine_incomeSourceSalaryShare",
+   "Income from salaries",
+   "Renta de salarios"
+  ],
+  [
+   "ine_incomeSourceOtherBenefitsShare",
+   "Income from other benefits",
+   "Renta de otras prestaciones"
+  ],
+  [
+   "ine_incomeSourcePensionsShare",
+   "Income from pensions",
+   "Renta de pensiones"
+  ],
+  [
+   "ine_incomeSourceUnemploymentBenefitsShare",
+   "Income from unemployment benefits",
+   "Renta de prestaciones por desempleo"
+  ],
+  [
+   "ine_giniIndex",
+   "Gini index",
+   "Índice de Gini"
+  ],
+  [
+   "ine_incomeP80P20Ratio",
+   "Income P80/P20 ratio",
+   "Ratio de renta P80/P20"
+  ],
+  [
+   "ine_ageMean",
+   "Mean age",
+   "Edad media"
+  ],
+  [
+   "ine_householdSizeMean",
+   "Mean household size",
+   "Tamaño medio del hogar"
+  ],
+  [
+   "ine_singlePersonHouseholdsShare",
+   "Single-person households",
+   "Hogares unipersonales"
+  ],
+  [
+   "ine_aboveMedianShare140",
+   "Above 140% of median income",
+   "Por encima del 140% de la mediana"
+  ],
+  [
+   "ine_aboveMedianShare160",
+   "Above 160% of median income",
+   "Por encima del 160% de la mediana"
+  ],
+  [
+   "ine_aboveMedianShare200",
+   "Above 200% of median income",
+   "Por encima del 200% de la mediana"
+  ],
+  [
+   "ine_belowHalfMedianShare40",
+   "Below 40% of median income",
+   "Por debajo del 40% de la mediana"
+  ],
+  [
+   "ine_belowMedianShare50",
+   "Below 50% of median income",
+   "Por debajo del 50% de la mediana"
+  ],
+  [
+   "ine_belowMedianShare60",
+   "Below 60% of median income",
+   "Por debajo del 60% de la mediana"
+  ],
+  [
+   "ine_under18Population",
+   "Population under 18",
+   "Población menor de 18"
+  ],
+  [
+   "ine_over65Population",
+   "Population over 65",
+   "Población mayor de 65"
+  ],
+  [
+   "ine_foreignNationalPopulation",
+   "Foreign nationals",
+   "Población extranjera"
+  ],
+  [
+   "ine_povertyPopulation",
+   "Population at risk of poverty",
+   "Población en riesgo de pobreza"
+  ],
+  [
+   "ine_population0to19",
+   "Population aged 0-19",
+   "Población de 0 a 19 años"
+  ],
+  [
+   "ine_population20to64",
+   "Population aged 20-64",
+   "Población de 20 a 64 años"
+  ],
+  [
+   "ine_foreignEU27Population",
+   "Foreign nationals, EU-27",
+   "Extranjeros, UE-27"
+  ],
+  [
+   "ine_foreignOtherPopulation",
+   "Foreign nationals, non-EU",
+   "Extranjeros, fuera de la UE"
+  ],
+  [
+   "ine_dwellings",
+   "Dwellings (Census 2021)",
+   "Viviendas (Censo 2021)"
+  ],
+  [
+   "ine_dwellings_main_share",
+   "Main residences",
+   "Viviendas principales"
+  ],
+  [
+   "ine_dwellings_secondary_or_empty_share",
+   "Secondary or empty dwellings",
+   "Viviendas secundarias o vacías"
+  ],
+  [
+   "ine_tenure_rented_share",
+   "Rented dwellings (district)",
+   "Viviendas en alquiler (distrito)"
+  ],
+  [
+   "ine_tenure_owned_share",
+   "Owned dwellings (district)",
+   "Viviendas en propiedad (distrito)"
+  ],
+  [
+   "ine_tenure_other_share",
+   "Other tenure (district)",
+   "Otro régimen de tenencia (distrito)"
+  ],
+  [
+   "ine_serpavi_rent_m2_median_vc_2024",
+   "Median rent per m2, flats 2024 (SERPAVI)",
+   "Alquiler mediano por m2, pisos 2024 (SERPAVI)"
+  ],
+  [
+   "ine_serpavi_rent_m2_median_vc_2016",
+   "Median rent per m2, flats 2016 (SERPAVI)",
+   "Alquiler mediano por m2, pisos 2016 (SERPAVI)"
+  ],
+  [
+   "ine_serpavi_rent_m2_median_vc_2011",
+   "Median rent per m2, flats 2011 (SERPAVI)",
+   "Alquiler mediano por m2, pisos 2011 (SERPAVI)"
+  ],
+  [
+   "ine_serpavi_rent_total_median_vc_2024",
+   "Median monthly rent, flats 2024 (SERPAVI)",
+   "Alquiler mensual mediano, pisos 2024 (SERPAVI)"
+  ],
+  [
+   "ine_serpavi_rent_total_median_vc_2016",
+   "Median monthly rent, flats 2016 (SERPAVI)",
+   "Alquiler mensual mediano, pisos 2016 (SERPAVI)"
+  ],
+  [
+   "ine_serpavi_rent_m2_median_vu_2024",
+   "Median rent per m2, houses 2024 (SERPAVI)",
+   "Alquiler mediano por m2, viviendas unifamiliares 2024 (SERPAVI)"
+  ],
+  [
+   "ine_serpavi_rent_m2_p25_vc_2024",
+   "Rent per m2, flats, 25th percentile 2024",
+   "Alquiler por m2, pisos, percentil 25, 2024"
+  ],
+  [
+   "ine_serpavi_rent_m2_p75_vc_2024",
+   "Rent per m2, flats, 75th percentile 2024",
+   "Alquiler por m2, pisos, percentil 75, 2024"
+  ],
+  [
+   "ine_serpavi_area_m2_median_vc_2024",
+   "Median flat area 2024 (m2)",
+   "Superficie mediana de pisos 2024 (m2)"
+  ],
+  [
+   "ine_serpavi_n_vc_2024",
+   "Rental contracts in SERPAVI sample, flats, 2024",
+   "Contratos de alquiler en la muestra SERPAVI, pisos, 2024"
+  ],
+  [
+   "ine_serpavi_rent_m2_latest",
+   "Median rent per m2, latest year (SERPAVI)",
+   "Alquiler mediano por m2, último año (SERPAVI)"
+  ],
+  [
+   "ine_tourist_dwellings_2020M08",
+   "Tourist dwellings Aug 2020 (municipality)",
+   "Viviendas turísticas ago. 2020 (municipio)"
+  ],
+  [
+   "ine_tourist_dwellings_2026M05",
+   "Tourist dwellings May 2026 (municipality)",
+   "Viviendas turísticas may. 2026 (municipio)"
+  ],
+  [
+   "ine_tourist_places_2020M08",
+   "Tourist places Aug 2020 (municipality)",
+   "Plazas turísticas ago. 2020 (municipio)"
+  ],
+  [
+   "ine_tourist_places_2026M05",
+   "Tourist places May 2026 (municipality)",
+   "Plazas turísticas may. 2026 (municipio)"
+  ],
+  [
+   "ine_tourist_dwellings_share_2020M08",
+   "Tourist dwellings share Aug 2020 (municipality)",
+   "Peso de viviendas turísticas ago. 2020 (municipio)"
+  ],
+  [
+   "ine_tourist_dwellings_share_2026M05",
+   "Tourist dwellings share May 2026 (municipality)",
+   "Peso de viviendas turísticas may. 2026 (municipio)"
+  ],
+  [
+   "ine_netmig_total_2024",
+   "Net migration 2024, total (municipality)",
+   "Saldo migratorio 2024, total (municipio)"
+  ],
+  [
+   "ine_netmig_exterior_2024",
+   "Net migration 2024, abroad (municipality)",
+   "Saldo migratorio 2024, exterior (municipio)"
+  ],
+  [
+   "ine_netmig_interior_2024",
+   "Net migration 2024, within Spain (municipality)",
+   "Saldo migratorio 2024, interior (municipio)"
+  ],
+  [
+   "ine_emal_rent_m2_2025",
+   "Rent per m2 2025 (EMAL, municipality)",
+   "Alquiler por m2 2025 (EMAL, municipio)"
+  ],
+  [
+   "ine_emal_rent_m2_2016",
+   "Rent per m2 2016 (EMAL, municipality)",
+   "Alquiler por m2 2016 (EMAL, municipio)"
+  ],
+  [
+   "ine_emal_rent_monthly_2025",
+   "Monthly rent 2025 (EMAL, municipality)",
+   "Alquiler mensual 2025 (EMAL, municipio)"
+  ],
+  [
+   "ine_emal_deposits",
+   "Rental deposits (EMAL, municipality)",
+   "Fianzas de alquiler (EMAL, municipio)"
+  ],
+  [
+   "ine_eustat_incomeTotal",
+   "Total income (Eustat)",
+   "Renta total (Eustat)"
+  ],
+  [
+   "ine_eustat_incomeWork",
+   "Income from work (Eustat)",
+   "Renta del trabajo (Eustat)"
+  ],
+  [
+   "ine_eustat_incomeMovableCapital",
+   "Income from movable capital (Eustat)",
+   "Renta de capital mobiliario (Eustat)"
+  ],
+  [
+   "ine_eustat_incomeRealEstateCapital",
+   "Income from real-estate capital (Eustat)",
+   "Renta de capital inmobiliario (Eustat)"
+  ],
+  [
+   "ine_eustat_incomeActivity",
+   "Income from economic activity (Eustat)",
+   "Renta de actividades económicas (Eustat)"
+  ],
+  [
+   "ine_eustat_incomeTransfers",
+   "Income from transfers (Eustat)",
+   "Renta de transferencias (Eustat)"
+  ],
+  [
+   "ine_eustat_incomeDisposable",
+   "Disposable income (Eustat)",
+   "Renta disponible (Eustat)"
+  ],
+  [
+   "ine_eustat_dwellingsTotal",
+   "Dwellings, total (Eustat)",
+   "Viviendas, total (Eustat)"
+  ],
+  [
+   "ine_eustat_dwellingsFamily",
+   "Family dwellings (Eustat)",
+   "Viviendas familiares (Eustat)"
+  ],
+  [
+   "ine_eustat_dwellingsMain",
+   "Main dwellings (Eustat)",
+   "Viviendas principales (Eustat)"
+  ],
+  [
+   "ine_eustat_dwellingsOther",
+   "Other dwellings (Eustat)",
+   "Otras viviendas (Eustat)"
+  ],
+  [
+   "ine_eustat_dwellingAvgAge",
+   "Mean dwelling age (Eustat)",
+   "Antigüedad media de la vivienda (Eustat)"
+  ],
+  [
+   "ine_eustat_dwellingAvgUsefulArea",
+   "Mean useful area (Eustat)",
+   "Superficie útil media (Eustat)"
+  ],
+  [
+   "ine_eustat_dwellingsOwnedPct",
+   "Owned dwellings, Basque Country",
+   "Viviendas en propiedad, País Vasco"
+  ],
+  [
+   "ine_eustat_dwellingsRentedPct",
+   "Rented dwellings, Basque Country",
+   "Viviendas en alquiler, País Vasco"
+  ],
+  [
+   "ine_eustat_dwellingsOtherTenurePct",
+   "Other tenure, Basque Country",
+   "Otra tenencia, País Vasco"
+  ],
+  [
+   "ine_catastro_buildings",
+   "Buildings (Catastro)",
+   "Edificios (Catastro)"
+  ],
+  [
+   "ine_catastro_dwellings",
+   "Registered dwellings",
+   "Viviendas catastradas"
+  ],
+  [
+   "ine_catastro_building_units",
+   "Building units (Catastro)",
+   "Inmuebles (Catastro)"
+  ],
+  [
+   "ine_catastro_floor_area_m2_total",
+   "Total floor area, m2 (Catastro)",
+   "Superficie construida total, m2 (Catastro)"
+  ],
+  [
+   "ine_catastro_footprint_m2_total",
+   "Total building footprint, m2 (Catastro)",
+   "Superficie en planta de los edificios, m2 (Catastro)"
+  ],
+  [
+   "ine_catastro_year_built_median",
+   "Median year of construction (Catastro)",
+   "Año de construcción mediano (Catastro)"
+  ],
+  [
+   "ine_catastro_share_built_before_1960",
+   "Buildings built before 1960 (Catastro)",
+   "Edificios construidos antes de 1960 (Catastro)"
+  ],
+  [
+   "ine_catastro_share_built_since_2000",
+   "Buildings built since 2000 (Catastro)",
+   "Edificios construidos desde 2000 (Catastro)"
+  ],
+  [
+   "ine_catastro_residential_share",
+   "Residential buildings (Catastro)",
+   "Edificios residenciales (Catastro)"
+  ],
+  [
+   "ine_catastro_dwellings_per_building",
+   "Dwellings per residential building (Catastro)",
+   "Viviendas por edificio residencial (Catastro)"
+  ],
+  [
+   "ine_catastro_height_mean_m",
+   "Mean building height, m (Catastro)",
+   "Altura media de los edificios, m (Catastro)"
+  ],
+  [
+   "ine_catastro_floors_mean",
+   "Mean floors above ground (Catastro)",
+   "Plantas sobre rasante medias (Catastro)"
+  ],
+  [
+   "level_of_service",
+   "Level of service",
+   "Nivel de servicio"
+  ],
+  [
+   "ine_valor_tasado_total_eur_m2_2026",
+   "Appraised value per m2, all dwellings, 2026 (municipality)",
+   "Valor tasado por m2, viviendas total, 2026 (municipio)"
+  ],
+  [
+   "ine_valor_tasado_new_eur_m2_2026",
+   "Appraised value per m2, new dwellings, 2026 (municipality)",
+   "Valor tasado por m2, viviendas nuevas, 2026 (municipio)"
+  ],
+  [
+   "ine_valor_tasado_old_eur_m2_2026",
+   "Appraised value per m2, used dwellings, 2026 (municipality)",
+   "Valor tasado por m2, viviendas usadas, 2026 (municipio)"
+  ],
+  [
+   "ine_valor_tasado_total_eur_m2_2016",
+   "Appraised value per m2, all dwellings, 2016 (municipality)",
+   "Valor tasado por m2, viviendas total, 2016 (municipio)"
+  ],
+  [
+   "ine_valor_tasado_new_eur_m2_2016",
+   "Appraised value per m2, new dwellings, 2016 (municipality)",
+   "Valor tasado por m2, viviendas nuevas, 2016 (municipio)"
+  ],
+  [
+   "ine_valor_tasado_old_eur_m2_2016",
+   "Appraised value per m2, used dwellings, 2016 (municipality)",
+   "Valor tasado por m2, viviendas usadas, 2016 (municipio)"
+  ],
+  [
+   "ine_built_1900_a_1920_share",
+   "Dwellings built 1900-1920 (district)",
+   "Viviendas construidas 1900-1920 (distrito)"
+  ],
+  [
+   "ine_built_1921_a_1940_share",
+   "Dwellings built 1921-1940 (district)",
+   "Viviendas construidas 1921-1940 (distrito)"
+  ],
+  [
+   "ine_built_1941_a_1950_share",
+   "Dwellings built 1941-1950 (district)",
+   "Viviendas construidas 1941-1950 (distrito)"
+  ],
+  [
+   "ine_built_1951_a_1960_share",
+   "Dwellings built 1951-1960 (district)",
+   "Viviendas construidas 1951-1960 (distrito)"
+  ],
+  [
+   "ine_built_1961_a_1970_share",
+   "Dwellings built 1961-1970 (district)",
+   "Viviendas construidas 1961-1970 (distrito)"
+  ],
+  [
+   "ine_built_1971_a_1980_share",
+   "Dwellings built 1971-1980 (district)",
+   "Viviendas construidas 1971-1980 (distrito)"
+  ],
+  [
+   "ine_built_1981_a_1990_share",
+   "Dwellings built 1981-1990 (district)",
+   "Viviendas construidas 1981-1990 (distrito)"
+  ],
+  [
+   "ine_built_1991_a_2000_share",
+   "Dwellings built 1991-2000 (district)",
+   "Viviendas construidas 1991-2000 (distrito)"
+  ],
+  [
+   "ine_built_2001_a_2010_share",
+   "Dwellings built 2001-2010 (district)",
+   "Viviendas construidas 2001-2010 (distrito)"
+  ],
+  [
+   "ine_built_2011_a_2020_share",
+   "Dwellings built 2011-2020 (district)",
+   "Viviendas construidas 2011-2020 (distrito)"
+  ],
+  [
+   "ine_built_Antes_de_1900_share",
+   "Dwellings built before 1900 (district)",
+   "Viviendas construidas antes de 1900 (distrito)"
+  ],
+  [
+   "ine_built_No_consta_share",
+   "Dwellings built year not stated (district)",
+   "Viviendas construidas año no consta (distrito)"
+  ],
+  [
+   "ine_floor_area_Hasta_30_m2_share",
+   "Dwellings up to 30 m2 (district)",
+   "Viviendas de hasta 30 m2 (distrito)"
+  ],
+  [
+   "ine_floor_area_30_45_m2_share",
+   "Dwellings 30-45 m2 (district)",
+   "Viviendas de 30-45 m2 (distrito)"
+  ],
+  [
+   "ine_floor_area_46_60_m2_share",
+   "Dwellings 46-60 m2 (district)",
+   "Viviendas de 46-60 m2 (distrito)"
+  ],
+  [
+   "ine_floor_area_61_75_m2_share",
+   "Dwellings 61-75 m2 (district)",
+   "Viviendas de 61-75 m2 (distrito)"
+  ],
+  [
+   "ine_floor_area_76_90_m2_share",
+   "Dwellings 76-90 m2 (district)",
+   "Viviendas de 76-90 m2 (distrito)"
+  ],
+  [
+   "ine_floor_area_91_105_m2_share",
+   "Dwellings 91-105 m2 (district)",
+   "Viviendas de 91-105 m2 (distrito)"
+  ],
+  [
+   "ine_floor_area_106_120_m2_share",
+   "Dwellings 106-120 m2 (district)",
+   "Viviendas de 106-120 m2 (distrito)"
+  ],
+  [
+   "ine_floor_area_121_150_m2_share",
+   "Dwellings 121-150 m2 (district)",
+   "Viviendas de 121-150 m2 (distrito)"
+  ],
+  [
+   "ine_floor_area_151_180_m2_share",
+   "Dwellings 151-180 m2 (district)",
+   "Viviendas de 151-180 m2 (distrito)"
+  ],
+  [
+   "ine_floor_area_M_s_de_180_m2_share",
+   "Dwellings over 180 m2 (district)",
+   "Viviendas de más de 180 m2 (distrito)"
+  ],
+  [
+   "ine_floor_area_No_Consta_share",
+   "Dwellings not stated (district)",
+   "Viviendas de no consta (distrito)"
+  ],
+  [
+   "ine_building_No_consta_share",
+   "Building type: not stated (district)",
+   "Tipo de edificio: no consta (distrito)"
+  ],
+  [
+   "ine_building_Vivienda_en_edificio_no_residencial_share",
+   "Building type: dwelling in a non-residential building (district)",
+   "Tipo de edificio: vivienda en edificio no residencial (distrito)"
+  ],
+  [
+   "ine_building_Vivienda_en_edificio_residencial_con_dos_viviendas_share",
+   "Building type: dwelling in a building with two dwellings (district)",
+   "Tipo de edificio: vivienda en edificio con dos viviendas (distrito)"
+  ],
+  [
+   "ine_building_Vivienda_en_edificio_residencial_con_tres_viviendas_o_m_s_share",
+   "Building type: dwelling in a building with three or more dwellings (district)",
+   "Tipo de edificio: vivienda en edificio con tres o más viviendas (distrito)"
+  ],
+  [
+   "ine_building_Vivienda_en_edificio_residencial_con_una_vivienda_share",
+   "Building type: dwelling in a single-dwelling building (district)",
+   "Tipo de edificio: vivienda en edificio con una vivienda (distrito)"
+  ],
+  [
+   "population_density",
+   "Population density (pop/km²)",
+   "Densidad de población (hab/km²)"
+  ],
+  [
+   "rent_per_m2_mean",
+   "Rent per m² (mean)",
+   "Alquiler por m² (media)"
+  ],
+  [
+   "price_per_m2_mean",
+   "Price per m² (mean)",
+   "Precio por m² (media)"
+  ],
+  [
+   "rent_per_home_mean",
+   "Rent per home (mean)",
+   "Alquiler por vivienda (media)"
+  ],
+  [
+   "price_per_home_mean",
+   "Price per home (mean)",
+   "Precio por vivienda (media)"
+  ],
+  [
+   "home_size_m2_mean",
+   "Home size m² (mean)",
+   "Superficie de la vivienda m² (media)"
+  ],
+  [
+   "male_share",
+   "Male share",
+   "Hombres"
+  ],
+  [
+   "female_share",
+   "Female share",
+   "Mujeres"
+  ],
+  [
+   "under18_share",
+   "Under 18 share",
+   "Población menor de 18 años"
+  ],
+  [
+   "over65_share",
+   "Over 65 share",
+   "Población mayor de 65 años"
+  ],
+  [
+   "university_share",
+   "University share",
+   "Población con estudios universitarios"
+  ],
+  [
+   "education_basic_or_less_share",
+   "Basic education or less share",
+   "Población con estudios básicos o inferiores"
+  ],
+  [
+   "foreign_born_share",
+   "Foreign born share",
+   "Población nacida en el extranjero"
+  ],
+  [
+   "dwellings_built_before_1945_share",
+   "Dwellings built before 1945 share",
+   "Viviendas construidas antes de 1945"
+  ],
+  [
+   "dwellings_built_1945_1970_share",
+   "Dwellings built 1945-1970 share",
+   "Viviendas construidas entre 1945 y 1970"
+  ],
+  [
+   "dwellings_built_1970_2000_share",
+   "Dwellings built 1970-2000 share",
+   "Viviendas construidas entre 1970 y 2000"
+  ],
+  [
+   "dwellings_built_after_2000_share",
+   "Dwellings built after 2000 share",
+   "Viviendas construidas después de 2000"
+  ],
+  [
+   "elec_national_left_share",
+   "Vote share left, national election",
+   "Voto izquierda, elecciones generales"
+  ],
+  [
+   "elec_national_right_share",
+   "Vote share right, national election",
+   "Voto derecha, elecciones generales"
+  ],
+  [
+   "elec_national_other_share",
+   "Vote share other parties, national election",
+   "Voto otros partidos, elecciones generales"
+  ],
+  [
+   "elec_national_turnout_rate",
+   "Turnout, national election",
+   "Participación, elecciones generales"
+  ],
+  [
+   "elec_national_total_votes",
+   "Votes cast, national election",
+   "Votos emitidos, elecciones generales"
+  ],
+  [
+   "elec_state_left_share",
+   "Vote share left, state election",
+   "Voto izquierda, elecciones autonómicas"
+  ],
+  [
+   "elec_state_right_share",
+   "Vote share right, state election",
+   "Voto derecha, elecciones autonómicas"
+  ],
+  [
+   "elec_state_other_share",
+   "Vote share other parties, state election",
+   "Voto otros partidos, elecciones autonómicas"
+  ],
+  [
+   "elec_state_turnout_rate",
+   "Turnout, state election",
+   "Participación, elecciones autonómicas"
+  ],
+  [
+   "elec_state_total_votes",
+   "Votes cast, state election",
+   "Votos emitidos, elecciones autonómicas"
+  ],
+  [
+   "elec_municipal_left_share",
+   "Vote share left, municipal election",
+   "Voto izquierda, elecciones municipales"
+  ],
+  [
+   "elec_municipal_right_share",
+   "Vote share right, municipal election",
+   "Voto derecha, elecciones municipales"
+  ],
+  [
+   "elec_municipal_other_share",
+   "Vote share other parties, municipal election",
+   "Voto otros partidos, elecciones municipales"
+  ],
+  [
+   "elec_municipal_turnout_rate",
+   "Turnout, municipal election",
+   "Participación, elecciones municipales"
+  ],
+  [
+   "elec_municipal_total_votes",
+   "Votes cast, municipal election",
+   "Votos emitidos, elecciones municipales"
+  ],
+  [
+   "ine_mitma_trips_per_person",
+   "Trips per person per day",
+   "Viajes por persona y día"
+  ],
+  [
+   "ine_mitma_distance_km_per_person",
+   "Distance travelled per person per day (km)",
+   "Distancia recorrida por persona y día (km)"
+  ],
+  [
+   "ine_mitma_long_distance_trip_share",
+   "Long-distance trips (over 50 km), share of trips",
+   "Viajes de larga distancia (más de 50 km), peso sobre los viajes"
+  ],
+  [
+   "ine_mitma_long_distance_km_share",
+   "Long-distance trips (over 50 km), share of kilometres",
+   "Viajes de larga distancia (más de 50 km), peso sobre los kilómetros"
+  ],
+  [
+   "ine_mitma_regular_flows_up_to_3_days_week_share_min",
+   "Regular trips on up to 3 days a week, lower bound",
+   "Viajes regulares de hasta 3 días a la semana, cota inferior"
+  ],
+  [
+   "ine_mitma_regular_flows_up_to_3_days_week_share_est",
+   "Regular trips on up to 3 days a week",
+   "Viajes regulares de hasta 3 días a la semana"
+  ],
+  [
+   "ine_mitma_regular_flows_up_to_3_days_week_share_max",
+   "Regular trips on up to 3 days a week, upper bound",
+   "Viajes regulares de hasta 3 días a la semana, cota superior"
+  ],
+  [
+   "ine_mitma_trip_share_0_5_2",
+   "Trips of 0.5-2 km, share",
+   "Viajes de 0.5-2 km, peso"
+  ],
+  [
+   "ine_mitma_trip_share_2_10",
+   "Trips of 2-10 km, share",
+   "Viajes de 2-10 km, peso"
+  ],
+  [
+   "ine_mitma_trip_share_10_50",
+   "Trips of 10-50 km, share",
+   "Viajes de 10-50 km, peso"
+  ],
+  [
+   "ine_mitma_trip_share_over50",
+   "Trips of over 50 km, share",
+   "Viajes de más de 50 km, peso"
+  ],
+  [
+   "ine_mitma_regular_flows_1_2",
+   "Trips on 1-2 days of 14, count",
+   "Viajes en 1-2 días de 14, número"
+  ],
+  [
+   "ine_mitma_regular_flows_3_4",
+   "Trips on 3-4 days of 14, count",
+   "Viajes en 3-4 días de 14, número"
+  ],
+  [
+   "ine_mitma_regular_flows_share_3_4",
+   "Regular trips on 3-4 days of 14, share",
+   "Viajes regulares en 3-4 días de 14, peso"
+  ],
+  [
+   "ine_mitma_regular_flows_5_7",
+   "Trips on 5-7 days of 14, count",
+   "Viajes en 5-7 días de 14, número"
+  ],
+  [
+   "ine_mitma_regular_flows_share_5_7",
+   "Regular trips on 5-7 days of 14, share",
+   "Viajes regulares en 5-7 días de 14, peso"
+  ],
+  [
+   "ine_mitma_regular_flows_8_10",
+   "Trips on 8-10 days of 14, count",
+   "Viajes en 8-10 días de 14, número"
+  ],
+  [
+   "ine_mitma_regular_flows_share_8_10",
+   "Regular trips on 8-10 days of 14, share",
+   "Viajes regulares en 8-10 días de 14, peso"
+  ],
+  [
+   "ine_mitma_regular_flows_11_13",
+   "Trips on 11-13 days of 14, count",
+   "Viajes en 11-13 días de 14, número"
+  ],
+  [
+   "ine_mitma_regular_flows_share_11_13",
+   "Regular trips on 11-13 days of 14, share",
+   "Viajes regulares en 11-13 días de 14, peso"
+  ],
+  [
+   "ine_mitma_regular_flows_14",
+   "Trips on 14 days of 14, count",
+   "Viajes en 14 días de 14, número"
+  ],
+  [
+   "ine_mitma_regular_flows_share_14",
+   "Regular trips on 14 days of 14, share",
+   "Viajes regulares en 14 días de 14, peso"
+  ]
+ ]
+}

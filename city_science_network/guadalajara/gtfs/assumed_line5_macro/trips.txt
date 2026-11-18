@@ -1,0 +1,3 @@
+route_id,service_id,trip_id,trip_headsign,direction_id,shape_id
+assumed_line5_macro,ALL,assumed_line5_macro_0,Aeropuerto,0,assumed_line5_macro_shape
+assumed_line5_macro,ALL,assumed_line5_macro_1,Chapalita Inn,1,

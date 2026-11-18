@@ -1,0 +1,1339 @@
+{
+ "_about": "Column documentation (the 'i' panels and the Metadata tab): sources, native levels and the bilingual description of every column. Templates use {placeholders}; columns: key -> [name_en, name_es, source, level, description_en, description_es, unit].",
+ "sources": {
+  "padron": [
+   "INE - Padrón municipal (population register, official figures)",
+   "INE - Padrón municipal (cifras oficiales de población)"
+  ],
+  "censo": [
+   "INE - Census of Population and Housing 2021",
+   "INE - Censo de Población y Viviendas 2021"
+  ],
+  "adrh": [
+   "INE - Household Income Distribution Atlas (ADRH)",
+   "INE - Atlas de Distribución de Renta de los Hogares (ADRH)"
+  ],
+  "eustat": [
+   "Eustat - Basque Statistics Institute (Basque Country only)",
+   "Eustat - Instituto Vasco de Estadística (solo País Vasco)"
+  ],
+  "emal": [
+   "Gobierno Vasco - EMAL rental-deposit statistics (Basque Country only)",
+   "Gobierno Vasco - Estadística de depósito de fianzas de alquiler, EMAL (solo País Vasco)"
+  ],
+  "serpavi": [
+   "MIVAU - SERPAVI rental price index (tax data + Catastro)",
+   "MIVAU - Sistema Estatal de Referencia del Precio del Alquiler de Vivienda (SERPAVI)"
+  ],
+  "valor": [
+   "MIVAU - Appraised value of free housing (Boletín Online, municipalities above 25,000 inhabitants)",
+   "MIVAU - Valor tasado de vivienda libre (Boletín Online, municipios de más de 25.000 habitantes)"
+  ],
+  "catastro": [
+   "Dirección General del Catastro - INSPIRE buildings (Gipuzkoa: foral cadastre / B5M)",
+   "Dirección General del Catastro - edificios INSPIRE (Gipuzkoa: catastro foral / B5M)"
+  ],
+  "tourist": [
+   "INE - Tourist dwellings statistic (VTE, experimental)",
+   "INE - Estadística experimental de viviendas turísticas (VTE)"
+  ],
+  "migr": [
+   "INE - Residential Variations Statistics (EMCR), net migration",
+   "INE - Estadística de Migraciones y Cambios de Residencia (EMCR), saldos migratorios"
+  ],
+  "elec": [
+   "Ministerio del Interior - results by polling station, aggregated to census sections (Basque 2024: Gobierno Vasco)",
+   "Ministerio del Interior - resultados por mesa electoral agregados a secciones censales (País Vasco 2024: Gobierno Vasco)"
+  ],
+  "mitma": [
+   "MITMA - Nationwide mobility study with mobile-phone big data (open data, MITMA districts)",
+   "MITMA - Estudio de movilidad con Big Data (datos abiertos, distritos MITMA)"
+  ],
+  "worldpop": [
+   "WorldPop - 100 m population grid",
+   "WorldPop - malla de población de 100 m"
+  ],
+  "derived": [
+   "Derived by this study from the sources named in the description",
+   "Derivada por este estudio a partir de las fuentes indicadas en la descripción"
+  ],
+  "transitlos": [
+   "Computed by this study (transitLOS)",
+   "Calculada por este estudio (transitLOS)"
+  ]
+ },
+ "levels": {
+  "section": [
+   "Census section (sección censal), about 1,500 residents",
+   "Sección censal, unos 1.500 residentes"
+  ],
+  "section_ba": [
+   "Census section (Basque Country only)",
+   "Sección censal (solo País Vasco)"
+  ],
+  "district": [
+   "Census district (distrito censal), repeated on each of its sections",
+   "Distrito censal, repetido en cada una de sus secciones"
+  ],
+  "municipality": [
+   "Municipality, repeated on each of its sections",
+   "Municipio, repetido en cada una de sus secciones"
+  ],
+  "municipality_ba": [
+   "Municipality (Basque Country only), repeated on each of its sections",
+   "Municipio (solo País Vasco), repetido en cada una de sus secciones"
+  ],
+  "grid": [
+   "100 m raster grid (WorldPop), resampled to the H3 hexagons",
+   "Malla ráster de 100 m (WorldPop), remuestreada a hexágonos H3"
+  ],
+  "h3": [
+   "H3 hexagon (resolution 9 for the score)",
+   "Hexágono H3 (resolución 9 para la puntuación)"
+  ],
+  "mitma_district": [
+   "MITMA district (MITMA zoning, built from census sections), repeated on each of its sections",
+   "Distrito MITMA (zonificación MITMA, formada por secciones censales), repetido en cada una de sus secciones"
+  ],
+  "section_derived": [
+   "Census section (computed from section-level data)",
+   "Sección censal (calculada con datos de sección)"
+  ]
+ },
+ "columns": {
+  "population": [
+   "Population",
+   "Población",
+   "worldpop",
+   "grid",
+   "Number of residents. The 100 m WorldPop population raster is resampled to each H3 hexagon so the total of a larger area is the sum of its cells.",
+   "Número de residentes. La malla ráster de población de 100 m de WorldPop se remuestrea a cada hexágono H3, de modo que el total de un área mayor es la suma de sus celdas.",
+   "people"
+  ],
+  "level_of_service": [
+   "Level of service",
+   "Nivel de servicio",
+   "transitlos",
+   "h3",
+   "Transit score from 0 to 100 for each hexagon: how fast, how frequent and how easy to walk to the public transport network around it is. Built from the GTFS feeds of the National Access Point (NAP) transport operators.",
+   "Puntuación de transporte público de 0 a 100 para cada hexágono: velocidad, frecuencia y facilidad para llegar a pie a la red de transporte público de su entorno. Se calcula con los feeds GTFS de los operadores del Punto de Acceso Nacional (NAP).",
+   "0-100"
+  ],
+  "population_density": [
+   "Population density",
+   "Densidad de población",
+   "worldpop",
+   "grid",
+   "Residents per square kilometre: the population of each hexagon divided by its area.",
+   "Residentes por kilómetro cuadrado: población de cada hexágono dividida entre su superficie.",
+   "pop/km²"
+  ],
+  "ine_malePopulation": [
+   "Male population",
+   "Población masculina",
+   "padron",
+   "section",
+   "Men registered in the municipal register.",
+   "Hombres inscritos en el padrón municipal.",
+   "people"
+  ],
+  "ine_femalePopulation": [
+   "Female population",
+   "Población femenina",
+   "padron",
+   "section",
+   "Women registered in the municipal register.",
+   "Mujeres inscritas en el padrón municipal.",
+   "people"
+  ],
+  "ine_households": [
+   "Households",
+   "Hogares",
+   "censo",
+   "section",
+   "Number of private households (people living together in the same dwelling).",
+   "Número de hogares privados (personas que conviven en la misma vivienda).",
+   "households"
+  ],
+  "ine_dwellings": [
+   "Dwellings",
+   "Viviendas",
+   "censo",
+   "section",
+   "Number of dwellings (main, secondary and empty).",
+   "Número de viviendas (principales, secundarias y vacías).",
+   "dwellings"
+  ],
+  "ine_educationPrimaryOrLessPopulation": [
+   "Primary education or less",
+   "Educación primaria o menos",
+   "censo",
+   "section",
+   "Residents whose highest completed education is primary education or lower.",
+   "Residentes cuyo nivel de estudios más alto completado es primaria o inferior.",
+   "people"
+  ],
+  "ine_educationSecondaryPopulation": [
+   "Secondary education",
+   "Educación secundaria",
+   "censo",
+   "section",
+   "Residents whose highest completed education is lower or upper secondary or post-secondary non-tertiary.",
+   "Residentes cuyo nivel de estudios más alto completado es secundaria (obligatoria o postobligatoria) o postsecundaria no superior.",
+   "people"
+  ],
+  "ine_educationUniversityPopulation": [
+   "University education",
+   "Educación universitaria",
+   "censo",
+   "section",
+   "Residents whose highest completed education is higher (tertiary) education.",
+   "Residentes cuyo nivel de estudios más alto completado es educación superior.",
+   "people"
+  ],
+  "ine_laborForce": [
+   "Labor force",
+   "Población activa",
+   "censo",
+   "section",
+   "Economically active residents: employed plus unemployed people looking for work.",
+   "Residentes económicamente activos: ocupados más parados que buscan empleo.",
+   "people"
+  ],
+  "ine_foreignBornPopulation": [
+   "Foreign-born population",
+   "Población nacida en el extranjero",
+   "censo",
+   "section",
+   "Residents born outside Spain.",
+   "Residentes nacidos fuera de España.",
+   "people"
+  ],
+  "ine_under18Population": [
+   "Under 18 population",
+   "Población menor de 18 años",
+   "adrh",
+   "section",
+   "Residents aged under 18.",
+   "Residentes menores de 18 años.",
+   "people"
+  ],
+  "ine_over65Population": [
+   "Over 65 population",
+   "Población mayor de 65 años",
+   "adrh",
+   "section",
+   "Residents aged 65 and over.",
+   "Residentes de 65 años o más.",
+   "people"
+  ],
+  "ine_foreignNationalPopulation": [
+   "Foreign national population",
+   "Población de nacionalidad extranjera",
+   "adrh",
+   "section",
+   "Residents without Spanish nationality.",
+   "Residentes sin nacionalidad española.",
+   "people"
+  ],
+  "ine_povertyPopulation": [
+   "Population at risk of poverty",
+   "Población en riesgo de pobreza",
+   "adrh",
+   "section",
+   "Residents below 60% of the median income per consumption unit (relative poverty).",
+   "Residentes con ingresos por unidad de consumo inferiores al 60% de la mediana (pobreza relativa).",
+   "people"
+  ],
+  "ine_population0to19": [
+   "Population 0-19",
+   "Población de 0 a 19 años",
+   "eustat",
+   "section_ba",
+   "Residents aged 0 to 19.",
+   "Residentes de 0 a 19 años.",
+   "people"
+  ],
+  "ine_population20to64": [
+   "Population 20-64",
+   "Población de 20 a 64 años",
+   "eustat",
+   "section_ba",
+   "Residents aged 20 to 64.",
+   "Residentes de 20 a 64 años.",
+   "people"
+  ],
+  "ine_foreignEU27Population": [
+   "Foreign EU27 population",
+   "Población extranjera de la UE-27",
+   "eustat",
+   "section_ba",
+   "Residents with the nationality of another EU27 country.",
+   "Residentes con nacionalidad de otro país de la UE-27.",
+   "people"
+  ],
+  "ine_foreignOtherPopulation": [
+   "Foreign non-EU27 population",
+   "Población extranjera de fuera de la UE-27",
+   "eustat",
+   "section_ba",
+   "Residents with a foreign nationality outside the EU27.",
+   "Residentes con una nacionalidad extranjera de fuera de la UE-27.",
+   "people"
+  ],
+  "ine_incomeNetPersonMean": [
+   "Mean net income per person",
+   "Renta neta media por persona",
+   "adrh",
+   "section",
+   "Mean net income (after tax and social contributions) per person.",
+   "Renta neta media (después de impuestos y cotizaciones) por persona.",
+   "EUR/year"
+  ],
+  "ine_incomeGrossPersonMean": [
+   "Mean gross income per person",
+   "Renta bruta media por persona",
+   "adrh",
+   "section",
+   "Mean gross income per person.",
+   "Renta bruta media por persona.",
+   "EUR/year"
+  ],
+  "ine_incomeGrossHouseholdMean": [
+   "Mean gross income per household",
+   "Renta bruta media por hogar",
+   "adrh",
+   "section",
+   "Mean gross income per household.",
+   "Renta bruta media por hogar.",
+   "EUR/year"
+  ],
+  "ine_meanHouseholdIncome": [
+   "Mean net income per household",
+   "Renta neta media por hogar",
+   "adrh",
+   "section",
+   "Mean net income per household.",
+   "Renta neta media por hogar.",
+   "EUR/year"
+  ],
+  "ine_incomePerConsumptionUnitMean": [
+   "Mean income per consumption unit",
+   "Renta media por unidad de consumo",
+   "adrh",
+   "section",
+   "Mean household income divided by its consumption units (OECD-modified scale: first adult 1, each other adult 0.5, each child under 14 0.3).",
+   "Renta media del hogar dividida por sus unidades de consumo (escala de la OCDE modificada: primer adulto 1, resto de adultos 0,5, menores de 14 años 0,3).",
+   "EUR/year"
+  ],
+  "ine_incomePerConsumptionUnitMedian": [
+   "Median income per consumption unit",
+   "Renta mediana por unidad de consumo",
+   "adrh",
+   "section",
+   "Median household income per consumption unit (OECD-modified scale).",
+   "Mediana de la renta del hogar por unidad de consumo (escala de la OCDE modificada).",
+   "EUR/year"
+  ],
+  "ine_giniIndex": [
+   "Gini index",
+   "Índice de Gini",
+   "adrh",
+   "section",
+   "Income inequality: 0 means everyone has the same income and 100 means one person has all of it.",
+   "Desigualdad de renta: 0 significa que todos tienen la misma renta y 100 que una sola persona la concentra toda.",
+   "0-100"
+  ],
+  "ine_incomeP80P20Ratio": [
+   "Income P80/P20 ratio",
+   "Ratio de renta P80/P20",
+   "adrh",
+   "section",
+   "Income of the person at the 80th percentile divided by the income at the 20th percentile; higher means more inequality.",
+   "Renta de la persona en el percentil 80 dividida entre la del percentil 20; cuanto más alto, mayor desigualdad.",
+   "ratio"
+  ],
+  "ine_ageMean": [
+   "Mean age",
+   "Edad media",
+   "adrh",
+   "section",
+   "Mean age of the residents.",
+   "Edad media de los residentes.",
+   "years"
+  ],
+  "ine_householdSizeMean": [
+   "Mean household size",
+   "Tamaño medio del hogar",
+   "adrh",
+   "section",
+   "Mean number of people per household.",
+   "Número medio de personas por hogar.",
+   "people"
+  ],
+  "ine_singlePersonHouseholdsShare": [
+   "Single-person households",
+   "Hogares unipersonales",
+   "adrh",
+   "section",
+   "Share of households made up of one person.",
+   "Porcentaje de hogares formados por una sola persona.",
+   "%"
+  ],
+  "ine_aboveMedianShare140": [
+   "Income above 140% of the median",
+   "Renta por encima del 140% de la mediana",
+   "adrh",
+   "section",
+   "Share of residents whose income per consumption unit is above 140% of the median.",
+   "Porcentaje de residentes con renta por unidad de consumo superior al 140% de la mediana.",
+   "%"
+  ],
+  "ine_aboveMedianShare160": [
+   "Income above 160% of the median",
+   "Renta por encima del 160% de la mediana",
+   "adrh",
+   "section",
+   "Share of residents whose income per consumption unit is above 160% of the median.",
+   "Porcentaje de residentes con renta por unidad de consumo superior al 160% de la mediana.",
+   "%"
+  ],
+  "ine_aboveMedianShare200": [
+   "Income above 200% of the median",
+   "Renta por encima del 200% de la mediana",
+   "adrh",
+   "section",
+   "Share of residents whose income per consumption unit is above 200% of the median.",
+   "Porcentaje de residentes con renta por unidad de consumo superior al 200% de la mediana.",
+   "%"
+  ],
+  "ine_belowHalfMedianShare40": [
+   "Income below 40% of the median",
+   "Renta por debajo del 40% de la mediana",
+   "adrh",
+   "section",
+   "Share of residents whose income per consumption unit is below 40% of the median.",
+   "Porcentaje de residentes con renta por unidad de consumo inferior al 40% de la mediana.",
+   "%"
+  ],
+  "ine_belowMedianShare50": [
+   "Income below 50% of the median",
+   "Renta por debajo del 50% de la mediana",
+   "adrh",
+   "section",
+   "Share of residents whose income per consumption unit is below 50% of the median.",
+   "Porcentaje de residentes con renta por unidad de consumo inferior al 50% de la mediana.",
+   "%"
+  ],
+  "ine_belowMedianShare60": [
+   "Income below 60% of the median",
+   "Renta por debajo del 60% de la mediana",
+   "adrh",
+   "section",
+   "Share of residents whose income per consumption unit is below 60% of the median (the relative-poverty threshold).",
+   "Porcentaje de residentes con renta por unidad de consumo inferior al 60% de la mediana (umbral de pobreza relativa).",
+   "%"
+  ],
+  "ine_incomeSourceSalaryShare": [
+   "Income from salaries",
+   "Renta procedente de salarios",
+   "adrh",
+   "section",
+   "Share of total income that comes from salaries.",
+   "Porcentaje de la renta total que procede de salarios.",
+   "%"
+  ],
+  "ine_incomeSourcePensionsShare": [
+   "Income from pensions",
+   "Renta procedente de pensiones",
+   "adrh",
+   "section",
+   "Share of total income that comes from pensions.",
+   "Porcentaje de la renta total que procede de pensiones.",
+   "%"
+  ],
+  "ine_incomeSourceUnemploymentBenefitsShare": [
+   "Income from unemployment benefits",
+   "Renta procedente de prestaciones por desempleo",
+   "adrh",
+   "section",
+   "Share of total income that comes from unemployment benefits.",
+   "Porcentaje de la renta total que procede de prestaciones por desempleo.",
+   "%"
+  ],
+  "ine_incomeSourceOtherBenefitsShare": [
+   "Income from other benefits",
+   "Renta procedente de otras prestaciones",
+   "adrh",
+   "section",
+   "Share of total income that comes from benefits other than pensions and unemployment.",
+   "Porcentaje de la renta total que procede de prestaciones distintas de pensiones y desempleo.",
+   "%"
+  ],
+  "ine_incomeSourceOtherShare": [
+   "Income from other sources",
+   "Renta procedente de otras fuentes",
+   "adrh",
+   "section",
+   "Share of total income that comes from other sources.",
+   "Porcentaje de la renta total que procede de otras fuentes.",
+   "%"
+  ],
+  "ine_serpavi_rent_m2_median_vc": [
+   "Median rent per m², flats",
+   "Alquiler mediano por m², pisos",
+   "serpavi",
+   "section",
+   "Median monthly rent per square metre of flats (collective housing) rented in the section; hidden where there are too few contracts.",
+   "Alquiler mensual mediano por metro cuadrado de los pisos (vivienda colectiva) alquilados en la sección; oculto donde hay pocos contratos.",
+   "EUR/m²/month"
+  ],
+  "ine_serpavi_rent_total_median_vc": [
+   "Median monthly rent, flats",
+   "Alquiler mensual mediano, pisos",
+   "serpavi",
+   "section",
+   "Median monthly rent per flat (collective housing) in the section.",
+   "Alquiler mensual mediano por piso (vivienda colectiva) en la sección.",
+   "EUR/month"
+  ],
+  "ine_serpavi_rent_m2_median_vu": [
+   "Median rent per m², houses",
+   "Alquiler mediano por m², viviendas unifamiliares",
+   "serpavi",
+   "section",
+   "Median monthly rent per square metre of single-family houses in the section.",
+   "Alquiler mensual mediano por metro cuadrado de las viviendas unifamiliares de la sección.",
+   "EUR/m²/month"
+  ],
+  "ine_serpavi_rent_m2_p25_vc": [
+   "Rent per m², flats, 25th percentile",
+   "Alquiler por m², pisos, percentil 25",
+   "serpavi",
+   "section",
+   "Monthly rent per square metre of flats below which 25% of the contracts fall.",
+   "Alquiler mensual por metro cuadrado de los pisos por debajo del cual queda el 25% de los contratos.",
+   "EUR/m²/month"
+  ],
+  "ine_serpavi_rent_m2_p75_vc": [
+   "Rent per m², flats, 75th percentile",
+   "Alquiler por m², pisos, percentil 75",
+   "serpavi",
+   "section",
+   "Monthly rent per square metre of flats below which 75% of the contracts fall.",
+   "Alquiler mensual por metro cuadrado de los pisos por debajo del cual queda el 75% de los contratos.",
+   "EUR/m²/month"
+  ],
+  "ine_serpavi_area_m2_median_vc": [
+   "Median flat area",
+   "Superficie mediana de los pisos",
+   "serpavi",
+   "section",
+   "Median floor area of the rented flats in the section.",
+   "Superficie mediana de los pisos alquilados en la sección.",
+   "m²"
+  ],
+  "ine_serpavi_n_vc": [
+   "Rental contracts in the sample, flats",
+   "Contratos de alquiler en la muestra, pisos",
+   "serpavi",
+   "section",
+   "Number of flat rental contracts the SERPAVI statistic is based on.",
+   "Número de contratos de alquiler de pisos en que se basa la estadística SERPAVI.",
+   "contracts"
+  ],
+  "ine_serpavi_rent_m2_latest": [
+   "Median rent per m², latest year",
+   "Alquiler mediano por m², último año",
+   "serpavi",
+   "section",
+   "Median monthly rent per square metre in the most recent year with data: flats where available, otherwise single-family houses.",
+   "Alquiler mensual mediano por metro cuadrado del último año con datos: pisos si hay, y si no viviendas unifamiliares.",
+   "EUR/m²/month"
+  ],
+  "ine_tourist_dwellings": [
+   "Tourist dwellings",
+   "Viviendas turísticas",
+   "tourist",
+   "municipality",
+   "Number of dwellings advertised as tourist rentals in the municipality, from portal data (not Airbnb microdata).",
+   "Número de viviendas anunciadas como alquiler turístico en el municipio, a partir de datos de portales (no de microdatos de Airbnb).",
+   "dwellings"
+  ],
+  "ine_tourist_places": [
+   "Tourist places",
+   "Plazas turísticas",
+   "tourist",
+   "municipality",
+   "Number of tourist beds (places) in tourist dwellings of the municipality.",
+   "Número de plazas turísticas en las viviendas turísticas del municipio.",
+   "places"
+  ],
+  "ine_tourist_dwellings_share": [
+   "Share of tourist dwellings",
+   "Peso de viviendas turísticas",
+   "tourist",
+   "municipality",
+   "Tourist dwellings as a share of all dwellings in the municipality.",
+   "Viviendas turísticas como porcentaje del total de viviendas del municipio.",
+   "%"
+  ],
+  "ine_netmig_total": [
+   "Net migration, total",
+   "Saldo migratorio, total",
+   "migr",
+   "municipality",
+   "People arriving minus people leaving the municipality in the year, from abroad and from the rest of Spain.",
+   "Personas que llegan menos personas que se van del municipio en el año, desde el extranjero y desde el resto de España.",
+   "people"
+  ],
+  "ine_netmig_exterior": [
+   "Net migration, abroad",
+   "Saldo migratorio, exterior",
+   "migr",
+   "municipality",
+   "Arrivals from abroad minus departures abroad.",
+   "Llegadas desde el extranjero menos salidas al extranjero.",
+   "people"
+  ],
+  "ine_netmig_interior": [
+   "Net migration, within Spain",
+   "Saldo migratorio, interior",
+   "migr",
+   "municipality",
+   "Arrivals from other Spanish municipalities minus departures to them.",
+   "Llegadas desde otros municipios españoles menos salidas hacia ellos.",
+   "people"
+  ],
+  "ine_valor_tasado_total_eur_m2": [
+   "Appraised value per m², all dwellings",
+   "Valor tasado por m², todas las viviendas",
+   "valor",
+   "municipality",
+   "Mean appraised value of free housing per square metre (appraisals made for mortgages), new and used dwellings together.",
+   "Valor tasado medio de la vivienda libre por metro cuadrado (tasaciones hipotecarias), viviendas nuevas y usadas conjuntamente.",
+   "EUR/m²"
+  ],
+  "ine_valor_tasado_new_eur_m2": [
+   "Appraised value per m², new dwellings",
+   "Valor tasado por m², viviendas nuevas",
+   "valor",
+   "municipality",
+   "Mean appraised value per square metre of dwellings up to five years old.",
+   "Valor tasado medio por metro cuadrado de las viviendas de hasta cinco años de antigüedad.",
+   "EUR/m²"
+  ],
+  "ine_valor_tasado_old_eur_m2": [
+   "Appraised value per m², used dwellings",
+   "Valor tasado por m², viviendas usadas",
+   "valor",
+   "municipality",
+   "Mean appraised value per square metre of dwellings more than five years old.",
+   "Valor tasado medio por metro cuadrado de las viviendas de más de cinco años de antigüedad.",
+   "EUR/m²"
+  ],
+  "ine_dwellings_main_share": [
+   "Main dwellings",
+   "Viviendas principales",
+   "censo",
+   "section",
+   "Share of dwellings that are the usual residence of a household.",
+   "Porcentaje de viviendas que son residencia habitual de un hogar.",
+   "%"
+  ],
+  "ine_dwellings_secondary_or_empty_share": [
+   "Secondary or empty dwellings",
+   "Viviendas secundarias o vacías",
+   "censo",
+   "section",
+   "Share of dwellings that are second homes or are empty.",
+   "Porcentaje de viviendas que son segundas residencias o están vacías.",
+   "%"
+  ],
+  "ine_tenure_rented_share": [
+   "Rented dwellings",
+   "Viviendas en alquiler",
+   "censo",
+   "district",
+   "Share of main dwellings that are rented.",
+   "Porcentaje de viviendas principales en alquiler.",
+   "%"
+  ],
+  "ine_tenure_owned_share": [
+   "Owned dwellings",
+   "Viviendas en propiedad",
+   "censo",
+   "district",
+   "Share of main dwellings that are owned.",
+   "Porcentaje de viviendas principales en propiedad.",
+   "%"
+  ],
+  "ine_tenure_other_share": [
+   "Dwellings with other tenure",
+   "Viviendas con otro régimen de tenencia",
+   "censo",
+   "district",
+   "Share of main dwellings with another form of tenure (free of charge, shared ownership...).",
+   "Porcentaje de viviendas principales con otro régimen de tenencia (cesión gratuita, propiedad compartida...).",
+   "%"
+  ],
+  "ine_catastro_buildings": [
+   "Buildings",
+   "Edificios",
+   "catastro",
+   "section",
+   "Number of buildings (annexes included) whose centre lies in the section.",
+   "Número de edificios (anexos incluidos) cuyo centro está en la sección.",
+   "buildings"
+  ],
+  "ine_catastro_dwellings": [
+   "Registered dwellings",
+   "Viviendas catastradas",
+   "catastro",
+   "section",
+   "Dwellings registered in the cadastre (not available in Gipuzkoa).",
+   "Viviendas registradas en el catastro (no disponible en Gipuzkoa).",
+   "dwellings"
+  ],
+  "ine_catastro_building_units": [
+   "Building units",
+   "Unidades de edificación",
+   "catastro",
+   "section",
+   "Dwellings, shops, offices, garages... registered in the cadastre (not available in Gipuzkoa).",
+   "Viviendas, locales, oficinas, garajes... registrados en el catastro (no disponible en Gipuzkoa).",
+   "units"
+  ],
+  "ine_catastro_floor_area_m2_total": [
+   "Total floor area",
+   "Superficie construida total",
+   "catastro",
+   "section",
+   "Total built floor area of the buildings (not available in Gipuzkoa).",
+   "Superficie construida total de los edificios (no disponible en Gipuzkoa).",
+   "m²"
+  ],
+  "ine_catastro_footprint_m2_total": [
+   "Total building footprint",
+   "Superficie ocupada por los edificios",
+   "catastro",
+   "section",
+   "Total ground area covered by the buildings of the section.",
+   "Superficie de suelo ocupada por los edificios de la sección.",
+   "m²"
+  ],
+  "ine_catastro_year_built_median": [
+   "Median year of construction",
+   "Año de construcción mediano",
+   "catastro",
+   "section",
+   "Median year of construction of the buildings with a known year (1900 is often used for any older building).",
+   "Año de construcción mediano de los edificios con año conocido (1900 se usa a menudo para cualquier edificio anterior).",
+   "year"
+  ],
+  "ine_catastro_share_built_before_1960": [
+   "Buildings built before 1960",
+   "Edificios construidos antes de 1960",
+   "catastro",
+   "section",
+   "Share of buildings, among those with a known year, built before 1960.",
+   "Porcentaje de edificios, entre los de año conocido, construidos antes de 1960.",
+   "%"
+  ],
+  "ine_catastro_share_built_since_2000": [
+   "Buildings built since 2000",
+   "Edificios construidos desde 2000",
+   "catastro",
+   "section",
+   "Share of buildings, among those with a known year, built in 2000 or later.",
+   "Porcentaje de edificios, entre los de año conocido, construidos en 2000 o después.",
+   "%"
+  ],
+  "ine_catastro_residential_share": [
+   "Residential buildings",
+   "Edificios residenciales",
+   "catastro",
+   "section",
+   "Share of buildings whose current use is residential (not available in Gipuzkoa).",
+   "Porcentaje de edificios cuyo uso actual es residencial (no disponible en Gipuzkoa).",
+   "%"
+  ],
+  "ine_catastro_dwellings_per_building": [
+   "Dwellings per building",
+   "Viviendas por edificio",
+   "catastro",
+   "section",
+   "Mean number of dwellings per residential building (not available in Gipuzkoa).",
+   "Número medio de viviendas por edificio residencial (no disponible en Gipuzkoa).",
+   "dwellings"
+  ],
+  "ine_catastro_height_mean_m": [
+   "Mean building height",
+   "Altura media de los edificios",
+   "catastro",
+   "section",
+   "Mean building height (Gipuzkoa, Araba and Navarra only).",
+   "Altura media de los edificios (solo Gipuzkoa, Araba y Navarra).",
+   "m"
+  ],
+  "ine_catastro_floors_mean": [
+   "Mean number of floors",
+   "Número medio de plantas",
+   "catastro",
+   "section",
+   "Mean number of floors above ground (Araba, Bizkaia, Navarra and where the state cadastre provides it).",
+   "Número medio de plantas sobre rasante (Araba, Bizkaia, Navarra y donde el catastro estatal lo facilita).",
+   "floors"
+  ],
+  "ine_emal_rent_m2": [
+   "Rent per m² (EMAL)",
+   "Alquiler por m² (EMAL)",
+   "emal",
+   "municipality_ba",
+   "Mean monthly rent per square metre of the leases deposited in the municipality.",
+   "Alquiler mensual medio por metro cuadrado de los contratos depositados en el municipio.",
+   "EUR/m²/month"
+  ],
+  "ine_emal_rent_monthly": [
+   "Monthly rent (EMAL)",
+   "Alquiler mensual (EMAL)",
+   "emal",
+   "municipality_ba",
+   "Mean monthly rent of the leases deposited in the municipality.",
+   "Alquiler mensual medio de los contratos depositados en el municipio.",
+   "EUR/month"
+  ],
+  "ine_emal_deposits": [
+   "Rental deposits (EMAL)",
+   "Depósitos de fianzas (EMAL)",
+   "emal",
+   "municipality_ba",
+   "Number of rental deposits made in the municipality.",
+   "Número de fianzas de alquiler depositadas en el municipio.",
+   "deposits"
+  ],
+  "ine_eustat_incomeTotal": [
+   "Total income (Eustat)",
+   "Renta total (Eustat)",
+   "eustat",
+   "section_ba",
+   "Mean total income per person.",
+   "Renta total media por persona.",
+   "EUR"
+  ],
+  "ine_eustat_incomeWork": [
+   "Income from work (Eustat)",
+   "Renta del trabajo (Eustat)",
+   "eustat",
+   "section_ba",
+   "Mean income per person from salaried work.",
+   "Renta media por persona procedente del trabajo asalariado.",
+   "EUR"
+  ],
+  "ine_eustat_incomeMovableCapital": [
+   "Income from movable capital (Eustat)",
+   "Renta del capital mobiliario (Eustat)",
+   "eustat",
+   "section_ba",
+   "Mean income per person from interest, dividends and other movable capital.",
+   "Renta media por persona procedente de intereses, dividendos y otro capital mobiliario.",
+   "EUR"
+  ],
+  "ine_eustat_incomeRealEstateCapital": [
+   "Income from real estate (Eustat)",
+   "Renta del capital inmobiliario (Eustat)",
+   "eustat",
+   "section_ba",
+   "Mean income per person from rented real estate.",
+   "Renta media por persona procedente de inmuebles alquilados.",
+   "EUR"
+  ],
+  "ine_eustat_incomeActivity": [
+   "Income from economic activity (Eustat)",
+   "Renta de actividades económicas (Eustat)",
+   "eustat",
+   "section_ba",
+   "Mean income per person from self-employment and business activity.",
+   "Renta media por persona procedente de actividades económicas por cuenta propia.",
+   "EUR"
+  ],
+  "ine_eustat_incomeTransfers": [
+   "Income from transfers (Eustat)",
+   "Renta por transferencias (Eustat)",
+   "eustat",
+   "section_ba",
+   "Mean income per person from pensions and social benefits.",
+   "Renta media por persona procedente de pensiones y prestaciones sociales.",
+   "EUR"
+  ],
+  "ine_eustat_incomeDisposable": [
+   "Disposable income (Eustat)",
+   "Renta disponible (Eustat)",
+   "eustat",
+   "section_ba",
+   "Mean income per person after taxes and contributions.",
+   "Renta media por persona después de impuestos y cotizaciones.",
+   "EUR"
+  ],
+  "ine_eustat_dwellingsTotal": [
+   "Dwellings (Eustat)",
+   "Viviendas (Eustat)",
+   "eustat",
+   "section_ba",
+   "Total dwellings in the section.",
+   "Total de viviendas de la sección.",
+   "dwellings"
+  ],
+  "ine_eustat_dwellingsFamily": [
+   "Family dwellings (Eustat)",
+   "Viviendas familiares (Eustat)",
+   "eustat",
+   "section_ba",
+   "Dwellings occupied by a family.",
+   "Viviendas ocupadas por una familia.",
+   "dwellings"
+  ],
+  "ine_eustat_dwellingsMain": [
+   "Main dwellings (Eustat)",
+   "Viviendas principales (Eustat)",
+   "eustat",
+   "section_ba",
+   "Dwellings used as the usual residence.",
+   "Viviendas utilizadas como residencia habitual.",
+   "dwellings"
+  ],
+  "ine_eustat_dwellingsOther": [
+   "Other dwellings (Eustat)",
+   "Otras viviendas (Eustat)",
+   "eustat",
+   "section_ba",
+   "Secondary, empty and other dwellings.",
+   "Viviendas secundarias, vacías y otras.",
+   "dwellings"
+  ],
+  "ine_eustat_dwellingAvgAge": [
+   "Mean dwelling age (Eustat)",
+   "Antigüedad media de la vivienda (Eustat)",
+   "eustat",
+   "section_ba",
+   "Mean age of the dwellings in years.",
+   "Antigüedad media de las viviendas en años.",
+   "years"
+  ],
+  "ine_eustat_dwellingAvgUsefulArea": [
+   "Mean useful area (Eustat)",
+   "Superficie útil media (Eustat)",
+   "eustat",
+   "section_ba",
+   "Mean useful floor area of the dwellings.",
+   "Superficie útil media de las viviendas.",
+   "m²"
+  ],
+  "ine_eustat_dwellingsOwnedPct": [
+   "Owned dwellings (Eustat)",
+   "Viviendas en propiedad (Eustat)",
+   "eustat",
+   "section_ba",
+   "Share of dwellings that are owned.",
+   "Porcentaje de viviendas en propiedad.",
+   "%"
+  ],
+  "ine_eustat_dwellingsRentedPct": [
+   "Rented dwellings (Eustat)",
+   "Viviendas en alquiler (Eustat)",
+   "eustat",
+   "section_ba",
+   "Share of dwellings that are rented.",
+   "Porcentaje de viviendas en alquiler.",
+   "%"
+  ],
+  "ine_eustat_dwellingsOtherTenurePct": [
+   "Other tenure dwellings (Eustat)",
+   "Viviendas con otra tenencia (Eustat)",
+   "eustat",
+   "section_ba",
+   "Share of dwellings with another form of tenure.",
+   "Porcentaje de viviendas con otro régimen de tenencia.",
+   "%"
+  ],
+  "rent_per_m2_mean": [
+   "Rent per m²",
+   "Alquiler por m²",
+   "derived",
+   "section_derived",
+   "Monthly rent per square metre of flats. SERPAVI median rent where available, EMAL in the Basque Country.",
+   "Alquiler mensual por metro cuadrado de los pisos. Mediana SERPAVI donde existe y EMAL en el País Vasco.",
+   "EUR/m²/month"
+  ],
+  "price_per_m2_mean": [
+   "Housing price per m²",
+   "Precio de la vivienda por m²",
+   "derived",
+   "municipality",
+   "Appraised value of free housing per square metre (MIVAU), available for municipalities above 25,000 inhabitants.",
+   "Valor tasado de la vivienda libre por metro cuadrado (MIVAU), disponible en municipios de más de 25.000 habitantes.",
+   "EUR/m²"
+  ],
+  "rent_per_home_mean": [
+   "Rent per home",
+   "Alquiler por vivienda",
+   "derived",
+   "section_derived",
+   "Monthly rent per flat. SERPAVI median rent where available, EMAL in the Basque Country.",
+   "Alquiler mensual por piso. Mediana SERPAVI donde existe y EMAL en el País Vasco.",
+   "EUR/month"
+  ],
+  "home_size_m2_mean": [
+   "Home size",
+   "Tamaño de la vivienda",
+   "derived",
+   "section_derived",
+   "Floor area of a typical dwelling: Eustat mean useful area in the Basque Country, SERPAVI median flat area elsewhere.",
+   "Superficie de una vivienda típica: superficie útil media de Eustat en el País Vasco y mediana SERPAVI de pisos en el resto.",
+   "m²"
+  ],
+  "male_share": [
+   "Male",
+   "Hombres",
+   "derived",
+   "section_derived",
+   "Men as a share of the population.",
+   "Hombres como porcentaje de la población.",
+   "%"
+  ],
+  "female_share": [
+   "Female",
+   "Mujeres",
+   "derived",
+   "section_derived",
+   "Women as a share of the population.",
+   "Mujeres como porcentaje de la población.",
+   "%"
+  ],
+  "under18_share": [
+   "Under 18",
+   "Menores de 18 años",
+   "derived",
+   "section_derived",
+   "Residents under 18 as a share of the population.",
+   "Residentes menores de 18 años como porcentaje de la población.",
+   "%"
+  ],
+  "over65_share": [
+   "Over 65",
+   "Mayores de 65 años",
+   "derived",
+   "section_derived",
+   "Residents aged 65 and over as a share of the population.",
+   "Residentes de 65 años o más como porcentaje de la población.",
+   "%"
+  ],
+  "foreign_born_share": [
+   "Foreign-born",
+   "Nacidos en el extranjero",
+   "derived",
+   "section_derived",
+   "Residents born outside Spain as a share of the population.",
+   "Residentes nacidos fuera de España como porcentaje de la población.",
+   "%"
+  ],
+  "university_share": [
+   "University education",
+   "Educación universitaria",
+   "derived",
+   "section_derived",
+   "Residents with higher education as a share of residents with education data.",
+   "Residentes con educación superior como porcentaje de los residentes con dato de estudios.",
+   "%"
+  ],
+  "education_basic_or_less_share": [
+   "Basic education or less",
+   "Educación básica o menos",
+   "derived",
+   "section_derived",
+   "Residents with primary education or less as a share of residents with education data.",
+   "Residentes con educación primaria o inferior como porcentaje de los residentes con dato de estudios.",
+   "%"
+  ]
+ },
+ "built_bands": {
+  "Antes_de_1900": [
+   "before 1900",
+   "antes de 1900"
+  ],
+  "No_consta": [
+   "with year not stated",
+   "con año no consignado"
+  ]
+ },
+ "floor_area_bands": {
+  "Hasta_30": [
+   "up to 30",
+   "hasta 30"
+  ],
+  "M_s_de_180": [
+   "over 180",
+   "más de 180"
+  ],
+  "No_Consta": [
+   "area not stated",
+   "superficie no consignada"
+  ]
+ },
+ "building_types": {
+  "Vivienda_en_edificio_no_residencial": [
+   "in a non-residential building",
+   "en edificio no residencial"
+  ],
+  "Vivienda_en_edificio_residencial_con_dos_viviendas": [
+   "in a residential building with two dwellings",
+   "en edificio residencial con dos viviendas"
+  ],
+  "Vivienda_en_edificio_residencial_con_tres_viviendas_o_m_s": [
+   "in a residential building with three or more dwellings",
+   "en edificio residencial con tres o más viviendas"
+  ],
+  "Vivienda_en_edificio_residencial_con_una_vivienda": [
+   "in a single-dwelling residential building",
+   "en edificio residencial de una vivienda"
+  ],
+  "No_consta": [
+   "with building type not stated",
+   "con tipo de edificio no consignado"
+  ]
+ },
+ "templates": {
+  "built": [
+   "Dwellings built {en}",
+   "Viviendas construidas {es}",
+   "censo",
+   "district",
+   "Share of main dwellings built {en}.",
+   "Porcentaje de viviendas principales construidas {es}.",
+   "%"
+  ],
+  "floor_area_not_stated": [
+   "Dwellings with area not stated",
+   "Viviendas con superficie no consignada",
+   "censo",
+   "district",
+   "Share of main dwellings whose floor area is not stated.",
+   "Porcentaje de viviendas principales sin superficie consignada.",
+   "%"
+  ],
+  "floor_area": [
+   "Dwellings of {en} m²",
+   "Viviendas de {es} m²",
+   "censo",
+   "district",
+   "Share of main dwellings with a floor area of {en} m².",
+   "Porcentaje de viviendas principales con una superficie de {es} m².",
+   "%"
+  ],
+  "building": [
+   "Dwellings {en}",
+   "Viviendas {es}",
+   "censo",
+   "district",
+   "Share of main dwellings {en}.",
+   "Porcentaje de viviendas principales {es}.",
+   "%"
+  ],
+  "dwellings_built_group": [
+   "Dwellings built {en}",
+   "Viviendas construidas {es}",
+   "derived",
+   "district",
+   "Share of dwellings built {en}, grouped from the Census 2021 construction periods.",
+   "Porcentaje de viviendas construidas {es}, agrupando los periodos de construcción del Censo 2021.",
+   "%"
+  ]
+ },
+ "dwellings_built_groups": {
+  "before_1945": [
+   "before 1945",
+   "antes de 1945"
+  ],
+  "1945_1970": [
+   "1945-1970",
+   "1945-1970"
+  ],
+  "1970_2000": [
+   "1970-2000",
+   "1970-2000"
+  ],
+  "after_2000": [
+   "after 2000",
+   "después de 2000"
+  ]
+ },
+ "elections": {
+  "scopes": {
+   "national": [
+    "General (national) election",
+    "Elecciones generales"
+   ],
+   "municipal": [
+    "Municipal election",
+    "Elecciones municipales"
+   ],
+   "state": [
+    "Basque Parliament election",
+    "Elecciones al Parlamento Vasco"
+   ]
+  },
+  "_placeholders": "{e_en} / {e_es}: the election name in lower case; {L} / {R} / {O}: the parties of the left / right / other bloc; {pn}: party name; {bloc_en} / {bloc_es}: its bloc",
+  "base": {
+   "total_votes": [
+    "valid votes",
+    "votos válidos",
+    "Valid votes (including blank ballots) in the {e_en}.",
+    "Votos válidos (incluidos los votos en blanco) en las {e_es}."
+   ],
+   "votes_cast": [
+    "votes cast",
+    "votos emitidos",
+    "Votes cast in the {e_en}.",
+    "Votos emitidos en las {e_es}."
+   ],
+   "electors": [
+    "registered voters",
+    "electores",
+    "People on the electoral roll for the {e_en}.",
+    "Personas inscritas en el censo electoral de las {e_es}."
+   ],
+   "turnout_rate": [
+    "turnout",
+    "participación",
+    "Votes cast as a share of registered voters in the {e_en}.",
+    "Votos emitidos como porcentaje de los electores en las {e_es}."
+   ],
+   "left_votes": [
+    "left bloc votes",
+    "votos bloque izquierda",
+    "Votes for left-bloc parties: {L}.",
+    "Votos a partidos del bloque de izquierda: {L}."
+   ],
+   "right_votes": [
+    "right bloc votes",
+    "votos bloque derecha",
+    "Votes for right-bloc parties: {R}.",
+    "Votos a partidos del bloque de derecha: {R}."
+   ],
+   "left_share": [
+    "left bloc vote",
+    "voto bloque izquierda",
+    "Share of valid votes (blank ballots included) going to left-bloc parties: {L}.",
+    "Porcentaje de votos válidos (en blanco incluidos) a partidos del bloque de izquierda: {L}."
+   ],
+   "right_share": [
+    "right bloc vote",
+    "voto bloque derecha",
+    "Share of valid votes (blank ballots included) going to right-bloc parties: {R}.",
+    "Porcentaje de votos válidos (en blanco incluidos) a partidos del bloque de derecha: {R}."
+   ],
+   "other_share": [
+    "other vote",
+    "voto otros partidos",
+    "Share of valid votes going to all other parties (regionalist, local and blank ballots): {O}.",
+    "Porcentaje de votos válidos a los demás partidos (regionalistas, locales y votos en blanco): {O}."
+   ]
+  },
+  "party_votes": [
+   "{pn} votes",
+   "votos {pn}",
+   "Votes for {pn} ({bloc_en}).",
+   "Votos a {pn} ({bloc_es})."
+  ],
+  "party_share": [
+   "{pn} vote",
+   "voto {pn}",
+   "Share of valid votes for {pn} ({bloc_en}).",
+   "Porcentaje de votos válidos a {pn} ({bloc_es})."
+  ],
+  "blocs_en": {
+   "left": "left bloc",
+   "right": "right bloc",
+   "other": "other parties"
+  },
+  "blocs_es": {
+   "left": "bloque de izquierda",
+   "right": "bloque de derecha",
+   "other": "otros partidos"
+  }
+ },
+ "mitma": {
+  "weekdays": [
+   "Average of three typical weekdays of 2024 (13 March, 12 June, 16 October).",
+   "Media de tres días laborables típicos de 2024 (13 de marzo, 12 de junio, 16 de octubre)."
+  ],
+  "home": [
+   " Each trip counts for the district where the traveller lives (origin or destination activity 'home'); trips with no home end are left out.",
+   " Cada viaje cuenta en el distrito de residencia del viajero (actividad 'casa' en origen o destino); los viajes sin extremo en casa no se incluyen."
+  ],
+  "regular_flows": [
+   "Mobile-phone data count, separately for every origin-destination pair of districts, the people who made the trip on a given number of days in two weeks (14 typical days of the month). A person with several regular destinations counts once per pair, so these are trips-pairs, not people. Average of March, June and October 2024.",
+   "Los datos de telefonía móvil cuentan, para cada par de distritos origen-destino, las personas que hicieron el viaje un número dado de días en dos semanas (14 días típicos del mes). Una persona con varios destinos regulares cuenta una vez por par, así que son pares persona-viaje, no personas. Media de marzo, junio y octubre de 2024."
+  ],
+  "up_to_3_est": [
+   "Share of regular flows (made on 3 or more of the 14 days) that are made on 3 days a week or fewer, i.e. 3 to 6 days in the two weeks. The published bins are 3-4, 5-7, 8-10, 11-13 and 14 days; the 5-7 bin straddles the limit, so this estimate counts two thirds of it. ",
+   "Porcentaje de los flujos regulares (realizados 3 o más de los 14 días) que se hacen 3 días a la semana o menos, es decir, de 3 a 6 días en las dos semanas. Los tramos publicados son 3-4, 5-7, 8-10, 11-13 y 14 días; el tramo 5-7 cruza el límite, por lo que esta estimación cuenta dos tercios de él. "
+  ],
+  "up_to_3_bound": [
+   "Same share as 'Regular trips on up to 3 days a week' but counting {w} the 5-7 day bin ({bound} bound). ",
+   "Mismo porcentaje que 'Viajes regulares de hasta 3 días a la semana' pero contando {w} tramo de 5-7 días (cota {bound}). "
+  ],
+  "bound_words": {
+   "min": [
+    "none of",
+    "lower",
+    "ninguno de",
+    "inferior"
+   ],
+   "max": [
+    "all of",
+    "upper",
+    "todos los",
+    "superior"
+   ]
+  },
+  "regular_share": [
+   "Share of the regular flows (3 or more days of 14) that are made on this number of days. ",
+   "Porcentaje de los flujos regulares (3 o más días de 14) que se hacen este número de días. "
+  ],
+  "regular_count": [
+   "Number of trip-pairs made on this number of days of 14, split evenly among the sections of the district (so sums over an area add up). ",
+   "Número de pares de viaje realizados este número de días de 14, repartido a partes iguales entre las secciones del distrito (la suma de un área suma bien). "
+  ],
+  "km_per_person": [
+   "Straight-line kilometres travelled per resident on an average weekday. ",
+   "Kilómetros en línea recta recorridos por residente en un día laborable medio. "
+  ],
+  "trips_per_person": [
+   "Trips made per resident on an average weekday. ",
+   "Viajes realizados por residente en un día laborable medio. "
+  ],
+  "per_person_tail": [
+   " Divided by the district's INE population.",
+   " Dividido por la población INE del distrito."
+  ],
+  "long_distance": [
+   "Share of {what_en} on trips longer than 50 km (the longest distance band MITMA publishes; great-circle distance). ",
+   "Porcentaje de los {what_es} en viajes de más de 50 km (el mayor tramo de distancia que publica el MITMA; distancia ortodrómica). "
+  ],
+  "long_distance_what": {
+   "km": [
+    "kilometres",
+    "kilómetros"
+   ],
+   "trips": [
+    "trips",
+    "viajes"
+   ]
+  },
+  "distance_band": [
+   "Share of trips in this great-circle distance band (published bands: 0.5-2, 2-10, 10-50 and over 50 km). ",
+   "Porcentaje de viajes en este tramo de distancia ortodrómica (tramos publicados: 0,5-2, 2-10, 10-50 y más de 50 km). "
+  ]
+ }
+}

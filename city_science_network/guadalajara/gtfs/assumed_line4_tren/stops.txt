@@ -1,0 +1,9 @@
+stop_id,stop_name,stop_lat,stop_lon
+assumed_line4_tren_lasjuntas_20.60796_-103.34077,Las Juntas (ASSUMED location),20.607964,-103.340769
+assumed_line4_tren_jalisco200anos_20.57599_-103.35522,Jalisco 200 Años (ASSUMED location),20.575989,-103.355219
+assumed_line4_tren_realdelvalle_20.55889_-103.36591,Real del Valle (ASSUMED location),20.558890,-103.365908
+assumed_line4_tren_concepciondelvalle_20.52714_-103.38494,Concepción del Valle (ASSUMED location),20.527139,-103.384939
+assumed_line4_tren_elcuervo_20.50763_-103.39341,El Cuervo (ASSUMED location),20.507628,-103.393408
+assumed_line4_tren_lomasdelsur_20.48565_-103.40504,Lomas del Sur (ASSUMED location),20.485647,-103.405039
+assumed_line4_tren_cutlajo_20.46896_-103.41522,CUTLAJO (ASSUMED location),20.468958,-103.415219
+assumed_line4_tren_tlajomulcocentro_20.46939_-103.43658,Tlajomulco Centro (ASSUMED location),20.469389,-103.436583

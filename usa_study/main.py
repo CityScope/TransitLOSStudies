@@ -34,7 +34,7 @@ Usage:
     python main.py ALL                # whole experiment: every state, then the nationwide map (stage 5)
     # every run ends by writing data/ptlos_by_state.csv, data/ptlos_usa.json (the PTLOS score) and data/run_manifest.json
     python main.py --usa-map-only     # only rebuild the nationwide map from existing state outputs
-    (see README.md for all flags and the final experiment design)
+    (see --help for all flags)
 """
 
 from __future__ import annotations
@@ -56,10 +56,6 @@ from pathlib import Path
 import geopandas as gpd
 
 sys.path.insert(0, str(Path(__file__).parent))
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "pyGTFSHandler"))
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "pyCensus" / "src"))
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "transitLOS" / "src"))
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "UrbanAccessAnalyzer"))
 
 from code.gtfs_stage import DEFAULT_WINDOW, score_state_stops
 from code.county_pipeline import STOPS_SIGNATURE_FILE, county_already_processed, county_stops_signature, get_state_pbf, rebuild_county_h3, process_county
@@ -76,8 +72,14 @@ logger = logging.getLogger("usa_study.main")
 
 BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / "data"
-OSM_FILES_DIR = BASE_DIR / "osm_files"
-PYCENSUS_CACHE_DIR = DATA_DIR / "pycensus_cache"
+from code.study_cache import apply_env, resolve_cache_dir  # noqa: E402
+
+from code.study_cache import osm_dir, pycensus_dir  # noqa: E402
+
+CACHE_DIR = resolve_cache_dir()  # shared TransitLOSStudies/cache (default); --cache-dir / STUDY_CACHE_DIR override
+OSM_FILES_DIR = osm_dir(CACHE_DIR)
+PYCENSUS_CACHE_DIR = pycensus_dir(CACHE_DIR)
+apply_env(CACHE_DIR)
 
 
 def sanitize_state_name(state_name: str) -> str:
@@ -93,7 +95,13 @@ def run_state(state_abbr: str, force: bool = False, skip_map: bool = False, refr
     """
     from pycensus.countries.usa import geography
 
-    state_gdf = geography.load_boundaries("state", state_abbr, 2023)
+    import us
+
+    _local_state = DATA_DIR / sanitize_state_name(us.states.lookup(state_abbr).name) / "state.geoparquet"
+    if _local_state.is_file():   # no TIGER download (it fails when several states run at once); same boundary as the first run
+        state_gdf = gpd.read_parquet(_local_state)[["GEOID", "geometry"]].to_crs(4326)
+    else:
+        state_gdf = geography.load_boundaries("state", state_abbr, 2023)
     state_fips = state_gdf["GEOID"].iloc[0] if "GEOID" in state_gdf.columns else None
     import us
 
@@ -120,7 +128,12 @@ def run_state(state_abbr: str, force: bool = False, skip_map: bool = False, refr
         )
 
         logger.info(f"Stage 1: scoring stops for {len(gtfs_dirs)} feeds...")
-        stops_gdf = score_state_stops(gtfs_dirs, ntd_rows_by_dir, state_gdf, window=DEFAULT_WINDOW)
+        stop_table_sink: list = []
+        stops_gdf = score_state_stops(gtfs_dirs, ntd_rows_by_dir, state_gdf, window=DEFAULT_WINDOW, stop_table_sink=stop_table_sink)
+        if stop_table_sink:   # one row per real stop_id (own mode / routes / colours) for the map's stop points
+            import pandas as _pd
+
+            _pd.concat(stop_table_sink, ignore_index=True).to_parquet(state_dir / "stops_by_id.parquet")
         def _signature(g):
             # Compared by what the stops ARE (location + score), not by their station names: those are not
             # stable between runs, which used to make every refresh look like a change and wipe finished counties.
@@ -141,6 +154,8 @@ def run_state(state_abbr: str, force: bool = False, skip_map: bool = False, refr
     from pycensus.countries.usa import dhc
 
     counties_gdf = dhc.load(aoi=state_gdf, states=[state_abbr], level="county", cache_dir=str(PYCENSUS_CACHE_DIR))
+    if counties_gdf is None or len(counties_gdf) == 0:
+        raise RuntimeError(f"{state_abbr}: the county list came back empty (census cache busy?) -- not rolling up an empty state")
     logger.info(f"Stage 2: processing {len(counties_gdf)} counties...")
 
     def _process_one(county_row) -> bool:
@@ -222,6 +237,15 @@ def run_state(state_abbr: str, force: bool = False, skip_map: bool = False, refr
     except Exception:
         logger.error(f"State districts failed:\n{traceback.format_exc()}")
     try:
+        # 2024 president at voting-district level (official precincts where a loader exists, else NYT), resampled to every level.
+        # A rerun rebuilds the county/district files from county-broadcast votes, so the marker of an earlier pass must go.
+        from add_precinct_elections import MARK as _VTD_MARK, process_state as _vtd_elections
+
+        (state_dir / _VTD_MARK).unlink(missing_ok=True)
+        logger.info(f"Voting-district elections: {_vtd_elections(state_dir)}")
+    except Exception:
+        logger.error(f"Voting-district elections failed:\n{traceback.format_exc()}")
+    try:
         add_state_native_elections(state_dir, resolved_state_fips, state_abbr, cache_dir=PYCENSUS_CACHE_DIR)
     except Exception:
         logger.error(f"State-native elections failed:\n{traceback.format_exc()}")
@@ -281,6 +305,15 @@ def main():
         "--usa-map-only", action="store_true",
         help="Skip the state runs; only (re)build the national map from the existing state outputs.",
     )
+    parser.add_argument("--cache-dir", default=None, help="Shared study cache folder (default TransitLOSStudies/cache; also STUDY_CACHE_DIR). Must be given before imports, see code.study_cache.")
+    parser.add_argument(
+        "--route-lines", action="store_true",
+        help="Only (re)compute the transit line geometry (`routes_lines.parquet`) of the given states / ALL, then stop.",
+    )
+    parser.add_argument(
+        "--vehicle-km", action="store_true",
+        help="Only (re)compute the daily vehicle-km (per county and place) of the given states / ALL, then stop.",
+    )
     args = parser.parse_args()
 
     is_all = len(args.states) == 1 and args.states[0].upper() == "ALL"
@@ -290,6 +323,27 @@ def main():
         states = args.states
     if not states and not args.usa_map_only:
         parser.error("give at least one state, ALL, or --usa-map-only")
+
+    if args.route_lines:
+        from code.route_lines_usa import compute_state_route_lines
+        from us import states as us_states
+
+        for abbr in states:
+            d = DATA_DIR / sanitize_state_name(us_states.lookup(abbr).name)
+            if (d / "stops.geoparquet").is_file():
+                logger.info(f"{abbr}: {len(compute_state_route_lines(d))} route lines")
+        return
+
+    if args.vehicle_km:
+        from code.vehicle_km_usa import compute_state_vehicle_km
+        from us import states as us_states
+
+        for abbr in states:
+            d = DATA_DIR / sanitize_state_name(us_states.lookup(abbr).name)
+            if (d / "stops.geoparquet").is_file():
+                r = compute_state_vehicle_km(d)
+                logger.info(f"{abbr}: {r[r.level == 'county'].vehicle_km.sum():,.0f} vehicle-km/day")
+        return
 
     failed = []
     if not args.usa_map_only:
@@ -345,6 +399,9 @@ def main():
         from code.county_pipeline import H3_RESOLUTIONS, H3_DENSE_TRACT_PER_KM2
 
         usa = write_ptlos_summary(DATA_DIR)
+        from code.feed_validate import audit_known_systems
+
+        audit_known_systems(DATA_DIR)   # well-known rail systems must be in the downloaded feeds (ERROR lines + feed_audit_known_systems.json)
         logger.info(f"USA PTLOS = {usa['ptlos']:.2f} ({usa['served_share']:.1%} of people served; {usa['states']} states, "
                     f"{usa['counties']} counties, {usa['stops']} stops) -> {DATA_DIR / 'ptlos_by_state.csv'}")
         write_run_manifest(DATA_DIR, Path(__file__).parent.parent.parent, {

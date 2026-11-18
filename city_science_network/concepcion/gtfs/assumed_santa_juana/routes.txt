@@ -1,0 +1,2 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type
+assumed_santa_juana,assumed,SJ,"Santa Juana - Concepción (regulated system, 23 buses)","ASSUMED: terminals from OpenStreetMap, road path, OSM bus stops within 35 m; headway 13 min from the 23-bus fleet (DTPR 2025)",3

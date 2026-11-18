@@ -1,0 +1,2 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type
+assumed_T21_C01,assumed,T21/C01,T21/C01 Central de Autobuses - Tonalá - Puente Grande - Zapotlanejo,"ASSUMED: stops named by Moovit, located at OSM bus stops with the same name; path on OSM roads; 20 min headway from El Ciudadano Jalisco (2023)",3

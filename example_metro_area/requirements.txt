@@ -1,0 +1,11 @@
+geohierarchy @ git+https://github.com/CityScope/geohierarchy.git
+pycensus @ git+https://github.com/CityScope/pyCensus.git
+pygtfshandler @ git+https://github.com/CityScope/pyGTFSHandler.git
+urbanaccessanalyzer @ git+https://github.com/CityScope/UrbanAccessAnalyzer.git
+transitlos @ git+https://github.com/CityScope/transitLOS.git
+rasterio>=1.3.0
+folium>=0.15.0
+freestiler>=0.2.0
+pmtiles>=3.7.0
+ipyleaflet>=0.19
+mapclassify>=2.5

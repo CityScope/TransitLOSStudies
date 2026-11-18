@@ -1,0 +1,28 @@
+stop_id,stop_name,stop_lat,stop_lon
+assumed_line5_macro_chapalitainn_20.65471_-103.44628,Chapalita Inn (ASSUMED location),20.654710,-103.446281
+assumed_line5_macro_elcolliinterpolated_20.65287_-103.44511,El Colli (interpolated) (ASSUMED location),20.652874,-103.445110
+assumed_line5_macro_feliperuvalcaba_20.64293_-103.44099,Felipe Ruvalcaba (ASSUMED location),20.642928,-103.440985
+assumed_line5_macro_miramar_20.63588_-103.4384,Miramar (ASSUMED location),20.635877,-103.438398
+assumed_line5_macro_marianooterointerpol_20.63183_-103.43625,Mariano Otero (interpolated) (ASSUMED location),20.631833,-103.436247
+assumed_line5_macro_elbriseno_20.62531_-103.4334,El Briseño (ASSUMED location),20.625311,-103.433402
+assumed_line5_macro_agricolainterpolated_20.61673_-103.42867,Agrícola (interpolated) (ASSUMED location),20.616729,-103.428668
+assumed_line5_macro_lopezmateosinterpola_20.61322_-103.42457,López Mateos (interpolated) (ASSUMED location),20.613222,-103.424573
+assumed_line5_macro_iteso_20.61019_-103.41552,ITESO (ASSUMED location),20.610186,-103.415515
+assumed_line5_macro_terminalsurdeautobus_20.60823_-103.40758,Terminal Sur de Autobuses (ASSUMED location),20.608226,-103.407576
+assumed_line5_macro_perifericosur_20.60728_-103.40112,Periférico Sur (ASSUMED location),20.607279,-103.401116
+assumed_line5_macro_sansebastianito_20.59062_-103.38568,San Sebastianito (ASSUMED location),20.590624,-103.385683
+assumed_line5_macro_8dejuliointerpolated_20.58389_-103.37808,8 de Julio (interpolated) (ASSUMED location),20.583889,-103.378084
+assumed_line5_macro_toluquilla_20.57948_-103.36917,Toluquilla (ASSUMED location),20.579479,-103.369171
+assumed_line5_macro_adolfhorn_20.577_-103.36087,Adolf Horn (ASSUMED location),20.576999,-103.360874
+assumed_line5_macro_jalisco200anos_20.5762_-103.35529,Jalisco 200 Años (ASSUMED location),20.576196,-103.355295
+assumed_line5_macro_artesanos_20.582_-103.35104,Artesanos (ASSUMED location),20.581996,-103.351040
+assumed_line5_macro_laspintas_20.58753_-103.32686,Las Pintas (ASSUMED location),20.587525,-103.326863
+assumed_line5_macro_carreteraachapalaint_20.57858_-103.33154,Carretera a Chapala (interpolated) (ASSUMED location),20.578579,-103.331538
+assumed_line5_macro_lasliebresinterpolat_20.56692_-103.33267,Las Liebres (interpolated) (ASSUMED location),20.566924,-103.332666
+assumed_line5_macro_parquemontenegrointe_20.55486_-103.33172,Parque Montenegro (interpolated) (ASSUMED location),20.554855,-103.331724
+assumed_line5_macro_lastorresinterpolate_20.54597_-103.33533,Las Torres (interpolated) (ASSUMED location),20.545972,-103.335325
+assumed_line5_macro_laspintitasinterpola_20.53407_-103.33599,Las Pintitas (interpolated) (ASSUMED location),20.534068,-103.335990
+assumed_line5_macro_lagiganterainterpola_20.52594_-103.32838,La Gigantera (interpolated) (ASSUMED location),20.525939,-103.328376
+assumed_line5_macro_lapiedrerainterpolat_20.51845_-103.32355,La Piedrera (interpolated) (ASSUMED location),20.518447,-103.323549
+assumed_line5_macro_sanjosedelquinceinte_20.51767_-103.31943,San José del Quince (interpolated) (ASSUMED location),20.517672,-103.319429
+assumed_line5_macro_aeropuerto_20.52013_-103.31306,Aeropuerto (ASSUMED location),20.520128,-103.313059

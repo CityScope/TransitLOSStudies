@@ -29,6 +29,7 @@ review for ambiguous BRT cases) follows
 from __future__ import annotations
 
 import logging
+import os
 from datetime import date, time
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence
@@ -66,6 +67,9 @@ ANALYSIS_END_TIME = time(22, 0)
 #: (neighbour-of-neighbour), which merged whole downtown streets into one "station" (CTA Loop: 395 stops -> 35
 #: stations, clusters up to 2.9 km), each scored from a single mean location.
 STOP_GROUP_DISTANCE_M = 150.0
+# Set here too, not only in main.py: every entry point that scores stops imports this module (without it the chained grouping merged
+# downtown Houston's 209 METRO stops into 19 "stations", one with 72 routes).
+os.environ.setdefault("GTFS_STOP_GROUPING", "complete")
 
 #: `transitlos.scoring.mrc.mode_category`'s own {rail, tram} route_type
 #: sets (everything else, including our BRT marker `702`, falls to "bus"
@@ -179,7 +183,19 @@ def _feed_has_service_in_window(
         end_date=ANALYSIS_DATE,
         stop_group_distance=stop_group_distance,
     )
-    return feed.trips.lf.limit(1).collect().height > 0
+    if feed.trips.lf.limit(1).collect().height == 0:
+        return False
+    # a holiday or a normal day, never a mix: reduced / holiday service on ANALYSIS_DATE -> the feed's own typical day (fallback)
+    from transitlos.day_check import day_volume_ratio
+
+    try:
+        r = day_volume_ratio(gtfs_dir, ANALYSIS_DATE)
+    except Exception:  # noqa: BLE001
+        r = None
+    if r is not None and not (0.8 <= r <= 1.25):
+        logger.warning(f"Feed '{gtfs_dir}': {ANALYSIS_DATE} runs {r:.0%} of its usual trips for that weekday -- scored on its own typical day")
+        return False
+    return True
 
 
 def split_feeds_by_window(
@@ -215,10 +231,10 @@ def split_feeds_by_window(
 def _route_modes_for(gtfs_dirs: Sequence[Path], ntd_rows_by_dir: Dict[Path, List[Dict]]) -> pl.DataFrame:
     """Concatenate `resolve_feed_modes` results across several feed directories."""
     mode_frames = []
-    for gtfs_dir in gtfs_dirs:
+    for file_id, gtfs_dir in enumerate(gtfs_dirs):   # file_id = the feed's position in the Feed's gtfs_dirs list (how the Feed numbers files)
         ntd_rows = ntd_rows_by_dir.get(gtfs_dir, [])
         try:
-            mode_frames.append(resolve_feed_modes(gtfs_dir, ntd_rows))
+            mode_frames.append(resolve_feed_modes(gtfs_dir, ntd_rows).with_columns(pl.lit(file_id, dtype=pl.Int64).alias("file_id")))
         except Exception as exc:  # pragma: no cover - malformed routes.txt varies
             logger.warning(f"Feed '{gtfs_dir}': could not resolve modes: {exc}")
     if not mode_frames:
@@ -255,6 +271,7 @@ def score_state_stops(
     state_aoi: gpd.GeoDataFrame,
     window: tuple = DEFAULT_WINDOW,
     stop_group_distance: float = STOP_GROUP_DISTANCE_M,
+    stop_table_sink: Optional[list] = None,
 ) -> gpd.GeoDataFrame:
     """Build one state's scored `stops` table (the `stops.geoparquet` content).
 
@@ -302,7 +319,12 @@ def score_state_stops(
             scored = best_subset_stop_scores(feed, ANALYSIS_DATE, route_modes, ANALYSIS_START_TIME, ANALYSIS_END_TIME)
             if scored.empty:
                 return None
-            return feed.add_stop_coords(scored)
+            scored = feed.add_stop_coords(scored)
+            if stop_table_sink is not None:
+                from transitlos.stop_table import stop_table_from_feed
+
+                stop_table_sink.append(stop_table_from_feed(feed, scored))
+            return scored
 
         try:
             combined = _score_in_window(in_window)
@@ -343,6 +365,13 @@ def score_state_stops(
         fallback_stops = feed.add_stop_coords(fallback_stops)
         fallback_stops["source_feed"] = str(gtfs_dir)
         fallback_stops["representative_date"] = str(rep_date)
+        if stop_table_sink is not None:
+            from transitlos.stop_table import stop_table_from_feed
+
+            tbl = stop_table_from_feed(feed, fallback_stops)
+            tbl["source_feed"] = str(gtfs_dir)
+            tbl["representative_date"] = str(rep_date)
+            stop_table_sink.append(tbl)
         frames.append(fallback_stops)
 
     if not frames:

@@ -1,0 +1,126 @@
+state,agency,ref,note
+,Washington Metropolitan Area Transit Authority,mdb-1846,study override (checked by hand)
+,Washington Metropolitan Area Transit Authority,mdb-1847,study override (checked by hand)
+,Rhode Island Public Transit Authority,mdb-624,study override (checked by hand)
+,Transportation District Commission of Hampton Roads,mdb-473,study override (checked by hand)
+,Alameda-Contra Costa Transit District,mdb-2455,study override (checked by hand)
+,Sacramento Regional Transit District,mdb-2137,study override (checked by hand)
+,North County Transit District,mdb-3093,study override (checked by hand)
+,City of Culver City,mdb-38,study override (checked by hand)
+,Livermore / Amador Valley Transit Authority,mdb-64,study override (checked by hand)
+,The Eastern Contra Costa Transit Authority,mdb-1974,study override (checked by hand)
+,Butte County Association of Governments,ntd-90208,study override (checked by hand)
+,City of Glendora,mdb-3097,study override (checked by hand)
+,City of Ridgecrest,mdb-2279,study override (checked by hand)
+,City of Rio Vista,mdb-81,study override (checked by hand)
+,Pinellas Suncoast Transit Authority,mdb-326,study override (checked by hand)
+,Broward County Board of County Commissioners,mdb-330,study override (checked by hand)
+,County of Citrus,mdb-2257,study override (checked by hand)
+,"City of Ocala, Florida",mdb-343,study override (checked by hand)
+,Augusta Richmond County Transit Department,tld-5780,study override (checked by hand)
+,Macon-Bibb County Transit Authority,tld-7846,study override (checked by hand)
+,City of Rock Hill,tld-6741,study override (checked by hand)
+,City of Clarksville,tld-4131,study override (checked by hand)
+,Monongalia County Urban Mass Transit Authority,mdb-407,study override (checked by hand)
+,Milwaukee County,mdb-2127,study override (checked by hand)
+,Eagle Valley Transportation Authority,mdb-2045,study override (checked by hand)
+,East Alabama Regional Planning and Development Commission,mdb-2211,study override (checked by hand)
+,Four Rivers Resource Services,ntd-50276,study override (checked by hand)
+,Senior Citizens Council,tld-4694,study override (checked by hand)
+,Hood River County Transportation District,mdb-260,study override (checked by hand)
+,"OCCK, Inc.",mdb-1867,study override (checked by hand)
+,Regional Transit Service,mdb-533,study override (checked by hand)
+,San Diego Metropolitan Transit System,mdb-13,study override (checked by hand)
+,Denver Regional Transportation District,mdb-178,study override (checked by hand)
+,Cambria County Transit Authority,tld-4671,study override (checked by hand)
+,"Senior Citizens of Sweet Home, Inc.",mdb-137,study override (checked by hand)
+NY,MTA NYCT Staten Island buses,https://rrgtfsfeeds.s3.amazonaws.com/gtfs_si.zip,official MTA
+NY,MTA NYCT Brooklyn buses,https://rrgtfsfeeds.s3.amazonaws.com/gtfs_b.zip,official MTA
+NY,MTA NYCT Queens buses,https://rrgtfsfeeds.s3.amazonaws.com/gtfs_q.zip,official MTA
+NY,MTA NYCT Bronx buses,https://rrgtfsfeeds.s3.amazonaws.com/gtfs_bx.zip,official MTA
+NY,MTA NYCT subway + Staten Island Railway,https://rrgtfsfeeds.s3.amazonaws.com/gtfs_subway.zip,official MTA
+NY,MTA Metro-North Railroad,https://rrgtfsfeeds.s3.amazonaws.com/gtfsmnr.zip,official MTA; NTD link is not a static feed
+NY,MTA Long Island Rail Road,https://rrgtfsfeeds.s3.amazonaws.com/gtfslirr.zip,official MTA
+WA,Sound Transit Link + Sounder,https://www.soundtransit.org/GTFS-rail/40_gtfs.zip,official
+TX,Capital Metro (Austin),https://data.texas.gov/download/r4v4-vz24/application%2Fx-zip-compressed,Texas open data portal
+CO,Denver RTD,https://www.rtd-denver.com/files/gtfs/google_transit.zip,official; license on RTD site
+CT,CTtransit buses,https://www.cttransit.com/sites/default/files/gtfs/googlect_transit.zip,"official; Hartford, New Haven, Stamford, Waterbury divisions"
+CT,Hartford Line rail,https://ctrides.com/hlgtfs.zip,official
+MI,The Rapid (Grand Rapids),http://connect.ridetherapid.org/InfoPoint/gtfs-zip.ashx,official
+HI,Honolulu TheBus,mdb-2350,Mobility Database archive
+HI,Hawaii County Hele-On,https://opendata.hawaii.gov/dataset/d029ba64-7041-46a1-bc7b-a86beea05cb5/resource/a95ae23c-5e3f-4bde-a1a1-05188500b223/download/mta_feed4.zip,2021 data: old
+VA,Fairfax Connector,mdb-483,Mobility Database archive
+VA,Fairfax CUE,mdb-2885,Mobility Database archive
+VA,Loudoun County Transit,mdb-2411,Mobility Database archive
+TN,Memphis Area Transit Authority,mdb-602,deprecated catalog entry; check dates
+NC,GoTriangle,tld-202,Transitland-sourced
+TX,Galveston Island Transit,mdb-2861,
+IA,Dubuque The Jule,mdb-2083,
+IA,Ames CyRide,mdb-923,
+NY,Niagara Frontier Transportation Authority (bus),tld-6748,
+NY,Niagara Frontier Transportation Authority (rail),tld-401,
+NY,Capital District Transportation Authority,mdb-538,inactive catalog entry; check dates
+CA,Antelope Valley Transit Authority,mdb-214,inactive catalog entry; check dates
+OK,OSU-Stillwater Community Transit,tld-7941,
+FL,Sarasota County Area Transit,tld-351,Breeze/SCAT; archived file covers 2024-11 to 2025-04
+FL,Okaloosa County Transit,mdb-336,old schedule (2015-16)
+MA,MBTA,mdb-437,
+WA,Kitsap Transit,mdb-1304,
+MO,Columbia GoCOMO,ntd-70016,
+OH,Cincinnati Metro,mdb-307,
+OH,Allen County Regional Transit Authority,mdb-210,
+NM,ABQ RIDE,mdb-166,
+CO,Roaring Fork Transportation Authority,mdb-2278,
+CO,San Miguel Authority for Regional Transportation,mdb-811,inactive catalog entry
+MD,Ocean City Transportation,mdb-495,inactive catalog entry
+MD,Calvert County Public Transportation,mdb-480,inactive catalog entry
+OH,Lawrence County Transit,tld-7829,inactive
+IN,Evansville METS,ntd-50043,inactive
+LA,Good Earth Transit (Terrebonne),ntd-60080,
+NJ,Coach USA / Suburban / Community / OBC lines,tld-5741,
+NC,Research Triangle Regional Public Transportation Authority,search:GoTriangle,Transitland (study override)
+NM,City of Albuquerque,search:ABQ RIDE,Transitland (study override)
+HI,City and County of Honolulu,search:TheBus,Transitland (study override)
+TN,City of Memphis,search:MATA,Transitland (study override)
+MI,Interurban Transit Partnership,search:The Rapid,Transitland (study override)
+,Rock Island County Metropolitan Mass Transit District,search:MetroLINK,Transitland (study override)
+TX,City of Galveston,f-galveston~tx~us,Transitland (study override)
+IA,Ames Transit Agency,search:CyRide,Transitland (study override)
+IA,City of Dubuque,search:The Jule,Transitland (study override)
+MO,City of Columbia,search:GoCOMO,Transitland (study override)
+NY,New York City Economic Development Corporation,search:NYC Ferry,Transitland (study override)
+OH,Lawrence County Port Authority,search:Lawrence County Transit,Transitland (study override)
+WA,People for People Yakima,search:People for People,Transitland (study override)
+NY,"Metro-North Commuter Railroad Company, dba: MTA Metro-North Railroad",f-dr7-mtanyc~metro~north,Transitland (study override)
+MN,Metro Transit,f-9zv-twin~cities~minnesota,Transitland (study override)
+WA,King County,f-c23-metrokingcounty,Transitland (study override)
+VA,"Fairfax County, VA",search:Fairfax Connector,Transitland (study override)
+AZ,Regional Public Transportation Authority,f-9tb-valleymetro,Transitland (study override)
+,Buncombe County,search:Mountain Mobility,Transitland (study override)
+MD,"Board of County Commissioners of Calvert County, Maryland",search:Calvert County Public Transportation,Transitland (study override)
+MD,Mayor and City Council Town of Ocean City,search:Ocean City Transportation,Transitland (study override)
+NM,City of Las Cruces NM,search:Roadrunner Transit,Transitland (study override)
+NV,Carson Area Metropolitan Planning Organization,search:Jump Around Carson,Transitland (study override)
+MN,"Arrowhead Economic Opportunity Agency, Inc.",search:Arrowhead Transit,Transitland (study override)
+CA,San Diego Metropolitan Transit System,f-9mu-mts,Transitland (study override)
+HI,County of Hawaii,f-hele~on~hi,Transitland (study override)
+OK,Central Oklahoma Transportation and Parking Authority,f-9y69-embark,Transitland (study override)
+FL,Okaloosa County Board of County Commissioners,f-dj6m-okaloosacountytransit~fl~us,Transitland (study override)
+IN,City of Evansville,f-evansville~in~us,Transitland (study override)
+IN,Michiana Area Council of Governments,f-macog,Transitland (study override)
+VA,City of Fredericksburg,f-fredericksburg~regional~transit,Transitland (study override)
+TX,McLennan County,f-waco~transit,Transitland (study override)
+OR,Umpqua Public Transportation District,f-9r8m-umpquatransit~or~us,Transitland (study override)
+LA,Terrebonne Parish Consolidated Government,search:Good Earth Transit,Transitland (study override)
+CA,Stanislaus Regional Transit Authority,f-9q9-modesto~ca~us,Transitland (study override)
+IA,River Bend Transit,f-citibus~ia~us,Transitland (study override)
+NY,Town of Wallkill,f-middletown~ny~us,Transitland (study override)
+TN,Regional Transportation Authority,f-dn6-regionaltransportationauthorityofmiddletennessee~nashville,Transitland (study override)
+MD,Maryland Transit Administration,f-dq-mtamaryland~bus,Transitland (study override)
+MD,Maryland Transit Administration,f-dq-mtamaryland~subwaylink,Transitland (study override)
+MD,Maryland Transit Administration,f-dq-mtamaryland~raillink,Transitland (study override)
+MD,Maryland Transit Administration,f-dq-mtamaryland~commuterbus,Transitland (study override)
+GA,Atlanta-Region Transit Link Authority,f-dnh-grtaxpress,Transitland (study override)
+TX,Hill Country Transit District,f-hctd~tx~us,Transitland (study override)
+VA,Loudoun County Transit,https://www.loudoun.gov/loudountransitgtfs,official; current feed
+GA,ATL Xpress (GRTA),mdb-2426,Georgia mobility data archive (2025 file)

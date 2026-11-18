@@ -47,7 +47,7 @@ Manifest: any `<city_dir>/map.html` this script is told about (see
 `CITY_MANIFEST` below) is offered in the selector. A place is included in
 the stats panel's "Place rank" tab only if it also has a
 `<city_dir>/results/summary.json` and `results/stats_data.json` (written by
-`code.pipeline.write_city_summary`/`build_city_map`) -- a place missing
+`studytools.pipeline.write_city_summary`/`build_city_map`) -- a place missing
 either shows as unranked ("--") rather than being silently dropped.
 
 Usage: `uv run python code/combined_map.py` from `city_science_network/`.
@@ -111,20 +111,21 @@ from geohierarchy.maps.maplibre.render import _custom_select_js
 # here (explicit user request, 2026-08-30: "boston city should not be part
 # of combined map. Only the CS cities in the CS folder."), even though an
 # earlier version of this file manually appended it as an extra entry.
+COMBINED_NAMES = {"gipuzkoa": "Gipuzkoa/Donostia"}   # the combined map names the Gipuzkoa study with both its names, whatever the selected area
 CITY_MANIFEST = tuple(
-    (key, cfg.display_name, key) for key, cfg in CITY_CONFIGS.items()
+    (key, COMBINED_NAMES.get(key, cfg.display_name), key) for key, cfg in CITY_CONFIGS.items()
 )
 
 
 # Column vocabulary for the unified stats panel's Place-rank tab weight-column
 # selector AND (doubling as) the Distribution tab's "Distribute by"/overlay
 # column list -- both are the `count_fields` argument `_stats_panel_html`
-# takes. Matches `code.pipeline.WEIGHT_COLUMN_CANDIDATES` exactly -- itself
+# takes. Matches `studytools.pipeline.WEIGHT_COLUMN_CANDIDATES` exactly -- itself
 # sourced from `pycensus.schemas.global_schema.json`'s `"type": "count"`
 # entries, filtered to drop anything matching
-# `code.pipeline._CENSUS_RATE_SUBSTRINGS` or already a
+# `studytools.pipeline._CENSUS_RATE_SUBSTRINGS` or already a
 # `SHARE_COLUMNS`/`RATE_SOURCE_COLUMNS` key -- kept as a parallel constant
-# here (rather than importing `code.pipeline`, a heavy geopandas/pandas
+# here (rather than importing `studytools.pipeline`, a heavy geopandas/pandas
 # dependency this page-generator script otherwise has no need for) since the
 # two lists must simply agree on key->label, not share code;
 # `transitlos.map.build`'s own `field_label` humanizes each key into the
@@ -133,6 +134,8 @@ CITY_MANIFEST = tuple(
 # that place's `stats_data.json` doesn't actually carry, rather than
 # defaulting to 0/1.
 WEIGHT_COLUMN_CANDIDATES = (
+    # The weight column of the cross-city ranking: global-schema names only (comparable between cities). A city whose census lacks a column
+    # simply does not appear when that weight is selected. The WorldPop demographic columns exist for every city.
     ("population", "Population"),
     ("households", "Households"),
     ("adultPopulation", "Adult population"),
@@ -140,6 +143,7 @@ WEIGHT_COLUMN_CANDIDATES = (
     ("malePopulation", "Male population"),
     ("under18Population", "Population under 18"),
     ("over65Population", "Population over 65"),
+    ("urbanPopulation", "Urban population"),
     ("cars", "Cars"),
     ("educationPrimaryOrLessPopulation", "Population, primary education or less"),
     ("educationSecondaryPopulation", "Population, secondary education"),
@@ -148,11 +152,12 @@ WEIGHT_COLUMN_CANDIDATES = (
     ("laborForce", "Labor force"),
     ("employedResidents", "Employed residents"),
     ("unemployedResidents", "Unemployed residents"),
-    ("workplaceJobs", "Workplace jobs"),
+    ("workplaceJobs", "Workplaces"),
     ("carCommuters", "Car commuters"),
     ("publicTransportCommuters", "Public transport commuters"),
     ("walkCommuters", "Walk commuters"),
     ("bikeCommuters", "Bike commuters"),
+    ("motorcycleCommuters", "Motorcycle commuters"),
     ("motorcycleHouseholds", "Motorcycle households"),
     ("bicycleHouseholds", "Bicycle households"),
     ("carHouseholds", "Car households"),
@@ -162,7 +167,14 @@ WEIGHT_COLUMN_CANDIDATES = (
     ("minorityEthnicityPopulation", "Minority-ethnicity population"),
     ("religiousPopulation", "Religious population"),
     ("minorityReligionPopulation", "Minority-religion population"),
-    ("populationAndJobs", "Population and jobs"),
+    ("populationAndJobs", "Population and workplaces"),
+    ("worldpop_malePopulation", "Male population (WorldPop)"),
+    ("worldpop_femalePopulation", "Female population (WorldPop)"),
+    ("worldpop_under18Population", "Population under 18 (WorldPop)"),
+    ("worldpop_over65Population", "Population over 65 (WorldPop)"),
+    ("worldpop_adultPopulation", "Adult population (WorldPop)"),
+    ("worldpop_urbanPopulation", "Urban population (WorldPop)"),
+    ("worldpop_residents", "Residents (WorldPop)"),
 )
 
 
@@ -170,13 +182,13 @@ WEIGHT_COLUMN_CANDIDATES = (
 # (the `regression_fields` argument `_stats_panel_html`/`_stats_panel_js`
 # take), per the user's explicit ask ("relative columns for Anova and
 # regression are with the .share or .density for population and population
-# and jobs or jobs option"). Matches `code.pipeline.RELATIVE_STATS_BASE_COLUMNS`
+# and jobs or jobs option"). Matches `studytools.pipeline.RELATIVE_STATS_BASE_COLUMNS`
 # x {share, density} -- 3 base quantities x 2 relative modes = 6 options, kept
-# as a parallel constant here (rather than importing `code.pipeline`, a heavy
+# as a parallel constant here (rather than importing `studytools.pipeline`, a heavy
 # geopandas/pandas dependency this page-generator script otherwise has no
 # need for) since the two lists must simply agree on key->label.
 #
-# See `code.pipeline.RELATIVE_STATS_BASE_COLUMNS`'s own comment for the full
+# See `studytools.pipeline.RELATIVE_STATS_BASE_COLUMNS`'s own comment for the full
 # design-decision writeup on what ".share"/".density" mean at this
 # cross-city level (within-city population-weighted-averaged relative
 # values per city -- NOT a literal "share of all cities combined", since
@@ -185,12 +197,12 @@ WEIGHT_COLUMN_CANDIDATES = (
 # Real bug (2026-08-28, live "ANOVA tab is empty" report): these dotted keys
 # were never anything `_stats_panel_js`'s `renderAnova`/`__anovaDiff` could
 # actually read. `_stats_panel_js` (reused as-is below, the SAME per-city
-# machinery `code.pipeline._stats_json_data` builds `results/stats_data.json`
+# machinery `studytools.pipeline._stats_json_data` builds `results/stats_data.json`
 # for) indexes `window.__statsData` by PLAIN per-h3-cell column name --
 # `data[field]`, an array -- and that JSON is fetched straight from each
 # city's own file, whose keys are exactly whatever real, undotted column
 # names that city's `relative_fields(all_fields)` picked (see
-# `code.pipeline._stats_panel_block`), e.g. `pop_density`/`pop_jobs_density`.
+# `studytools.pipeline._stats_panel_block`), e.g. `pop_density`/`pop_jobs_density`.
 # No per-cell column named `"population.share"` (or any `.share`/`.density`
 # suffixed key) is ever written there -- that `<col>.share`/`<col>.density`
 # naming is `RELATIVE_STATS_BASE_COLUMNS`' cross-city SCALAR summary
@@ -208,7 +220,7 @@ WEIGHT_COLUMN_CANDIDATES = (
 # graceful-exclusion contract every other field here already has).
 # Item 4 additions (2026-08-30): `population_density`/`worldpop_population_density`/
 # `jobs_density`/`jobs_and_population_density`/`jobs_share` -- the same five
-# generically-named derived columns `code.pipeline._add_derived_density_columns`
+# generically-named derived columns `studytools.pipeline._add_derived_density_columns`
 # now adds to every census level and h3 resolution wherever their real inputs
 # exist (mirrors `pop_density`/`pop_jobs_density` above: absent -- not
 # erroring -- for a city without the underlying source, same graceful-
@@ -262,7 +274,7 @@ def _available_cities() -> list[dict]:
                 metro_median_by_weight = summary.get("metro_median_access_by_weight", {}) or {}
                 core_median_by_weight = summary.get("core_median_access_by_weight", {}) or {}
                 column_stats = summary.get("column_stats", column_stats)
-                # [lon, lat] -- see `code.pipeline.write_city_summary`'s own
+                # [lon, lat] -- see `studytools.pipeline.write_city_summary`'s own
                 # docstring. Used to place this city's marker on the
                 # combined page's low-zoom "all cities" overview map (see
                 # `_PAGE_TEMPLATE`'s overview-map JS below); `None` for a
@@ -439,7 +451,7 @@ _PAGE_TEMPLATE = """<!doctype html>
 </head>
 <body>
 <!--CUSTOM_SELECT_JS-->
-<iframe id="cityIframe" src="{initial_src}"></iframe>
+<iframe id="cityIframe" src="about:blank" data-first="{initial_src}"></iframe>
 <div id="overviewMap"></div>
 
 <div id="citySelectorBar"><span class="k">City</span><span class="v" id="citySelectorLabel"></span><span class="caret">&#9662;</span></div>
@@ -499,7 +511,7 @@ function selectCity(key) {{
 // city.") Two mutually-exclusive display modes: MODE_CITY (the existing
 // `#cityIframe`, unchanged) and MODE_OVERVIEW (`#overviewMap`, a small
 // standalone MapLibre map showing one marker per city from `CITIES[i].center`
-// -- see `code.pipeline.write_city_summary`'s `aoi_center`). Zoom 8 is the
+// -- see `studytools.pipeline.write_city_summary`'s `aoi_center`). Zoom 8 is the
 // literal threshold from the request in both directions, so neither mode
 // can "trap" the other just above/below it.
 var MODE_CITY = 'city', MODE_OVERVIEW = 'overview';
@@ -535,8 +547,8 @@ function __scoreColor(v) {{
 // do not coincide with place rank population weight so something is
 // wrong") -- real bug: the overview map's circles used `c.metro_median_access`,
 // baked into `results/summary.json` at that city's last FULL pipeline run
-// (`code.pipeline.write_city_summary`), which a `--map-only` rebuild (the
-// normal way this whole map gets refreshed -- see `hosting/README.md`)
+// (`studytools.pipeline.write_city_summary`), which a `--map-only` rebuild (the
+// normal way this whole map gets refreshed)
 // never touches -- only `results/stats_data.json` gets rewritten on that
 // path. Meanwhile the Place-rank tab computes its own population-weighted
 // median LIVE from that same freshly-rebuilt `stats_data.json`, so the two
@@ -554,21 +566,90 @@ function __scoreColor(v) {{
 // already-built markers, not just markers built after the fact.
 var __overviewMarkerRefs = {{}}; // key -> {{circleEl, labelEl}}
 var __latestScoreByKey = {{}}; // key -> population-weighted median access (live, once known)
+var __latestColorByKey = {{}}; // key -> CSS colour chosen by the rank tab's settings (weight / mean-median / rank-by), once known
+var __latestTextByKey = {{}};  // key -> label suffix (" — 55.2") for the same settings
 function __applyOverviewMarkerScore(key, score) {{
   var ref = __overviewMarkerRefs[key];
   if (!ref) return;
-  ref.circleEl.style.background = __scoreColor(score);
+  ref.circleEl.style.background = (key in __latestColorByKey) ? __latestColorByKey[key] : __scoreColor(score);
   var c = null;
   for (var i = 0; i < CITIES.length; i++) if (CITIES[i].key === key) c = CITIES[i];
-  ref.labelEl.textContent = (c ? c.display_name : key) + (score != null ? ' — ' + score.toFixed(1) : '');
+  ref.labelEl.textContent = (c ? c.display_name : key) + ((key in __latestTextByKey) ? __latestTextByKey[key] : (score != null ? ' — ' + score.toFixed(1) : ''));
+  if (window.__declutterCityLabels) window.__declutterCityLabels();
 }}
-window.__onPlaceRankComputed = function(results) {{
-  results.forEach(function(r) {{
-    if (r.value == null) return; // still loading / genuinely unranked -- keep showing the last known value
-    __latestScoreByKey[r.key] = r.value;
-    __applyOverviewMarkerScore(r.key, r.value);
+// Item 30: the balls follow the Place-rank tab's settings (weight column, mean / median, area, scenario, "Rank by"). The tab's own
+// `renderPlaceRank` only hands the population-weighted score to `__onPlaceRankComputed`, so the page recomputes the same figure itself from the
+// tab's cached per-city `stats_data.json` (`__placeCompareCache`, `__weightedMean`/`__weightedMedian`, `__vkmCache`) every time the list re-renders.
+function __fmtBigRank(v) {{ return v >= 1e6 ? (v / 1e6).toFixed(2) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(v >= 1e4 ? 0 : 1) + 'k' : v.toFixed(0); }}
+function __recolorFromRank() {{
+  if (typeof __placeCompareCache === 'undefined' || typeof __weightedMean !== 'function') return;
+  var pick = function(id, d) {{ var e = document.getElementById(id); return e ? e.value : d; }};
+  var area = pick('placeRankAreaSelect', 'metro');
+  var agg = pick('placeRankAggSelect', 'mean');
+  var edited = pick('placeRankScenarioSelect', 'original') === 'edited';
+  var weightCol = pick('placeRankWeightSelect', 'population');
+  var rankBy = pick('placeRankByVarSelect', 'score');
+  var vals = {{}}, texts = null, known = null;
+  var last = window.__placeRankLast;   // the tab's own values (any "Rank by", incl. transit share and census columns)
+  if (last && last.rankBy === rankBy && last.area === area && last.agg === agg && last.weight === weightCol && last.edited === edited) {{
+    vals = last.values; texts = last.text; known = last.known;
+  }} else CITIES.forEach(function(c) {{
+    if (rankBy !== 'score' && rankBy !== 'pop' && rankBy !== 'vkm' && rankBy !== 'vkmpc') return;   // the rest only from the tab
+    var cached = __placeCompareCache[c.key];
+    if (!cached) return;
+    var d = cached[area] || cached.metro;
+    if (edited && cached[area + '_edited']) d = cached[area + '_edited'];
+    if (!d || !d.level_of_service) return;
+    if (weightCol !== 'none' && !d[weightCol]) return;
+    var score = d.level_of_service;
+    var w = (weightCol !== 'none') ? d[weightCol] : score.map(function() {{ return 1; }});
+    var v = (agg === 'median') ? __weightedMedian(score, w) : __weightedMean(score, w);
+    if (isNaN(v)) return;
+    var pop = null;
+    if (d.population) {{ pop = 0; for (var i = 0; i < d.population.length; i++) pop += (d.population[i] || 0); }}
+    var vk = (typeof __vkmCache !== 'undefined') ? __vkmCache[c.key] : null;
+    var vkm = (vk && vk[area]) ? vk[area].vehicle_km : null;
+    var x = rankBy === 'pop' ? pop : rankBy === 'vkm' ? vkm : rankBy === 'vkmpc' ? ((vkm !== null && pop) ? vkm / pop * 1000 : null) : v;
+    if (x !== null && x !== undefined && !isNaN(x)) vals[c.key] = x;
   }});
-}};
+  var keys = Object.keys(vals);
+  if (!keys.length) return;
+  var sorted = keys.map(function(k) {{ return vals[k]; }}).sort(function(a, b) {{ return a - b; }});
+  CITIES.forEach(function(c) {{
+    var k = c.key;
+    if (!(k in vals)) {{
+      // lacks the chosen weight / data: shown grey and unranked (not silently the stale default)
+      if (known ? known.indexOf(k) >= 0 : cacheKnown(k)) {{ __latestColorByKey[k] = '#888'; __latestTextByKey[k] = ''; delete __latestScoreByKey[k]; __applyOverviewMarkerScore(k, null); }}
+      return;
+    }}
+    var x = vals[k];
+    if (rankBy === 'score') {{ __latestColorByKey[k] = __scoreColor(x); __latestTextByKey[k] = ' — ' + x.toFixed(1); }}
+    else {{
+      var below = sorted.filter(function(y) {{ return y < x; }}).length;   // colour by rank among the cities (0 = worst, 100 = best)
+      __latestColorByKey[k] = __scoreColor(sorted.length > 1 ? 100 * below / (sorted.length - 1) : 100);
+      __latestTextByKey[k] = ' — ' + (texts && texts[k] != null ? texts[k] : (rankBy === 'pop' || rankBy === 'vkm' ? __fmtBigRank(x) : x.toFixed(0)));
+    }}
+    __latestScoreByKey[k] = x;
+    __applyOverviewMarkerScore(k, x);
+  }});
+  function cacheKnown(k) {{ return __placeCompareCache[k] !== undefined; }}
+}}
+window.__recolorFromRank = __recolorFromRank;
+window.__onPlaceRankComputed = function(results) {{ __recolorFromRank(); }};
+(function __watchRankTab() {{
+  var tries = 0;
+  var t = setInterval(function() {{
+    var list = document.getElementById('placeRankList');
+    if (list) {{
+      clearInterval(t);
+      new MutationObserver(function() {{ __recolorFromRank(); }}).observe(list, {{childList: true}});
+      document.addEventListener('change', function(e) {{
+        if (e.target && /^placeRank.*Select$/.test(e.target.id || '')) setTimeout(__recolorFromRank, 0);
+      }});
+      __recolorFromRank();
+    }} else if (++tries > 200) clearInterval(t);
+  }}, 150);
+}})();
 
 function __nearestCity(lon, lat) {{
   var best = null, bestD = Infinity;
@@ -626,17 +707,20 @@ function ensureOverviewMap() {{
   var __pops = pts.map(function(c) {{ return c.metro_total_population; }}).filter(function(v) {{ return v != null && v > 0; }});
   var __popMin = __pops.length ? Math.min.apply(null, __pops) : 0;
   var __popMax = __pops.length ? Math.max.apply(null, __pops) : 1;
-  var MIN_R = 8, MAX_R = 32;
+  var MIN_R = 5, MAX_R = 46;   // 2026-11-07: more contrast between small and large cities
   function __popRadius(pop) {{
     if (pop == null || pop <= 0 || __popMax <= __popMin) return MIN_R;
     var t = (Math.sqrt(pop) - Math.sqrt(__popMin)) / (Math.sqrt(__popMax) - Math.sqrt(__popMin));
     return MIN_R + t * (MAX_R - MIN_R);
   }}
   __overviewMap.on('load', function() {{
+    try {{ __overviewMap.setProjection({{type: 'globe'}}); }} catch (e) {{}}   // the world overview is a globe that flattens to Web Mercator when zooming into a city
     if (pts.length > 1) {{
       var bounds = new maplibregl.LngLatBounds();
       pts.forEach(function(c) {{ bounds.extend(c.center); }});
-      __overviewMap.fitBounds(bounds, {{padding: 60, maxZoom: OVERVIEW_ZOOM_THRESHOLD - 1, duration: 0}});
+      // globe: the whole sphere fits the viewport, centred on Boston
+      var __cv = __overviewMap.getCanvas(), __gz = Math.log2(Math.min(__cv.clientWidth, __cv.clientHeight) * 0.9 * Math.PI / 512);
+      __overviewMap.jumpTo({{center: [-71.06, 24], zoom: Math.max(__gz * 0.9, 0.7)}});
     }}
     pts.forEach(function(c) {{
       // Prefer the LIVE population-weighted value (`__onPlaceRankComputed`,
@@ -687,11 +771,11 @@ function ensureOverviewMap() {{
       var circle = document.createElement('div');
       circle.className = 'overviewCircle';
       circle.style.cssText = 'width:100%;height:100%;border-radius:50%;' +
-        'background:' + __scoreColor(score) + ';border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4);';
+        'background:' + ((c.key in __latestColorByKey) ? __latestColorByKey[c.key] : __scoreColor(score)) + ';border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4);';
       var label = document.createElement('div');
       label.className = 'overviewMarker';
       label.style.cssText = 'position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:3px;';
-      label.textContent = c.display_name + (score != null ? ' — ' + score.toFixed(1) : '');
+      label.textContent = c.display_name + ((c.key in __latestTextByKey) ? __latestTextByKey[c.key] : (score != null ? ' — ' + score.toFixed(1) : ''));
       wrap.appendChild(circle);
       wrap.appendChild(label);
       __overviewMarkerRefs[c.key] = {{circleEl: circle, labelEl: label}};
@@ -716,6 +800,45 @@ function ensureOverviewMap() {{
       }});
       new maplibregl.Marker({{element: wrap, anchor: 'center'}}).setLngLat(c.center).addTo(__overviewMap);
     }});
+    // City labels never overlap each other (nor another city's circle): in priority order (best score first) each label takes the first
+    // free spot among below / above / right / left of its circle; a label with no free spot is hidden until the view changes.
+    var __labelSpots = [
+      'top:100%;bottom:auto;left:50%;right:auto;transform:translateX(-50%);margin:3px 0 0 0;',
+      'bottom:100%;top:auto;left:50%;right:auto;transform:translateX(-50%);margin:0 0 3px 0;',
+      'left:100%;right:auto;top:50%;bottom:auto;transform:translateY(-50%);margin:0 0 0 4px;',
+      'right:100%;left:auto;top:50%;bottom:auto;transform:translateY(-50%);margin:0 4px 0 0;',
+    ];
+    var __declutterQueued = false;
+    function __hit(a, b) {{ return !(a.right + 2 < b.left || a.left - 2 > b.right || a.bottom + 1 < b.top || a.top - 1 > b.bottom); }}
+    function __declutterLabels() {{
+      __declutterQueued = false;
+      var keys = pts.slice().sort(function(a, b) {{
+        var sa = (a.key in __latestScoreByKey) ? __latestScoreByKey[a.key] : a.metro_median_access;
+        var sb = (b.key in __latestScoreByKey) ? __latestScoreByKey[b.key] : b.metro_median_access;
+        return (sb == null ? -1 : sb) - (sa == null ? -1 : sa);
+      }}).map(function(c) {{ return c.key; }});
+      var circles = {{}};
+      keys.forEach(function(k) {{ circles[k] = __overviewMarkerRefs[k].circleEl.getBoundingClientRect(); }});
+      var placed = [];
+      keys.forEach(function(k) {{
+        var ref = __overviewMarkerRefs[k], el = ref.labelEl, done = false;
+        el.style.visibility = 'visible';
+        for (var i = 0; i < __labelSpots.length && !done; i++) {{
+          el.style.cssText = 'position:absolute;white-space:nowrap;' + __labelSpots[i];
+          var r = el.getBoundingClientRect();
+          var clash = placed.some(function(p) {{ return __hit(r, p); }}) ||
+            keys.some(function(o) {{ return o !== k && __hit(r, circles[o]); }});
+          if (!clash) {{ placed.push(r); done = true; }}
+        }}
+        if (!done) {{ el.style.cssText = 'position:absolute;white-space:nowrap;' + __labelSpots[0] + 'visibility:hidden;'; }}
+      }});
+    }}
+    window.__declutterCityLabels = function() {{
+      if (__declutterQueued) return; __declutterQueued = true; requestAnimationFrame(__declutterLabels);
+    }};
+    __overviewMap.on('move', window.__declutterCityLabels);
+    window.addEventListener('resize', window.__declutterCityLabels);
+    window.__declutterCityLabels();
   }});
   // Zooming IN past the threshold on the overview map auto-picks whichever
   // city's marker is closest to the current view center and switches to it
@@ -762,6 +885,8 @@ function switchToCity(key) {{
   document.getElementById('overviewMap').style.display = 'none';
   document.getElementById('cityIframe').style.display = 'block';
   selectCity(key);
+  updateCitySelectorLabel();
+  try {{ injectCitySelector(); }} catch (e) {{}}
   __updateStatsTabVisibility();
 }}
 
@@ -771,6 +896,8 @@ function switchToOverview(fromLngLat, fromCity) {{
   var ov = ensureOverviewMap();
   document.getElementById('overviewMap').style.display = 'block';
   ov.resize();
+  updateCitySelectorLabel();
+  document.getElementById('citySelectorBar').style.display = 'block';
   // 2026-09-05: land at the SAME per-city switch_zoom (minus a step) the
   // city you just left uses, not one flat threshold -- `fromCity` (the
   // city being exited, when known) is optional so the initial page-load
@@ -829,7 +956,7 @@ function renderDropdown() {{
   document.getElementById('cityDropdown').innerHTML = html;
   var opts = document.querySelectorAll('#cityDropdown .opt');
   for (var j = 0; j < opts.length; j++) {{
-    opts[j].addEventListener('click', function(ev) {{ selectCity(ev.currentTarget.getAttribute('data-key')); }});
+    opts[j].addEventListener('click', function(ev) {{ switchToCity(ev.currentTarget.getAttribute('data-key')); }});
   }}
 }}
 
@@ -911,7 +1038,7 @@ function injectCitySelector() {{
 }}
 
 function updateCitySelectorLabel() {{
-  document.getElementById('citySelectorLabel').textContent = currentCityLabel();
+  document.getElementById('citySelectorLabel').textContent = (__mode === MODE_OVERVIEW) ? 'Select a city' : currentCityLabel();
   try {{
     var idoc = document.getElementById('cityIframe').contentDocument;
     var sel = idoc && idoc.getElementById(CITY_SELECTOR_INLINE_ID);
@@ -1032,6 +1159,7 @@ function __rebuildStatsFieldSelectors(data) {{
     overlaySel.innerHTML = overlayHtml;
     if (absFields.indexOf(prevOverlay) !== -1) overlaySel.value = prevOverlay;
   }}
+  if (window.__columnMetaBase) __applyRegDefault();
 }}
 
 // -- Metadata tab (2026-09-02, explicit user request: the combined page's
@@ -1075,7 +1203,7 @@ function __weightedAvg(values, weights) {{
 function __renderMetadataTab() {{
   var body = document.getElementById('metadataTabBody');
   if (!body) return;
-  var area = window.__statsArea === 'core' ? 'core' : 'metro';
+  var area = ['core', 'official', 'municipality'].indexOf(window.__statsArea) >= 0 ? window.__statsArea : 'metro';
   var data = (window.__statsData && window.__statsData[area]) || (window.__statsData && window.__statsData.metro) || {{}};
   var keys = Object.keys(data).filter(function(k) {{
     return !__STATS_NON_FIELD_KEYS[k] && Array.isArray(data[k]);
@@ -1108,21 +1236,79 @@ function __renderMetadataTab() {{
     if (kLower.indexOf('density') !== -1) unitStr = 'pop/km²';
     else if (['share', 'rate', 'pct', 'percent', 'ratio'].some(function(m) {{ return kLower.indexOf(m) !== -1; }})) unitStr = '%';
     else if (!isRel) unitStr = 'count';
+    var meta = ((window.__cityMetadata || {{}})[currentKey] || {{}})[k] || null;
+    var esc = function(t) {{ return (t == null || t === '') ? '--' : String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }};
+    if (meta && meta.share != null && !shareStr) shareStr = Number(meta.share).toFixed(1) + '%';
     rows += '<tr style="border-top:1px solid #eee;">' +
       '<td style="font-weight:600;">' + __fieldLabel(k) + '</td>' +
-      '<td>--</td><td>--</td>' +
+      '<td>' + esc(meta && meta.original_name) + '</td>' +
+      '<td>' + esc(meta && meta.source) + '</td>' +
+      '<td>' + esc(meta && meta.country) + '</td>' +
       '<td style="text-align:right;">' + totalStr + '</td>' +
       '<td style="text-align:right;">' + avgStr + '</td>' +
       '<td style="text-align:right;">' + shareStr + '</td>' +
-      '<td>' + unitStr + '</td>' +
-      '<td>' + (weights ? 'population' : '(unweighted)') + '</td>' +
-      '<td></td></tr>';
+      '<td>' + esc(meta && meta.share_column) + '</td>' +
+      '<td>' + ((meta && meta.unit) || unitStr) + '</td>' +
+      '<td>' + ((meta && meta.weight_column) || (weights ? 'population' : '(unweighted)')) + '</td>' +
+      '<td>' + esc(meta && (meta.native_levels || []).join(', ')) + '</td>' +
+      '<td>' + esc(meta && (meta.resampled_levels || []).join(', ')) + '</td>' +
+      '<td>' + esc(meta && ((meta.resampling_up_method || '') + ' / ' + (meta.resampling_down_method || ''))) + '</td>' +
+      '<td>' + esc(meta && meta.description) + '</td></tr>';
   }});
-  body.innerHTML = rows || '<tr><td colspan="9" style="color:#888;">No data loaded for this place yet.</td></tr>';
+  body.innerHTML = rows || '<tr><td colspan="14" style="color:#888;">No data loaded for this place yet.</td></tr>';
 }}
 window.__renderMetadataTab = __renderMetadataTab;
 
+// Per-city metadata (`<city>/results/census_metadata.json`, one row per column: original name, source, levels, resampling,
+// description), keyed by the column name -- fills the Metadata tab.
+window.__cityMetadata = window.__cityMetadata || {{}};
+function __loadMetadataForCity(key) {{
+  if (key in window.__cityMetadata) {{ if (key === currentKey && window.__cityColMeta[key]) __applyColumnMeta(window.__cityColMeta[key]); return; }}
+  window.__cityMetadata[key] = null;
+  var c = null;
+  for (var i = 0; i < CITIES.length; i++) if (CITIES[i].key === key) c = CITIES[i];
+  if (!c) return;
+  fetch(c.downloads_base_path + '/census_metadata.json')
+    .then(function(resp) {{ return resp.ok ? resp.json() : []; }})
+    .catch(function() {{ return []; }})
+    .then(function(rows) {{
+      var byCol = {{}};
+      (rows || []).forEach(function(r) {{ if (r && r.column) byCol[r.column] = r; }});
+      window.__cityMetadata[key] = byCol;
+      if (key === currentKey && window.__renderMetadataTab) window.__renderMetadataTab();
+      var meta = {{}};
+      (rows || []).forEach(function(r) {{ if (r && r.column) meta[r.column] = {{name: r.name || r.column, source: r.source || '', level: (r.native_levels || []).join(', ') || r.level || '', description: r.description || '', unit: r.unit || '', original: r.original_name || ''}}; }});
+      window.__cityColMeta[key] = meta;
+      if (key === currentKey) __applyColumnMeta(meta);
+    }});
+}}
+
+// Nice column names, info buttons and the default regression column for the wrapper's own stats panel: filled from each city's census_metadata.json
+window.__cityColMeta = window.__cityColMeta || {{}};
+function __applyRegDefault() {{
+  var rs = document.getElementById('regFieldSelect');
+  if (!rs || rs.dataset.userSet) return;
+  var pick = ['population_density', 'pop_jobs_density', 'pop_density'].filter(function(x) {{ return Array.prototype.some.call(rs.options, function(o) {{ return o.value === x; }}); }})[0];
+  if (pick && rs.value !== pick) {{ rs.value = pick; rs.dispatchEvent(new Event('change', {{bubbles: true}})); }}
+}}
+document.addEventListener('change', function(e) {{ if (e.isTrusted && e.target && e.target.id === 'regFieldSelect') e.target.dataset.userSet = '1'; }}, true);
+function __applyColumnMeta(meta) {{
+  var base = window.__columnMetaBase || (window.__columnMetaBase = Object.assign({{}}, window.__columnMeta || {{}}));
+  window.__columnMeta = Object.assign({{}}, base, meta);
+  var labels = {{}};
+  Object.keys(meta).forEach(function(c) {{ labels[c] = meta[c].name; }});
+  window.__PY_FIELD_LABELS = labels;
+  if (!window.__fieldLabelOrig) window.__fieldLabelOrig = window.__fieldLabel;
+  window.__fieldLabel = function(k) {{ var m = (window.__columnMeta || {{}})[k]; return (m && m.name) ? m.name : window.__fieldLabelOrig(k); }};
+  window.__fieldLabelsFor = function(fields) {{ var o = {{}}; fields.forEach(function(f) {{ o[f] = window.__fieldLabel(f); }}); return o; }};
+  if (window.__statsData) __rebuildStatsFieldSelectors(window.__statsData);
+  __applyRegDefault();
+  __refreshActiveStatsTab();
+  if (window.__colInfoScan) setTimeout(window.__colInfoScan, 300);
+}}
+
 function __loadStatsDataForCity(key) {{
+  __loadMetadataForCity(key);
   if (Object.prototype.hasOwnProperty.call(__statsDataCache, key)) {{
     if (key === currentKey) {{
       window.__statsData = __statsDataCache[key] || {{}};
@@ -1203,6 +1389,68 @@ window.addEventListener('load', function() {{
 """
 
 
+def build_world_quantiles(root: Path | None = None) -> Path:
+    """`world_quantiles.json` next to the combined map: for every statistic its 101 quantiles over the res-7 cells of ALL cities.
+
+    The city popups' "All places" percentile reads it (`../world_quantiles.json` from a city's `map.html`).
+    """
+    import json
+
+    import numpy as np
+
+    root = Path(root) if root else Path(__file__).resolve().parent.parent
+    columns: dict = {}
+    for f in sorted(root.glob("*/results/stats_data.json")):
+        try:
+            metro = json.loads(f.read_text(encoding="utf-8")).get("metro") or {}
+        except Exception:  # noqa: BLE001 -- a city whose results are mid-write is simply left out
+            continue
+        for k, v in metro.items():
+            if k != "h3_cell" and isinstance(v, list):
+                columns.setdefault(k, []).append(np.array([np.nan if x is None else x for x in v], dtype="float64"))
+    table = {}
+    for k, parts in columns.items():
+        arr = np.concatenate(parts)
+        arr = arr[np.isfinite(arr)]
+        if len(arr) > 1:
+            table[k] = [float(f"{x:.5g}") for x in np.percentile(arr, np.arange(101))]
+    out = root / "world_quantiles.json"
+    out.write_text(json.dumps(table, separators=(",", ":")))
+    try:   # the res-9 popups' "All places" table (transitlos.map.popup_cells), from each city's res-9 popup cells
+        import pandas as pd
+
+        from transitlos.map.popup_cells import world_quantiles
+
+        frames = [pd.read_parquet(f) for f in sorted(root.glob("*/results/map_inputs_checkpoint/popup9_cells.parquet"))]
+        if frames:
+            world_quantiles(frames, str(root / "world_quantiles9.json"))
+    except Exception as exc:  # noqa: BLE001
+        print(f"[combined] world_quantiles9 skipped: {exc!r}", flush=True)
+    return out
+
+
+_WRAPPER_AREA_SYNC = r"""
+<script>
+// The wrapper's own stats panel and the open city's map share one Area: choosing it in either changes the map mask, the top score and both panels.
+(function() {
+  var fr = document.getElementById('cityIframe'), touched = 0;
+  if (!fr) return;
+  function child() { try { return fr.contentWindow; } catch (e) { return null; } }
+  function push() { var w = child(); if (w && w.__setArea && window.__currentArea && w.__currentArea !== window.__currentArea) { try { w.__setArea(window.__currentArea); } catch (e) {} } }
+  document.addEventListener('change', function(e) {
+    if (e.target && /AreaSelect$/.test(e.target.id) && !/Compare/.test(e.target.id)) { touched = Date.now(); setTimeout(push, 60); }
+  }, true);
+  fr.addEventListener('load', function() { setTimeout(push, 2500); setTimeout(push, 6000); });
+  setInterval(function() {
+    var w = child();
+    if (Date.now() - touched < 3000 || !w || !w.__currentArea || !window.__setArea) return;
+    if (w.__currentArea !== window.__currentArea) window.__setArea(w.__currentArea);
+  }, 1200);
+})();
+</script>
+"""
+
+
 def build_combined_map(out_path: Path | None = None) -> Path:
     """Write `city_science_network/combined_map.html` from the currently-available cities.
 
@@ -1213,6 +1461,7 @@ def build_combined_map(out_path: Path | None = None) -> Path:
     cities = _available_cities()
     if not cities:
         raise RuntimeError("No city map.html found under CITY_MANIFEST -- nothing to combine.")
+    build_world_quantiles()   # percentiles of the city popups, among every cell of every city
     # Ordered best-to-worst by `metro_median_access` (population-weighted
     # median level of service, metro scope -- the same headline figure the
     # Place-rank tab ranks by) so both the dropdown list AND the page's
@@ -1254,6 +1503,8 @@ def build_combined_map(out_path: Path | None = None) -> Path:
     # `CITY_MANIFEST` (and therefore `cities`) is city_science_network-only (no
     # `boston_city`-style sibling-directory entry, per explicit user
     # request, 2026-08-30), so no path-prefix exclusion is needed here.
+    import transitlos.map.build as _build_mod
+    _build_mod._ACTIVE_AREAS = ["metro", "core", "official", "municipality"]   # every city's stats_data.json holds all four analysis areas: the combined map offers all four
     place_rank_manifest = [{"key": c["key"], "label": c["display_name"]} for c in cities]
     count_fields = [key for key, _label in WEIGHT_COLUMN_CANDIDATES]
     regression_fields = [key for key, _label in ANOVA_REGRESSION_COLUMNS]
@@ -1330,7 +1581,11 @@ def build_combined_map(out_path: Path | None = None) -> Path:
     html = html.replace("<!--DOWNLOAD_PANEL-->", download_panel_html)
     html = html.replace("<!--CUSTOM_SELECT_JS-->", _custom_select_js())
     out_path = out_path or (ROOT / "combined_map.html")
-    out_path.write_text(html)
+    from transitlos.map.col_info import col_info_script
+    _i = html.rfind('</body>')
+    html = html[:_i] + col_info_script([], None) + _WRAPPER_AREA_SYNC + html[_i:]
+    from transitlos.map.buildstamp import write_stamped
+    write_stamped(out_path, html)
     return out_path
 
 

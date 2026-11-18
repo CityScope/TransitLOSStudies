@@ -1,0 +1,38 @@
+stop_id,stop_name,stop_lat,stop_lon
+assumed_T21_C01_nuevacentralcamioner_20.61915_-103.28554,Nueva Central Camionera (ASSUMED location),20.619149,-103.285541
+assumed_T21_C01_sala7delacentraldeau_20.62193_-103.28468,Sala 7 de la central de autobuses (ASSUMED location),20.621930,-103.284680
+assumed_T21_C01_salvadorhinojosa_20.62183_-103.282,Salvador Hinojosa (ASSUMED location),20.621830,-103.282000
+assumed_T21_C01_paraderointerpolated_20.62185_-103.27683,Paradero (interpolated) (ASSUMED location),20.621847,-103.276830
+assumed_T21_C01_paraderointerpolated_20.61946_-103.27085,Paradero (interpolated) (ASSUMED location),20.619460,-103.270850
+assumed_T21_C01_paraderointerpolated_20.618_-103.26286,Paradero (interpolated) (ASSUMED location),20.617995,-103.262861
+assumed_T21_C01_paraderointerpolated_20.61794_-103.2625,Paradero (interpolated) (ASSUMED location),20.617942,-103.262500
+assumed_T21_C01_paraderointerpolated_20.61639_-103.25159,Paradero (interpolated) (ASSUMED location),20.616391,-103.251589
+assumed_T21_C01_paraderointerpolated_20.61572_-103.2444,Paradero (interpolated) (ASSUMED location),20.615715,-103.244404
+assumed_T21_C01_paraderointerpolated_20.61597_-103.23681,Paradero (interpolated) (ASSUMED location),20.615966,-103.236813
+assumed_T21_C01_paraderointerpolated_20.61683_-103.23103,Paradero (interpolated) (ASSUMED location),20.616832,-103.231032
+assumed_T21_C01_paraderointerpolated_20.61762_-103.22582,Paradero (interpolated) (ASSUMED location),20.617623,-103.225819
+assumed_T21_C01_paraderointerpolated_20.61888_-103.21755,Paradero (interpolated) (ASSUMED location),20.618878,-103.217552
+assumed_T21_C01_paraderointerpolated_20.61956_-103.21144,Paradero (interpolated) (ASSUMED location),20.619563,-103.211435
+assumed_T21_C01_paraderointerpolated_20.62005_-103.20588,Paradero (interpolated) (ASSUMED location),20.620053,-103.205881
+assumed_T21_C01_paraderointerpolated_20.6202_-103.19857,Paradero (interpolated) (ASSUMED location),20.620196,-103.198566
+assumed_T21_C01_paraderointerpolated_20.61466_-103.18971,Paradero (interpolated) (ASSUMED location),20.614665,-103.189706
+assumed_T21_C01_paraderointerpolated_20.61372_-103.18726,Paradero (interpolated) (ASSUMED location),20.613718,-103.187259
+assumed_T21_C01_paraderointerpolated_20.61214_-103.1769,Paradero (interpolated) (ASSUMED location),20.612136,-103.176897
+assumed_T21_C01_paraderointerpolated_20.61144_-103.17459,Paradero (interpolated) (ASSUMED location),20.611439,-103.174595
+assumed_T21_C01_paraderointerpolated_20.60858_-103.16792,Paradero (interpolated) (ASSUMED location),20.608582,-103.167920
+assumed_T21_C01_paraderointerpolated_20.60705_-103.16431,Paradero (interpolated) (ASSUMED location),20.607049,-103.164314
+assumed_T21_C01_paraderointerpolated_20.60195_-103.15234,Paradero (interpolated) (ASSUMED location),20.601946,-103.152345
+assumed_T21_C01_paraderointerpolated_20.60148_-103.14979,Paradero (interpolated) (ASSUMED location),20.601475,-103.149794
+assumed_T21_C01_paraderointerpolated_20.60313_-103.14309,Paradero (interpolated) (ASSUMED location),20.603130,-103.143093
+assumed_T21_C01_paraderointerpolated_20.60543_-103.1373,Paradero (interpolated) (ASSUMED location),20.605429,-103.137298
+assumed_T21_C01_paraderointerpolated_20.60796_-103.13144,Paradero (interpolated) (ASSUMED location),20.607960,-103.131440
+assumed_T21_C01_paraderointerpolated_20.60799_-103.1249,Paradero (interpolated) (ASSUMED location),20.607987,-103.124899
+assumed_T21_C01_paraderointerpolated_20.60818_-103.1178,Paradero (interpolated) (ASSUMED location),20.608180,-103.117805
+assumed_T21_C01_paraderointerpolated_20.60851_-103.11031,Paradero (interpolated) (ASSUMED location),20.608514,-103.110306
+assumed_T21_C01_paraderointerpolated_20.61102_-103.10515,Paradero (interpolated) (ASSUMED location),20.611018,-103.105153
+assumed_T21_C01_paraderointerpolated_20.61427_-103.10001,Paradero (interpolated) (ASSUMED location),20.614269,-103.100014
+assumed_T21_C01_paraderointerpolated_20.61521_-103.09436,Paradero (interpolated) (ASSUMED location),20.615211,-103.094355
+assumed_T21_C01_paraderointerpolated_20.6163_-103.0842,Paradero (interpolated) (ASSUMED location),20.616303,-103.084201
+assumed_T21_C01_paraderointerpolated_20.61641_-103.07979,Paradero (interpolated) (ASSUMED location),20.616414,-103.079788
+assumed_T21_C01_paraderointerpolated_20.61992_-103.07449,Paradero (interpolated) (ASSUMED location),20.619924,-103.074489
+assumed_T21_C01_plazaprincipalzapotl_20.62275_-103.06898,Plaza Principal Zapotlanejo (ASSUMED location),20.622745,-103.068984

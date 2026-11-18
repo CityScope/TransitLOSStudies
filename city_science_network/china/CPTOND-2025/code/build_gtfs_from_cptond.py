@@ -2,13 +2,12 @@
 
 NOTE: the Shanghai study feed is no longer built with this script -- it is
 built by `build_shanghai_metro_area_gtfs.py` (whole metro area, researched
-headways; see shanghai/gtfs/sources/GTFS_CONSTRUCTION.md). The Shanghai
+headways). The Shanghai
 headway tables below are the older ones, kept for the generic single-city use.
 
 CPTOND-2025 (China Public Transport Operation Network Dataset) ships route
 geometries and per-route ordered stop lists as shapefiles, not GTFS, and it
-carries no timetable -- no departure times, no explicit headway. See
-`TransitLOSStudies/china/sources/sources.md` for provenance.
+carries no timetable -- no departure times, no explicit headway. Source: CPTOND-2025, https://doi.org/10.6084/m9.figshare.29377427.
 
 Route polylines from `<city>_<mode>_routes.shp` are written to `shapes.txt`
 (one shape per trip) so maps draw the real alignments, not stop-to-stop

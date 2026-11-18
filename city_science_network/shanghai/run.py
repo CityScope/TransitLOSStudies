@@ -14,12 +14,17 @@ import dataclasses
 import os
 
 from code.city_config import CITY_CONFIGS
-from code.cli import parse_run_flags
-from code.params import GLOBAL_PARAMS
-from code.pipeline import run_city_study
+from studytools.cli import parse_run_flags
+from studytools.params import GLOBAL_PARAMS
+from studytools.pipeline import run_city_study
 
 CITY_DIR = Path(__file__).resolve().parent
 ROOT = CITY_DIR.parent
+
+from code.study_cache import apply_env as _apply_cache_env, osm_dir as _osm_dir, pycensus_dir as _pycensus_dir, resolve_cache_dir as _resolve_cache_dir, worldpop_dir as _worldpop_dir
+
+_CACHE = _resolve_cache_dir()  # shared TransitLOSStudies/cache (or --cache-dir / STUDY_CACHE_DIR)
+_apply_cache_env(_CACHE)
 
 # Shanghai-only override (2026-09-01): its real metro grid at the shared
 # default h3_resolution=11 is 25,732,258 cells -- materializing that many
@@ -72,15 +77,15 @@ else:
 if __name__ == "__main__":
     flags = parse_run_flags()
     if flags.dispatch(city_dir=CITY_DIR, config=CITY_CONFIGS["shanghai"], params=SHANGHAI_PARAMS,
-                       census_root=ROOT / "census", default_tile_workers=1):
+                       census_root=_pycensus_dir(_CACHE), default_tile_workers=1):
         raise SystemExit(0)
     run_city_study(
         city_dir=CITY_DIR,
         config=CITY_CONFIGS["shanghai"],
         params=SHANGHAI_PARAMS,
-        streets_root=ROOT / "streets",
-        worldpop_root=ROOT / "worldpop",
-        census_root=ROOT / "census",
+        streets_root=_osm_dir(_CACHE),
+        worldpop_root=_worldpop_dir(_CACHE),
+        census_root=_pycensus_dir(_CACHE),
         reuse_cached_los=flags.reuse_cached_los,
         # Shanghai's metro grid (14-city Yangtze Delta megaregion, 13M+ res-11
         # h3 cells) OOM-killed the map-build stage twice live: once at the

@@ -1,0 +1,3 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type
+assumed_401,assumed,401,401 Alto Tomé - Concepción (Transportes Tomé),"ASSUMED: terminals from OpenStreetMap, road path, OSM bus stops within 35 m; 5 min peak / 7 min off-peak (Seremi de Transportes, Tomé bus federation)",3
+assumed_411,assumed,411,411 Dichato - Tomé - Concepción (Transportes Tomé),"ASSUMED: terminals from OpenStreetMap, road path, OSM bus stops within 35 m; hourly (Rome2Rio listing)",3
