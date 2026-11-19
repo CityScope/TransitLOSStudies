@@ -367,3 +367,6 @@ CLAUDE.local.md
 /usa_flex/analysis/report.py
 /usa_flex/analysis/report_gen23.py
 /usa_flex/analysis/report_gen4.py
+
+# mkdocs build output (published by .github/workflows/docs.yml)
+/site/

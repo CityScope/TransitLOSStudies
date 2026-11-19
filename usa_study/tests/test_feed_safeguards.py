@@ -60,7 +60,7 @@ def test_route_modes_survive_id_collisions_and_padding(tmp_path):
     pytest.importorskip("pyGTFSHandler")
     from pyGTFSHandler.feed import Feed
 
-    from code.best_subset_scoring import feed_route_modes
+    from studytools.best_subset_scoring import feed_route_modes
 
     a, b = tmp_path / "a_bus", tmp_path / "b_rail"
     make_feed(a, [("1", 3), ("9", 3)])

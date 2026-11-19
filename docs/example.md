@@ -1,0 +1,1 @@
+--8<-- "example_metro_area/README.md"

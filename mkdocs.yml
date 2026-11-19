@@ -1,0 +1,26 @@
+site_name: Transit level of service
+site_description: Transit level-of-service maps and the studies behind them
+site_url: https://cityscope.github.io/TransitLOSStudies/
+repo_url: https://github.com/CityScope/TransitLOSStudies
+docs_dir: docs
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+plugins:
+  - search
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.snippets:
+      base_path: ["."]
+      check_paths: true
+nav:
+  - Maps: index.md
+  - Your own area: example.md
+  - The studies: studies.md

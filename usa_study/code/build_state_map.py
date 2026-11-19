@@ -272,7 +272,7 @@ def assemble_map_inputs(state_dirs, include_streets: bool = True, external: bool
                 break
         edges_gdf = _concat_gdfs(samples)
 
-    from .route_labels import add_route_labels
+    from studytools.route_labels import add_route_labels
 
     def _labelled(d: Path):
         by_id = d / "stops_by_id.parquet"

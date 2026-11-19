@@ -9,6 +9,9 @@ packages:
 - `usa_flex/`: the US flexible-scoring map and the score fits against observed transit use;
 - `example_metro_area/`: the same study for any area you choose, as a notebook (`example.ipynb`, runs in Google Colab) and a script.
 
+The maps and the docs: https://cityscope.github.io/TransitLOSStudies/. Any other area: open
+[`example_metro_area/example.ipynb` in Google Colab](https://colab.research.google.com/github/CityScope/TransitLOSStudies/blob/main/example_metro_area/example.ipynb).
+
 The repository holds the code and the inputs that can no longer be downloaded (archived feeds, hand-built feeds with their
 `ASSUMED.md`, analysis areas, feed lists, the fits' warm start). Everything else is downloaded into the shared cache (`cache/`,
 or `STUDY_CACHE_DIR`) and regenerated.

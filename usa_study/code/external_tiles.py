@@ -183,8 +183,25 @@ def _workers_and_budget():
 
     cpus = os.cpu_count() or 2
     workers = int(os.environ.get("USA_TILE_WORKERS", max(1, min(cpus - 2, 12))))
-    budget = float(os.environ.get("USA_TILE_MEMORY_GB", 0)) * 1e9 or 0.7 * psutil.virtual_memory().available
+    free = psutil.virtual_memory().available
+    room = _cgroup_room()
+    if room is not None:   # running in a memory-capped scope: the cap, not the machine, is the limit
+        free = min(free, room)
+    budget = float(os.environ.get("USA_TILE_MEMORY_GB", 0)) * 1e9 or 0.7 * free
     return workers, budget
+
+
+def _cgroup_room():
+    """Bytes left under this process's cgroup memory cap (cgroup v2 `memory.max` minus `memory.current`), or None when uncapped."""
+    try:
+        rel = next(line.split("::", 1)[1].strip() for line in open("/proc/self/cgroup") if line.startswith("0::"))
+        d = Path("/sys/fs/cgroup") / rel.lstrip("/")
+        cap = (d / "memory.max").read_text().strip()
+        if cap == "max":
+            return None
+        return max(0, int(cap) - int((d / "memory.current").read_text()))
+    except Exception:  # noqa: BLE001 -- no cgroup v2: the machine's free memory is the limit
+        return None
 
 
 def _make_writer(kind: str, arg, state_dirs: List[Path]):
