@@ -1,4 +1,4 @@
-/* "Flexible scoring" tab of the US flex map: the normal US map (same page, tiles and tabs) plus a tab that recomputes the level of service
+/* "Scoring" tab of the US flex map: the normal US map (same page, tiles and tabs) whose scoring tab (in place of the map's own "Scoring funcs") recomputes the level of service
  * in the browser with any scoring variant (the fitted presets of the US fit report, or curves edited by hand) and recolours the H3 cells.
  *
  * Data: one folder per state (transitlos.flex.export, usa_flex/build_web.py) under FLEX_CFG.base: station profiles (stop_*.bin), the
@@ -137,6 +137,7 @@
       '#statsTab_flex .plot{display:block;margin-top:4px;max-width:100%} #statsTab_flex .pbg{fill:var(--bg);stroke:var(--line)} #statsTab_flex .grid{stroke:var(--line);stroke-dasharray:2 3}' +
       '#statsTab_flex .tick{fill:var(--mut);font-size:9px} #statsTab_flex .curve{stroke:var(--acc);stroke-width:2;fill:none} #statsTab_flex .refcurve{stroke:var(--mut);stroke-width:1;stroke-dasharray:3 3;opacity:.7;fill:none}' +
       '#statsTab_flex .pt{fill:var(--acc);stroke:var(--bg);stroke-width:1.5;cursor:grab}' +
+      '.flexHide{display:none !important} ' +
       'html.mapdark #statsTab_flex{--bg:#171717;--fg:#e6e6e6;--mut:#999;--line:#333;--card:#1f1f1f;--acc:#6aa0ff}';
     document.head.appendChild(st);
   }
@@ -144,18 +145,21 @@
     addStyle();
     const tabs = document.querySelector('#statsPanel .statsTabBtn'); if (!tabs) return false;
     const bar = tabs.parentNode; if (document.getElementById('statsTab_flex')) return true;
-    const btn = document.createElement('button'); btn.className = 'statsTabBtn'; btn.setAttribute('data-tab', 'flex'); btn.textContent = 'Flexible scoring';
-    bar.appendChild(btn);
+    const btn = document.createElement('button'); btn.className = 'statsTabBtn'; btn.setAttribute('data-tab', 'flex'); btn.textContent = 'Scoring';
+    // one scoring tab: the flex options take the place of the map's own scoring-functions tab
+    const own = bar.querySelector('.statsTabBtn[data-tab="discretization"]');
+    if (own) { bar.insertBefore(btn, own); own.remove(); const op = document.getElementById('statsTab_discretization'); if (op) op.style.display = 'none'; } else bar.appendChild(btn);
     const panel = document.createElement('div'); panel.id = 'statsTab_flex'; panel.className = 'statsTabPanel'; panel.style.display = 'none';
     panel.innerHTML = '<div style="font:12px/1.4 sans-serif;color:#333;">' +
-      '<div style="margin-bottom:6px;color:#555;">Recompute the level of service with another scoring: a fitted variant of the US calibration or your own curves. ' +
-      'Everything on screen is recoloured (hexagons and circles of every resolution, block groups, tracts, counties, states: population-weighted means of the cells); streets, popups and the statistics tabs keep the published score.</div>' +
       '<div style="display:flex;gap:6px;margin-bottom:6px;"><label style="flex:2;">Scoring<select id="flexPreset" style="width:100%;"></select></label>' +
       '<label style="flex:1;">Colour<select id="flexMode" style="width:100%;"><option value="score">Recomputed score</option><option value="diff">Change vs default</option><option value="map">Published map</option></select></label></div>' +
       '<div id="flexLegend" style="display:none;margin-bottom:6px;"><div style="height:10px;border-radius:2px;background:linear-gradient(to right,#b2182b,#ef8a62,#fddbc7,#f7f7f7,#d1e5f0,#67a9cf,#2166ac);"></div>' +
-      '<div style="display:flex;justify-content:space-between;color:#666;font-size:11px;"><span>-30 (lower)</span><span>0</span><span>+30 (higher than the default)</span></div></div>' +
+      '<div style="display:flex;justify-content:space-between;color:#666;font-size:11px;"><span>&minus;30</span><span>0</span><span>+30</span></div></div>' +
       '<div id="flexStatus" style="color:#666;margin-bottom:6px;"></div><div id="flexEditors"></div></div>';
     bar.parentNode.appendChild(panel);
+    // the census controls above the tabs (level, compare with, extended census) do not apply to scoring: hidden while it is open
+    bar.addEventListener('click', (e) => { const t = e.target.closest('.statsTabBtn'); if (!t) return;
+      ['scopeBar', 'extCensusRow', 'statsAreaBtnRow'].forEach((id) => { const el = $(id); if (el) el.classList.toggle('flexHide', t.dataset.tab === 'flex'); }); });
     btn.addEventListener('click', () => {
       window.__statsTab = 'flex';
       document.querySelectorAll('.statsTabBtn').forEach((b) => b.classList.remove('active')); btn.classList.add('active');
