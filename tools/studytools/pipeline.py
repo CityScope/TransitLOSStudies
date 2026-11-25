@@ -5587,8 +5587,12 @@ def _join_census(
     cache_dir: Path,
     country: str = "USA",
     census_module: str | None = None,
+    skip: tuple[str, ...] = (),
 ) -> gpd.GeoDataFrame:
     """Join a curated set of national census population/housing attributes onto `h3_grid`.
+
+    `skip` (USA): source families not to download or join -- "acs5" (ACS 5-year, with its block interpolation), "religion", "housing_history",
+    "elections" (`CityConfig.census_skip`).
 
     Dispatches to the pyCensus module for `country` (an ISO3 code, matching
     `CityConfig.country`) instead of hardcoding USA -- see `ACS_KEEP_COLUMNS`
@@ -5611,15 +5615,18 @@ def _join_census(
     if country == "USA":
         from pycensus.census.countries.usa import acs5 as acs
 
-        h3_grid = _join_polygon_stats(
-            h3_grid, aoi, states, census_levels, cache_dir, acs.load, ACS_KEEP_COLUMNS, "acs5_"
-        )
+        if "acs5" not in skip:
+            h3_grid = _join_polygon_stats(
+                h3_grid, aoi, states, census_levels, cache_dir, acs.load, ACS_KEEP_COLUMNS, "acs5_"
+            )
         # Additionally interpolate ACS5's blockgroup-only count fields down
         # onto real DHC blocks (see `_interpolate_acs_to_dhc_blocks`) and
         # join those at block resolution too, under `_interpolated`-suffixed
         # column names so they're never confused with the real
         # blockgroup-resolution `acs5_*` columns just joined above.
         try:
+            if "acs5" in skip:
+                raise RuntimeError("skipped (not chosen)")
             h3_grid = _join_polygon_stats(
                 h3_grid,
                 aoi,
@@ -5634,6 +5641,8 @@ def _join_census(
             print(f"[pipeline] skipping ACS->DHC-block interpolation: {exc}")
         # Religion: 2020 U.S. Religion Census adherents per county (the Census Bureau asks no religion question).
         try:
+            if "religion" in skip:
+                raise RuntimeError("skipped (not chosen)")
             h3_grid = _join_polygon_stats(
                 h3_grid, aoi, states, ("county",), cache_dir, _us_religion_loader, US_RELIGION_KEEP_COLUMNS, "usrc_"
             )
@@ -5641,12 +5650,16 @@ def _join_census(
             print(f"[pipeline] skipping US religion join: {exc}")
         # Housing prices / rents / tenure at tract level (ACS now, ~2016, 2000; FHFA index; HUD rents).
         try:
+            if "housing_history" in skip:
+                raise RuntimeError("skipped (not chosen)")
             h3_grid = _join_polygon_stats(
                 h3_grid, aoi, states, ("tract",), cache_dir, _us_housing_loader, US_HOUSING_KEEP_COLUMNS, "ushs_"
             )
         except Exception as exc:  # pragma: no cover - network/data availability varies
             print(f"[pipeline] skipping US housing join: {exc}")
         try:   # precinct-resolution elections (resampled precinct -> H3 -> tract)
+            if "elections" in skip:
+                raise RuntimeError("skipped (not chosen)")
             h3_grid = _join_polygon_stats(
                 h3_grid, aoi, states, ("tract",), cache_dir, _us_precinct_elections_loader, US_PRECINCT_ELECTION_KEEP, ""
             )
@@ -5654,6 +5667,8 @@ def _join_census(
             print(f"[pipeline] skipping US precinct elections join: {exc}")
         # The last national election (2024 presidential, county results from MIT MEDSL) as county-level columns.
         try:
+            if "elections" in skip:
+                raise RuntimeError("skipped (not chosen)")
             h3_grid = _join_polygon_stats(
                 h3_grid, aoi, states, ("county",), cache_dir, _us_last_election_loader, US_LAST_ELECTION_COLUMNS, ""
             )
@@ -9778,6 +9793,7 @@ def run_city_study(
             census_dir,
             country=config.country,
             census_module=config.census_module,
+            skip=config.census_skip,
         )
         _lap("census ACS join")
         print(f"[pipeline:{config.key}] joining decennial race/ethnicity attributes")
@@ -9785,6 +9801,8 @@ def run_city_study(
         _lap("census DHC race join")
         print(f"[pipeline:{config.key}] joining LODES WAC jobs-by-workplace counts")
         try:
+            if "lodes" in config.census_skip:
+                raise RuntimeError("skipped (not chosen)")
             h3_grid = _join_polygon_stats_lightweight(_join_jobs, h3_grid, aoi_gdf, config.census_states, census_dir, country=config.country)
         except Exception as exc:  # pragma: no cover - LODES availability varies by state/year
             print(f"[pipeline] skipping LODES jobs join: {exc}")

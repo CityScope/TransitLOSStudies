@@ -20,7 +20,7 @@ ENV = Path(os.environ.get("PTLOS_ENV") or Path.home() / ".cache" / "ptlos_env")
 MODULES = ["geohierarchy", "pycensus", "pyGTFSHandler", "UrbanAccessAnalyzer", "transitlos",
            "rasterio", "folium", "freestiler", "pmtiles", "anywidget", "ipywidgets", "mapclassify", "polars", "duckdb"]
 #: optional API keys (more feed sources, some censuses); in Colab they are read from its Secrets, anywhere from the environment
-KEYS = ("TRANSITLAND_API_KEY", "NAP_API_KEY", "DESTATIS_GENESIS_TOKEN", "MOBILITY_DATABASE_REFRESH_TOKEN")
+KEYS = ("US_CENSUS_API_KEY", "TRANSITLAND_API_KEY", "NAP_API_KEY", "DESTATIS_GENESIS_TOKEN", "MOBILITY_DATABASE_REFRESH_TOKEN")
 #: what the notebook's own kernel needs for the maps (the study packages are not needed there)
 KERNEL = [("anywidget", "anywidget>=0.9"), ("ipywidgets", "ipywidgets>=8"), ("matplotlib", "matplotlib>=3.7")]
 

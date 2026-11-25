@@ -22,7 +22,7 @@ share, the commuters or trips behind it, and the surveyed sample where the sourc
 | Toronto | Statistics Canada census 2021 | dissemination area (9,712) | commuters by main mode, residence |
 | Concepcion | INE Censo 2024 | block (manzana) / rural entity (10,470) | commuters by mode, residence |
 | Beersheba | CBS census 2022 public-use file per sub-quarter | sub-quarter / locality (30) | commuters by main mode, residence |
-| Guadalajara | IMEPLAN Encuesta Origen-Destino 2023 | AGEB of residence, urban and rural (1,046 sampled; the maps fill the rest from the survey's 601 microzones and 81 centralidades) | surveyed workers by main mode of the first work trip (24,152 surveyed) |
+| Guadalajara | IMEPLAN Encuesta Origen-Destino 2023 | centralidad of residence (71; the 60 that feeds reach are fitted; the survey's AGEBs and microzones are too noisy to fit, see `docs/reports/city_science_flex.md`) | surveyed workers by main mode of the first work trip (24,152 surveyed) |
 | Gipuzkoa | PMUS San Sebastian 2024-2029 neighbourhood sheets (EM CAPV 2021 + 2022 oversample); outside Donostia the Estudio de la Movilidad de la CAPV 2021 origin-destination matrices | neighbourhood of Donostia (15), comarca elsewhere | weekday trips by mode, all purposes, by origin |
 | Taipei | Taipei DOT daily mode-use survey 2018; in New Taipei the MOTC survey 2010 (Taipei DOT report 102-03); Keelung and Taoyuan publish city totals only | district of Taipei City (12), traffic zone of New Taipei (7) | vehicles used on commuting / school trips |
 | Hamburg | MiD 2023 (the city's modal-split WFS); outside the city the MiD 2017 Metropolregion report | Bezirk (7), Kreis (13) | residents' trips by main mode |
@@ -34,7 +34,9 @@ Notes on the measures:
 * Commuters by residence (Boston, San Francisco, Toronto, Concepcion, Beersheba, Guadalajara) are the outcome of the US fit. The
   trip-based units (Donostia by origin, Hamburg and Andorra by residence) and Taipei's vehicle counts measure something else: each
   city keeps its own level and is compared on its own, not pooled with the commuters.
-* Guadalajara has about 23 surveyed commuters per AGEB: the fit weights an AGEB by its sample (`n_sample`), not by its expanded count.
+* Guadalajara has about 16 to 23 surveyed commuters per AGEB (about 280 per centralidad): `outcomes.py` therefore takes the centralidad, the
+  coarsest survey level with enough units; a unit weighs the people it stands for (`n_tc`, expanded) and the likelihood counts its surveyed sample (`n_sample_tc`). The left vote is an extra control for Guadalajara only
+  (`CITY_EXTRA` in `fit_tests.py`) and units with a default score under 5 (no feed reaches them) are left out (`NO_FEED_BELOW`).
   Its AGEBs are the survey's own 2020 urban AGEBs, then INEGI's urban and rural AGEB layers.
 * Finer data exist only on request: MobiHam 2022 microdata with the Stadtteil of residence (Hamburg, 104 Stadtteile), the MOTC survey
   microdata with the district (Taipei, later years than 2018), the EM CAPV microdata (Gipuzkoa, municipalities above 10,000

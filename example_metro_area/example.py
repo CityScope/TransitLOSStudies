@@ -27,6 +27,7 @@ or from Python / the notebook:
 from __future__ import annotations
 
 import json
+import math
 import re
 import shutil
 import sys
@@ -62,7 +63,6 @@ FEED_SOURCES = None                    # where "download" looks; None = the most
 NAME = None                            # name of the results folder and zip; None = taken from the place or file name
 OUTPUT_DIR = HERE / "areas"            # one folder per area
 CACHE_DIR = None                       # downloads shared by every run; None = TransitLOSStudies/cache
-WORLDPOP = "auto"                      # "auto": WorldPop columns only where there is no census; True: also next to a census (downloads WorldPop); False: never
 BUILD_MAP = True                       # build the interactive map (map.html, finest hexagons, circles and census); False = only the zip
 # ======================================================================
 
@@ -90,11 +90,16 @@ MUNICIPALITY_BY_PLACE = [
     ("*", "openstreetmap"),                            # OpenStreetMap administrative boundary
 ]
 
+#: a feed whose coverage is wider than this (km across) is regional or intercity: not ticked by default in `find_feeds`
+COVERAGE_MAX_KM = 250
+
 #: API keys this study may ask for: (what needs it, where to sign up, environment variable)
 API_KEYS = {
     "transitland": ("Transitland (transit feeds)", "https://www.transit.land (create an account, then an API key)", "TRANSITLAND_API_KEY"),
     "nap_es": ("Spain's National Access Point (transit feeds)", "https://nap.transportes.gob.es (register, then the API key in your profile)",
                "NAP_API_KEY"),
+    "us_census": ("the US Census Bureau API (US census data)", "https://api.census.gov/data/key_signup.html (a free key, sent by email)",
+                  "US_CENSUS_API_KEY"),
     "destatis_genesis": ("the German census (Destatis GENESIS-Online)", "https://www-genesis.destatis.de (register, then create a token)",
                          "DESTATIS_GENESIS_TOKEN"),
 }
@@ -192,6 +197,27 @@ def api_key(name: str) -> Optional[str]:
 
 
 # ---------------------------------------------------------------- census and inputs
+def check_census_api(country: str) -> None:
+    """For the USA: stop early, with what to do, when the Census Bureau API does not answer with data. Without a (valid) key it answers with an
+    HTML page, and the census would silently be left out of the results."""
+    if country != "USA":
+        return
+    import requests
+    from pycensus.api_keys import resolve_api_key
+
+    key = resolve_api_key("us_census", "US_CENSUS_API_KEY")
+    try:
+        r = requests.get("https://api.census.gov/data/2023/acs/acs5", params={"get": "NAME", "for": "state:25", **({"key": key} if key else {})}, timeout=60)
+        r.json()
+    except Exception as exc:  # noqa: BLE001
+        problem = "no key was found" if not key else "the key was not accepted" if "json" in type(exc).__name__.lower() else f"it could not be reached ({exc})"
+        raise RuntimeError(
+            f"The US Census Bureau API did not return census data: {problem}. Get a free key at https://api.census.gov/data/key_signup.html (it "
+            f"arrives by email). In Colab add it as a Secret named US_CENSUS_API_KEY (key icon in the left bar, allow notebook access) and run "
+            f"this step again; on your own machine set the environment variable US_CENSUS_API_KEY or save it in ~/.config/ptlos/api_keys.json "
+            f"as \"us_census\".") from None
+
+
 def place_codes(aoi: gpd.GeoDataFrame, samples: int = 9) -> dict:
     """Where the area is: `{"iso2", "iso3", "regions": ISO 3166-2 codes, "provinces": names}` from points spread over it."""
     import numpy as np
@@ -270,7 +296,8 @@ def _us_states(aoi: gpd.GeoDataFrame) -> list:
 
 # ---------------------------------------------------------------- transit feeds
 def get_feeds(aoi: gpd.GeoDataFrame, gtfs_dir: Path, feeds: Union[str, Path, Sequence] = "download",
-              sources: Optional[Sequence[str]] = None, place: Optional[dict] = None, states: Optional[Sequence[str]] = None) -> list:
+              sources: Optional[Sequence[str]] = None, place: Optional[dict] = None, states: Optional[Sequence[str]] = None,
+              only: Optional[Sequence[str]] = None) -> list:
     """The GTFS feeds of the run in `gtfs_dir` (one folder per feed). Feeds without stops in the area and duplicate copies of the same
     feed are left out. Returns the feed folders.
 
@@ -283,9 +310,11 @@ def get_feeds(aoi: gpd.GeoDataFrame, gtfs_dir: Path, feeds: Union[str, Path, Seq
             `FEED_SOURCES_BY_PLACE`, most local first, each later one only adding the feeds the earlier ones miss.
         place: Where the area is (`place_codes`); found when missing.
         states: US states of the area (for "ntd").
+        only: For "download": the keys (`find_feeds`) of the only feeds to download; None = all that the sources list.
     """
     gtfs_dir = Path(gtfs_dir)
-    choice = json.dumps(feeds if isinstance(feeds, str) else [str(f) for f in feeds]) + json.dumps(list(sources or [])) + "|local+missing+operators"
+    choice = (json.dumps(feeds if isinstance(feeds, str) else [str(f) for f in feeds]) + json.dumps(list(sources or [])) + "|local+missing+operators"
+              + (json.dumps(sorted(only)) if only is not None else ""))
     marker = gtfs_dir / "_feeds_choice.json"
     if marker.is_file() and marker.read_text() == choice and any(gtfs_dir.glob("*/stops.txt")):
         return sorted(p.parent for p in gtfs_dir.glob("*/stops.txt"))   # same choice as the last run: reuse
@@ -297,7 +326,7 @@ def get_feeds(aoi: gpd.GeoDataFrame, gtfs_dir: Path, feeds: Union[str, Path, Seq
         tiers = [list(sources)] if sources else by_place(FEED_SOURCES_BY_PLACE, place)
         kept, origin = [], {}
         for tier in tiers:   # most local first; each later (more general) source only adds the feeds the earlier ones miss
-            added = _keep_feeds_in_area(download_feeds(aoi, gtfs_dir, tier, place, states), aoi, keep=kept)
+            added = _keep_feeds_in_area(download_feeds(aoi, gtfs_dir, tier, place, states, only), aoi, keep=kept)
             print(f"[gtfs] {', '.join(tier)}: {len(added)} feeds" + (" not already covered" if kept else ""), flush=True)
             origin.update({p.name: ", ".join(tier) for p in added})
             kept += added
@@ -310,48 +339,62 @@ def get_feeds(aoi: gpd.GeoDataFrame, gtfs_dir: Path, feeds: Union[str, Path, Seq
     return kept
 
 
+def _search_source(source: str, aoi: gpd.GeoDataFrame, place: dict, states: Optional[Sequence[str]]):
+    """`(client, found)` of one feed source: its downloader and the feeds it lists for the area (metadata only, nothing downloaded), or None
+    when it needs an API key that is missing."""
+    from pyGTFSHandler.downloaders import MobilityDatabaseCatalog, TransitLandDownloader
+
+    if source == "ntd":
+        from pyGTFSHandler.downloaders.usa import NTDDownloader
+
+        client = NTDDownloader()
+        return client, client.search_feeds(state=list(states or [r.split("-")[1] for r in place.get("regions", []) if r.startswith("US-")]))
+    if source == "nap":
+        from pyGTFSHandler.downloaders.spain import NAPDownloader
+
+        key = api_key("nap_es")
+        if not key:
+            return None
+        client = NAPDownloader(api_key=key)
+        return client, client.search_feeds(region=place.get("provinces", []), region_type=0)   # 0 = province
+    if source == "mobility_database":
+        client = MobilityDatabaseCatalog()
+        return client, client.search_feeds(aoi=aoi)
+    if source == "transitland":
+        key = api_key("transitland")
+        if not key:
+            return None
+        client = TransitLandDownloader(api_key=key)
+        return client, client.search_feeds(aoi=aoi)
+    raise ValueError(f"unknown feed source {source!r}: use 'ntd', 'nap', 'mobility_database' or 'transitland'")
+
+
 def download_feeds(aoi: gpd.GeoDataFrame, gtfs_dir: Path, sources: Sequence[str], place: Optional[dict] = None,
-                   states: Optional[Sequence[str]] = None) -> list:
+                   states: Optional[Sequence[str]] = None, only: Optional[Sequence[str]] = None) -> list:
     """Download the area's feeds from `sources`. Returns the feed folders.
 
     Sources: "ntd" (US National Transit Database, the area's states), "nap" (Spain's National Access Point, the area's provinces;
     asks for a free key), "mobility_database" (Mobility Database catalog, no key), "transitland" (asks for a free key).
+    `only`: keys (`"<source>:<feed id>"`, as `find_feeds` gives them) of the only feeds to download; None = all that the sources list.
     """
-    from pyGTFSHandler.downloaders import MobilityDatabaseCatalog, TransitLandDownloader
-
     place = place or {}
+    only = None if only is None else set(only)
     folders = []
     for s in sources:
         try:
-            if s == "ntd":
-                from pyGTFSHandler.downloaders.usa import NTDDownloader
-
-                client = NTDDownloader()
-                found = client.search_feeds(state=list(states or [r.split("-")[1] for r in place.get("regions", []) if r.startswith("US-")]))
-            elif s == "nap":
-                from pyGTFSHandler.downloaders.spain import NAPDownloader
-
-                key = api_key("nap_es")
-                if not key:
-                    continue
-                client = NAPDownloader(api_key=key)
-                found = client.search_feeds(region=place.get("provinces", []), region_type=0)   # 0 = province
-            elif s == "mobility_database":
-                client = MobilityDatabaseCatalog()
-                found = client.search_feeds(aoi=aoi)
-            elif s == "transitland":
-                key = api_key("transitland")
-                if not key:
-                    continue
-                client = TransitLandDownloader(api_key=key)
-                found = client.search_feeds(aoi=aoi)
-            else:
-                raise ValueError(f"unknown feed source {s!r}: use 'ntd', 'nap', 'mobility_database' or 'transitland'")
+            searched = _search_source(s, aoi, place, states)
         except ValueError:
             raise
         except Exception as exc:  # noqa: BLE001 -- one source down must not stop the others
             print(f"[gtfs] {s}: search failed ({exc})", flush=True)
             continue
+        if searched is None:
+            continue
+        client, found = searched
+        if only is not None:
+            found = [f for f in found if f"{s}:{f.id}" in only]
+            if not found:
+                continue
         print(f"[gtfs] {s}: {len(found)} feeds", flush=True)
         try:
             folders += [Path(p) for p in client.download_feeds(found, str(gtfs_dir))]
@@ -363,6 +406,116 @@ def download_feeds(aoi: gpd.GeoDataFrame, gtfs_dir: Path, sources: Sequence[str]
                     print(f"[gtfs] {feed.id}: download failed ({exc})", flush=True)
     unique = list(dict.fromkeys(folders))   # a downloader can return one folder per row (NTD: one row per mode of a feed)
     return [f for f in unique if (f / "stops.txt").is_file()]
+
+
+def _dig(record: dict, dotted: str, default=None):
+    """`record["a.b.c"]` or `record["a"]["b"]["c"]`: the sources return their metadata flat (Mobility Database) or nested (Transitland)."""
+    if dotted in record:
+        return record[dotted]
+    node = record
+    for part in dotted.split("."):
+        if not isinstance(node, dict) or part not in node:
+            return default
+        node = node[part]
+    return node
+
+
+def _area_names(aoi: gpd.GeoDataFrame) -> set:
+    """Lower-case names that identify the area: its place name and the name of the UN urban centre it lies in."""
+    names = {str(aoi["name"].iloc[0]).split(",")[0].split("(")[0].strip().lower()}
+    try:
+        from pycensus.census.worldwide import un_metro_areas
+
+        point = aoi.to_crs(4326).union_all().representative_point()
+        found = un_metro_areas.find(point=(point.x, point.y), kind="urban_centre")
+        if not found.empty:
+            names.add(str(found["name"].iloc[0]).lower())
+    except Exception:  # noqa: BLE001
+        pass
+    return {n for n in names if n}
+
+
+def find_feeds(aoi: gpd.GeoDataFrame, feeds: Union[str, Path, Sequence] = "download", sources: Optional[Sequence[str]] = FEED_SOURCES) -> list:
+    """The feeds the sources list for the area, from their metadata only: nothing is downloaded, so you can choose before downloading.
+
+    Returns one dict per feed (the same feed listed by several sources once, under the most local one): `key`, `keys` (to give to
+    `list_feeds(selected=...)`), `source`, `provider`, `name`, `location`, `modes`, `updated`, `url`, `likely` (whether it probably serves the
+    area: the source placed it there, or its urbanized area / city matches) and `why`. Empty for your own feeds (`feeds` other than
+    "download"): there is nothing to choose before downloading.
+    """
+    if not (isinstance(feeds, str) and feeds == "download"):
+        return []
+    place = place_codes(aoi)
+    states = _us_states(aoi) if place["iso3"] == "USA" else None
+    tiers = [list(sources)] if sources else by_place(FEED_SOURCES_BY_PLACE, place)
+    names, entries = _area_names(aoi), {}
+    minx, miny, maxx, maxy = aoi.to_crs(4326).total_bounds
+    for s in [x for tier in tiers for x in tier]:
+        try:
+            searched = _search_source(s, aoi, place, states)
+        except ValueError:
+            raise
+        except Exception as exc:  # noqa: BLE001
+            print(f"[gtfs] {s}: search failed ({exc})", flush=True)
+            continue
+        if searched is None:
+            continue
+        for f in searched[1]:
+            raw = f.raw if isinstance(f.raw, dict) else {}
+            ntd = raw.get("ntd") if isinstance(raw.get("ntd"), dict) else {}
+            box = [_dig(raw, f"location.bounding_box.{k}") for k in ("minimum_longitude", "minimum_latitude", "maximum_longitude", "maximum_latitude")]
+            box = [float(v) for v in box] if all(v not in (None, "") for v in box) else None
+            location = ", ".join(str(x) for x in (ntd.get("city"), ntd.get("state"), _dig(raw, "location.municipality"),
+                                                  _dig(raw, "location.subdivision_name")) if x)
+            likely, why = True, f"listed by {s} for the area"
+            if s == "ntd":
+                uza, city = str(ntd.get("uza_name", "")), str(ntd.get("city", ""))
+                likely = city.lower() in names
+                same_uza = any(n in uza.lower() for n in names)
+                why = (f"based in {city}, in the area" if likely else
+                       f"based in {city}, same urbanized area ({uza}); may not serve the area" if same_uza else f"based in {city}, elsewhere")
+            else:   # a coverage box or polygon: it must include the area, and not be regional or intercity in size
+                shape_ = None
+                if box:
+                    from shapely.geometry import box as _box
+
+                    shape_ = _box(*box)
+                elif isinstance(_dig(raw, "feed_state.feed_version.geometry"), dict):
+                    from shapely.geometry import shape as _shape
+
+                    shape_ = _shape(_dig(raw, "feed_state.feed_version.geometry"))
+                if shape_ is not None:
+                    x0, y0, x1, y1 = shape_.bounds
+                    span = ((x1 - x0) * 111.3 * math.cos(math.radians((y0 + y1) / 2))) ** 2
+                    span = (span + ((y1 - y0) * 111.3) ** 2) ** 0.5
+                    inside = shape_.intersects(aoi.to_crs(4326).union_all())
+                    likely = inside and span <= COVERAGE_MAX_KM
+                    why = (f"its coverage ({span:,.0f} km across) " + ("includes the area" if inside else "does not include the area")
+                           + (" but is regional or intercity in size" if inside and not likely else ""))
+            url = str(_dig(raw, "urls.direct_download") or f.download_url or "").strip()   # the agency's own link: the same feed from other sources matches
+            key = f"{s}:{f.id}"
+            entry = entries.get(url.lower()) if url else None
+            if entry:   # the same feed from another source: kept under the first (most local) one, the others noted
+                entry["keys"].append(key)
+                entry["also"].append(s)
+                if ntd.get("mode_name") and ntd["mode_name"] not in entry["modes"]:
+                    entry["modes"].append(ntd["mode_name"])
+                continue
+            entries[url.lower() or key] = {
+                "key": key, "keys": [key], "source": s, "also": [], "provider": str(f.provider or "") if str(f.provider) != "None" else "",
+                "name": str(f.name or "") if str(f.name) not in ("None", "") else "", "location": location,
+                "modes": [ntd["mode_name"]] if ntd.get("mode_name") else [], "url": url,
+                "updated": str(ntd.get("new_modified_date") or _dig(raw, "feed_state.feed_version.fetched_at") or "")[:10],
+                "likely": bool(likely), "why": why}
+    out = []
+    for e in entries.values():
+        e["provider"] = e["provider"] or e["name"] or e["key"].split(":", 1)[1]
+        if e["provider"].startswith("f-"):   # a Transitland feed id (f-drt3-middlesex~ma~us): made readable
+            e["provider"] = e["provider"][2:].replace("~", " ")
+        e["modes"] = ", ".join(e["modes"])
+        e["source"] = ", ".join(dict.fromkeys([e["source"], *e.pop("also")]))
+        out.append(e)
+    return sorted(out, key=lambda e: (not e["likely"], e["provider"].lower()))
 
 
 def _add_feed(item, gtfs_dir: Path) -> Optional[Path]:
@@ -473,8 +626,11 @@ def _service_days(folder: Path):
 
 
 def list_feeds(aoi: gpd.GeoDataFrame, feeds: Union[str, Path, Sequence] = "download", name: Optional[str] = None,
-               sources: Optional[Sequence[str]] = FEED_SOURCES) -> list:
-    """Get the GTFS feeds of the area (as `get_feeds`; kept in `areas/<name>/gtfs_all`) and describe each, to choose from.
+               sources: Optional[Sequence[str]] = FEED_SOURCES, selected: Optional[Sequence[str]] = None) -> list:
+    """Download the GTFS feeds of the area (as `get_feeds`; kept in `areas/<name>/gtfs_all`) and describe each, to choose from.
+
+    `selected`: the `keys` of the feeds to download, chosen from `find_feeds` (their metadata, before any download); None = all that the
+    sources list. Nothing else is downloaded here (the street data comes with `run`).
 
     Returns one dict per feed: `name` (folder), `agency`, `source`, `stops` (in the area), `trips` and `events` (stop calls) in the
     area per typical day of its calendar, `first_date` and `last_date` of its calendar.
@@ -484,9 +640,10 @@ def list_feeds(aoi: gpd.GeoDataFrame, feeds: Union[str, Path, Sequence] = "downl
     name = _safe_name(name or str(aoi["name"].iloc[0]))
     cache = study_cache.resolve_cache_dir(CACHE_DIR)
     study_cache.apply_env(cache, "example")
-    config, place = area_config(aoi, name, study_cache.osm_dir(cache))
+    place = place_codes(aoi)
+    states = _us_states(aoi) if place["iso3"] == "USA" else None
     gtfs_all = Path(OUTPUT_DIR) / name / "gtfs_all"
-    folders = get_feeds(aoi, gtfs_all, feeds, sources, place=place, states=config.census_states)
+    folders = get_feeds(aoi, gtfs_all, feeds, sources, place=place, states=states, only=selected)
     origin = json.loads((gtfs_all / "_feeds_sources.json").read_text()) if (gtfs_all / "_feeds_sources.json").is_file() else {}
     geom = aoi.union_all()
     out = []
@@ -577,43 +734,75 @@ def service_dates(aoi: gpd.GeoDataFrame, feed_names: Sequence[str], day: str = D
 
 
 # ---------------------------------------------------------------- census columns
-#: column name prefix -> group of the columns a source adds; the other columns are grouped by the global schema's categories
-_COLUMN_SOURCES = [("worldpop", "WorldPop"), ("acs5_", "ACS 5-year (USA)"), ("acs_", "ACS 5-year (USA)"), ("dhc_", "Decennial census (USA)"),
-                   ("ushs_", "Housing history (USA)"), ("usrc_", "Religion (USA)"), ("gba_", "Buildings (GlobalBuildingAtlas)"),
-                   ("elec_", "Elections"), ("lodes_", "Jobs (LODES)"), ("statcan_", "Statistics Canada")]
-_WORLDPOP_COLUMNS = ("population_overestimation_vs_census", "population_underestimation_vs_census", "gba_population_overestimation_vs_census",
-                     "gba_population_underestimation_vs_census")
-
-
-_CATEGORY_NAMES = {"populationEstimates": "population estimates", "raceEthinicity": "race and ethnicity"}   # the schema's own spelling is not shown
-
-
-def column_group(column: str, schema: dict) -> Optional[str]:
-    """The group a result column belongs to (None = always kept: ids, geometry, population, level of service, densities)."""
-    if column in ("geometry", "h3_cell", "GEOID", "population", "level_of_service", "area_m2") or column.startswith(("pop_", "population_density")):
-        return None
-    if column in _WORLDPOP_COLUMNS[:2] or column.startswith("worldpop"):
-        return "WorldPop"
-    for prefix, group in _COLUMN_SOURCES:
-        if column.startswith(prefix):
-            return group
-    if re.match(r"^\d{4}_", column):
-        return "Elections"
-    return f"Harmonised: {_CATEGORY_NAMES.get(schema[column], schema[column])}" if column in schema else None
-
-
-#: what each group of columns is (shown in the notebook's column chooser)
-_GROUP_TEXT = {
-    "WorldPop": "WorldPop modelled population (100 m grid) and its comparison with the census counts.",
-    "ACS 5-year (USA)": "US Census Bureau, American Community Survey 5-year estimates (block group): population, income, housing, commuting, education.",
-    "Decennial census (USA)": "US Census Bureau, 2020 Decennial census (blocks): population, race and ethnicity, age, housing units.",
-    "Housing history (USA)": "US housing tenure, rent and home values for earlier census periods.",
-    "Religion (USA)": "US Religion Census 2020 (county): congregations and adherents by denomination.",
-    "Buildings (GlobalBuildingAtlas)": "Building footprints, heights and built floor area from the GlobalBuildingAtlas, and the built-surface population estimate.",
-    "Elections": "Election results (vote shares and totals) of the latest election at each level.",
-    "Jobs (LODES)": "US LEHD LODES: jobs by workplace.",
-    "Statistics Canada": "Statistics Canada census columns.",
+#: the census data sources, one group per download unit: key -> (title, what it holds, prefixes of its result columns). The groups of the
+#: notebook's choosers (before the run, what to download; after it, which columns to keep).
+SOURCES = {
+    "acs5": ("ACS 5-year estimates (USA)", "US Census Bureau American Community Survey, block groups: population, age, income, housing, education, commuting, jobs, health.",
+             ("acs5_", "acs_")),
+    "dhc": ("Decennial census 2020 (USA)", "US Census Bureau, blocks: the population of every block (the base of the population map), race and ethnicity, age, housing units.",
+            ("dhc_",)),
+    "lodes": ("Jobs by workplace (LODES, USA)", "US LEHD LODES: jobs by workplace.", ("lodes_",)),
+    "religion": ("Religion census (USA)", "US Religion Census 2020, counties: congregations and adherents by denomination.", ("usrc_",)),
+    "housing_history": ("Housing, earlier periods (USA)", "Housing tenure, rent and home values for earlier census periods (tracts).", ("ushs_",)),
+    "elections": ("Elections (USA)", "Election results: precinct results resampled to tracts, and the last national election by county.", ("elec_",)),
+    "buildings": ("Buildings (GlobalBuildingAtlas)", "Building footprints, heights and built floor area, and the built-surface population estimate.", ("gba_",)),
+    "worldpop_grid": ("WorldPop population grid", "WorldPop's modelled population on a 100 m grid, the base of the population map where the census is too coarse.", ()),
+    "worldpop_layers": ("WorldPop age, sex and urban layers", "WorldPop age, sex and urban-share layers of the whole country.", ("worldpop",)),
+    "census": ("National census", "The country's own census columns.", ()),
+    "derived": ("Derived indicators", "Shares, rates and harmonised names made by this study from the sources above.", ()),
 }
+#: the USA sources that can be left out of the download (the decennial census blocks and the buildings are always needed)
+_OPTIONAL_USA = ("acs5", "lodes", "religion", "housing_history", "elections")
+
+
+def census_sources(aoi: gpd.GeoDataFrame) -> list:
+    """The census data sources for the area, to choose from BEFORE the run downloads them (unticked ones are never downloaded).
+
+    Returns one dict per source: `key`, `title`, `description`, `required` (always used), `default` (ticked at the start) and `note`. For the
+    USA the optional ones are ACS, jobs, religion, housing history, elections and the two WorldPop groups; the decennial census blocks and the
+    buildings are required. Another country with a census has one national group (required); without one, WorldPop is required.
+    """
+    from studytools.config import _census_supported
+
+    iso3 = place_codes(aoi)["iso3"]
+    census_module = next(iter(by_place(CENSUS_BY_PLACE, place_codes(aoi))), None)
+    has_census = _census_supported(iso3, census_module)
+
+    def row(key, required=False, default=True, note=""):
+        return {"key": key, "title": SOURCES[key][0], "description": SOURCES[key][1], "required": required, "default": default or required, "note": note}
+
+    if iso3 == "USA" and has_census:
+        rows = [row("dhc", required=True), row("acs5"), row("lodes"), row("religion"), row("housing_history"), row("elections")]
+    elif has_census:
+        rows = [row("census", required=True)]
+    else:
+        rows = []
+    rows.append(row("buildings", required=True))
+    if has_census:
+        rows.append(row("worldpop_grid", default=False, note="only needed where the census areas are large; otherwise the census gives the population (about 1.5 GB for the USA)"))
+        rows.append(row("worldpop_layers", default=False, note="a one-time download of tens of GB for the USA"))
+    else:
+        rows.append(row("worldpop_grid", required=True, note="the country has no census here: WorldPop gives the population"))
+        rows.append(row("worldpop_layers", required=True, note="no census here: WorldPop's layers give age, sex and urban share"))
+    return rows
+
+
+def column_group(column: str, bare: dict) -> Optional[str]:
+    """The source group (a key of `SOURCES`) of a result column, None when it is always kept (ids, geometry, population, level of service,
+    densities). A column takes the source of its name's prefix; a bare name (`medianAge`) the source the run recorded for it (`bare`);
+    the rest are derived indicators."""
+    if column in ("geometry", "h3_cell", "GEOID", "population", "level_of_service", "area_m2") or column.startswith(("pop_", "population_density", "__")):
+        return None
+    for key, (_, _, prefixes) in SOURCES.items():
+        if column.startswith(prefixes) if prefixes else False:
+            return key
+    if re.match(r"^\d{4}_", column):
+        return "elections"
+    if column in bare:
+        for key, (_, _, prefixes) in SOURCES.items():
+            if prefixes and bare[column].startswith(prefixes):
+                return key
+    return "derived"
 
 
 def _metadata(area_dir: Path) -> dict:
@@ -634,16 +823,17 @@ def _short(text: str, n: int = 260) -> str:
 
 
 def result_columns(aoi: gpd.GeoDataFrame, name: Optional[str] = None) -> dict:
-    """The census columns of the results by group, with what each is: `{group: {"description", "columns": [{"column", "name",
+    """The census columns of the results by source group, with what each is: `{group title: {"description", "columns": [{"column", "name",
     "description", "unit", "level", "source", "in"}]}}`. `level` = the census level the source publishes it at ("derived" for columns made
     by this study); `in` = the result tables that hold it. Descriptions: the run's census metadata, else the global schema's definition."""
     import pyarrow.parquet as pq
 
     area_dir = Path(OUTPUT_DIR) / _safe_name(name or str(aoi["name"].iloc[0]))
-    schema_rows = json.loads((Path(__import__("pycensus").__file__).parent / "census" / "global_schema.json").read_text())
-    schema = {e["feature_name"]: e["category"] for e in schema_rows}
-    definition = {e["feature_name"]: e.get("definition", "") for e in schema_rows}
+    definition = {e["feature_name"]: e.get("definition", "") for e in json.loads(
+        (Path(__import__("pycensus").__file__).parent / "census" / "global_schema.json").read_text())}
     meta, tables = _metadata(area_dir), {}
+    bare_file = area_dir / "results" / "bare_column_sources.json"
+    bare = json.loads(bare_file.read_text()) if bare_file.is_file() else {}
     for arc, src in _result_tables(area_dir).items():
         if arc != "streets.parquet" and src.is_file():
             tables[arc] = pq.ParquetFile(src).schema_arrow.names
@@ -658,18 +848,18 @@ def result_columns(aoi: gpd.GeoDataFrame, name: Optional[str] = None) -> dict:
 
     groups: dict = {}
     for c in dict.fromkeys(c for names in tables.values() for c in names):
-        g = column_group(c, schema)
-        if not g:
+        key = column_group(c, bare)
+        if not key:
             continue
         m = meta.get(c, {})
         level = m.get("level") or ("derived" if c not in meta else "")
-        groups.setdefault(g, {"description": _GROUP_TEXT.get(g) or (f"Columns with the same name and meaning in every country (pyCensus global schema): {g.split(': ')[-1]}."
-                                                                     if g.startswith("Harmonised") else ""), "columns": []})["columns"].append(
+        title, text, _ = SOURCES[key]
+        groups.setdefault(title, {"description": text, "key": key, "columns": []})["columns"].append(
             {"column": c, "name": m.get("name") or _words(c),
              "description": _short(m.get("description") or definition.get(c) or "A column derived or merged by this study; no further description is recorded."),
-             "unit": m.get("unit") or "",
-             "level": level, "source": m.get("source") or "", "in": where(c)})
-    return dict(sorted(groups.items()))
+             "unit": m.get("unit") or "", "level": level, "source": m.get("source") or "", "in": where(c)})
+    order = {SOURCES[k][0]: i for i, k in enumerate(SOURCES)}
+    return dict(sorted(groups.items(), key=lambda kv: order.get(kv[0], 99)))
 
 
 def export_results(aoi: gpd.GeoDataFrame, columns: Sequence[str], name: Optional[str] = None) -> Path:
@@ -706,7 +896,7 @@ def _share_worldpop_downloads(area_dir: Path, shared: Path) -> None:
 def run(aoi: gpd.GeoDataFrame, name: Optional[str] = None, day: str = DAY, start_time: str = START_TIME, end_time: str = END_TIME,
         feeds=FEEDS, feed_sources: Optional[Sequence[str]] = FEED_SOURCES, output_dir: Path = OUTPUT_DIR,
         cache_dir: Optional[str] = CACHE_DIR, build_map: bool = BUILD_MAP, feed_names: Optional[Sequence[str]] = None,
-        service_date: Optional[str] = None, worldpop=WORLDPOP) -> Path:
+        service_date: Optional[str] = None, census_sources: Optional[Sequence[str]] = None) -> Path:
     """Run the study for `aoi` and return the results zip.
 
     Args:
@@ -718,7 +908,7 @@ def run(aoi: gpd.GeoDataFrame, name: Optional[str] = None, day: str = DAY, start
         feeds: "download", a folder with GTFS feeds, or a list of feed zips / folders / links (see `get_feeds`).
         feed_names: The feeds to use out of those `list_feeds` got (their `name`); None = get the feeds with `feeds`.
         service_date: The analysis date ("YYYY-MM-DD", see `service_dates`); None = chosen automatically, like the US study.
-        worldpop: "auto" (WorldPop columns only without a census), True (also next to a census) or False (never; see `area_config`).
+        census_sources: The census sources to download (keys of `census_sources`); the others are never downloaded. None = each one's default.
         feed_sources: Sources "download" uses; None = the most local ones that have the area's feeds.
         output_dir: Folder that gets one sub-folder per area.
         cache_dir: Shared download cache; None = TransitLOSStudies/cache.
@@ -726,7 +916,6 @@ def run(aoi: gpd.GeoDataFrame, name: Optional[str] = None, day: str = DAY, start
     """
     import dataclasses
 
-    worldpop = {"include": True, "never": False}.get(worldpop, worldpop)   # the notebook's words for the setting
     from studytools import cache as study_cache
     from studytools.inputs import census_population_raster, worldpop_raster
     from studytools.params import GLOBAL_PARAMS
@@ -749,14 +938,22 @@ def run(aoi: gpd.GeoDataFrame, name: Optional[str] = None, day: str = DAY, start
     (area_dir / "results" / "pop_access_h3_checkpoint.parquet").unlink(missing_ok=True)   # never reuse a level of service of other settings
     print(f"[example] {name}: {area_km2(aoi):,.0f} km2, {day} {start_time}-{end_time}", flush=True)
 
-    config, place = area_config(aoi, name, study_cache.osm_dir(cache), worldpop)
+    config, place = area_config(aoi, name, study_cache.osm_dir(cache))
     print(f"[example] population: {census_used(config)}", flush=True)
+    chosen = {r["key"] for r in census_sources(aoi) if r["default"]} if census_sources is None else set(census_sources)
+    config = dataclasses.replace(
+        config, worldpop_layers="worldpop_layers" in chosen or not config.uses_census,
+        census_skip=tuple(k for k in _OPTIONAL_USA if k not in chosen) if config.country == "USA" else ())   # unchosen sources are never downloaded
+    if config.census_skip:
+        print(f"[example] census sources left out: {', '.join(config.census_skip)}", flush=True)
+    if config.uses_census:
+        check_census_api(config.country)   # before any long step: a missing key would leave the census out of the results
     census_dir = study_cache.pycensus_dir(cache, "example")
     population_dir = area_dir / "population"
     tif = population_dir / f"{name}_census_population.tif"
     if config.worldpop_layers:   # the age and sex rasters are shared by every area of the country
         _share_worldpop_downloads(area_dir, Path(study_cache.worldpop_dir(cache)) / "raw_age_structures")
-    if config.uses_census and not config.worldpop_layers and census_population_raster(config, aoi, census_dir, tif):   # a fine census: no WorldPop
+    if config.uses_census and not config.worldpop_layers and "worldpop_grid" not in chosen and census_population_raster(config, aoi, census_dir, tif):   # a fine census: no WorldPop
         config, wp_root = dataclasses.replace(config, worldpop_filename=tif.name), population_dir
     else:
         worldpop_raster(config.country, study_cache.worldpop_dir(cache))

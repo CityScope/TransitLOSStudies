@@ -24,3 +24,9 @@ nav:
   - Maps: index.md
   - Your own area: example.md
   - The studies: studies.md
+  - Extending the studies: NEW_COUNTRY_OR_CITIES.md
+  - Fit reports:
+      - Overview: reports/index.md
+      - US final score: reports/us_flex_final_score.md
+      - US studies: reports/us_flex_studies.md
+      - City science: reports/city_science_flex.md

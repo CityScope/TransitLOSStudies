@@ -4,7 +4,11 @@ Areas travel as small dicts (`name`, `km2`, `geojson`, `outline`, `bounds`) so t
 """
 import json
 import sys
+import warnings
 from pathlib import Path
+
+# pandas warns when an optional speed-up library (bottleneck, numexpr) is older than it likes, as Colab's are; the results do not change
+warnings.filterwarnings("ignore", message=r"Pandas requires version .* or newer of '.*' \(version .* currently installed\)", category=UserWarning)
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 

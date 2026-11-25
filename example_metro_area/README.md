@@ -43,11 +43,19 @@ Results (`areas/<name>/<name>_results.zip`):
 - `h3_res<N>.parquet`: H3 hexagons at each resolution, with population, level of service and the census columns.
 - `census_<level>.parquet`: the census at its finest level.
 
-Choosing the feeds and the service date (notebook): after the feeds are downloaded they are listed with their agencies, source, stops and trips in the
-area, all ticked (`study.list_feeds` / `ui.select_feeds`). The next step plots the service of the chosen feeds on every date (stops × trips in the
+Choosing the feeds and the service date (notebook): first the feeds the sources list for the area are shown from their metadata, nothing downloaded
+(`study.find_feeds` / `ui.select_candidates`): agency, sources, base city, modes, update date, and whether the coverage includes the area and is not
+regional or intercity in size (wider than `COVERAGE_MAX_KM`, 250 km) or the agency is based in the area; those that probably serve the area start ticked.
+Only the ticked feeds are downloaded and listed again with their agencies, source, stops and trips in the area, all ticked (`study.list_feeds(selected=...)`
+/ `ui.select_feeds`). The street data is downloaded only when the study runs. The next step plots the service of the chosen feeds on every date (stops × trips in the
 area, `study.service_dates` / `ui.pick_date`) with a suggested date (the middle of the typical days of the chosen day type within 60 days of today) and a
 date box to use another one. A date you set is used as it is; without one the date is chosen automatically, as in the US study.
 
 Population: with a census whose polygons are small (median area of the finest level at most 1 km²) the census itself provides the population raster
 and WorldPop is not downloaded. Coarser or missing censuses use WorldPop as before.
-With `WORLDPOP = include` the WorldPop columns are added next to a census: the age and sex rasters of the whole country are downloaded once (tens of GB for the USA).
+
+Census sources (notebook): the census comes from several sources, each its own download. Before the run the notebook lists them (`study.census_sources` /
+`ui.select_sources`): for the USA the decennial census blocks and the buildings are required, and ACS 5-year, jobs by workplace, religion, housing in
+earlier periods, elections and the two WorldPop groups (the population grid, and the age, sex and urban layers: tens of GB) can be ticked or not. The
+unticked ones are never downloaded (`CityConfig.census_skip`, and WorldPop only when ticked or when the country has no census). After the run, the columns of the
+downloaded sources are grouped by source and can be ticked one by one for the download. The US census needs a free API key (`US_CENSUS_API_KEY`).

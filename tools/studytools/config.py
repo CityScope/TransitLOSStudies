@@ -156,6 +156,10 @@ class CityConfig:
     # False: no WorldPop columns in the results (no `worldpop_*` demographic layers, no WorldPop comparison columns). For an area with its
     # own census (the example study sets it so); WorldPop is then only the fine-grained distribution inside each census unit.
     worldpop_layers: bool = True
+    # Census source families not to download or join (USA: "acs5", "religion", "housing_history", "elections", "lodes"). The decennial census
+    # blocks stay (they give the population of every block) and so does the building data. The example study sets it from the sources the
+    # user chose, to save download time.
+    census_skip: tuple[str, ...] = ()
     # True: the map has only the finest H3 resolution (hexagons and circles) and the finest census level, no street or development
     # layers -- light enough to build and open anywhere (the example study, e.g. in Colab). The downloads keep every level.
     map_finest_only: bool = False

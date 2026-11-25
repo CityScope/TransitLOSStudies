@@ -144,6 +144,55 @@ def _widget():
     return AreaMap
 
 
+_STATS_ONLY = """
+<style id="ptlos-stats-only">
+html, body { overflow: auto !important; }
+html body #statsButton, html body #top-center-bar, html body #layer-switcher, html body #routeEditToggleBtn, html body #route-toolbar,
+html body #downloadButton, html body #downloadPanel, html body .maplibregl-control-container { display: none !important; }
+html body #statsPanel { display: flex !important; flex-direction: column !important; position: fixed !important; left: 0 !important; top: 0 !important;
+  right: 0 !important; bottom: 0 !important; width: auto !important; height: auto !important; max-width: none !important; max-height: none !important;
+  transform: none !important; margin: 0 !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
+  resize: none !important; z-index: 20000 !important; }
+</style>
+<script>
+(function () {   // the map page with its statistics panel opened over the whole frame, once the statistics data has loaded
+  var n = 0, t = setInterval(function () {
+    var b = document.getElementById('statsButton'), p = document.getElementById('statsPanel');
+    if (p && b && window.__statsData) {
+      clearInterval(t);
+      if (getComputedStyle(p).display === 'none') b.click();
+      setTimeout(function () { var a = p.querySelector('.statsTabBtn.active'); if (a) a.click(); }, 600);   // draws the tab now that the data is there
+    } else if (++n > 300) clearInterval(t);
+  }, 300);
+})();
+</script>
+"""
+
+
+def stats_page(results) -> Path:
+    """`stats.html` next to the run's `map.html`: the same page with the statistics panel (distribution, regression, ANOVA, discretization,
+    metadata) opened over the whole frame, to show in a cell of its own with more room than beside the map."""
+    area_dir = Path(results).parent if str(results).endswith(".zip") else Path(results)
+    page = (area_dir / "map.html").read_text(encoding="utf-8")
+    out = area_dir / "stats.html"
+    out.write_text(page.replace("</body>", _STATS_ONLY + "</body>", 1) if "</body>" in page else page + _STATS_ONLY, encoding="utf-8")
+    return out
+
+
+def show_stats(results, height: int = 900):
+    """Show the statistics panel of a run in its own frame (see `stats_page`)."""
+    stats_page(results)
+    area_dir = Path(results).parent if str(results).endswith(".zip") else Path(results)
+    port = _serve(area_dir)
+    try:
+        from google.colab import output
+    except ImportError:
+        from IPython.display import IFrame
+
+        return IFrame(f"http://localhost:{port}/stats.html", width="100%", height=height)
+    output.serve_kernel_port_as_iframe(port, path="/stats.html", height=height)
+
+
 def draw_area(area: Optional[dict] = None):
     """A map with a polygon drawing tool, opened on `area`. The shapes drawn are in its `.drawn` (GeoJSON features)."""
     return _widget()(draw=True, height=520, bounds=area["bounds"] if area else [-180, -60, 180, 75])
@@ -155,6 +204,84 @@ def show_area(area: dict):
 
     return widgets.VBox([widgets.HTML(f"<b>{area['name']}</b>: {area['km2']:,.0f} km²"),
                          _widget()(bounds=area["bounds"], outline=area["outline"])])
+
+
+def select_sources(catalog: list):
+    """The census data sources, to tick BEFORE the run: only the ticked ones are downloaded (locked ones are always needed). One line each: the
+    source, what it holds, and what it costs. Its `.value` is the list of ticked keys, for `run(census_sources=...)`."""
+    import html
+
+    import ipywidgets as widgets
+
+    L, grey = widgets.Layout, "color:#777;font-size:11px"
+    rows, boxes = [], []
+    for r in catalog:
+        cb = widgets.Checkbox(value=bool(r["default"]), disabled=bool(r["required"]), description=r["title"], indent=False, layout=L(width="300px", flex="0 0 auto", margin="0"))
+        text = r["description"] + (f" <i>{r['note']}.</i>" if r["note"] else "") + (" <i>Always used.</i>" if r["required"] else "")
+        rows.append(widgets.HBox([cb, widgets.HTML(f"<div style='{grey};line-height:1.25'>{text}</div>", layout=L(margin="0"))], layout=L(align_items="center", margin="0 0 2px 0")))
+        boxes.append((cb, r["key"]))
+    count = widgets.HTML()
+
+    def update(*_):
+        count.value = f"<span style='{grey}'>{sum(b.value for b, _ in boxes)} of {len(boxes)} sources: the unticked ones are not downloaded</span>"
+
+    for b, _ in boxes:
+        b.observe(update, "value")
+    update()
+
+    class SourceChoice(widgets.VBox):
+        @property
+        def value(self) -> list:
+            return [k for b, k in boxes if b.value]
+
+    return SourceChoice([*rows, count])
+
+
+def select_candidates(candidates: list):
+    """The feeds the sources list for the area, from their metadata, before anything is downloaded: tick the ones to download. Those that
+    probably serve the area start ticked. Its `.value` is the list of keys to give to `list_feeds(selected=...)` (None without candidates)."""
+    import html
+
+    import ipywidgets as widgets
+
+    L, small = widgets.Layout, "color:#666;font-size:90%"
+    if not candidates:
+        return type("Own", (), {"value": None})()   # your own feeds: nothing to choose before downloading
+    rows, boxes = [], []
+    for e in candidates:
+        cb = widgets.Checkbox(value=bool(e["likely"]), description="", indent=False, layout=L(width="26px", flex="0 0 auto"))
+        facts = " · ".join(x for x in (e["source"], e["location"], e["modes"], f"updated {e['updated']}" if e["updated"] else "") if x)
+        info = widgets.HTML(f"<b>{html.escape(e['provider'])}</b><br><span style='{small}'>{html.escape(facts)}</span><br>"
+                            f"<span style='{small};font-style:italic'>{html.escape(e['why'])}</span>", layout=L(flex="1 1 auto"))
+        rows.append(widgets.HBox([cb, info], layout=L(margin="2px 0 8px 0", align_items="flex-start", flex="0 0 auto")))
+        boxes.append((cb, e))
+    tick, untick = widgets.Button(description="Tick all", layout=L(width="90px")), widgets.Button(description="Untick all", layout=L(width="90px"))
+    count = widgets.HTML()
+
+    def update(*_):
+        count.value = f"<span style='{small}'>{sum(b.value for b, _ in boxes)} of {len(boxes)} feeds ticked</span>"
+
+    def set_all(value):
+        for b, _ in boxes:
+            b.value = value
+
+    for b, _ in boxes:
+        b.observe(update, "value")
+    tick.on_click(lambda _: set_all(True))
+    untick.on_click(lambda _: set_all(False))
+    update()
+
+    class CandidateChoice(widgets.VBox):
+        @property
+        def value(self) -> list:
+            keys = []
+            for b, e in boxes:
+                if b.value:   # the most local source's rows of the feed (the others list the same feed: not downloaded twice)
+                    keys += [k for k in e["keys"] if k.split(":")[0] == e["key"].split(":")[0]]
+            return keys
+
+    return CandidateChoice([widgets.HBox([tick, untick, count], layout=L(align_items="center", margin="0 0 8px 0")),
+                            widgets.VBox(rows, layout=L(max_height="460px", overflow_y="auto", border="1px solid #ddd", padding="6px"))])
 
 
 def select_feeds(feeds: list):
@@ -249,95 +376,108 @@ def pick_date(info: dict):
 
 
 def select_columns(groups: dict):
-    """A chooser of the census columns: every group (with what it is) can be ticked as a whole or opened to tick single columns, each with
-    its name, description, unit, census level and the result tables that hold it. Everything starts ticked; a search box filters the
-    columns. Its `.value` is the list of ticked columns (names for `export_results`)."""
+    """A compact chooser of the census columns. The topics are a grid of tick boxes (all ticked); the arrow next to a topic opens its columns
+    below, one per line (name, unit, census level, source; the description on hover, or inline with *descriptions*) to tick single ones. The
+    search box lists the matching columns of every topic. Its `.value` is the list of ticked columns (for `export_results`)."""
     import html
 
     import ipywidgets as widgets
 
-    L, small = widgets.Layout, "color:#666;font-size:90%"
-    entries = []   # (column, checkbox, row, searchable text, group key)
-    group_rows = []
-    state = {"busy": False}
+    L, grey = widgets.Layout, "color:#777"
+    esc = lambda t: html.escape(str(t), quote=True)   # noqa: E731
+    entries, state = [], {"busy": False, "open": None}
+    topic_box, topic_title = {}, {}
+    detail = widgets.VBox(layout=L(max_height="340px", overflow_y="auto", border="1px solid #ddd", padding="3px 6px", margin="4px 0 0 0", display="none"))
+    show_desc = widgets.Checkbox(value=False, description="descriptions", indent=False, layout=L(width="auto", margin="0 0 0 auto"))
 
-    def refresh(key):
-        boxes = [e[1] for e in entries if e[4] == key]
-        on = sum(b.value for b in boxes)
-        box, button, body, label = group_ui[key]
-        state["busy"] = True
-        box.value = on == len(boxes)
-        state["busy"] = False
-        box.description = f"{label} ({on} of {len(boxes)})" if on != len(boxes) else f"{label} ({len(boxes)})"
-
-    group_ui = {}
-    for gname, g in groups.items():
-        rows = []
+    for name, g in groups.items():
         for c in g["columns"]:
-            cb = widgets.Checkbox(value=True, description="", indent=False, layout=L(width="26px", flex="0 0 auto"))
-            facts = " · ".join(x for x in (c["unit"], f"level: {c['level']}" if c["level"] else "", c["source"], f"in: {c['in']}" if c["in"] else "") if x)
-            info = widgets.HTML(f"<b>{html.escape(c['name'])}</b> <code>{html.escape(c['column'])}</code><br>"
-                                f"<span style='{small}'>{html.escape(facts)}</span><br><span style='font-size:90%'>{html.escape(c['description'])}</span>",
-                                layout=L(flex="1 1 auto"))
-            row = widgets.HBox([cb, info], layout=L(margin="2px 0 6px 18px", align_items="flex-start", flex="0 0 auto"))
-            rows.append(row)
-            entries.append((c["column"], cb, row, f"{c['name']} {c['column']} {c['description']} {c['source']}".lower(), gname))
-            cb.observe(lambda ch, key=gname: refresh(key), "value")
-        body = widgets.VBox(rows, layout=L(display="none", max_height="420px", overflow_y="auto", border="1px solid #ddd", padding="4px", margin="2px 0 6px 18px"))
-        box = widgets.Checkbox(value=True, description=f"{gname} ({len(rows)})", indent=False, layout=L(width="360px", flex="0 0 auto"))
-        button = widgets.Button(description="Show columns", layout=L(width="120px"), button_style="")
-        group_ui[gname] = (box, button, body, gname)
+            cb = widgets.Checkbox(value=True, description="", indent=False, layout=L(width="20px", flex="0 0 auto", margin="0"))
+            meta = " · ".join(x for x in (c["unit"], c["level"], c["source"]) if x)
+            tip = f"{c['column']}: {c['description']}" + (f" (in {c['in']})" if c["in"] else "")
+            shown = c["name"][:-len(f" ({c['source']})")] if c["source"] and c["name"].endswith(f" ({c['source']})") else c["name"]   # the source is shown after it
+            line = widgets.HTML(f"<div style='font-size:12px;line-height:1.3' title='{esc(tip)}'>{html.escape(shown)} <span style='{grey}'>{html.escape(meta)}</span></div>",
+                                layout=L(margin="0"))
+            desc = widgets.HTML(f"<div style='font-size:11px;{grey};margin:0 0 3px 20px'><code>{html.escape(c['column'])}</code> {html.escape(c['description'])}</div>",
+                                layout=L(display="none", margin="0"))
+            row = widgets.VBox([widgets.HBox([cb, line], layout=L(align_items="center", margin="0")), desc], layout=L(margin="0", flex="0 0 auto"))
+            entries.append({"column": c["column"], "cb": cb, "row": row, "desc": desc, "topic": name,
+                            "text": f"{c['name']} {c['column']} {c['description']} {c['source']} {name}".lower()})
 
-        def toggle(_, b=body, btn=button):
-            shown = b.layout.display == "none"
-            b.layout.display = "" if shown else "none"
-            btn.description = "Hide columns" if shown else "Show columns"
+    def refresh(topic):
+        mine = [e["cb"] for e in entries if e["topic"] == topic]
+        on = sum(b.value for b in mine)
+        state["busy"] = True
+        topic_box[topic].value = on == len(mine)
+        state["busy"] = False
+        topic_box[topic].description = f"{topic_title[topic]} ({on}/{len(mine)})" if on != len(mine) else f"{topic_title[topic]} ({len(mine)})"
+        count.value = f"<span style='font-size:12px;{grey}'>{sum(e['cb'].value for e in entries)} of {len(entries)} columns</span>"
 
-        def whole(ch, key=gname):
-            if not state["busy"]:
-                for e in entries:
-                    if e[4] == key and e[2].layout.display != "none":
-                        e[1].value = ch["new"]
+    def show_topic(topic):
+        state["open"] = topic
+        head = widgets.HBox([widgets.HTML(f"<span style='font-size:12px'><b>{html.escape(topic)}</b> <span style='{grey}'>{html.escape(groups[topic]['description'])}</span></span>"),
+                             show_desc], layout=L(align_items="center", margin="0 0 3px 0", flex="0 0 auto"))
+        detail.children = [head, *[e["row"] for e in entries if e["topic"] == topic]]
+        detail.layout.display = ""
 
-        button.on_click(toggle)
-        box.observe(whole, "value")
-        text = widgets.HTML(f"<span style='{small}'>{html.escape(g['description'])}</span>", layout=L(margin="0 0 0 18px"))
-        group_rows.append(widgets.VBox([widgets.HBox([box, button]), text, body]))
+    def whole(change, topic):
+        if not state["busy"]:
+            for e in entries:
+                if e["topic"] == topic:
+                    e["cb"].value = change["new"]
 
-    search = widgets.Text(placeholder="Search the columns (name, description, source)", layout=L(width="440px"))
-    tick, untick = widgets.Button(description="Tick all", layout=L(width="90px")), widgets.Button(description="Untick all", layout=L(width="90px"))
+    cells = []
+    for name in groups:
+        topic_title[name] = name
+        box = widgets.Checkbox(value=True, description=f"{name} ({len(groups[name]['columns'])})", indent=False, layout=L(width="auto", flex="0 1 auto", margin="0"))
+        arrow = widgets.Button(description="▸", tooltip=groups[name]["description"], layout=L(width="26px", height="22px", padding="0", margin="0"))
+        topic_box[name] = box
+        box.observe(lambda ch, t=name: whole(ch, t), "value")
+        arrow.on_click(lambda _, t=name: show_topic(t))
+        cells.append(widgets.HBox([box, arrow], layout=L(align_items="center", justify_content="flex-start", margin="0")))
+    grid = widgets.GridBox(cells, layout=L(grid_template_columns="repeat(3, minmax(0, 1fr))", grid_gap="1px 14px", width="100%"))
+
+    search = widgets.Text(placeholder="Search columns", layout=L(width="220px"))
+    all_btn, none_btn = widgets.Button(description="All", layout=L(width="48px")), widgets.Button(description="None", layout=L(width="52px"))
     count = widgets.HTML()
 
     def set_all(value):
         for e in entries:
-            if e[2].layout.display != "none":
-                e[1].value = value
+            e["cb"].value = value
 
-    def update_count(*_):
-        count.value = f"<span style='{small}'>{sum(e[1].value for e in entries)} of {len(entries)} columns ticked</span>"
+    def searched(change):
+        q = change["new"].strip().lower()
+        if q:
+            hits = [e for e in entries if q in e["text"]]
+            detail.children = [widgets.HTML(f"<span style='font-size:12px;{grey}'>{len(hits)} matching columns" + (" (first 150 shown)" if len(hits) > 150 else "") + "</span>",
+                                            layout=L(flex="0 0 auto")),
+                               *[e["row"] for e in hits[:150]]]
+            detail.layout.display = ""
+        elif state["open"]:
+            show_topic(state["open"])
+        else:
+            detail.layout.display = "none"
 
-    def filtered(ch):
-        q = search.value.strip().lower()
+    def toggle_desc(change):
         for e in entries:
-            e[2].layout.display = "none" if q and q not in e[3] else ""
-        for key, (box, button, body, _) in group_ui.items():
-            if q:   # open the groups that have matches
-                body.layout.display = "" if any(e[4] == key and e[2].layout.display != "none" for e in entries) else "none"
-                button.description = "Hide columns" if body.layout.display == "" else "Show columns"
+            e["desc"].layout.display = "" if change["new"] else "none"
 
-    tick.on_click(lambda _: set_all(True))
-    untick.on_click(lambda _: set_all(False))
-    search.observe(filtered, "value")
+    all_btn.on_click(lambda _: set_all(True))
+    none_btn.on_click(lambda _: set_all(False))
+    search.observe(searched, "value")
+    show_desc.observe(toggle_desc, "value")
     for e in entries:
-        e[1].observe(update_count, "value")
-    update_count()
+        e["cb"].observe(lambda ch, t=e["topic"]: refresh(t), "value")
+    for name in groups:
+        refresh(name)
 
     class ColumnChoice(widgets.VBox):
         @property
         def value(self) -> list:
-            return [e[0] for e in entries if e[1].value]
+            return [e["column"] for e in entries if e["cb"].value]
 
-    return ColumnChoice([widgets.HBox([search, tick, untick, count], layout=L(align_items="center", margin="0 0 8px 0")), *group_rows])
+    top = widgets.HBox([search, all_btn, none_btn, count], layout=L(align_items="center", margin="0 0 4px 0"))
+    return ColumnChoice([top, grid, detail])
 
 
 def upload_file() -> str:
