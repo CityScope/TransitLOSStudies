@@ -9,7 +9,7 @@ Settings (top of `example.py`):
 
 | Setting | Meaning |
 |---|---|
-| `PLACE` | place name, e.g. `"Boston, Massachusetts, USA"` (the default) |
+| `PLACE` | place name, e.g. `"Cambridge, Massachusetts, USA"` (the default) |
 | `AREA` | `"metro_area"` (UN functional urban area, also `"functional_area"`), `"urban_core"` (UN urban centre) or `"municipality"` |
 | `AOI_FILE` | your own boundary file, used instead of `PLACE` |
 | `DAY` | `"weekday"` (a working day), `"saturday"` or `"sunday"` |

@@ -20,7 +20,7 @@ Run it with the settings below:
 or from Python / the notebook:
 
     import example
-    aoi = example.area_from_place("Boston, Massachusetts, USA", "municipality")
+    aoi = example.area_from_place("Cambridge, Massachusetts, USA", "municipality")
     zip_path = example.run(aoi, day="saturday", start_time="08:00", end_time="20:00")
 """
 
@@ -42,8 +42,8 @@ import geopandas as gpd  # noqa: E402
 
 # ============================== SETTINGS ==============================
 # The area
-PLACE = "Boston, Massachusetts, USA"   # a place name, found with OpenStreetMap
-AREA = "metro_area"                       # "metro_area" (UN functional urban area), "urban_core" (UN urban centre) or "municipality"
+PLACE = "Cambridge, Massachusetts, USA"   # a place name, found with OpenStreetMap
+AREA = "municipality"                      # "metro_area" (UN functional urban area), "urban_core" (UN urban centre) or "municipality"
 AOI_FILE = None                        # your own area file (.gpkg, .geojson, .shp, ...): used instead of PLACE
 
 # When
@@ -104,7 +104,7 @@ def area_from_place(place: str, area: str = "municipality") -> gpd.GeoDataFrame:
     """The area of a place name.
 
     Args:
-        place: Place name, e.g. "Boston, Massachusetts, USA".
+        place: Place name, e.g. "Cambridge, Massachusetts, USA".
         area: "municipality" (its administrative boundary: the most local source in `MUNICIPALITY_BY_PLACE`), "urban_core"
             (the UN urban centre that contains it) or "metro_area" (the UN functional urban area: the urban centre plus its
             commuting zone).
@@ -600,40 +600,37 @@ def draw_area(aoi: Optional[gpd.GeoDataFrame] = None):
     return m, drawn
 
 
-def area_from_upload(upload: bool = False, path=None, aoi: Optional[gpd.GeoDataFrame] = None) -> Optional[gpd.GeoDataFrame]:
-    """The area of a file: `path`, or (`upload`, in Colab) a file picked from your computer; `aoi` (kept) when there is none."""
-    if upload:
+def get_area(place: str, area: str = "municipality", file=None) -> gpd.GeoDataFrame:
+    """The area of a place name, or of a file when `file` is given: a path, or "upload" to pick one from your computer (Colab)."""
+    if not file:
+        return area_from_place(place, area)
+    if file == "upload":
         from google.colab import files
 
-        path = next(iter(files.upload()))
-    return area_from_file(path) if path else aoi
+        file = next(iter(files.upload()))
+    return area_from_file(file)
 
 
-def confirm_area(aoi: gpd.GeoDataFrame):
-    """Show the area on a light map (ipyleaflet, a simplified outline: folium chokes on big geometries) and return the checkbox that
-    confirms it (`.value`); `EXAMPLE_AUTOCONFIRM=1` ticks it (tests)."""
+def area_from_drawn(drawn: list) -> gpd.GeoDataFrame:
+    """The last shape drawn on the `draw_area` map."""
+    if not drawn:
+        raise RuntimeError("Nothing drawn: draw a polygon or rectangle on the map above, then run this cell and the ones below again.")
+    return area_from_geojson(drawn[-1])
+
+
+def show_area(aoi: gpd.GeoDataFrame):
+    """The area on a light map (ipyleaflet, a simplified outline: folium chokes on big geometries), with its name and size."""
     import json
-    import os
 
     import ipywidgets as widgets
     from ipyleaflet import GeoJSON, Map
-    from IPython.display import display
 
     minx, miny, maxx, maxy = aoi.total_bounds
     outline = aoi.geometry.simplify(max(maxx - minx, maxy - miny) / 500)
     m = Map(center=((miny + maxy) / 2, (minx + maxx) / 2), scroll_wheel_zoom=True, layout=widgets.Layout(height="420px"))
     m.add(GeoJSON(data=json.loads(outline.to_json()), style={"color": "#d33", "fillOpacity": 0.1, "weight": 2}))
     m.fit_bounds([[miny, minx], [maxy, maxx]])
-    box = widgets.Checkbox(value=os.environ.get("EXAMPLE_AUTOCONFIRM") == "1", description="Yes, analyse this area", indent=False)
-    display(widgets.HTML(f"<b>{aoi['name'].iloc[0]}</b>: {area_km2(aoi):,.0f} km²"), m, box)
-    return box
-
-
-def run_confirmed(confirm, aoi: gpd.GeoDataFrame, **settings) -> Path:
-    """`run(aoi, **settings)` once the area is confirmed (the checkbox from `confirm_area`)."""
-    if not confirm.value:
-        raise RuntimeError("Confirm the area first: tick the box in section 3.")
-    return run(aoi, **settings)
+    return widgets.VBox([widgets.HTML(f"<b>{aoi['name'].iloc[0]}</b>: {area_km2(aoi):,.0f} km²"), m])
 
 
 def upload_feeds() -> list:

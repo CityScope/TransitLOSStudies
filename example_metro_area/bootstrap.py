@@ -6,6 +6,7 @@ import importlib.util
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -22,9 +23,15 @@ def setup() -> bool:
     if missing:
         print("Installing:", ", ".join(m.split(" @ ")[0] for m in missing), flush=True)
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", *missing])
-        if in_colab:
-            print("Installed. The session restarts now; run all cells again (Runtime -> Run all).")
-            os.kill(os.getpid(), 9)
+        if in_colab:   # Colab has pandas loaded: restart once so the new versions are used (this is not an error)
+            print("Installed. The session restarts now (one time only). When it is back, run all cells again: Runtime -> Run all.", flush=True)
+            try:
+                from IPython import get_ipython
+
+                get_ipython().kernel.do_shutdown(True)
+                time.sleep(30)
+            except Exception:  # noqa: BLE001
+                os.kill(os.getpid(), 9)
         raise SystemExit("Installed. Restart the kernel, then run all cells again.")
     sys.path.insert(0, str(HERE))
     if in_colab:
