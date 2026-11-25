@@ -1,5 +1,5 @@
 """The US flex map page: the normal US map (`usa_study/data/_usa/map.html`, same tiles and tabs) plus the "Flexible scoring" tab
-(`web_map/flex_tab.js`), written next to it as `flex.html` with its scripts in `flex_js/` and the scoring variants in `flex_presets.json`.
+(`tools/flex_web/flex_tab.js`, shared with the city science flex maps), written next to it as `flex.html` with its scripts in `flex_js/` and the scoring variants in `flex_presets.json`.
 The per-state flex data (`web_buf/<State>/`, build_web.py) is served from /us_transit_los_flex/.
 
     python build_flex_page.py [US_MAP_DIR]        # default ../usa_study/data/_usa
@@ -13,7 +13,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE / "fit"))
-from export_presets import params_from  # noqa: E402
+from export_presets import params_from, params_from_fit4  # noqa: E402
 
 RUNS = HERE / "fit" / "data_buf" / "torch_runs"
 WEB = HERE / "web_buf"
@@ -28,8 +28,17 @@ VARIANTS = [   # run, name (the fits of the US fit report, generation 4)
 ]
 
 
+#: the final form (2026-11-19/20, study 8c): speed curve first, then the mode factor; controls income / poverty / education + extra housing
+FINAL = ("g5_controls_w_cs_seq_s8_nofuel", "US fit 2026-11: speed first, then mode (final form)")
+
+
 def presets() -> list:
     out = []
+    f = RUNS / f"{FINAL[0]}.json"
+    if f.is_file():
+        o = json.loads(f.read_text())
+        p, err = params_from_fit4(o["runs"][o["best"]]["params"])
+        out.append({"name": FINAL[1], "run": FINAL[0], "params": p, "walk_shape_error": round(err, 3)})
     best_grid = None
     for p in sorted(RUNS.glob("steepgrid_*.json")):
         o = json.loads(p.read_text())
@@ -57,7 +66,7 @@ def main(us_dir: Path) -> Path:
     js.mkdir(exist_ok=True)
     for f in ("score.js", "editor.js"):
         shutil.copy2(WEB / f, js / f)
-    shutil.copy2(HERE / "web_map" / "flex_tab.js", js / "flex_tab.js")
+    shutil.copy2(HERE.parent / "tools" / "flex_web" / "flex_tab.js", js / "flex_tab.js")   # shared with the city science flex maps
     (us_dir / "flex_presets.json").write_text(json.dumps(presets()), encoding="utf-8")
     inject = ('<script src="https://cdn.jsdelivr.net/npm/h3-js@4.1.0/dist/h3-js.umd.js"></script>\n'
               '<script>window.FLEX_CFG = {base: "/us_transit_los_flex/", presets: "flex_presets.json", maxStates: 3, minZoom: 6};</script>\n'

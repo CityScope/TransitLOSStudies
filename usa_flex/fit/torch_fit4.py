@@ -90,6 +90,11 @@ NO_WORK = _os0.environ.get("FIT4_NO_WORK") == "1"
 CV_COLD = _os0.environ.get("FIT4_CV_COLD") == "1"         # held-out folds from the default start instead of the full-data fit (leak check)
 CTRL_STUDY = _os0.environ.get("FIT4_CTRL_STUDY") == "1"   # clip the controls' extremes (the study's runs only, so the earlier runs stay reproducible)
 EXTRA3 = HERE / "data_buf" / "bg_extra3.parquet"
+# generalisation study (study 10, 2026-11-20): what makes the score carry over to metros the fit has not seen
+WLAM = float(_os0.environ.get("FIT4_WLAM", "0.5"))          # fit weight = population x metro population ** -WLAM (0.5 = every run before; eval stays 0.5)
+METRO_CTX = _os0.environ.get("FIT4_METRO_CTX") == "1"       # + b x (metro mean of the block groups' transit access term): how much of the metro the network reaches
+CTRL_METRO_MEANS = _os0.environ.get("FIT4_CTRL_METRO_MEANS") == "1"   # + the metro (or county) population-weighted mean of every control: context effects
+SAVE_HO = _os0.environ.get("FIT4_SAVE_HO", "1") == "1"      # held-out per-block-group predictions (<run>_ho.npz) for within-metro diagnostics
 
 
 def _z(v: np.ndarray) -> np.ndarray:
@@ -187,6 +192,13 @@ class Data4(t3.Data3):
                 if not n.endswith("(missing)"):
                     lo, hi = torch.quantile(M[::7, j].float(), torch.tensor([0.001, 0.999], device=M.device))
                     c = M[:, j].clamp(lo, hi); M[:, j] = (c - c.mean()) / c.std().clamp(min=1e-9)
+        if CTRL_METRO_MEANS:   # the metro / county mean of each control (missing flags left out), standardised: the context a block group sits in
+            g = torch.as_tensor(np.asarray(self.group), device=M.device).long(); ng = len(self.group_names); w = self.pop[:, None]
+            cols = [j for j, n in enumerate(self.control_names) if not n.endswith("(missing)")]
+            S = torch.zeros((ng, len(cols)), device=M.device).index_add(0, g, w * M[:, cols]) / torch.zeros((ng, 1), device=M.device).index_add(0, g, w).clamp(min=1.0)
+            Mm = S[g]; Mm = (Mm - Mm.mean(0)) / Mm.std(0).clamp(min=1e-9)
+            M = torch.cat([M, Mm], 1); self.control_names = self.control_names + [self.control_names[j] + " (metro mean)" for j in cols]
+            print(f"+ metro means of {len(cols)} controls", flush=True)
         return M
 
 
@@ -281,6 +293,9 @@ class Model4(torch.nn.Module):
         Tn = len(TASKS)
         self.alpha = torch.nn.Parameter(torch.full((Tn,), -3.0)); self.leps = torch.nn.Parameter(torch.full((Tn,), math.log(0.05)))
         self.lkappa = torch.nn.Parameter(torch.full((Tn,), math.log(5.0)))
+        if METRO_CTX:
+            self.b_ctx = torch.nn.Parameter(torch.zeros(Tn))
+            d.grp_t = torch.as_tensor(np.asarray(d.group), device=DEV).long(); d.n_grp = len(d.group_names)
         if drive:
             self.lf50, self.lkf = P(math.log(6000.0)), P(math.log(2.0))
             self.lthf = torch.nn.Parameter(torch.full((Tn,), math.log(0.5))); self.lepsf = torch.nn.Parameter(torch.full((Tn,), math.log(0.05)))
@@ -423,6 +438,10 @@ class Model4(torch.nn.Module):
         walk, farm = self.access(d)
         C = self._cols(walk); A = self._area(C, d)
         e = self.alpha[None, :] + torch.log1p(A / torch.exp(self.leps)[None, :])
+        if METRO_CTX:   # metro population-weighted mean of the access term, centred: one coefficient per task
+            a = torch.log1p(A / torch.exp(self.leps)[None, :]); g = d.grp_t; w = d.pop[:, None]
+            S = torch.zeros((d.n_grp, a.shape[1]), device=a.device).index_add(0, g, w * a) / torch.zeros((d.n_grp, 1), device=a.device).index_add(0, g, w).clamp(min=1.0)
+            c = S[g]; e = e + self.b_ctx[None, :] * (c - (w * c).sum(0) / w.sum())
         if self.drive:
             Af = self._area(self._cols(farm), d)
             e = e + torch.exp(self.lthf)[None, :] * torch.log1p(Af / torch.exp(self.lepsf)[None, :])
@@ -669,11 +688,12 @@ def scores(m, d) -> dict:
         return out
 
 
-def cv_skill(d, mk, X, w_fit, base_sd, steps=900):
+def cv_skill(d, mk, X, w_fit, base_sd, steps=int(_os0.environ.get("FIT4_CV_STEPS", "900"))):   # FIT4_CV_STEPS: smoke tests only
     """Metro-grouped 5-fold held-out skill per task (1 - held-out loss / no-transit loss), random terms of held-out metros / block groups at 0."""
     folds = tf.cv_folds(d)
     w_eval = t2.weights(d, 0.5)
     ho = {t: np.zeros(d.nb) for t in TASKS}; ho0 = {t: np.zeros(d.nb) for t in TASKS}
+    mu_ho = {t: np.zeros(d.nb, np.float32) for t in TASKS}   # held-out predicted share per block group (SAVE_HO)
     fold_params = []   # the curves refitted without each fifth of the metros: stability across metro subsets
     for f in range(5):
         tr = w_fit * torch.tensor((folds != f).astype(np.float32), device=DEV); tr = tr / tr.sum()
@@ -686,8 +706,12 @@ def cv_skill(d, mk, X, w_fit, base_sd, steps=900):
         fold_params.append(m.params())
         with torch.no_grad():
             tl = task_ll(m, d, X, use_re=False)
+            if SAVE_HO:
+                E = m.etas(d, X, use_re=False)
             for task in TASKS:
                 ho[task][folds == f] = tl[task][0].cpu().numpy()[folds == f]
+                if SAVE_HO:
+                    mu_ho[task][folds == f] = torch.sigmoid(E[task]).cpu().numpy()[folds == f]
                 _, a, lk = nl[task]
                 y = d.y if task == "total" else d.y_mode[task]
                 ho0[task][folds == f] = (bb_loglik(y, d.n.clamp(min=1.0), torch.sigmoid(a).expand_as(y), torch.exp(lk)) / d.n.clamp(min=1.0)).cpu().numpy()[folds == f]
@@ -703,6 +727,10 @@ def cv_skill(d, mk, X, w_fit, base_sd, steps=900):
         out[task + "_folds"] = [float(1 - (wn * mask * ho[task] * (folds == f)).sum() / (wn * mask * ho0[task] * (folds == f)).sum()) for f in range(5)]
     uf = np.full(len(d.group_names), -1); uf[np.asarray(d.group)] = folds; out["unit_fold"] = uf.tolist()   # the fold of each metro / county
     out["fold_params"] = fold_params
+    if SAVE_HO:
+        out["_ho"] = {"group": np.asarray(d.group), "n": d.n.cpu().numpy(), "w": wn, "y_total": d.y.cpu().numpy(),
+                      **{f"y_{t}": d.y_mode[t].cpu().numpy() for t in TASKS if t != "total"}, **{f"mu_{t}": v for t, v in mu_ho.items()},
+                      **{f"ok_{t}": (d.ok_total if t == "total" else d.ok_mode[t]).cpu().numpy() for t in TASKS}}
     return out
 
 
@@ -715,7 +743,7 @@ def run(d, name, level="raw", drive=False, starts=10, steps=None, cv=True, keep=
         d.keep = keep0 * torch.tensor(keep.astype(np.float32), device=DEV)
     try:
         X = d.control_matrix() if level in ("controls", "sem") else None
-        w = t3.weights3(d, True, 0.5)
+        w = t3.weights3(d, True, WLAM)
         nulls = null_losses(d, w, with_car=level == "sem")
         mk = lambda: Model4(d, level, drive, X.shape[1] if X is not None else 0)  # noqa: E731
         runs = []
@@ -747,10 +775,13 @@ def run(d, name, level="raw", drive=False, starts=10, steps=None, cv=True, keep=
         flat = lambda p: {k: v for k, v in pd.json_normalize(p, sep=".").iloc[0].items() if isinstance(v, (int, float))}  # noqa: E731
         keys = flat(runs[best]["params"]).keys()
         spread = {k: {"min": min(flat(r["params"])[k] for r in runs), "max": max(flat(r["params"])[k] for r in runs)} for k in keys}
-        out = {"name": name, "level": level, "drive": drive, "starts": starts, "cv_cold": CV_COLD, "control_names": getattr(d, "control_names", None), "no_work": NO_WORK, "loss_range": [min(r["loss"] for r in runs), max(r["loss"] for r in runs)],
+        out = {"name": name, "level": level, "drive": drive, "starts": starts, "cv_cold": CV_COLD, "control_names": getattr(d, "control_names", None), "no_work": NO_WORK, "wlam": WLAM, "metro_ctx": METRO_CTX, "ctrl_metro_means": CTRL_METRO_MEANS, "loss_range": [min(r["loss"] for r in runs), max(r["loss"] for r in runs)],
                "spread": spread, "best": best}
         if cv:
             out["cv"] = cv_skill(d, mk, X, w, runs[best]["_sd"])
+            ho_arr = out["cv"].pop("_ho", None)
+            if ho_arr is not None:
+                np.savez_compressed(RUNS / f"{name}_ho.npz", **ho_arr)
         torch.save(runs[best]["_sd"], RUNS / f"{name}.pt")
         for r in runs:
             r.pop("_sd")

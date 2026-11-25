@@ -2,7 +2,7 @@
 
 Transit level of service for one area anywhere, from public data.
 
-- **Notebook:** `example.ipynb` runs in Google Colab or Jupyter. It installs what is missing, lets you choose the area (place name, drawn on a map, or uploaded file), runs the study and downloads the results.
+- **Notebook:** `example.ipynb` runs in Google Colab ([open it in Colab](https://colab.research.google.com/github/CityScope/TransitLOSStudies/blob/main/example_metro_area/example.ipynb)) or Jupyter. It installs what is missing, lets you choose the area (place name, drawn on a map, or uploaded file), runs the study and downloads the results.
 - **Script:** `example.py` holds the same steps. Edit the settings at the top and run `python example.py`.
 
 Settings (top of `example.py`):
@@ -10,7 +10,7 @@ Settings (top of `example.py`):
 | Setting | Meaning |
 |---|---|
 | `PLACE` | place name, e.g. `"Boston, Massachusetts, USA"` (the default) |
-| `AREA` | `"municipality"`, `"urban_core"` (UN urban centre) or `"metro_area"` (UN metropolitan area) |
+| `AREA` | `"metro_area"` (UN functional urban area, also `"functional_area"`), `"urban_core"` (UN urban centre) or `"municipality"` |
 | `AOI_FILE` | your own boundary file, used instead of `PLACE` |
 | `DAY` | `"weekday"` (a working day), `"saturday"` or `"sunday"` |
 | `START_TIME`, `END_TIME` | the hours analysed (default `"06:00"` to `"22:00"`) |
@@ -20,6 +20,8 @@ Settings (top of `example.py`):
 | `OUTPUT_DIR` | where the results go (`areas/<name>/`) |
 | `CACHE_DIR` | shared downloads (default `TransitLOSStudies/cache`) |
 | `BUILD_MAP` | build the interactive map `map.html` (finest hexagons, circles and census, stops and routes; no streets) |
+
+Scoring: the standard transitLOS scoring functions (taken from the transit literature); nothing is fitted to data.
 
 What it uses: every input from the most local source that covers the area (the `*_BY_PLACE` tables in `example.py`; add a better
 local source above the general ones):

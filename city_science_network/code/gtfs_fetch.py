@@ -44,7 +44,10 @@ EXTRA_URL_FEEDS = {
                       ("smart_rail", "https://storage.googleapis.com/storage/v1/b/mdb-latest/o/us-california-sonoma-marin-area-rail-transit-smart-gtfs-815.zip?alt=media"),
                       ("ace_rail", "https://storage.googleapis.com/storage/v1/b/mdb-latest/o/us-california-altamont-corridor-express-gtfs-1133.zip?alt=media"),
                      ],
-    "gipuzkoa": [("renfe_alta_velocidad", "https://ssl.renfe.com/gtransit/Fichero_AV_LD/google_transit.zip")],
+    # Euskotren from its own publication (Open Data Euskadi, the same file as the NAP's): the Mobility Database copy lagged behind the
+    # opening of the Donostia metro section (Kontxa-Zentroa, Amara, Bentaberri; lines T0 / T1) on 2026-11-21
+    "gipuzkoa": [("renfe_alta_velocidad", "https://ssl.renfe.com/gtransit/Fichero_AV_LD/google_transit.zip"),
+                 ("euskotren", "https://opendata.euskadi.eus/transport/moveuskadi/euskotren/gtfs_euskotren.zip")],
 }
 CPTOND_URL = "https://ndownloader.figshare.com/files/58153174"
 CPTOND_MD5 = "8b786408d8a9d4d16faa531f98cc9fc6"

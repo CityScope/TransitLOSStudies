@@ -76,6 +76,8 @@ def folds_better(a, b):
 def ref_of(tag):
     if tag == "A0":
         return None
+    if tag.startswith(("seq_s9_", "nomode_s9_")):   # study 9: every curve variant against the lean final form
+        return ("seq_" if tag.startswith("seq_") else "nomode_") + "s8_nofuel"
     if tag.startswith("coldcv_"):
         return "coldcv_A0" if tag == "coldcv_B0" else None
     if tag == "final_small":
@@ -119,6 +121,27 @@ if __name__ == "__main__":
             print(f"# {t} {d:+.4f} p {p:.3f} {'significant (Holm)' if sig.get(t) else ''}", file=sys.stderr)
         c = [(res[t][0], t) for t, s in sig.items() if s and t in res]
         print(max(c)[1] if c else "")
+        sys.exit()
+    if mode == "pick9":   # study 9: <spec file> of 'tag family kind env...' lines -> the env settings of the combined form
+        # kind 'shape': adopted when significantly better than the lean final form (Holm over every shape test);
+        # kind 'simpler': adopted when it loses under SIMPLER_TOL and is not significantly worse ("adds nothing or very little").
+        # One setting per family (the best adopted one).
+        TOL = float(os.environ.get("SIMPLER_TOL", "0.0007")); ref = "seq_s8_nofuel"
+        spec = [l.split(None, 3) for l in open(sys.argv[2]).read().split("\n") if l.strip() and not l.startswith("#")]
+        res = {t: test(ref, f"seq_{t}") for t, *_ in spec if (R / f"g5_controls_w_cs_seq_{t}.json").exists()}
+        kinds = {t: k for t, f, k, *_ in spec}
+        sig = holm({t: p for t, (d, p) in res.items() if kinds[t] == "shape" and d > 0} or {"_": 1.0})
+        best = {}
+        for t, fam, kind, env in spec:
+            if t not in res:
+                continue
+            d, p = res[t]; pw = test(f"seq_{t}", ref)[1]     # pw: p of 'the lean form is not better' = significantly worse when < ALPHA
+            ok = sig.get(t, False) if kind == "shape" else (d > -TOL and pw >= ALPHA)
+            print(f"# {t:14s} {kind:7s} {d:+.4f} p(not better) {p:.3f} p(lean form not better) {pw:.3f} folds {folds_better(ref, f'seq_{t}')}"
+                  f" {'ADOPTED' if ok else ''}", file=sys.stderr)
+            if ok and (fam not in best or d > best[fam][0]):
+                best[fam] = (d, env)
+        print(" ".join(e for _, e in best.values()))
         sys.exit()
     if mode == "table":
         tags = sorted(f.stem.replace("g5_controls_w_cs_", "") for f in R.glob("g5_controls_w_cs_*.json"))

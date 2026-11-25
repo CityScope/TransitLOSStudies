@@ -1,10 +1,11 @@
-/* "Scoring" tab of the US flex map: the normal US map (same page, tiles and tabs) whose scoring tab (in place of the map's own "Scoring funcs") recomputes the level of service
- * in the browser with any scoring variant (the fitted presets of the US fit report, or curves edited by hand) and recolours the H3 cells.
+/* "Scoring" tab of the flex maps (US map, city science maps): the normal map (same page, tiles and tabs) whose scoring tab (in place of the map's own
+ * "Scoring funcs") recomputes the level of service in the browser with any scoring variant (fitted presets, or curves edited by hand) and recolours the H3 cells.
  *
- * Data: one folder per state (transitlos.flex.export, usa_flex/build_web.py) under FLEX_CFG.base: station profiles (stop_*.bin), the
+ * Data: one folder per area (a US state, a city; transitlos.flex.export) under FLEX_CFG.base: station profiles (stop_*.bin), the
  * stations of every cell (cell_station.bin / cell_dist.bin), cell centres (cell_geom.bin) and counts (cell_counts.bin, population first).
- * Scoring: FlexScore (score.js, the same formulas as transitlos.flex.scoring). Cells: res 10 (walking zone) and res 8 (outside); the map's
- * other resolutions: finer cells take their res-10 / res-8 parent's value, coarser ones the population-weighted mean of the cells inside.
+ * Scoring: FlexScore (score.js, the same formulas as transitlos.flex.scoring). Cells: the area's own resolution R (meta.cell_res: 10 in the US,
+ * 11 in the cities; res 8 for far cells); the map's other resolutions: finer cells take their res-R / res-8 parent's value, coarser ones the
+ * population-weighted mean of the cells inside.
  * Only the cells drawn on screen are recoloured (after every move), through the map's own `access_override` feature-state.
  */
 (function () {
@@ -26,11 +27,13 @@
       bin(p + 'stop_np.bin', Int32Array), bin(p + 'cell_station.bin', Int32Array), bin(p + 'cell_dist.bin', Uint16Array), bin(p + 'cell_geom.bin', Float32Array),
       meta.count_columns && meta.count_columns.length ? bin(p + 'cell_counts.bin', Float32Array) : Promise.resolve(new Float32Array(0))]);
     const nc = meta.nc, ncol = (meta.count_columns || []).length, ids = new Array(nc), res = new Int8Array(nc), pop = new Float32Array(nc);
-    for (let c = 0; c < nc; c++) {   // H3 id from the cell centre; resolution from the centre-vertex distance (res 10 ~ 75 m, res 8 ~ 530 m)
+    const cx = new Float32Array(nc), cy = new Float32Array(nc);   // cell centres (the map editor places new stations' cells with them)
+    const R = meta.cell_res || 10;
+    for (let c = 0; c < nc; c++) {   // H3 id from the cell centre; resolution from the centre-vertex distance (res 10 ~ 75 m, res 11 ~ 28 m, res 8 ~ 530 m)
       const lon = geom[c * 14], lat = geom[c * 14 + 1], dx = (geom[c * 14 + 2] - lon) * Math.cos(lat * Math.PI / 180) * 111320, dy = (geom[c * 14 + 3] - lat) * 110574;
-      res[c] = Math.hypot(dx, dy) > 200 ? 8 : 10; ids[c] = h3.latLngToCell(lat, lon, res[c]); pop[c] = ncol ? counts[c * ncol] : 1;
+      res[c] = Math.hypot(dx, dy) > 200 ? 8 : R; ids[c] = h3.latLngToCell(lat, lon, res[c]); pop[c] = ncol ? counts[c * ncol] : 1; cx[c] = lon; cy[c] = lat;
     }
-    const D = { meta, md, hh, vv, np, cst, cdist, nc, ids, res, pop, S: meta.S, P: meta.P, K: meta.K, ss: new Float32Array(meta.S * meta.P), los: new Float32Array(nc), def: new Float32Array(nc) };
+    const D = { meta, R, md, hh, vv, np, cst, cdist, nc, ids, res, pop, cx, cy, path: p, S: meta.S, P: meta.P, K: meta.K, ss: new Float32Array(meta.S * meta.P), los: new Float32Array(nc), def: new Float32Array(nc) };
     if (meta.bg_ids) {   // census units under the cells (block group, tract; counties and the state from the block-group ids)
       const [cbg, ctr] = await Promise.all([bin(p + 'cell_bg.bin', Int32Array), bin(p + 'cell_tract.bin', Int32Array)]);
       D.cbg = cbg; D.ctr = ctr; D.bgIds = meta.bg_ids; D.trIds = meta.tract_ids;
@@ -43,13 +46,14 @@
     const S = FlexScore.prepare(p);
     FlexScore.stopScores(S, D.md, D.hh, D.vv, D.S * D.P, D.ss);
     FlexScore.cellScores(S, D.cst, D.cdist, D.nc, D.K, D.P, D.np, D.md, D.ss, out, null);
+    if (out === D.los && D.edit) D.edit.afterCells(S, out);   // the map editor's new stations
   }
-  /* per state: value of every map cell (res r) -> {v, d}: res >= 10 from the res-10 (else res-8) parent, coarser from the population-weighted
+  /* per area: value of every map cell (res r) -> {v, d}: res >= R from the res-R (else res-8) parent, coarser from the population-weighted
    * mean of the flex cells inside. Rebuilt after every recompute. */
   function aggregate(D) {
-    D.v10 = new Map(); D.v8 = new Map(); D.agg = {};
-    for (let c = 0; c < D.nc; c++) (D.res[c] === 10 ? D.v10 : D.v8).set(D.ids[c], c);
-    for (let r = 3; r <= 9; r++) {
+    D.vR = new Map(); D.v8 = new Map(); D.agg = {};
+    for (let c = 0; c < D.nc; c++) (D.res[c] === D.R ? D.vR : D.v8).set(D.ids[c], c);
+    for (let r = 3; r < D.R; r++) {
       const acc = new Map();
       for (let c = 0; c < D.nc; c++) {
         if (D.res[c] < r) continue;
@@ -77,11 +81,11 @@
   }
   function valueOf(id, r) {
     for (const name of order) {
-      const D = states[name]; if (!D || !D.v10) continue;
-      if (r >= 10) { let c = D.v10.get(r === 10 ? id : h3.cellToParent(id, 10)); if (c === undefined) c = D.v8.get(h3.cellToParent(id, 8)); if (c !== undefined) return [D.los[c], D.def[c]]; continue; }
+      const D = states[name]; if (!D || !D.vR) continue;
+      if (r >= D.R) { let c = D.vR.get(r === D.R ? id : h3.cellToParent(id, D.R)); if (c === undefined) c = D.v8.get(h3.cellToParent(id, 8)); if (c !== undefined) return [D.los[c], D.def[c]]; continue; }
       const a = D.agg[r] && D.agg[r].get(id);
       if (a && a[2] > 0) return [a[0] / a[2], a[1] / a[2]];
-      if (r === 9) { const c = D.v8.get(h3.cellToParent(id, 8)); if (c !== undefined) return [D.los[c], D.def[c]]; }
+      if (r > 8) { const c = D.v8.get(h3.cellToParent(id, 8)); if (c !== undefined) return [D.los[c], D.def[c]]; }
     }
     return null;
   }
@@ -101,11 +105,12 @@
       if (painted.get(k) === col) continue;
       m.setFeatureState({ source: f.source, sourceLayer: f.sourceLayer, id: f.id }, { access_override: col }); painted.set(k, col); n++;
     }
+    if (order.length) status('Recomputed: ' + order.join(', ') + ' · ' + painted.size + ' cells recoloured');   // every repaint (tiles arrive after the data)
     return n;
   }
   async function ensureStates() {
     const m = window.__mainMap || window.__map; if (!m || !INDEX || busy) return;
-    if (m.getZoom() < CFG.minZoom) { status('Zoom in to a state (zoom ' + CFG.minZoom + '+) to recompute its cells.'); return; }
+    if (m.getZoom() < CFG.minZoom) { status('Zoom in (zoom ' + CFG.minZoom + '+) to recompute the cells.'); return; }
     const b = m.getBounds(), want = INDEX.states.filter((s) => !(s.bbox[0] > b.getEast() || s.bbox[2] < b.getWest() || s.bbox[1] > b.getNorth() || s.bbox[3] < b.getSouth())).map((s) => s.name);
     const missing = want.filter((n) => !states[n]).slice(0, CFG.maxStates);
     if (missing.length) {
@@ -116,8 +121,7 @@
       } catch (e) { status('Could not load the flexible-scoring data: ' + e.message); busy = false; return; }
       busy = false;
     }
-    const n = paint();
-    status('Recomputed: ' + order.join(', ') + (n !== undefined ? ' · ' + n + ' cells recoloured' : ''));
+    paint();
   }
   function recomputeOne(D) { const t = performance.now(); score(D, params, D.los); aggregate(D); D.ms = performance.now() - t; }
   let timer = 0;
@@ -179,9 +183,52 @@
     try { PRESETS = await (await fetch(CFG.presets)).json(); } catch (e) { PRESETS = []; }
     const tryTab = () => { if (!addTab()) setTimeout(tryTab, 500); }; tryTab();
     const hook = () => { const m = window.__mainMap || window.__map; if (!m) { setTimeout(hook, 500); return; }
-      m.on('moveend', () => { if (window.__statsTab === 'flex' || painted.size) ensureStates(); });
-      m.on('idle', () => { if (painted.size || window.__statsTab === 'flex') paint(); }); };
+      m.on('moveend', () => { if (window.__statsTab === 'flex' || painted.size || window.__flexEditOn) ensureStates(); });
+      m.on('idle', () => { if (painted.size || window.__statsTab === 'flex' || window.__flexEditOn) paint(); }); };
     hook();
   }
+  window.__flexDebug = { states: () => states, valueOf, paint };   // for the page tests
+  // for the map editor (flex_edit.js): load the area, recompute and recolour after an edit, the scoring in use, the colour mode
+  window.__flexApi = {
+    load: async () => { await ensureStates(); return order.length ? states[order[0]] : null; },
+    recompute: () => { order.forEach((n) => recomputeOne(states[n])); painted.clear(); paint(); },
+    // after an edit: every stop score (cheap), then only the cells that list a changed station or a new station's cell, and the coarser
+    // levels updated by the change of those cells
+    recomputeEdit: (info) => {
+      const D = order.length ? states[order[0]] : null; if (!D || !D.agg) return;
+      const S = FlexScore.prepare(params);
+      FlexScore.stopScores(S, D.md, D.hh, D.vv, D.S * D.P, D.ss);
+      if (!D.st2c) {   // station -> cells listing it (CSR), once
+        const n = D.meta.S, cnt = new Int32Array(n + 1);
+        for (let i = 0; i < D.cst.length; i++) { const s = D.cst[i]; if (s >= 0 && s < n) cnt[s + 1]++; }
+        for (let s = 0; s < n; s++) cnt[s + 1] += cnt[s];
+        const pos = cnt.slice(0, n), cells = new Int32Array(cnt[n]);
+        for (let i = 0; i < D.cst.length; i++) { const s = D.cst[i]; if (s >= 0 && s < n) cells[pos[s]++] = (i / D.K) | 0; }
+        D.st2c = { off: cnt, cells };
+      }
+      const set = new Set(info.cells || []);
+      for (const s of info.stations || []) if (s < D.meta.S) for (let i = D.st2c.off[s]; i < D.st2c.off[s + 1]; i++) set.add(D.st2c.cells[i]);
+      const cells = Int32Array.from(set), old = new Float32Array(cells.length);
+      cells.forEach((c, i) => { old[i] = D.los[c]; });
+      FlexScore.cellScoresAt(S, D.cst, D.cdist, cells, D.K, D.P, D.np, D.md, D.ss, D.los);
+      if (D.edit) D.edit.afterCells(S, D.los);
+      cells.forEach((c, i) => {
+        const d = D.los[c] - old[i]; if (!d) return;
+        const w = D.pop[c] > 0 ? D.pop[c] : 1e-6;
+        for (let r = 3; r < D.R; r++) { if (D.res[c] < r) continue; const a = D.agg[r].get(D.res[c] === r ? D.ids[c] : h3.cellToParent(D.ids[c], r)); if (a) a[0] += w * d; }
+        if (D.cbg) {
+          const g = D.cbg[c] >= 0 ? D.bgIds[D.cbg[c]] : null, t = D.ctr[c] >= 0 ? D.trIds[D.ctr[c]] : null;
+          const upd = (lvl, k) => { const m = k && D.census[lvl]; const a = m && m.get(k); if (a) a[0] += w * d; };
+          upd('blockgroup', g); upd('tract', t); if (g) { upd('county', g.slice(0, 5)); upd('state', g.slice(0, 2)); }
+        }
+      });
+      painted.clear(); paint();
+      return cells.length;
+    },
+    params: () => params, defaults: () => defaults,
+    setColour: (m) => { mode = m; const s = $('flexMode'); if (s) s.value = m; const lg = $('flexLegend'); if (lg) lg.style.display = m === 'diff' ? 'block' : 'none';
+      painted.clear(); const mm = window.__mainMap || window.__map; if (mm) clearPaint(mm); paint(); },
+    colour: () => mode,
+  };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

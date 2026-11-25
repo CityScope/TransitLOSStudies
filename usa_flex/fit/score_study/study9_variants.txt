@@ -1,0 +1,12 @@
+# study 9: one change each to the lean final form V1.   tag  family  kind(shape|simpler)  env
+s9_s_ll      S     shape    FIT4_SHAPE_S=loglogistic
+s9_s_power   S     shape    FIT4_SHAPE_S=power
+s9_h_mono    H     shape    FIT4_SHAPE_H=mono
+s9_h_wait    H     shape    FIT4_SHAPE_H=wait
+s9_w_mono    W     shape    FIT4_SHAPE_W=mono
+s9_w_exp     W     shape    FIT4_SHAPE_W=exp
+s9_d_flat    DECAY simpler  FIT4_DECAY=
+s9_agg_sum   AGG   shape    FIT4_AGG=sum
+s9_agg_ptal  AGG   shape    FIT4_AGG=ptal
+s9_no_work   WORK  simpler  FIT4_NO_WORK=1
+s9_noclip    CLIP  shape    FIT4_SPEED_CLIP=0

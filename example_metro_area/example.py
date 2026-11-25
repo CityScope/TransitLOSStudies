@@ -43,7 +43,7 @@ import geopandas as gpd  # noqa: E402
 # ============================== SETTINGS ==============================
 # The area
 PLACE = "Boston, Massachusetts, USA"   # a place name, found with OpenStreetMap
-AREA = "municipality"                  # "municipality", "urban_core" (UN urban centre) or "metro_area" (UN metropolitan area)
+AREA = "metro_area"                       # "metro_area" (UN functional urban area), "urban_core" (UN urban centre) or "municipality"
 AOI_FILE = None                        # your own area file (.gpkg, .geojson, .shp, ...): used instead of PLACE
 
 # When
@@ -66,6 +66,9 @@ BUILD_MAP = True                       # build the interactive map (map.html, fi
 # ======================================================================
 
 AREAS = ("municipality", "urban_core", "metro_area")
+#: other names for the same area types ("functional area" is the UN name of the metro area)
+AREA_ALIASES = {"functional_area": "metro_area", "functional_urban_area": "metro_area", "fua": "metro_area", "urban_centre": "urban_core",
+                "urban_center": "urban_core", "city": "municipality"}
 DAYS = ("weekday", "saturday", "sunday")
 _UN_KIND = {"urban_core": "urban_centre", "metro_area": "functional_urban_area"}
 
@@ -108,8 +111,9 @@ def area_from_place(place: str, area: str = "municipality") -> gpd.GeoDataFrame:
     """
     from studytools.city_core import _geocode_admin_polygon
 
+    area = AREA_ALIASES.get(area.strip().lower().replace(" ", "_"), area.strip().lower().replace(" ", "_"))
     if area not in AREAS:
-        raise ValueError(f"area must be one of {AREAS}, not {area!r}")
+        raise ValueError(f"area must be one of {AREAS} (or {tuple(AREA_ALIASES)}), not {area!r}")
     osm = _geocode_admin_polygon(place).to_crs(4326)
     point = osm.union_all().representative_point()
     if area == "municipality":
@@ -579,6 +583,74 @@ def _serve(folder: Path) -> int:
     threading.Thread(target=server.serve_forever, daemon=True).start()
     _SERVERS[folder] = server.server_address[1]
     return _SERVERS[folder]
+
+
+# ---------------------------------------------------------------- notebook helpers
+def draw_area(aoi: Optional[gpd.GeoDataFrame] = None):
+    """A map with drawing tools (polygon, rectangle), opened on `aoi`. Returns (map, drawn): `drawn` collects the shapes drawn."""
+    from ipyleaflet import DrawControl, Map
+
+    c = aoi.union_all().centroid if aoi is not None else None
+    drawn: list = []
+    m = Map(center=(c.y, c.x) if c is not None else (20, 0), zoom=9 if c is not None else 2, scroll_wheel_zoom=True)
+    ctl = DrawControl(polygon={"shapeOptions": {"color": "#d33"}}, rectangle={"shapeOptions": {"color": "#d33"}},
+                      polyline={}, circlemarker={}, marker={}, circle={})
+    ctl.on_draw(lambda control, action, geo_json: drawn.append(geo_json) if action == "created" else None)
+    m.add(ctl)
+    return m, drawn
+
+
+def area_from_upload(upload: bool = False, path=None, aoi: Optional[gpd.GeoDataFrame] = None) -> Optional[gpd.GeoDataFrame]:
+    """The area of a file: `path`, or (`upload`, in Colab) a file picked from your computer; `aoi` (kept) when there is none."""
+    if upload:
+        from google.colab import files
+
+        path = next(iter(files.upload()))
+    return area_from_file(path) if path else aoi
+
+
+def confirm_area(aoi: gpd.GeoDataFrame):
+    """Show the area on a light map (ipyleaflet, a simplified outline: folium chokes on big geometries) and return the checkbox that
+    confirms it (`.value`); `EXAMPLE_AUTOCONFIRM=1` ticks it (tests)."""
+    import json
+    import os
+
+    import ipywidgets as widgets
+    from ipyleaflet import GeoJSON, Map
+    from IPython.display import display
+
+    minx, miny, maxx, maxy = aoi.total_bounds
+    outline = aoi.geometry.simplify(max(maxx - minx, maxy - miny) / 500)
+    m = Map(center=((miny + maxy) / 2, (minx + maxx) / 2), scroll_wheel_zoom=True, layout=widgets.Layout(height="420px"))
+    m.add(GeoJSON(data=json.loads(outline.to_json()), style={"color": "#d33", "fillOpacity": 0.1, "weight": 2}))
+    m.fit_bounds([[miny, minx], [maxy, maxx]])
+    box = widgets.Checkbox(value=os.environ.get("EXAMPLE_AUTOCONFIRM") == "1", description="Yes, analyse this area", indent=False)
+    display(widgets.HTML(f"<b>{aoi['name'].iloc[0]}</b>: {area_km2(aoi):,.0f} km²"), m, box)
+    return box
+
+
+def run_confirmed(confirm, aoi: gpd.GeoDataFrame, **settings) -> Path:
+    """`run(aoi, **settings)` once the area is confirmed (the checkbox from `confirm_area`)."""
+    if not confirm.value:
+        raise RuntimeError("Confirm the area first: tick the box in section 3.")
+    return run(aoi, **settings)
+
+
+def upload_feeds() -> list:
+    """Pick GTFS zip files from your computer (Colab); returns their names, for `FEEDS`."""
+    from google.colab import files
+
+    return list(files.upload())
+
+
+def download(path) -> None:
+    """Download a file in Colab; elsewhere print where it is."""
+    try:
+        from google.colab import files
+    except ImportError:
+        print(path)
+    else:
+        files.download(str(path))
 
 
 def _clock(s: Union[str, time]) -> time:

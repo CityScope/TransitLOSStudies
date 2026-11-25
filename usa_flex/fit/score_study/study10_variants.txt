@@ -1,0 +1,7 @@
+# study 10: one change each to the lean final form V1.   tag  env
+g_base
+g_wlam1       FIT4_WLAM=1
+g_wlam0       FIT4_WLAM=0
+g_ctx         FIT4_METRO_CTX=1
+g_cmeans      FIT4_CTRL_METRO_MEANS=1
+g_ctx_cmeans  FIT4_METRO_CTX=1 FIT4_CTRL_METRO_MEANS=1

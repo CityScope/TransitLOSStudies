@@ -2794,6 +2794,9 @@ def build_h3_by_resolution(
     # the density rule on the native cells first: every coarser level is then the exact sum of the kept native cells
     h3_grid = _native_density_rule(h3_grid, getattr(params, "h3_occupancy_min_per_km2", 10.0))
     census_cols = _census_columns(h3_grid)
+    # Hamburg: `population` is the Zensus grid only while `population_worldpop` exists (`_census_population_column`); without it the
+    # coarser levels fell back to the admin-polygon `destatis_population` (5.41 M vs the grid's 5.35 M, 2026-11-21 map check)
+    census_cols += [c for c in ("population_worldpop",) if c in h3_grid.columns and c not in census_cols]
     resolutions = list(
         dict.fromkeys([params.h3_resolution, params.stats_h3_resolution, *params.map_h3_resolutions])
     )
@@ -3084,6 +3087,9 @@ def build_h3_by_resolution_chunked(
         raise ValueError("params.chunked_h3_output must be set to use build_h3_by_resolution_chunked")
 
     census_cols = _census_columns(h3_grid)
+    # Hamburg: `population` is the Zensus grid only while `population_worldpop` exists (`_census_population_column`); without it the
+    # coarser levels fell back to the admin-polygon `destatis_population` (5.41 M vs the grid's 5.35 M, 2026-11-21 map check)
+    census_cols += [c for c in ("population_worldpop",) if c in h3_grid.columns and c not in census_cols]
     resolutions = list(
         dict.fromkeys([params.h3_resolution, params.stats_h3_resolution, *params.map_h3_resolutions])
     )
@@ -3697,7 +3703,9 @@ def _toronto_profile_loader(aoi, states, level, cache_dir):
 
         for scope in ("national", "state", "municipal"):
             try:
-                t = el.load(scope, level="da", census_geometry={"da": gdf[["GEOID", "geometry"]]})
+                # federal and Ontario: every polling division of the study area (2026-11-20: only the City of Toronto's before)
+                t = el.load(scope, level="da", census_geometry={"da": gdf[["GEOID", "geometry"]]},
+                            area=gdf.to_crs(4326).union_all() if scope != "municipal" else None)
                 gdf = _merge_elections(gdf, t, TORONTO_PROFILE_KEEP_COLUMNS, "statcan_")
             except Exception as exc:  # pragma: no cover - network/data availability varies
                 print(f"[pipeline] skipping Toronto election {scope}: {exc}")
@@ -3739,6 +3747,54 @@ def _us_precinct_elections_loader(aoi, states, level, cache_dir):
             tracts = tracts.merge(t.reset_index()[["GEOID", *cols]] if "GEOID" not in t.columns else t[["GEOID", *cols]], on="GEOID", how="left")
         except Exception as exc:  # pragma: no cover - network/data availability varies
             print(f"[pipeline] skipping US precinct election {scope}: {exc}")
+    # 2026-11-21: the city precinct files cover only Boston / San Francisco; the rest of the metro takes the 2024 presidential result of the
+    # NYT nationwide precinct map (same columns; no turnout: the NYT files carry no registered voters). Governor / mayor stay city-only.
+    try:
+        tracts = _us_national_nyt_fill(tracts, aoi, states, cache_dir)
+    except Exception as exc:  # pragma: no cover - network/data availability varies
+        print(f"[pipeline] skipping NYT 2024 precinct fill: {exc}")
+    return tracts
+
+
+def _us_national_nyt_fill(tracts, aoi, states, cache_dir):
+    """Tracts without a 2024 presidential value get it from the NYT 2024 precinct map (dasymetric by tract population)."""
+    from pycensus.census.countries.usa import acs5
+    from pycensus.census.countries.usa.elections_precinct import nyt2024
+
+    tag = "elec_national_2024"
+    have = f"{tag}_left_share"
+    if have in tracts.columns and tracts[have].notna().all():
+        return tracts
+    pop = acs5.load(aoi=aoi, states=list(states) if states else None, level="tract", cache_dir=str(cache_dir))
+    pc = next((c for c in ("population", "acs5_population") if c in pop.columns), None)
+    if pc is None:
+        return tracts
+    miss = tracts[have].isna() if have in tracts.columns else pd.Series(True, index=tracts.index)
+    tgt = tracts.loc[miss, ["GEOID", "geometry"]].merge(pop[["GEOID", pc]], on="GEOID", how="left").rename(columns={pc: "population"})
+    parts = []
+    for fips in sorted({str(g)[:2] for g in tgt["GEOID"]}):
+        sub = tgt[tgt["GEOID"].astype(str).str[:2] == fips].reset_index(drop=True)
+        prec = nyt2024.load_state_precincts(fips, cache_dir=str(Path(cache_dir) / "elections"))
+        v = nyt2024.allocate_to_polygons(gpd.GeoDataFrame(sub, geometry="geometry", crs=tracts.crs), prec, pop_col="population")
+        if v is None:
+            continue
+        v.index = sub["GEOID"].to_numpy()
+        parts.append(v)
+    if not parts:
+        return tracts
+    v = pd.concat(parts)
+    tot = v["votes_total"].where(v["votes_total"] > 0)
+    fill = pd.DataFrame({f"{tag}_total_votes": v["votes_total"], f"{tag}_left_share": v["votes_dem"] / tot, f"{tag}_right_share": v["votes_rep"] / tot,
+                         f"{tag}_other_share": (v["votes_total"] - v["votes_dem"] - v["votes_rep"]).clip(lower=0) / tot,
+                         f"{tag}_party_democrat_share": v["votes_dem"] / tot, f"{tag}_party_republican_share": v["votes_rep"] / tot,
+                         f"{tag}_party_other_share": (v["votes_total"] - v["votes_dem"] - v["votes_rep"]).clip(lower=0) / tot})
+    for c in fill.columns:
+        new = tracts["GEOID"].map(fill[c])
+        tracts[c] = tracts[c].fillna(new) if c in tracts.columns else new
+        US_PRECINCT_ELECTION_KEEP.add(c)
+        if not c.endswith("_total_votes"):
+            _RATE_COLUMNS.add(c)
+    print(f"[pipeline] NYT 2024 precinct fill: {int(fill[f'{tag}_left_share'].notna().sum())} tracts outside the city precinct files")
     return tracts
 
 
@@ -3990,11 +4046,20 @@ def _residual_backfill(current: np.ndarray, empty: np.ndarray, h3_row: np.ndarra
     have = xp.where(empty_x, 0.0, xp.nan_to_num(xp.asarray(current)[cell_x]))
     pop = xp.where(empty_x, xp.nan_to_num(xp.asarray(cell_pop)[cell_x]), 0.0)
     placed = xp.bincount(poly_x, weights=have, minlength=n_poly)
-    pop_sum = xp.bincount(poly_x, weights=pop, minlength=n_poly)
-    n_empty = xp.bincount(poly_x, weights=empty_x.astype(xp.float64), minlength=n_poly)
-    resid = xp.maximum(xp.nan_to_num(xp.asarray(poly_total[:n_poly] if len(poly_total) >= n_poly else np.pad(poly_total, (0, n_poly - len(poly_total))))) - placed, 0.0)
-    share = xp.where(pop_sum[poly_x] > 0, pop / xp.where(pop_sum[poly_x] > 0, pop_sum[poly_x], 1.0), 1.0 / xp.where(n_empty[poly_x] > 0, n_empty[poly_x], 1.0))
-    val = xp.where(empty_x, resid[poly_x] * share, 0.0)
+    # An empty cell takes the polygon's total x its own weight share of ALL the polygon's cells (2026-11-20). Before, the empty cells shared
+    # the whole residual (total - what the finer level placed), which also holds the finer polygons that held no cell centre: on a coast the
+    # only empty cells are water, and Toronto's municipalities put 1.6 M residents (21 %) into Lake Ontario cells (one cell 27,590 people),
+    # Boston 192 k into 6 empty cells. What no cell takes now goes to the AOI-wide rescale of `_join_polygon_stats` (one factor).
+    w_all = xp.nan_to_num(xp.asarray(cell_pop)[cell_x])
+    pop_all = xp.bincount(poly_x, weights=w_all, minlength=n_poly)
+    n_all = xp.bincount(poly_x, minlength=n_poly).astype(xp.float64)
+    total = xp.nan_to_num(xp.asarray(poly_total[:n_poly] if len(poly_total) >= n_poly else np.pad(poly_total, (0, n_poly - len(poly_total)))))
+    resid = xp.maximum(total - placed, 0.0)
+    share = xp.where(pop_all[poly_x] > 0, pop / xp.where(pop_all[poly_x] > 0, pop_all[poly_x], 1.0), 1.0 / xp.where(n_all[poly_x] > 0, n_all[poly_x], 1.0))
+    share = xp.where(empty_x, share, 0.0)
+    give = xp.bincount(poly_x, weights=share, minlength=n_poly) * total            # what the polygon's empty cells take
+    cap = xp.where(give > resid, resid / xp.where(give > 0, give, 1.0), 1.0)         # never more than the residual (no mass twice)
+    val = xp.where(empty_x, total[poly_x] * share * cap[poly_x], 0.0)
     per_cell = to_numpy(xp.bincount(cell_x, weights=val, minlength=len(current)))
     got = to_numpy(xp.bincount(cell_x, weights=empty_x.astype(xp.float64), minlength=len(current))) > 0
     return np.where(got, per_cell, np.nan)
@@ -4020,13 +4085,17 @@ def _cached_census_load(loader, aoi, states_arg, level, cache_dir, prefix):
     """`loader(aoi=..., level=...)` with its processed result kept as geoparquet under `<cache_dir>/_loader_cache`.
 
     A census loader re-reads and re-processes the raw polygons and tables on every run (minutes for Toronto's StatCan levels) although nothing changed between two rebuilds.
-    The cache key covers the AOI geometry, level, states, the loader and the pycensus code state; set CS_LOADER_CACHE=0 to bypass it. Any cache problem falls back to the loader."""
+    The cache key covers the AOI geometry, level, states, the loader, the source file the loader is defined in (the loader adapters here call
+    further helpers of this module, so a change to any of them must miss the cache) and the pycensus code state; set CS_LOADER_CACHE=0 to bypass
+    it. Any cache problem falls back to the loader."""
     import hashlib
+    import inspect
 
     if os.environ.get("CS_LOADER_CACHE", "1") == "0":
         return loader(aoi=aoi, states=states_arg, level=level, cache_dir=str(cache_dir))
     try:
         key = hashlib.sha1("|".join([prefix, str(level), str(states_arg), getattr(loader, "__module__", "") + "." + getattr(loader, "__qualname__", ""), _pycensus_stamp(),
+                                     hashlib.sha1(Path(inspect.getsourcefile(loader)).read_bytes()).hexdigest(),
                                      hashlib.sha1(aoi.to_crs(4326).union_all().wkb).hexdigest()]).encode()).hexdigest()[:16]
         path = Path(cache_dir) / "_loader_cache" / f"{prefix}{level}_{key}.parquet"
         if path.is_file():
@@ -4331,11 +4400,12 @@ def _mexico_census_loader(aoi, states, level, cache_dir):
         aoi=aoi, states=states, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "mexico")
     )
     gdf = _restore_population_prefix(gdf, "inegi")
-    if level == "ageb" and len(gdf):   # 2024 presidential result (casilla -> seccion -> H3 -> AGEB)
+    if level in ("ageb", "municipality") and len(gdf):   # 2024 presidential result (casilla -> seccion -> H3 -> AGEB / municipality)
+        # municipality: the fallback for the cells outside the urban AGEBs (rural areas had no election value, 2026-11-20)
         try:
             from pycensus.census.countries.mexico import elections as el
 
-            t = el.load("national", level="ageb", census_geometry={"ageb": gdf[["GEOID", "geometry"]]}, aoi=aoi)
+            t = el.load("national", level=level, census_geometry={level: gdf[["GEOID", "geometry"]]}, aoi=aoi)
             gdf = _merge_elections(gdf, t, INEGI_KEEP_COLUMNS, "inegi_")
         except Exception as exc:  # pragma: no cover - network/data availability varies
             print(f"[pipeline] skipping Mexico election join: {exc}")
@@ -4721,6 +4791,78 @@ def _israel_commute_loader(aoi, states, level, cache_dir):
     return cbs_commute.load(aoi=aoi, level=level, cache_dir=str(cache_dir))
 
 
+# Sub-municipal transit use from local travel surveys (2026-11-20, the finest published unit of each): Guadalajara EOD 2023 per AGEB of
+# residence, Donostia neighbourhood sheets of the PMUS, Taipei districts (city DOT survey 2018), Hamburg Bezirke (MiD 2023).
+IMEPLAN_EOD_KEEP_COLUMNS: set = set()
+DONOSTIA_PMUS_KEEP_COLUMNS: set = set()
+TAIPEI_MODE_USE_KEEP_COLUMNS: set = set()
+MID_HAMBURG_KEEP_COLUMNS: set = set()
+EM_CAPV_KEEP_COLUMNS: set = set()
+
+
+def _em_capv_loader(aoi, states, level, cache_dir):
+    """Basque mobility study 2021: trips by mode per comarca of origin, capitals apart (`pycensus...spain.mobility.em_capv`), ``emcapv_``."""
+    from pycensus.census.countries.spain.mobility import em_capv
+
+    return em_capv.load(aoi=aoi, cache_dir=str(cache_dir))
+
+
+def _empty_units():
+    return gpd.GeoDataFrame({"GEOID": []}, geometry=[], crs=4326)
+
+
+def _imeplan_eod_loader(aoi, states, level, cache_dir):
+    """Guadalajara EOD 2023 commuters by mode per AGEB of residence, then per survey microzone and centralidad for the AGEBs the survey did not
+    sample (`pycensus...mexico.imeplan_eod`); empty outside its survey area."""
+    from pycensus.census.countries.mexico import imeplan_eod
+
+    return imeplan_eod.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "mexico"))
+
+
+def _donostia_pmus_loader(aoi, states, level, cache_dir):
+    """Donostia trips by mode per neighbourhood (`pycensus...spain.mobility.donostia_pmus`), prefixed ``donpmus_``."""
+    from pycensus.census.countries.spain.mobility import donostia_pmus
+
+    return donostia_pmus.load(aoi=aoi, cache_dir=str(cache_dir))
+
+
+def _taipei_mode_use_loader(aoi, states, level, cache_dir):
+    """Mode shares, prefixed ``tpemode_``: ``district`` = Taipei City's 12 districts (city DOT survey 2018, `taiwan.taipei_mode_use`);
+    ``traffic_zone`` = New Taipei's 7 traffic zones (MOTC survey 2010 as tabulated by the Taipei DOT, `taiwan.shuangbei_commute`), for the
+    cells outside Taipei City."""
+    from pycensus.census.countries.taiwan import shuangbei_commute, taipei_mode_use
+
+    if level == "traffic_zone":
+        g = shuangbei_commute.load(cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "taiwan"))
+        g = g[g["county"] == "New Taipei City"].rename(columns={"sample_trips": "sample_commute_trips"})
+    else:
+        g = taipei_mode_use.load(cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "taiwan"))
+    g = g[g.intersects(aoi.to_crs(4326).union_all())] if aoi is not None else g
+    keep = [c for c in g.columns if c not in ("GEOID", "geometry", "name", "year", "sample_residents", "zone", "districts", "county")]
+    return g[["GEOID", "geometry", *keep]].rename(columns={c: "tpemode_" + c for c in keep}).reset_index(drop=True)
+
+
+def _mid_hamburg_loader(aoi, states, level, cache_dir):
+    """Trip shares by main mode, prefixed ``midhh_``: ``bezirk`` = Hamburg's 7 Bezirke (MiD 2023), ``kreis`` = the Kreise of the
+    Metropolregion around it (MiD 2017 regional report) for the cells outside the city."""
+    from pycensus.census.countries.germany import mid_hamburg
+
+    g = mid_hamburg.kreise(data_dir=str(Path(cache_dir) / "germany")) if level == "kreis" else mid_hamburg.bezirke(cache_dir=str(cache_dir))
+    g = g[g.intersects(aoi.to_crs(4326).union_all())] if aoi is not None else g
+    keep = [c for c in g.columns if c.endswith("_share")]
+    return g[["GEOID", "geometry", *keep]].rename(columns={c: "midhh_" + c for c in keep}).reset_index(drop=True)
+
+
+def _join_survey_units(h3_grid, aoi, states, cache_dir, levels, loader, keep, prefix, label):
+    """One travel-survey source on its own zoning (``levels``: one level or a finest-first tuple); skipped (map unchanged) when it fails or
+    has no unit in the AOI."""
+    try:
+        return _join_polygon_stats(h3_grid, aoi, states, (levels,) if isinstance(levels, str) else tuple(levels), cache_dir, loader, keep, prefix)
+    except Exception as exc:  # pragma: no cover - network/data availability varies
+        print(f"[pipeline] skipping {label} join: {exc}")
+        return h3_grid
+
+
 def _israel_census_loader(aoi, states, level, cache_dir):
     """Adapt `pycensus.census.countries.israel.cbs.load`'s signature to `_join_polygon_stats`'s.
 
@@ -4761,6 +4903,15 @@ def _israel_census_loader(aoi, states, level, cache_dir):
             print(f"[pipeline] Israel statistical areas: {n0} + {len(gdf) - n0} locality remainders")
         except Exception as exc:  # pragma: no cover
             print(f"[pipeline] Israel locality remainders not added: {type(exc).__name__}: {str(exc)[:120]}")
+    if level == "locality" and len(gdf):   # Knesset 25 summed per locality: the localities without statistical areas (2026-11-20)
+        try:
+            from pycensus.census.countries.israel.elections import load_knesset_localities
+
+            t = load_knesset_localities(25, localities=sorted({int(str(g)) for g in gdf["GEOID"] if str(g).isdigit()}),
+                                        data_dir=str(Path(cache_dir) / "israel_elections"))
+            gdf = _merge_elections(gdf, t, ISRAEL_KEEP_COLUMNS, "cbs_")
+        except Exception as exc:  # pragma: no cover - network/data availability varies
+            print(f"[pipeline] skipping Israel locality election join: {exc}")
     return gdf
 
 
@@ -5009,7 +5160,9 @@ def _taiwan_census_loader(aoi, states, level, cache_dir):
 
         for fn, kw in ((el.load_presidential, 2024), (el.load_legislative, 2024), (el.load_mayor, 2022), (el.load_council, 2022)):
             try:
-                t = fn(kw, counties=("63000",), level=level, data_dir=str(Path(cache_dir) / "taiwan_elections"), with_h3=False).census
+                # every county of the area (2026-11-21: Taipei City only before; the metro also covers New Taipei, Keelung, Taoyuan)
+                t = fn(kw, counties=tuple(sorted({str(g)[:5] for g in gdf["GEOID"]})), level=level,
+                       data_dir=str(Path(cache_dir) / "taiwan_elections"), with_h3=False).census
                 gdf = _merge_elections(gdf, t, TAIWAN_KEEP_COLUMNS, "moi_")
             except Exception as exc:  # pragma: no cover - network/data availability varies
                 print(f"[pipeline] skipping Taiwan election {fn.__name__}: {exc}")
@@ -5027,12 +5180,16 @@ def _taiwan_realprice_extras(gdf, level, cache_dir):
         return gdf
     # Registry county letters (a=Taipei, f=New Taipei, ...), derived from the loaded GEOIDs' 5-digit county codes via the package mapping when
     # available; Taipei and New Taipei are the cities of this study.
+    from pycensus.census.countries.taiwan.constants import COUNTY_CODES as _CC
+    from pycensus.census.countries.taiwan.moi.realprice import CITY_LETTERS
+
+    names = {_CC.get(str(g)[:5]) for g in gdf["GEOID"]}   # every county of the area (Taipei + New Taipei only before 2026-11-21)
+    letters = tuple(sorted(k for k, v in CITY_LETTERS.items() if v in names)) or ("a", "f")
     out = gdf
     new_cols: list = []
     for year in (2025, 2016, 2013):
         try:
-            rp = load_realprice(year, "county_city" if level == "county_city" else "district", ("a", "f"),
-                                str(Path(cache_dir) / "taiwan"))
+            rp = load_realprice(year, "county_city" if level == "county_city" else "district", letters, str(Path(cache_dir) / "taiwan"))
         except Exception as exc:  # pragma: no cover - network/data availability varies
             print(f"[pipeline] skipping Taiwan real-price {year}: {exc}")
             continue
@@ -5504,9 +5661,11 @@ def _join_census(
             print(f"[pipeline] skipping last-election join: {exc}")
         return h3_grid
     if country == "MEX":
-        return _join_polygon_stats(
+        h3_grid = _join_polygon_stats(
             h3_grid, aoi, states, INEGI_LEVELS, cache_dir, _mexico_census_loader, INEGI_KEEP_COLUMNS, "inegi_"
         )
+        return _join_survey_units(h3_grid, aoi, states, cache_dir, ("ageb", "microzone", "centralidad"), _imeplan_eod_loader, IMEPLAN_EOD_KEEP_COLUMNS, "imepeod_",
+                                  "Guadalajara EOD 2023")
     if country == "ESP":
         h3_grid = _join_polygon_stats(
             h3_grid, aoi, states, SPAIN_LEVELS, cache_dir, _spain_census_loader, SPAIN_KEEP_COLUMNS, "ine_"
@@ -5524,7 +5683,10 @@ def _join_census(
             )
         except Exception as exc:  # pragma: no cover - network/data availability varies
             print(f"[pipeline] skipping Eustat municipal indicators join: {exc}")
-        return h3_grid
+        h3_grid = _join_survey_units(h3_grid, aoi, states, cache_dir, "auzoa", _donostia_pmus_loader, DONOSTIA_PMUS_KEEP_COLUMNS, "donpmus_",
+                                     "Donostia PMUS neighbourhoods")
+        return _join_survey_units(h3_grid, aoi, states, cache_dir, "eustat_zone", _em_capv_loader, EM_CAPV_KEEP_COLUMNS, "emcapv_",
+                                  "Basque mobility study 2021 comarcas")
     if country == "ISR":
         h3_grid = _join_polygon_stats(
             h3_grid, aoi, states, ISRAEL_LEVELS, cache_dir, _israel_census_loader, ISRAEL_KEEP_COLUMNS, "cbs_"
@@ -5555,9 +5717,11 @@ def _join_census(
             h3_grid, aoi, states, ANDORRA_LEVELS, cache_dir, _andorra_census_loader, ANDORRA_KEEP_COLUMNS, "estadisticaad_"
         )
     if country == "TWN":
-        return _join_polygon_stats(
+        h3_grid = _join_polygon_stats(
             h3_grid, aoi, states, TAIWAN_LEVELS, cache_dir, _taiwan_census_loader, TAIWAN_KEEP_COLUMNS, "moi_"
         )
+        return _join_survey_units(h3_grid, aoi, states, cache_dir, ("district", "traffic_zone"), _taipei_mode_use_loader, TAIPEI_MODE_USE_KEEP_COLUMNS, "tpemode_",
+                                  "Taipei district mode use")
     if country == "CHL":
         h3_grid = _join_polygon_stats(
             h3_grid, aoi, states, CHILE_LEVELS, cache_dir, _chile_census_loader, CHILE_KEEP_COLUMNS, "ine_cl_"
@@ -5622,7 +5786,8 @@ def _join_census(
             )
         except Exception as exc:  # pragma: no cover - network/data availability varies
             print(f"[pipeline] skipping Hamburg elections join: {exc}")
-        return h3_grid
+        return _join_survey_units(h3_grid, aoi, states, cache_dir, ("bezirk", "kreis"), _mid_hamburg_loader, MID_HAMBURG_KEEP_COLUMNS, "midhh_",
+                                  "Hamburg MiD Bezirke")
     print(
         f"[pipeline] census join not yet supported for country={country!r} "
         "(pycensus module exists but is unaudited/unwired for this study) -- skipping, 0 census columns"
@@ -9741,6 +9906,11 @@ for _keep, _args in (
     (CHILE_KEEP_COLUMNS, ("chile", "ine", "ine_cl_")),
     (CHILE_CASEN_KEEP_COLUMNS, ("chile", "casen", "casen_cl_")),
     (ISRAEL_COMMUTE_KEEP_COLUMNS, ("israel", "cbs_commute", "cbscommute_")),
+    (IMEPLAN_EOD_KEEP_COLUMNS, ("mexico", "imeplan_eod", "imepeod_")),
+    (DONOSTIA_PMUS_KEEP_COLUMNS, ("spain", "donostia_pmus", "donpmus_")),
+    (TAIPEI_MODE_USE_KEEP_COLUMNS, ("taiwan", "taipei_mode_use", "tpemode_")),
+    (MID_HAMBURG_KEEP_COLUMNS, ("germany", "mid_hamburg", "midhh_")),
+    (EM_CAPV_KEEP_COLUMNS, ("spain", "em_capv", "emcapv_")),
     (GERMANY_KEEP_COLUMNS, ("germany", "destatis", "destatis_")),
     (GERMANY_BA_PENDLER_KEEP_COLUMNS, ("germany", "ba_pendler", "ba_pendler_")),
     (TORONTO_PROFILE_KEEP_COLUMNS, ("canada", "toronto", "statcan_")),

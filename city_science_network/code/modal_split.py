@@ -5,8 +5,8 @@
 - Units as PUBLISHED, each assigned whole to an area by its representative point; area share = transit commuters / commuters by car,
   public transport, walking and cycling summed over the area (only upscaling, never a value split down):
   block groups (Boston, San Francisco, ACS 5-year), dissemination areas (Toronto, StatCan 2021), census districts (Concepcion, INE Censo
-  2024), CBS Census 2022 sub-quarters / localities (Beersheba, pycensus israel.cbs_commute), INEGI Censo 2020 municipalities (Guadalajara,
-  pycensus mexico.inegi_movilidad), parishes (Andorra, ENM 2050 survey, pycensus andorra.enm_mobility: respondents' modes x parish residents).
+  2024), CBS Census 2022 sub-quarters / localities (Beersheba, pycensus israel.cbs_commute), AGEBs of residence of the IMEPLAN origin-destination
+  survey 2023 (Guadalajara, pycensus mexico.imeplan_eod), parishes (Andorra, ENM 2050 survey, pycensus andorra.enm_mobility: respondents' modes x parish residents).
 - Gipuzkoa: INE ECEPOV-2021 (pycensus spain.mobility.ecepov): Donostia and the province.
 - Published city figures (pycensus germany.mid_hamburg, taiwan.motc_mode_use): Hamburg (MiD 2023), Taipei (MOTC 2022).
 - Shanghai (pycensus china.shanghai_transport_survey): only the central city's commuting share exists, a territory none of the areas matches.
@@ -52,8 +52,8 @@ UNITS = {   # the finest unit the census PUBLISHES commute modes for (never a va
 LOADED = {   # units read through a pycensus source: city -> (source label, census label, loader(aoi) -> GeoDataFrame with the four counts)
     "beerseba": ("CBS Israel, Census 2022 public-use file (main means of transport to work)", "sub-quarters / localities",
                  lambda aoi: __import__("pycensus.census.countries.israel.cbs_commute", fromlist=["load"]).load(aoi=aoi, cache_dir=str(HERE / "census"))),
-    "guadalajara": ("INEGI, Censo 2020 cuestionario ampliado (means of transport to work)", "municipalities",
-                    lambda aoi: __import__("pycensus.census.countries.mexico.inegi_movilidad", fromlist=["load"]).load(
+    "guadalajara": ("IMEPLAN, Encuesta Origen-Destino 2023 (main means of the first work trip, expanded)", "AGEBs of residence",
+                    lambda aoi: __import__("pycensus.census.countries.mexico.imeplan_eod", fromlist=["load"]).load(
                         aoi=aoi, cache_dir=str(HERE / "census"), data_dir=str(HERE / "census" / "mexico"))),
     "andorra": ("ENM 2050 citizen survey (CRES 2021): modes used the day before, by parish", "parishes", None),
 }

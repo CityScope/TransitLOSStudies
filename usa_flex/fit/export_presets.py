@@ -53,6 +53,22 @@ def params_from(c):
     return p, err
 
 
+def params_from_fit4(p: dict):
+    """Map preset of a torch_fit4 run (its best start's ``params``): the sampled headway, speed and distance curves and the mode factors.
+    The distance curve of the final form scales with headway and speed (``FIT4_DECAY=service``); the map has one walking shape, so its curve
+    at the reference service (10 min, 20 km/h) is used for every service -- an approximation.
+
+    Args:
+        p: ``params`` of a torch_fit4 run.
+
+    Returns:
+        ``(map parameters, walk shape error)`` as :func:`params_from`.
+    """
+    xy = lambda d: {"x": [float(k) for k in d], "y": [float(v) for v in d.values()]}  # noqa: E731
+    c = {"headway": xy(p["curve_H"]), "speed": xy(p["curve_S"]), "mode": p["mode"], "walk": {m: xy(p["curve_W"][m]) for m in ("bus", "tram", "rail")}}
+    return params_from(c)
+
+
 def main():
     presets = json.loads(PRESETS.read_text())
     presets = [p for p in presets if not p["name"].startswith("Data-driven")]

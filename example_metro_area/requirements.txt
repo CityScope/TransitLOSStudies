@@ -8,4 +8,5 @@ folium>=0.15.0
 freestiler>=0.2.0
 pmtiles>=3.7.0
 ipyleaflet>=0.19
+ipywidgets>=8
 mapclassify>=2.5
