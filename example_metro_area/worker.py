@@ -1,0 +1,42 @@
+"""Runs one function of `example.py` in the study environment: `python worker.py '<json>'` (called by `bootstrap.call`).
+
+Areas travel as small dicts (`name`, `km2`, `geojson`, `outline`, `bounds`) so the notebook's own kernel needs no geopandas.
+"""
+import json
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+
+def _in(v):
+    import geopandas as gpd
+    from shapely.geometry import shape
+
+    if isinstance(v, dict) and "geojson" in v:
+        return gpd.GeoDataFrame({"name": [v["name"]]}, geometry=[shape(v["geojson"])], crs=4326)
+    if isinstance(v, (list, tuple)):
+        return [_in(x) for x in v]
+    return v
+
+
+def _out(v):
+    import geopandas as gpd
+
+    if isinstance(v, gpd.GeoDataFrame):
+        geom = v.to_crs(4326).union_all()
+        minx, miny, maxx, maxy = geom.bounds
+        outline = geom.simplify(max(maxx - minx, maxy - miny) / 500)
+        import example
+
+        return {"name": str(v["name"].iloc[0]), "km2": example.area_km2(v), "geojson": json.loads(gpd.GeoSeries([geom]).to_json())["features"][0]["geometry"],
+                "outline": json.loads(gpd.GeoSeries([outline], crs=4326).to_json()), "bounds": [minx, miny, maxx, maxy]}
+    return str(v) if isinstance(v, Path) else v
+
+
+if __name__ == "__main__":
+    request = json.loads(sys.argv[1])
+    import example
+
+    result = getattr(example, request["fn"])(*_in(request["args"]), **{k: _in(v) for k, v in request["kwargs"].items()})
+    Path(request["out"]).write_text(json.dumps(_out(result)))
