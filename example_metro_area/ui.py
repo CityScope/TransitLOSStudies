@@ -91,55 +91,253 @@ def _serve(folder: Path) -> int:
 # ---------------------------------------------------------------- notebook helpers
 
 
-def _map(center, zoom=None, **kwargs):
-    """An ipyleaflet map whose background is OpenMapTiles vector tiles (OpenFreeMap, styled light); never the library's default OSM tiles."""
-    import urllib.request
+_ESM = """
+import maplibregl from "https://esm.sh/maplibre-gl@5.13.0";
+import MapboxDraw from "https://esm.sh/@mapbox/mapbox-gl-draw@1.4.3";
 
-    from ipyleaflet import Map, VectorTileLayer
+function css(el, href) { const l = document.createElement("link"); l.rel = "stylesheet"; l.href = href; el.appendChild(l); }
 
-    m = Map(center=center, zoom=zoom or 9, scroll_wheel_zoom=True, **kwargs)
-    m.layers = ()                                      # drop the default OpenStreetMap layer
-    try:   # the tile address carries the planet's build date, so it is read from the TileJSON
-        request = urllib.request.Request("https://tiles.openfreemap.org/planet", headers={"User-Agent": "transitlos-notebook"})
-        url = json.load(urllib.request.urlopen(request, timeout=20))["tiles"][0]
-    except Exception:  # noqa: BLE001 -- no background rather than a failed notebook
-        return m
-    none = {"fill": False, "stroke": False}
-    fill = lambda c: {"fill": True, "fillColor": c, "fillOpacity": 1, "stroke": False}   # noqa: E731
-    line = lambda c, w=1: {"fill": False, "color": c, "weight": w, "opacity": 1}          # noqa: E731
-    style = {"water": fill("#cfdde8"), "landcover": fill("#e9eee4"), "landuse": fill("#efefef"), "park": fill("#e1ebdb"),
-             "building": fill("#e6e6e6"), "waterway": line("#cfdde8"), "transportation": line("#d4d4d4"), "boundary": line("#b9b9b9")}
-    for layer in ("aerodrome_label", "aeroway", "housenumber", "mountain_peak", "place", "poi", "transportation_name", "water_name"):
-        style[layer] = none
-    m.add(VectorTileLayer(url=url, vector_tile_layer_styling=style, attribution="&copy; OpenFreeMap &copy; OpenMapTiles &copy; OpenStreetMap contributors",
-                          max_native_zoom=14))
-    return m
+function render({ model, el }) {
+  css(el, "https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css");
+  const draw = model.get("draw");
+  if (draw) css(el, "https://unpkg.com/@mapbox/mapbox-gl-draw@1.4.3/dist/mapbox-gl-draw.css");
+  const box = document.createElement("div");
+  box.style.cssText = "width:100%;height:" + model.get("height") + "px";
+  el.appendChild(box);
+  const b = model.get("bounds");
+  const map = new maplibregl.Map({ container: box, style: "https://tiles.openfreemap.org/styles/positron",
+                                   bounds: [[b[0], b[1]], [b[2], b[3]]], fitBoundsOptions: { padding: 24 } });
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }));
+  const outline = model.get("outline");
+  if (outline) map.on("load", () => {
+    map.addSource("area", { type: "geojson", data: outline });
+    map.addLayer({ id: "area-fill", type: "fill", source: "area", paint: { "fill-color": "#d33", "fill-opacity": 0.1 } });
+    map.addLayer({ id: "area-line", type: "line", source: "area", paint: { "line-color": "#d33", "line-width": 2 } });
+  });
+  if (draw) {
+    const c = MapboxDraw.constants.classes;   // mapbox-gl-draw with maplibre: its control classes
+    c.CONTROL_BASE = "maplibregl-ctrl"; c.CONTROL_PREFIX = "maplibregl-ctrl-"; c.CONTROL_GROUP = "maplibregl-ctrl-group";
+    const tool = new MapboxDraw({ displayControlsDefault: false, controls: { polygon: true, trash: true } });
+    map.addControl(tool, "top-left");
+    const sync = () => { model.set("drawn", tool.getAll().features); model.save_changes(); };
+    ["draw.create", "draw.update", "draw.delete"].forEach((e) => map.on(e, sync));
+  }
+}
+export default { render };
+"""
+
+
+def _widget():
+    import anywidget
+    import traitlets
+
+    class AreaMap(anywidget.AnyWidget):
+        """A MapLibre map with the OpenMapTiles background (OpenFreeMap), an area outline, and (`draw`) a polygon drawing tool."""
+
+        _esm = _ESM
+        bounds = traitlets.List([-10, -10, 10, 10]).tag(sync=True)
+        outline = traitlets.Dict(allow_none=True, default_value=None).tag(sync=True)
+        draw = traitlets.Bool(False).tag(sync=True)
+        height = traitlets.Int(420).tag(sync=True)
+        drawn = traitlets.List([]).tag(sync=True)   # the shapes drawn (GeoJSON features)
+
+    return AreaMap
 
 
 def draw_area(area: Optional[dict] = None):
-    """A map with drawing tools (polygon, rectangle), opened on `area`. Returns (map, drawn): `drawn` collects the shapes drawn."""
-    from ipyleaflet import DrawControl
-
-    minx, miny, maxx, maxy = area["bounds"] if area else (-10, -10, 10, 10)
-    drawn: list = []
-    m = _map(((miny + maxy) / 2, (minx + maxx) / 2), 9 if area else 2)
-    ctl = DrawControl(polygon={"shapeOptions": {"color": "#d33"}}, rectangle={"shapeOptions": {"color": "#d33"}},
-                      polyline={}, circlemarker={}, marker={}, circle={})
-    ctl.on_draw(lambda control, action, geo_json: drawn.append(geo_json) if action == "created" else None)
-    m.add(ctl)
-    return m, drawn
+    """A map with a polygon drawing tool, opened on `area`. The shapes drawn are in its `.drawn` (GeoJSON features)."""
+    return _widget()(draw=True, height=520, bounds=area["bounds"] if area else [-180, -60, 180, 75])
 
 
 def show_area(area: dict):
-    """The area on a light map (ipyleaflet, a simplified outline: folium chokes on big geometries), with its name and size."""
+    """The area on the OpenMapTiles map (a simplified outline: big geometries stay light), with its name and size."""
     import ipywidgets as widgets
-    from ipyleaflet import GeoJSON
 
-    minx, miny, maxx, maxy = area["bounds"]
-    m = _map(((miny + maxy) / 2, (minx + maxx) / 2), layout=widgets.Layout(height="420px"))
-    m.add(GeoJSON(data=area["outline"], style={"color": "#d33", "fillOpacity": 0.1, "weight": 2}))
-    m.fit_bounds([[miny, minx], [maxy, maxx]])
-    return widgets.VBox([widgets.HTML(f"<b>{area['name']}</b>: {area['km2']:,.0f} km²"), m])
+    return widgets.VBox([widgets.HTML(f"<b>{area['name']}</b>: {area['km2']:,.0f} km²"),
+                         _widget()(bounds=area["bounds"], outline=area["outline"])])
+
+
+def select_feeds(feeds: list):
+    """A checklist of the feeds (all ticked). Its `.value` is the list of the ticked feeds' names."""
+    import ipywidgets as widgets
+
+    rows = []
+    for f in feeds:
+        span = f" · calendar {f['first_date']} to {f['last_date']}" if f["first_date"] else ""
+        info = f"{f['source']} · {f['stops']:,} stops in the area · {f['trips']:,} trips on a typical day{span}"
+        box = widgets.Checkbox(value=True, description=f["agency"] or f["name"], indent=False, layout=widgets.Layout(width="320px"))
+        box.feed = f["name"]
+        rows.append(widgets.HBox([box, widgets.HTML(f"<span style='color:#666;font-size:90%'>{info}</span>")]))
+
+    class FeedChoice(widgets.VBox):
+        @property
+        def value(self) -> list:
+            return [r.children[0].feed for r in self.children if r.children[0].value]
+
+    return FeedChoice(rows)
+
+
+def pick_date(info: dict):
+    """The service on every date of the chosen feeds, as a plot (bars: stop calls in the area, i.e. stops x trips). Weekdays, Saturdays,
+    Sundays and public holidays have their own colour; the day type chosen in the settings is drawn strongest. The date to use is in a
+    date box next to it, first the suggested one; its `.value` is the date ("YYYY-MM-DD") and the red line follows it."""
+    import datetime
+
+    import ipywidgets as widgets
+    import matplotlib.dates as mdates
+    import matplotlib.pyplot as plt
+    from IPython.display import display
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import Patch
+
+    rows = info["dates"]
+    dates = [datetime.date.fromisoformat(r["date"]) for r in rows]
+    events = [r["events"] for r in rows]
+    holiday = [r.get("holiday", "") for r in rows]
+    colours = {"weekday": "#2a6fb0", "saturday": "#e69f00", "sunday": "#9b59b6"}
+    kind = ["holiday" if h else ("saturday" if d.weekday() == 5 else "sunday" if d.weekday() == 6 else "weekday") for d, h in zip(dates, holiday)]
+    paint = [colours.get(k, "#c0392b") for k in kind]
+    strong = [k == info["day"] for k in kind]
+    suggested = datetime.date.fromisoformat(info["suggested"])
+    box = widgets.DatePicker(description="Service date", value=suggested, style={"description_width": "initial"})
+    out = widgets.Output()
+
+    def draw(_=None):
+        with out:
+            out.clear_output(wait=True)
+            fig, ax = plt.subplots(figsize=(11, 3.8))
+            for d, e, c, k, s in zip(dates, events, paint, kind, strong):
+                ax.bar(d, e, width=1.0, color=c, alpha=1.0 if s else 0.55, hatch="////" if k == "holiday" else None,
+                       edgecolor="white" if k != "holiday" else "#7b241c", linewidth=0.8 if k != "holiday" else 0.4)
+            top = max(events) if events else 1
+            real = [d for d, e in zip(dates, events) if e >= 0.05 * top]   # where there is real service (tiny feeds can run for years)
+            lo, hi = (min(real) - datetime.timedelta(days=7), max(real) + datetime.timedelta(days=7)) if real else (dates[0], dates[-1])
+            ax.set_xlim(lo, hi)
+            for d, e, h in zip(dates, events, holiday):
+                if h and lo + datetime.timedelta(days=2) <= d <= hi:
+                    ax.text(d, e + top * 0.02, h, rotation=90, ha="center", va="bottom", fontsize=7, color="#7b241c")
+            ax.set_ylim(0, top * 1.4)
+            ticks = mdates.AutoDateLocator(minticks=4, maxticks=9)
+            ax.xaxis.set_major_locator(ticks)
+            ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(ticks))
+            ax.axvline(suggested, color="#444", ls="--", lw=1)
+            if box.value:
+                ax.axvline(box.value, color="#d33", lw=2)
+            ax.set_ylabel("stops × trips in the area")
+            ax.set_title("Service on every date", loc="left", fontsize=10)
+            handles = [Patch(color=colours["weekday"], label="weekday"), Patch(color=colours["saturday"], label="Saturday"),
+                       Patch(color=colours["sunday"], label="Sunday"), Patch(facecolor="white", edgecolor="#7b241c", hatch="////", label="public holiday"),
+                       Line2D([], [], color="#444", ls="--", label=f"suggested {suggested}")]
+            if box.value:
+                handles.append(Line2D([], [], color="#d33", lw=2, label=f"chosen {box.value}"))
+            ax.legend(handles=handles, frameon=False, fontsize=8, ncol=6, loc="upper left", bbox_to_anchor=(0, 1.0))
+            for side in ("top", "right"):
+                ax.spines[side].set_visible(False)
+            fig.tight_layout()
+            display(fig)
+            plt.close(fig)
+
+    box.observe(draw, "value")
+    draw()
+
+    class DateChoice(widgets.VBox):
+        @property
+        def value(self):
+            return str(box.value) if box.value else None
+
+    return DateChoice([box, out])
+
+
+def select_columns(groups: dict):
+    """A chooser of the census columns: every group (with what it is) can be ticked as a whole or opened to tick single columns, each with
+    its name, description, unit, census level and the result tables that hold it. Everything starts ticked; a search box filters the
+    columns. Its `.value` is the list of ticked columns (names for `export_results`)."""
+    import html
+
+    import ipywidgets as widgets
+
+    L, small = widgets.Layout, "color:#666;font-size:90%"
+    entries = []   # (column, checkbox, row, searchable text, group key)
+    group_rows = []
+    state = {"busy": False}
+
+    def refresh(key):
+        boxes = [e[1] for e in entries if e[4] == key]
+        on = sum(b.value for b in boxes)
+        box, button, body, label = group_ui[key]
+        state["busy"] = True
+        box.value = on == len(boxes)
+        state["busy"] = False
+        box.description = f"{label} ({on} of {len(boxes)})" if on != len(boxes) else f"{label} ({len(boxes)})"
+
+    group_ui = {}
+    for gname, g in groups.items():
+        rows = []
+        for c in g["columns"]:
+            cb = widgets.Checkbox(value=True, description="", indent=False, layout=L(width="26px", flex="0 0 auto"))
+            facts = " · ".join(x for x in (c["unit"], f"level: {c['level']}" if c["level"] else "", c["source"], f"in: {c['in']}" if c["in"] else "") if x)
+            info = widgets.HTML(f"<b>{html.escape(c['name'])}</b> <code>{html.escape(c['column'])}</code><br>"
+                                f"<span style='{small}'>{html.escape(facts)}</span><br><span style='font-size:90%'>{html.escape(c['description'])}</span>",
+                                layout=L(flex="1 1 auto"))
+            row = widgets.HBox([cb, info], layout=L(margin="2px 0 6px 18px", align_items="flex-start", flex="0 0 auto"))
+            rows.append(row)
+            entries.append((c["column"], cb, row, f"{c['name']} {c['column']} {c['description']} {c['source']}".lower(), gname))
+            cb.observe(lambda ch, key=gname: refresh(key), "value")
+        body = widgets.VBox(rows, layout=L(display="none", max_height="420px", overflow_y="auto", border="1px solid #ddd", padding="4px", margin="2px 0 6px 18px"))
+        box = widgets.Checkbox(value=True, description=f"{gname} ({len(rows)})", indent=False, layout=L(width="360px", flex="0 0 auto"))
+        button = widgets.Button(description="Show columns", layout=L(width="120px"), button_style="")
+        group_ui[gname] = (box, button, body, gname)
+
+        def toggle(_, b=body, btn=button):
+            shown = b.layout.display == "none"
+            b.layout.display = "" if shown else "none"
+            btn.description = "Hide columns" if shown else "Show columns"
+
+        def whole(ch, key=gname):
+            if not state["busy"]:
+                for e in entries:
+                    if e[4] == key and e[2].layout.display != "none":
+                        e[1].value = ch["new"]
+
+        button.on_click(toggle)
+        box.observe(whole, "value")
+        text = widgets.HTML(f"<span style='{small}'>{html.escape(g['description'])}</span>", layout=L(margin="0 0 0 18px"))
+        group_rows.append(widgets.VBox([widgets.HBox([box, button]), text, body]))
+
+    search = widgets.Text(placeholder="Search the columns (name, description, source)", layout=L(width="440px"))
+    tick, untick = widgets.Button(description="Tick all", layout=L(width="90px")), widgets.Button(description="Untick all", layout=L(width="90px"))
+    count = widgets.HTML()
+
+    def set_all(value):
+        for e in entries:
+            if e[2].layout.display != "none":
+                e[1].value = value
+
+    def update_count(*_):
+        count.value = f"<span style='{small}'>{sum(e[1].value for e in entries)} of {len(entries)} columns ticked</span>"
+
+    def filtered(ch):
+        q = search.value.strip().lower()
+        for e in entries:
+            e[2].layout.display = "none" if q and q not in e[3] else ""
+        for key, (box, button, body, _) in group_ui.items():
+            if q:   # open the groups that have matches
+                body.layout.display = "" if any(e[4] == key and e[2].layout.display != "none" for e in entries) else "none"
+                button.description = "Hide columns" if body.layout.display == "" else "Show columns"
+
+    tick.on_click(lambda _: set_all(True))
+    untick.on_click(lambda _: set_all(False))
+    search.observe(filtered, "value")
+    for e in entries:
+        e[1].observe(update_count, "value")
+    update_count()
+
+    class ColumnChoice(widgets.VBox):
+        @property
+        def value(self) -> list:
+            return [e[0] for e in entries if e[1].value]
+
+    return ColumnChoice([widgets.HBox([search, tick, untick, count], layout=L(align_items="center", margin="0 0 8px 0")), *group_rows])
 
 
 def upload_file() -> str:

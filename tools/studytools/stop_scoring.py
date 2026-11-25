@@ -54,12 +54,14 @@ def _route_modes(dirs: Sequence[Path]) -> pl.DataFrame:
     return pl.concat(frames, how="diagonal_relaxed").unique(["route_id", "file_id"], keep="first")
 
 
-def _has_service_on(d: Path, day: date, aoi, group_m: float) -> bool:
+def _has_service_on(d: Path, day: date, aoi, group_m: float, strict: bool = False) -> bool:
     from pyGTFSHandler.feed import Feed
 
     feed = Feed(gtfs_dirs=[str(d)], aoi=aoi, start_date=day, end_date=day, stop_group_distance=group_m)
     if feed.trips.lf.limit(1).collect().height == 0:
         return False
+    if strict:   # the date was chosen by the user: used as it is
+        return True
     # a holiday or a normal day, never a mix: reduced / holiday service on the shared date -> scored alone on the feed's own typical day
     from transitlos.day_check import day_volume_ratio
 
@@ -83,9 +85,11 @@ def score_city_stops(
     stop_group_distance: float = STOP_GROUP_DISTANCE_M,
     stop_table_sink: Optional[list] = None,
     day_type: str = "weekday",
+    strict_date: bool = False,
 ) -> gpd.GeoDataFrame:
     """Scored stops of one city (the `stops.parquet` content): one row per station with `stop_score`, sub-scores, `mode_category`.
-    `day_type`: the analysis day is a working "weekday", a "saturday" or a "sunday"."""
+    `day_type`: the analysis day is a working "weekday", a "saturday" or a "sunday". `strict_date`: the pinned `date_range` date is used
+    as it is: no swap to a feed's own typical day when its volume that day differs (a date chosen by the user)."""
     from pyGTFSHandler.feed import Feed
     from transitlos.stops import pick_analysis_date as _pick
 
@@ -130,7 +134,7 @@ def score_city_stops(
                     _r = day_volume_ratio(d, day)
                 except Exception:  # noqa: BLE001
                     _r = None
-                if _r is not None and not (0.8 <= _r <= 1.25):
+                if _r is not None and not (0.8 <= _r <= 1.25) and not strict_date:
                     day = pick_analysis_date(feed)
             try:
                 single = Feed(gtfs_dirs=[str(d)], aoi=aoi, start_date=day, end_date=day, stop_group_distance=stop_group_distance)
@@ -162,7 +166,7 @@ def score_city_stops(
         in_window, expired = [], []
         for d in dirs:
             try:
-                (in_window if _has_service_on(d, shared, aoi, stop_group_distance) else expired).append(d)
+                (in_window if _has_service_on(d, shared, aoi, stop_group_distance, strict_date) else expired).append(d)
             except Exception as exc:  # noqa: BLE001
                 logger.warning(f"feed {d.name}: could not check service on {shared}: {exc}")
                 expired.append(d)

@@ -9526,6 +9526,7 @@ def run_city_study(
     worldpop_root: Path,
     census_root: Optional[Path] = None,
     date_range: Optional[Union[tuple, dict]] = None,
+    strict_date: bool = False,
     reuse_cached_los: bool = False,
     tile_workers: Optional[int] = 4,
     build_map: bool = True,
@@ -9559,6 +9560,7 @@ def run_city_study(
             usage). Defaults to `city_dir / "uscensus"` (the old, per-city
             location) when not given, for any caller that hasn't been
             updated to pass it explicitly.
+        strict_date: With a pinned `date_range`, use that date as it is (no swap to a feed's own typical day): a date chosen by the user.
         date_range: Optional `(start_date, end_date)` forwarded to GTFS
             loading; strongly recommended once a valid service date is
             known (skips an expensive auto-detection fallback). When
@@ -9652,7 +9654,7 @@ def run_city_study(
         from .stop_scoring import score_city_stops
 
         stops = score_city_stops(
-            _gtfs_dirs(city_dir / "gtfs"), aoi_gdf, per_feed=config.stops_per_feed, date_range=date_range,
+            _gtfs_dirs(city_dir / "gtfs"), aoi_gdf, per_feed=config.stops_per_feed, date_range=date_range, strict_date=strict_date,
             start_time=params.analysis_start_time, end_time=params.analysis_end_time, day_type=params.analysis_day_type,
         )
         stops.to_parquet(stops_path)

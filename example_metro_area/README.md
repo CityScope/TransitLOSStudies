@@ -2,7 +2,7 @@
 
 Transit level of service for one area anywhere, from public data.
 
-- **Notebook:** `example.ipynb` runs in Google Colab ([open it in Colab](https://colab.research.google.com/github/CityScope/TransitLOSStudies/blob/main/example_metro_area/example.ipynb)) or Jupyter. It installs what is missing, lets you choose the area (place name, drawn on a map, or uploaded file), runs the study and downloads the results.
+- **Notebook:** `example.ipynb` runs in Google Colab ([open it in Colab](https://colab.research.google.com/github/CityScope/TransitLOSStudies/blob/main/example_metro_area/example.ipynb)) or Jupyter. Set the place (and the options) in the *Settings* cell, a form in Colab, then Run all: it installs what is missing (a few minutes on the first run, no restart), gets the area, feeds and census, runs the study, shows the interactive map and offers the download. Optional steps, each in its own cell: draw the area on a map or give your own file; untick feeds; set the service date (with a plot of the service on every date); untick groups of census columns; include WorldPop columns. Run all takes the defaults.
 - **Script:** `example.py` holds the same steps. Edit the settings at the top and run `python example.py`.
 
 Settings (top of `example.py`):
@@ -42,3 +42,12 @@ Results (`areas/<name>/<name>_results.zip`):
 - `streets.parquet`: street segments with their transit level of service.
 - `h3_res<N>.parquet`: H3 hexagons at each resolution, with population, level of service and the census columns.
 - `census_<level>.parquet`: the census at its finest level.
+
+Choosing the feeds and the service date (notebook): after the feeds are downloaded they are listed with their agencies, source, stops and trips in the
+area, all ticked (`study.list_feeds` / `ui.select_feeds`). The next step plots the service of the chosen feeds on every date (stops × trips in the
+area, `study.service_dates` / `ui.pick_date`) with a suggested date (the middle of the typical days of the chosen day type within 60 days of today) and a
+date box to use another one. A date you set is used as it is; without one the date is chosen automatically, as in the US study.
+
+Population: with a census whose polygons are small (median area of the finest level at most 1 km²) the census itself provides the population raster
+and WorldPop is not downloaded. Coarser or missing censuses use WorldPop as before.
+With `WORLDPOP = include` the WorldPop columns are added next to a census: the age and sex rasters of the whole country are downloaded once (tens of GB for the USA).

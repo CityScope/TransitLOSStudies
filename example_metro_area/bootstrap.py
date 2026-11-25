@@ -18,9 +18,11 @@ HERE = Path(__file__).resolve().parent
 ENV = Path(os.environ.get("PTLOS_ENV") or Path.home() / ".cache" / "ptlos_env")
 #: import name of each line of requirements.txt, in the same order
 MODULES = ["geohierarchy", "pycensus", "pyGTFSHandler", "UrbanAccessAnalyzer", "transitlos",
-           "rasterio", "folium", "freestiler", "pmtiles", "ipyleaflet", "ipywidgets", "mapclassify", "polars"]
+           "rasterio", "folium", "freestiler", "pmtiles", "anywidget", "ipywidgets", "mapclassify", "polars", "duckdb"]
+#: optional API keys (more feed sources, some censuses); in Colab they are read from its Secrets, anywhere from the environment
+KEYS = ("TRANSITLAND_API_KEY", "NAP_API_KEY", "DESTATIS_GENESIS_TOKEN", "MOBILITY_DATABASE_REFRESH_TOKEN")
 #: what the notebook's own kernel needs for the maps (the study packages are not needed there)
-KERNEL = [("ipyleaflet", "ipyleaflet>=0.19"), ("ipywidgets", "ipywidgets>=8")]
+KERNEL = [("anywidget", "anywidget>=0.9"), ("ipywidgets", "ipywidgets>=8"), ("matplotlib", "matplotlib>=3.7")]
 
 
 def _requirements() -> list:
@@ -72,6 +74,20 @@ class Study:
         return lambda *args, **kwargs: call(name, *args, **kwargs)
 
 
+def _colab_secrets() -> None:
+    """Keys saved as Colab Secrets (the key icon in the sidebar) become environment variables, which the study process inherits."""
+    try:
+        from google.colab import userdata
+    except ImportError:
+        return
+    for name in KEYS:
+        if not os.environ.get(name):
+            try:
+                os.environ[name] = userdata.get(name)
+            except Exception:  # noqa: BLE001 -- no such secret, or no access granted: the source is skipped
+                pass
+
+
 def setup() -> Study:
     """Make the notebook ready (the map packages; the study packages come with the first call) and return the study."""
     missing = [req for mod, req in KERNEL if importlib.util.find_spec(mod) is None]
@@ -84,5 +100,6 @@ def setup() -> Study:
         pass
     else:
         output.enable_custom_widget_manager()
+    _colab_secrets()
     python()
     return Study()
