@@ -681,6 +681,28 @@ def export_results(aoi: gpd.GeoDataFrame, columns: Sequence[str], name: Optional
 
 
 # ---------------------------------------------------------------- run
+def _share_worldpop_downloads(area_dir: Path, shared: Path) -> None:
+    """The country-wide WorldPop age and sex rasters (tens of GB) are kept once in `shared`, for every area: the area's
+    `worldpop_demographic/raw_age_structures` becomes a link to it, and what an earlier run left there is moved over."""
+    link = Path(area_dir) / "worldpop_demographic" / "raw_age_structures"
+    shared.mkdir(parents=True, exist_ok=True)
+    link.parent.mkdir(parents=True, exist_ok=True)
+    if link.is_symlink():
+        return
+    if link.is_dir():
+        for item in link.iterdir():
+            target = shared / item.name
+            if target.exists():   # the same country already shared: merge the folders, keeping what is there
+                for f in item.rglob("*"):
+                    if f.is_file() and not (shared / f.relative_to(link)).exists():
+                        (shared / f.relative_to(link)).parent.mkdir(parents=True, exist_ok=True)
+                        shutil.move(str(f), shared / f.relative_to(link))
+            else:
+                shutil.move(str(item), target)
+        shutil.rmtree(link)
+    link.symlink_to(shared, target_is_directory=True)
+
+
 def run(aoi: gpd.GeoDataFrame, name: Optional[str] = None, day: str = DAY, start_time: str = START_TIME, end_time: str = END_TIME,
         feeds=FEEDS, feed_sources: Optional[Sequence[str]] = FEED_SOURCES, output_dir: Path = OUTPUT_DIR,
         cache_dir: Optional[str] = CACHE_DIR, build_map: bool = BUILD_MAP, feed_names: Optional[Sequence[str]] = None,
@@ -732,6 +754,8 @@ def run(aoi: gpd.GeoDataFrame, name: Optional[str] = None, day: str = DAY, start
     census_dir = study_cache.pycensus_dir(cache, "example")
     population_dir = area_dir / "population"
     tif = population_dir / f"{name}_census_population.tif"
+    if config.worldpop_layers:   # the age and sex rasters are shared by every area of the country
+        _share_worldpop_downloads(area_dir, Path(study_cache.worldpop_dir(cache)) / "raw_age_structures")
     if config.uses_census and not config.worldpop_layers and census_population_raster(config, aoi, census_dir, tif):   # a fine census: no WorldPop
         config, wp_root = dataclasses.replace(config, worldpop_filename=tif.name), population_dir
     else:
