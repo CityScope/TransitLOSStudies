@@ -9,6 +9,7 @@ import codecs
 import importlib.util
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -101,5 +102,7 @@ def setup() -> Study:
     else:
         output.enable_custom_widget_manager()
     _colab_secrets()
+    if "google.colab" in sys.modules and shutil.which("pdftotext") is None:   # some election results are published as PDF tables
+        subprocess.run(["apt-get", "install", "-y", "-qq", "poppler-utils"], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     python()
     return Study()

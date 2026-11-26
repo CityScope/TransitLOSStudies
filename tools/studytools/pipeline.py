@@ -3765,21 +3765,25 @@ def _us_national_nyt_fill(tracts, aoi, states, cache_dir):
     have = f"{tag}_left_share"
     if have in tracts.columns and tracts[have].notna().all():
         return tracts
-    pop = acs5.load(aoi=aoi, states=list(states) if states else None, level="tract", cache_dir=str(cache_dir))
-    pc = next((c for c in ("population", "acs5_population") if c in pop.columns), None)
+    from pycensus.census.countries.usa import dhc
+
+    miss = tracts[have].isna() if have in tracts.columns else pd.Series(True, index=tracts.index)
+    want = set(tracts.loc[miss, "GEOID"].astype(str))
+    # votes are spread over the census BLOCKS (their decennial population: the finest count there is), then summed to the tracts
+    blocks = dhc.load(aoi=aoi, states=list(states) if states else None, level="block", cache_dir=str(cache_dir))
+    pc = next((c for c in ("dhc_population", "population") if c in blocks.columns), None)
     if pc is None:
         return tracts
-    miss = tracts[have].isna() if have in tracts.columns else pd.Series(True, index=tracts.index)
-    tgt = tracts.loc[miss, ["GEOID", "geometry"]].merge(pop[["GEOID", pc]], on="GEOID", how="left").rename(columns={pc: "population"})
+    blocks = blocks[blocks["GEOID"].astype(str).str[:11].isin(want)][["GEOID", pc, "geometry"]].rename(columns={pc: "population"})
     parts = []
-    for fips in sorted({str(g)[:2] for g in tgt["GEOID"]}):
-        sub = tgt[tgt["GEOID"].astype(str).str[:2] == fips].reset_index(drop=True)
+    for fips in sorted({str(g)[:2] for g in blocks["GEOID"]}):
+        sub = blocks[blocks["GEOID"].astype(str).str[:2] == fips].reset_index(drop=True)
         prec = nyt2024.load_state_precincts(fips, cache_dir=str(Path(cache_dir) / "elections"))
-        v = nyt2024.allocate_to_polygons(gpd.GeoDataFrame(sub, geometry="geometry", crs=tracts.crs), prec, pop_col="population")
+        v = nyt2024.allocate_to_polygons(gpd.GeoDataFrame(sub, geometry="geometry", crs=blocks.crs), prec, pop_col="population")
         if v is None:
             continue
-        v.index = sub["GEOID"].to_numpy()
-        parts.append(v)
+        v.index = sub["GEOID"].astype(str).str[:11].to_numpy()
+        parts.append(v.groupby(level=0).sum(min_count=1))
     if not parts:
         return tracts
     v = pd.concat(parts)
@@ -3967,6 +3971,8 @@ _FALLBACK_MAX_M = 600.0   # a census polygon with no cell centroid inside is att
 _GRID_RESCALE_WARN = 0.05   # = transitlos.grid_rules.GridRules.rescale_warn_share
 #: built floor area per H3 cell of the current city (`_set_floor_area`): {"resolution", "cells" (sorted uint64), "res", "non" (m2)}
 _FLOOR_AREA: dict = {}
+#: the population raster of the current run (`_prune_cells_without_people` reads its pixel under each cell when there is no census unit)
+_POP_RASTER: dict = {}
 
 
 def _set_floor_area(config, aoi_gdf, resolution: int, cache_dir) -> None:
@@ -4264,6 +4270,15 @@ def _join_polygon_stats(
         h3_row, p_row = g_row[on_grid], poly_row[on_grid]
         n_unmatched = int((n_in == 0).sum())
 
+        pop_src = next((c for c in census_gdf.columns if c.lower().endswith("population") and not c.lower().startswith(("female", "male", "adult", "under", "over"))), None)
+        if pop_src is not None:   # the people of the census unit a cell sits in: a cell exists only inside a unit holding at least one person (`_prune_cells_without_people`)
+            src = pd.to_numeric(census_gdf[pop_src], errors="coerce").to_numpy(dtype=float)[p_row]
+            if "_source_population" not in h3_grid.columns:
+                h3_grid["_source_population"] = np.nan
+            cur = h3_grid["_source_population"].to_numpy(dtype=float)
+            fill = np.isnan(cur[h3_row])
+            cur[h3_row[fill]] = src[fill]
+            h3_grid["_source_population"] = cur
         for col in census_gdf.columns:
             # `pycensus` renames canonical columns to their bare name (e.g. `inegi_population` -> `population`); this module still works with the
             # prefixed names (`keep_columns`, `SHARE_COLUMNS`, ...), and the prefixed key also keeps a bare `population` from colliding with the
@@ -6782,6 +6797,54 @@ _RESAMPLE_SKIP = {
 }
 
 
+def _raster_value_at_cells(tif, cell_ids) -> np.ndarray:
+    """The value of the raster pixel under the centre of each H3 cell (NaN outside the raster)."""
+    import h3ronpy
+    import rasterio
+    from h3ronpy.vector import cells_to_coordinates
+
+    ids = np.asarray(h3ronpy.cells_parse([str(c) for c in cell_ids])).astype(np.uint64)
+    co = cells_to_coordinates(ids)
+    xy = list(zip(np.asarray(co.column("lng")), np.asarray(co.column("lat"))))
+    with rasterio.open(tif) as src:
+        v = np.fromiter((x[0] for x in src.sample(xy, masked=True)), dtype=float, count=len(xy)) if src.nodata is None else \
+            np.array([float(x[0]) if not np.ma.is_masked(x[0]) else np.nan for x in src.sample(xy, masked=True)])
+    return v
+
+
+def _prune_cells_without_people(h3_grid, config):
+    """An H3 cell exists only if it holds people (or jobs). With building footprints (`_FLOOR_AREA`) the people are those the census assigns to
+    the buildings of the cell (any residents or jobs at all). Without footprints (no cadaster and no GBA for the area) the cell needs at least
+    one person in the SOURCE unit it falls in: the census unit (block, ...) under its centre, else the population raster pixel under it (not
+    the cell's own, fractional share). `CityConfig.keep_cells_without_people` switches it off (maps with the GBA over- and underestimation columns)."""
+    internal = [c for c in ("_source_population",) if c in h3_grid.columns]
+    if config.keep_cells_without_people:
+        return h3_grid.drop(columns=internal)
+    buildings = bool(_FLOOR_AREA.get("resolution")) and config.uses_census
+    if buildings:
+        pc = _census_population_column(h3_grid)
+        jobs = [c for c in h3_grid.columns if c in JOBS_COLUMN_CANDIDATES or c.startswith("lodes_wac_jobs")]
+        cols = [c for c in ([pc] if pc else []) + jobs if c in h3_grid.columns]
+        if not cols:
+            return h3_grid.drop(columns=internal)
+        has = np.zeros(len(h3_grid), bool)
+        for c in cols:
+            has |= np.nan_to_num(pd.to_numeric(h3_grid[c], errors="coerce").to_numpy(float)) > 0
+        how = "after the buildings' spread"
+    else:
+        if "_source_population" in h3_grid.columns:
+            src = pd.to_numeric(h3_grid["_source_population"], errors="coerce").to_numpy(float)
+            how = "no building footprints: the census unit under the cell holds under 1 person"
+        elif _POP_RASTER.get("path") and Path(_POP_RASTER["path"]).is_file():
+            src = _raster_value_at_cells(_POP_RASTER["path"], h3_grid["h3_cell"].to_numpy())
+            how = "no building footprints: the raster pixel under the cell holds under 1 person"
+        else:
+            return h3_grid.drop(columns=internal)
+        has = np.nan_to_num(src) >= 1.0
+    print(f"[pipeline:{config.key}] cells holding residents or jobs: {int(has.sum()):,} of {len(h3_grid):,} ({how}; the others dropped)", flush=True)
+    return h3_grid[has].drop(columns=internal).reset_index(drop=True)
+
+
 def _resample_h3_density_1km(census_gdf: gpd.GeoDataFrame, h3_grid: gpd.GeoDataFrame, populated_mask) -> gpd.GeoDataFrame:
     """The neighbourhood densities (500 m / 1 / 2 / 3 km, transitlos.neighbourhood.DENSITY_COLUMNS) on census polygons: the residents-weighted
     mean of their H3 cells' densities (the densities the polygon's residents live in), from area-weighted sums of density x residents and of
@@ -6814,6 +6877,49 @@ def _resample_h3_density_1km(census_gdf: gpd.GeoDataFrame, h3_grid: gpd.GeoDataF
     return census_gdf.merge(r[["_geo_idx"] + cols], on="_geo_idx", how="left")
 
 
+def _vote_weight_column(col: str, columns) -> Optional[str]:
+    """The total-votes column that weights an election share column: `elec_national_left_share` -> `elec_national_total_votes`,
+    `2024_president_democrat_share` -> `2024_president_total_votes` (None when there is none)."""
+    for suffix in ("_left_share", "_right_share", "_other_share", "_democrat_share", "_republican_share", "_turnout_rate"):
+        if col.endswith(suffix) or ("_party_" in col and col.endswith("_share")):
+            head = col.split("_party_")[0] if "_party_" in col else col[: -len(suffix)]
+            w = f"{head}_total_votes"
+            return w if w in columns else None
+    return None
+
+
+def _resample_h3_vote_shares(census_gdf: gpd.GeoDataFrame, h3_grid: gpd.GeoDataFrame, populated_mask) -> gpd.GeoDataFrame:
+    """Election shares (left / right / other, per party) that the H3 cells hold but this census layer lacks: the votes-weighted mean of the cells
+    in each polygon (a share of votes is averaged with the votes as weights; the total-votes counts are resampled as any count)."""
+    pairs = {c: _vote_weight_column(c, h3_grid.columns) for c in h3_grid.columns
+             if c not in census_gdf.columns and c in _RATE_COLUMNS and pd.api.types.is_numeric_dtype(h3_grid[c])}
+    pairs = {c: w for c, w in pairs.items() if w and h3_grid[c].notna().any()}
+    if not pairs:
+        return census_gdf
+    cols = list(pairs)
+    cells = h3_grid.loc[populated_mask, [*cols, *set(pairs.values()), "geometry"]]
+    if len(cells) > _RESAMPLE_MAX_CELLS or not len(cells):
+        return census_gdf
+    data = {}
+    for i, c in enumerate(cols):
+        w = pd.to_numeric(cells[pairs[c]], errors="coerce").fillna(0.0)
+        v = pd.to_numeric(cells[c], errors="coerce")
+        data[f"_vw{i}"] = (v.fillna(0.0) * w).where(v.notna(), 0.0)
+        data[f"_vd{i}"] = w.where(v.notna(), 0.0)
+    cells = gpd.GeoDataFrame(data, geometry=cells.geometry.to_numpy(), crs=h3_grid.crs).to_crs(census_gdf.crs)
+    hierarchy = GeoHierarchy(crs=census_gdf.crs)
+    hierarchy.add_level("_census_map_level", census_gdf[["_geo_idx", "geometry"]].copy(), id_col="_geo_idx")
+    sums = list(data)
+    hierarchy.add_vector_data(cells, level="_census_map_level", columns=sums, agg={k: Sum(geoweighted=True) for k in sums}, fill_null=None,
+                              intersection_mode="exact")
+    id_col = hierarchy.id_cols["_census_map_level"]
+    r = hierarchy["_census_map_level"][[id_col] + sums].rename(columns={id_col: "_geo_idx"})
+    for i, c in enumerate(cols):
+        r[c] = np.where(r[f"_vd{i}"] > 0, r[f"_vw{i}"] / r[f"_vd{i}"].where(r[f"_vd{i}"] > 0), np.nan)
+    print(f"[pipeline] election shares on census polygons (votes-weighted mean of their cells): {cols}")
+    return census_gdf.merge(r[["_geo_idx"] + cols], on="_geo_idx", how="left")
+
+
 def _resample_missing_h3_counts(
     census_gdf: gpd.GeoDataFrame, h3_grid: gpd.GeoDataFrame, populated_mask
 ) -> gpd.GeoDataFrame:
@@ -6828,6 +6934,7 @@ def _resample_missing_h3_counts(
     from transitlos.map.build import absolute_fields
 
     census_gdf = _resample_h3_density_1km(census_gdf, h3_grid, populated_mask)
+    census_gdf = _resample_h3_vote_shares(census_gdf, h3_grid, populated_mask)
     # 2026-11-15: a column the layer has but leaves blank everywhere (an ACS table not published at this level, e.g. nativity on block
     # groups) is filled from the cells too -- they hold the coarser level's values
     blank = [c for c in census_gdf.columns if c in h3_grid.columns and pd.to_numeric(census_gdf[c], errors="coerce").isna().all()]
@@ -9228,6 +9335,7 @@ def refresh_census_only(
     except Exception as exc:  # pragma: no cover - LODES availability varies by state/year
         print(f"[pipeline] skipping LODES jobs join: {exc}")
     h3_grid = _rename_canonical_columns(h3_grid)
+    h3_grid = _prune_cells_without_people(h3_grid, config)
 
     if config.exclude_cells_touching_country_border:
         h3_grid = _filter_cells_touching_country_border(
@@ -9713,6 +9821,7 @@ def run_city_study(
     # cheap and already resumable via `reuse_cached_los`'s stops/access
     # caching above).
     pop_access_checkpoint_path = city_dir / "results" / "pop_access_h3_checkpoint.parquet"
+    _POP_RASTER["path"] = str(worldpop_root / config.worldpop_filename)
     if not config.uses_census and pop_access_checkpoint_path.is_file():
         print(f"[pipeline:{config.key}] loading cached pop_access_h3 checkpoint (skipping edge join + worldpop global-schema join)")
         pop_access_h3 = pl.read_parquet(pop_access_checkpoint_path)
@@ -9812,6 +9921,7 @@ def run_city_study(
         # that ACS/DHC/LODES (or the equivalent non-US source) have all
         # landed their prefixed columns on `h3_grid`.
         h3_grid = _rename_canonical_columns(h3_grid)
+        h3_grid = _prune_cells_without_people(h3_grid, config)
         _lap("canonical column rename")
 
         if config.exclude_cells_touching_country_border:

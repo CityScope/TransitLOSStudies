@@ -27,6 +27,7 @@ or from Python / the notebook:
 from __future__ import annotations
 
 import json
+import os
 import math
 import re
 import shutil
@@ -102,7 +103,7 @@ API_KEYS = {
                           "MOBILITY_DATABASE_REFRESH_TOKEN"),
     "us_census": ("the US Census Bureau API (US census data)", "https://api.census.gov/data/key_signup.html (a free key, sent by email)",
                   "US_CENSUS_API_KEY"),
-    "destatis_genesis": ("the German census (Destatis GENESIS-Online)", "https://www.destatis.de/EN/Service/OpenData/api-webservice.html (register a free GENESIS-Online account, then create a token)",
+    "destatis_genesis": ("the German census (Destatis GENESIS-Online)", "https://genesis.destatis.de/datenbank/online/statistics#modal=web-service-api (register a free GENESIS-Online account, then create a token)",
                          "DESTATIS_GENESIS_TOKEN"),
 }
 
@@ -236,7 +237,7 @@ def keys_needed(aoi: gpd.GeoDataFrame, sources: Sequence[str]) -> list:
             for n in names:
                 need.setdefault(n, []).append(src)
     return [{"name": n, "what": API_KEYS[n][0], "url": API_KEYS[n][1].split(" ")[0], "help": API_KEYS[n][1], "env": API_KEYS[n][2],
-             "have": bool(resolve_api_key(n, API_KEYS[n][2])), "sources": src} for n, src in need.items()]
+             "have": bool(resolve_api_key(n, API_KEYS[n][2])), "sources": src, "optional": False, "required": True} for n, src in need.items()]
 
 
 #: the key each feed source needs, and whether it is optional (the source then still works from its public catalog)
@@ -254,7 +255,7 @@ def feed_keys_needed(aoi: gpd.GeoDataFrame, sources: Optional[Sequence[str]] = N
         if src in FEED_KEYS:
             n, optional = FEED_KEYS[src]
             out.append({"name": n, "what": API_KEYS[n][0], "url": API_KEYS[n][1].split(" ")[0], "help": API_KEYS[n][1], "env": API_KEYS[n][2],
-                        "have": bool(resolve_api_key(n, API_KEYS[n][2])), "sources": [src], "optional": optional})
+                        "have": bool(resolve_api_key(n, API_KEYS[n][2])), "sources": [src], "optional": optional, "required": False})
     return out
 
 
@@ -1055,6 +1056,7 @@ def run(aoi: gpd.GeoDataFrame, name: Optional[str] = None, day: str = DAY, start
         _share_worldpop_downloads(area_dir, Path(study_cache.worldpop_dir(cache)) / "raw_age_structures")
     if config.uses_census and not config.worldpop_layers and "worldpop_grid" not in chosen and census_population_raster(config, aoi, census_dir, tif):   # a fine census: no WorldPop
         config, wp_root = dataclasses.replace(config, worldpop_filename=tif.name), population_dir
+        os.environ["PYCENSUS_POPULATION_RASTER"] = str(tif)   # the census raster is also the surface the election results are spread over (no WorldPop)
     else:
         worldpop_raster(config.country, study_cache.worldpop_dir(cache))
         wp_root = study_cache.worldpop_dir(cache)
@@ -1068,6 +1070,9 @@ def run(aoi: gpd.GeoDataFrame, name: Optional[str] = None, day: str = DAY, start
     if not got:
         raise RuntimeError("No GTFS feed with stops in this area. Give your own feeds with FEEDS (a folder or a list).")
     pinned = None if service_date is None else (_date.fromisoformat(str(service_date)),) * 2
+    if pinned is not None:   # the stop table and the other steps that re-score the feeds read the date of the run from here (not a date of their own)
+        (area_dir / "results").mkdir(parents=True, exist_ok=True)
+        (area_dir / "results" / "analysis_dates.json").write_text(json.dumps({p.name: pinned[0].isoformat() for p in (area_dir / "gtfs").iterdir() if p.is_dir()}))
 
     run_city_study(city_dir=area_dir, config=config, params=params, streets_root=study_cache.osm_dir(cache),
                    worldpop_root=wp_root, census_root=census_dir,

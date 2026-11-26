@@ -160,6 +160,10 @@ class CityConfig:
     # blocks stay (they give the population of every block) and so does the building data. The example study sets it from the sources the
     # user chose, to save download time.
     census_skip: tuple[str, ...] = ()
+    # False (normal maps): an H3 cell exists only if, after the census is spread over the buildings (`_set_floor_area`), it holds residents or
+    # jobs. True: cells near a street stay even with none (maps with the GBA over- and underestimation columns, e.g. the city study, where a built
+    # cell without census population is the point).
+    keep_cells_without_people: bool = False
     # True: the map has only the finest H3 resolution (hexagons and circles) and the finest census level, no street or development
     # layers -- light enough to build and open anywhere (the example study, e.g. in Colab). The downloads keep every level.
     map_finest_only: bool = False

@@ -10,6 +10,11 @@ from pathlib import Path
 # pandas warns when an optional speed-up library (bottleneck, numexpr) is older than it likes, as Colab's are; the results do not change
 warnings.filterwarnings("ignore", message=r"Pandas requires version .* or newer of '.*' \(version .* currently installed\)", category=UserWarning)
 
+# the run prints thousands of harmless library warnings (fragmented frames, centroids in degrees, divisions by zero in shares): left out of the notebook's output
+warnings.filterwarnings("ignore", message=r"DataFrame is highly fragmented")
+warnings.filterwarnings("ignore", message=r"Geometry is in a geographic CRS")
+warnings.filterwarnings("ignore", category=RuntimeWarning, message=r"(divide by zero|invalid value|overflow) encountered")
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 

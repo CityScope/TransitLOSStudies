@@ -318,6 +318,36 @@ def ask_keys(study, aoi, source_choice=None, feeds=None):
     return box
 
 
+def ensure_keys(study, aoi, sources=None, feeds=None, tries: int = 3) -> bool:
+    """Stop and ask, in the cell's own output, for every API key still missing, then go on. The census sources in `sources` (keys of
+    `census_sources`) or the feed databases in `feeds` decide which keys. A key the census cannot do without asks again until it is given;
+    a feed key can be skipped with Enter (that database is then left out). A key typed is checked where a check exists and saved for good in
+    `~/.config/ptlos/api_keys.json`. Returns True when nothing required is missing."""
+    import getpass
+
+    found = study.keys_needed(aoi, sources) if sources is not None else study.feed_keys_needed(aoi, feeds or None)
+    ok = True
+    for k in found:
+        if k["have"]:
+            continue
+        print(f"\nAn API key is needed: {k['what']} (for {', '.join(k['sources'])}).\nGet one for free at {k['url']}", flush=True)
+        for attempt in range(tries):
+            key = getpass.getpass("Paste the key here" + ("" if k.get("required") else " (or press Enter to skip)") + ": ").strip()
+            if not key:
+                if k.get("required") and attempt < tries - 1:
+                    print("This key is needed to continue.", flush=True)
+                    continue
+                break
+            res = study.save_key(k["name"], key)
+            print(res["message"], flush=True)
+            if res["ok"]:
+                k["have"] = True
+                break
+        if not k["have"] and k.get("required"):
+            ok = False
+    return ok
+
+
 def select_candidates(candidates: list):
     """The feeds the sources list for the area, from their metadata, before anything is downloaded: tick the ones to download. Those that
     probably serve the area start ticked. Its `.value` is the list of keys to give to `list_feeds(selected=...)` (None without candidates)."""

@@ -200,3 +200,7 @@ CITY_CONFIGS: dict[str, CityConfig] = {
         worldpop_filename="chl_pop_2025_CN_100m_R2025A_v1.tif",
     ),
 }
+
+
+# the city study shows the GBA over- and underestimation of the population: cells with buildings and no census population stay
+CITY_CONFIGS = {k: __import__("dataclasses").replace(v, keep_cells_without_people=True) for k, v in CITY_CONFIGS.items()}
