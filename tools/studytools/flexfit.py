@@ -377,3 +377,145 @@ def refit_levels(m: FlexModel, t: Tensors, w, X=None, A=None, free=("alpha", "lk
             A = m2.unit_access(t)
     fit(m2, t, w, X, A=A, steps=steps, lr=0.05, polish=40)
     return m2
+
+
+# ================================================================================================================================ the smooth model
+#: steepness ranges of the smooth model's curves: wide enough for a gentle or a quick decay, narrow enough that no curve becomes a step
+KH_RANGE, KV_RANGE, KW_RANGE = (0.5, 3.0), (0.5, 3.0), (0.8, 4.0)
+V_TOP_KMH = 100.0   # the speed curve is 1 here (item speeds above it count as this)
+SMOOTH_SPEED_PARAMS = ("lv50", "xv")   # frozen after the speed-first stage
+
+
+def _bounded(x, lo_hi):
+    return lo_hi[0] + (lo_hi[1] - lo_hi[0]) * torch.sigmoid(x)
+
+
+class SmoothModel(FlexModel):
+    """The model for a ranking of areas (city science revision, 2026-11-25). As `FlexModel`, with:
+
+      * smooth curves, all log-logistic in the log of their argument with a bounded steepness: headway H (1 at the minimum headway, flat below
+        it), speed S (increasing, 1 at 100 km/h), walking W (1 at the floor, flat below it; its slope does not depend on the service)
+      * modes that cannot be out of order: rail = 1, tram = rail * a factor below 1, bus = tram * a factor below 1
+      * the unit's service term is the population-weighted MEAN OF THE CELL SCORES  s_c = log(1 + A_c / eps)  over its cells (the score is
+        computed per H3 cell, then averaged over whatever geometry the units are), not the log of the mean access
+      * link     logit p = alpha_g + b_g * s_u + X delta     (b_g = 1 unless the per-area slope is freed)
+    The score of a place for a ranking is  100 * s / P95(s)  with the shared curves and eps and no area-specific term.
+    """
+
+    def __init__(self, n_group: int, n_ctrl: int = 0, floor_m: float = walk_floor_m(11), no_mode: bool = False, slope_per_group: bool = False,
+                 tram_mid: bool | None = None):
+        torch.nn.Module.__init__(self)
+        self.no_mode, self.tram_mid, self.slope_norm, self.floor_m = bool(no_mode), False, False, float(floor_m)
+        P = lambda *v: torch.nn.Parameter(torch.tensor(v, dtype=torch.float32))  # noqa: E731
+        self.lh50, self.xh = P(math.log(10.0)), P(0.0)
+        self.lv50, self.xv = P(math.log(20.0)), P(0.0)
+        self.l50w, self.xw = P(math.log(500.0)), P(0.0)
+        self.lmode = P(1.0, 0.5)   # tram = sigmoid(a) of rail, bus = sigmoid(b) of tram
+        if no_mode:
+            self.lmode.requires_grad_(False)
+        self.alpha = torch.nn.Parameter(torch.full((n_group,), -2.0, dtype=torch.float64))
+        self.lkappa = torch.nn.Parameter(torch.full((n_group,), math.log(5.0), dtype=torch.float64))
+        self.leps = P(math.log(0.05))
+        self.lslope = torch.nn.Parameter(torch.zeros(n_group))
+        self.lslope.requires_grad_(slope_per_group)
+        self.delta = torch.nn.Parameter(torch.zeros(n_ctrl, dtype=torch.float64))
+
+    def kh(self):
+        return _bounded(self.xh, KH_RANGE)
+
+    def kv(self):
+        return _bounded(self.xv, KV_RANGE)
+
+    def kw(self):
+        return _bounded(self.xw, KW_RANGE)
+
+    def logH(self, h):
+        f = lambda x: _ll(self.kh() * (torch.log(x) - self.lh50))  # noqa: E731
+        return f(h.clamp(min=H_FLOOR_MIN)) - f(torch.tensor(H_FLOOR_MIN, device=h.device))
+
+    def logS(self, v):
+        f = lambda x: _ll(self.kv() * (self.lv50 - torch.log(x)))  # noqa: E731   increasing in v
+        return f(v.clamp(min=0.5, max=V_TOP_KMH)) - f(torch.tensor(V_TOP_KMH, device=v.device))
+
+    def logW(self, d, h=None, v=None):
+        f = lambda x: _ll(self.kw() * (torch.log(x) - self.l50w))  # noqa: E731
+        return f(d.clamp(min=self.floor_m)) - f(torch.tensor(self.floor_m, device=d.device))
+
+    def lm(self):
+        z = torch.zeros(1, device=self.lmode.device)
+        if self.no_mode:
+            return torch.zeros(3, device=self.lmode.device)
+        tram = Fn.logsigmoid(self.lmode[:1])
+        return torch.cat([tram + Fn.logsigmoid(self.lmode[1:2]), tram, z])
+
+    def cell_score(self, t):
+        return torch.log1p(self.cell_access(t) / torch.exp(self.leps))
+
+    def unit_access(self, t):
+        """The unit's service term: the population-weighted mean of its cells' scores (cells without stops score 0)."""
+        return torch.zeros(t.n_unit, device=t.dev).index_add(0, t.cell_unit, t.cell_pop * self.cell_score(t)) / t.unit_pop
+
+    def service_term(self, S, group):
+        return (torch.exp(self.log_slopes())[group] * S).double()
+
+    def params(self) -> dict:
+        g = lambda p: p.detach().cpu().double().numpy().round(5).tolist()  # noqa: E731
+        with torch.no_grad():
+            H = {h: float(torch.exp(self.logH(torch.tensor([float(h)])))) for h in (3, 5, 10, 15, 20, 30, 60)}
+            S = {v: float(torch.exp(self.logS(torch.tensor([float(v)])))) for v in (5, 10, 15, 20, 30, 50, 80)}
+            W = {d: float(torch.exp(self.logW(torch.tensor([float(d)])))) for d in (200, 400, 600, 800, 1200, 1600)}
+        return {"h50_min": math.exp(self.lh50.item()), "kh": float(self.kh()), "v50_kmh": math.exp(self.lv50.item()), "kv": float(self.kv()),
+                "w50_m": math.exp(self.l50w.item()), "kw": float(self.kw()), "mode": dict(zip(MODES, [math.exp(x) for x in g(self.lm())])),
+                "eps": math.exp(self.leps.item()), "alpha": g(self.alpha), "kappa": [math.exp(x) for x in g(self.lkappa)],
+                "slope": [math.exp(x) for x in g(self.log_slopes())], "delta": g(self.delta), "curve_H": H, "curve_S": S, "curve_W": W,
+                "walk_floor_m": self.floor_m}
+
+
+def randomize_smooth(m: SmoothModel, rng: np.random.Generator):
+    """A random start of the smooth model's curve parameters (wide ranges, no literature values)."""
+    with torch.no_grad():
+        m.lh50.fill_(math.log(rng.uniform(4, 40))); m.xh.fill_(float(rng.normal(0, 1.5)))
+        m.lv50.fill_(math.log(rng.uniform(10, 50))); m.xv.fill_(float(rng.normal(0, 1.5)))
+        m.l50w.fill_(math.log(rng.uniform(200, 1500))); m.xw.fill_(float(rng.normal(0, 1.5)))
+        m.leps.fill_(math.log(rng.uniform(0.01, 0.3)))
+
+
+def fit_sequence_smooth(t: Tensors, w, X=None, n_ctrl=0, floor_m=walk_floor_m(11), starts=3, steps=1500, seed=0, slope_per_group=False,
+                        slope_norm=False, log=None, fixed: dict | None = None):
+    """Speed first, then mode (the study's rule) for the smooth model: stage 1 without mode factors from `starts` starts (best kept), stage 2
+    from it with the speed curve frozen and the modes free. `slope_norm`: the area slopes' geometric mean held at 1 (the curves then carry the
+    size of the service effect of the average area). `fixed`: parameters held at the given values in both stages (a sensitivity test, e.g. a curve
+    taken from another fit). Returns (model, {"stage1": loss, "stage2": loss})."""
+
+    def hold(m):
+        with torch.no_grad():
+            for n, v in (fixed or {}).items():
+                getattr(m, n).fill_(v)
+        m.freeze(tuple(fixed or ()))
+
+    rng = np.random.default_rng(seed)
+    best = None
+    for s in range(starts):
+        m = SmoothModel(t.n_group, n_ctrl, floor_m, no_mode=True, slope_per_group=slope_per_group).to(t.dev)
+        m.slope_norm = bool(slope_norm and slope_per_group)
+        if s:
+            randomize_smooth(m, rng)
+        hold(m)
+        L = fit(m, t, w, X, steps=steps)
+        if log:
+            log(f"  stage 1 start {s}: loss {L:.6f}")
+        if best is None or L < best[0]:
+            best = (L, m)
+    L1, m1 = best
+    m2 = SmoothModel(t.n_group, n_ctrl, floor_m, no_mode=False, slope_per_group=slope_per_group).to(t.dev)
+    m2.load_state_dict({k: v for k, v in m1.state_dict().items() if k != "lmode"}, strict=False)
+    m2.freeze(SMOOTH_SPEED_PARAMS)
+    hold(m2)
+    m2.slope_norm = bool(slope_norm and slope_per_group)
+    L2 = fit(m2, t, w, X, steps=steps)
+    if log:
+        log(f"  stage 2 (speed frozen, mode free): loss {L2:.6f}")
+    with torch.no_grad():
+        m2.lslope.copy_(m2.log_slopes())
+    m2.slope_norm = False
+    return m2, {"stage1": L1, "stage2": L2}

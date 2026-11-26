@@ -9797,7 +9797,8 @@ def run_city_study(
         )
         _lap("census ACS join")
         print(f"[pipeline:{config.key}] joining decennial race/ethnicity attributes")
-        h3_grid = _join_polygon_stats_lightweight(_join_race, h3_grid, aoi_gdf, config.census_states, census_dir, country=config.country)
+        if "dhc" not in config.census_skip:
+            h3_grid = _join_polygon_stats_lightweight(_join_race, h3_grid, aoi_gdf, config.census_states, census_dir, country=config.country)
         _lap("census DHC race join")
         print(f"[pipeline:{config.key}] joining LODES WAC jobs-by-workplace counts")
         try:

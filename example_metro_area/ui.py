@@ -207,7 +207,7 @@ def show_area(area: dict):
 
 
 def select_sources(catalog: list):
-    """The census data sources, to tick BEFORE the run: only the ticked ones are downloaded (locked ones are always needed). One line each: the
+    """The census data sources, to tick BEFORE the run: only the ticked ones are downloaded; nothing is locked: unticking the census population ticks WorldPop's grid for it. One line each: the
     source, what it holds, and what it costs. Its `.value` is the list of ticked keys, for `run(census_sources=...)`."""
     import html
 
@@ -216,13 +216,23 @@ def select_sources(catalog: list):
     L, grey = widgets.Layout, "color:#777;font-size:11px"
     rows, boxes = [], []
     for r in catalog:
-        cb = widgets.Checkbox(value=bool(r["default"]), disabled=bool(r["required"]), description=r["title"], indent=False, layout=L(width="300px", flex="0 0 auto", margin="0"))
-        text = r["description"] + (f" <i>{r['note']}.</i>" if r["note"] else "") + (" <i>Always used.</i>" if r["required"] else "")
+        cb = widgets.Checkbox(value=bool(r["default"] or r.get("forced")), disabled=bool(r.get("forced")), description=r["title"], indent=False, layout=L(width="300px", flex="0 0 auto", margin="0"))
+        text = r["description"] + (f" <i>{r['note']}.</i>" if r["note"] else "") + (" <i>Needed here.</i>" if r.get("forced") else "")
         rows.append(widgets.HBox([cb, widgets.HTML(f"<div style='{grey};line-height:1.25'>{text}</div>", layout=L(margin="0"))], layout=L(align_items="center", margin="0 0 2px 0")))
         boxes.append((cb, r["key"]))
     count = widgets.HTML()
+    by_key = {k: b for b, k in boxes}
+
+    def link(*_):   # the census population unticked -> WorldPop's grid ticked (and held while it is)
+        for r in catalog:
+            if r.get("replaces") in by_key and r["key"] in by_key:
+                off, g = not by_key[r["replaces"]].value, by_key[r["key"]]
+                if off:
+                    g.value = True
+                g.disabled = off
 
     def update(*_):
+        link()
         count.value = f"<span style='{grey}'>{sum(b.value for b, _ in boxes)} of {len(boxes)} sources: the unticked ones are not downloaded</span>"
 
     for b, _ in boxes:
@@ -234,7 +244,78 @@ def select_sources(catalog: list):
         def value(self) -> list:
             return [k for b, k in boxes if b.value]
 
+        def observe_choice(self, fn):
+            for b, _ in boxes:
+                b.observe(lambda *_: fn(), "value")
+
     return SourceChoice([*rows, count])
+
+
+def select_databases(catalog: list):
+    """The feed databases to search (the global ones and those of the area's country, ticked): its `.value` is the list of ticked keys, in order,
+    for `find_feeds(sources=...)`; `observe_choice(fn)` calls `fn` at every change."""
+    import ipywidgets as widgets
+
+    L, grey = widgets.Layout, "color:#777;font-size:11px"
+    boxes, rows = [], []
+    for r in catalog:
+        cb = widgets.Checkbox(value=bool(r["default"]), description=r["title"], indent=False, layout=L(width="300px", flex="0 0 auto", margin="0"))
+        tag = "global" if r["scope"] == "global" else f"{r['scope']} only"
+        rows.append(widgets.HBox([cb, widgets.HTML(f"<div style='{grey}'>{r['description']} <i>({tag})</i></div>")], layout=L(align_items="center", margin="0 0 2px 0")))
+        boxes.append((cb, r["key"]))
+
+    class DatabaseChoice(widgets.VBox):
+        @property
+        def value(self) -> list:
+            return [k for b, k in boxes if b.value]
+
+        def observe_choice(self, fn):
+            for b, _ in boxes:
+                b.observe(lambda *_: fn(), "value")
+
+    return DatabaseChoice(rows)
+
+
+def ask_keys(study, aoi, source_choice=None, feeds=None):
+    """The API keys the ticked census sources need: checked now and again at every change of the ticks; each missing one gets a box to paste
+    it in (with the link to sign up for it), saved for good in `~/.config/ptlos/api_keys.json`. Nothing shows when every key is there.
+    With `feeds` (the notebook's FEEDS sources, or None for the area's own) it asks for the keys of the transit-feed sources instead; those marked
+    optional can be skipped (the source then uses its public catalog)."""
+    import ipywidgets as widgets
+
+    L, grey = widgets.Layout, "color:#666;font-size:11px"
+    box = widgets.VBox(layout=L(margin="6px 0 0 0"))
+
+    def row(k):
+        field = widgets.Password(placeholder="paste the key", layout=L(width="320px"))
+        btn = widgets.Button(description="Save key", button_style="primary", layout=L(width="90px"))
+        msg = widgets.HTML()
+
+        def save(_):
+            res = study.save_key(k["name"], field.value)
+            msg.value = f"<span style='color:{'#2a7' if res['ok'] else '#b00'}'>{res['message']}</span>"
+            if res["ok"]:
+                field.value = ""
+                refresh()
+
+        btn.on_click(save)
+        info = widgets.HTML(f"<b>{'Key (optional)' if k.get('optional') else 'Key needed'}:</b> {k['what']} (for {', '.join(k['sources'])}).<br>"
+                            f"Get one at <a href='{k['url']}' target='_blank'>{k['url']}</a> <span style='{grey}'>({k['help'].split(' ', 1)[-1].strip('()')})</span>")
+        return widgets.VBox([info, widgets.HBox([field, btn, msg], layout=L(align_items="center"))],
+                            layout=L(border="1px solid #e0b000", padding="6px 10px", margin="0 0 6px 0"))
+
+    def refresh(*_):
+        chosen = feeds.value if hasattr(feeds, "value") else feeds
+        found = study.keys_needed(aoi, source_choice.value) if source_choice is not None else study.feed_keys_needed(aoi, chosen or None)
+        missing = [k for k in found if not k["have"]]
+        box.children = [row(k) for k in missing]
+
+    refresh()
+    if source_choice is not None:
+        source_choice.observe_choice(refresh)
+    elif hasattr(feeds, "observe_choice"):
+        feeds.observe_choice(refresh)
+    return box
 
 
 def select_candidates(candidates: list):
@@ -252,7 +333,8 @@ def select_candidates(candidates: list):
         cb = widgets.Checkbox(value=bool(e["likely"]), description="", indent=False, layout=L(width="26px", flex="0 0 auto"))
         facts = " · ".join(x for x in (e["source"], e["location"], e["modes"], f"updated {e['updated']}" if e["updated"] else "") if x)
         info = widgets.HTML(f"<b>{html.escape(e['provider'])}</b><br><span style='{small}'>{html.escape(facts)}</span><br>"
-                            f"<span style='{small};font-style:italic'>{html.escape(e['why'])}</span>", layout=L(flex="1 1 auto"))
+                            f"<span style='{small};font-style:italic'>{html.escape(e['why'])}</span>"
+                            + (f"<br><span style='{small}'>Service: {html.escape(e['service'])}</span>" if e.get("service") else ""), layout=L(flex="1 1 auto"))
         rows.append(widgets.HBox([cb, info], layout=L(margin="2px 0 8px 0", align_items="flex-start", flex="0 0 auto")))
         boxes.append((cb, e))
     tick, untick = widgets.Button(description="Tick all", layout=L(width="90px")), widgets.Button(description="Untick all", layout=L(width="90px"))

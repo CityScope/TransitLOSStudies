@@ -59,8 +59,8 @@ The fits use transit against the car only (`share_tc` = transit / (transit + car
 2. `flex/outcomes.py`: the outcome table per city (above).
 3. `flex/build_fit_data.py`: per city the outcome units, their populated res-11 cells (the cell centre in the unit; within 100 m for units
    drawn without the streets), the cells' service items and the units' controls (population-weighted over the cells) -> `<city>/flex/fit/`.
-4. `flex/fit_tests.py` (model: `tools/studytools/flexfit.py`, the final US form): the US curves on the cities, each city on its own, fitted
-   in one city and predicting another, the five pooled and left out one at a time, the treatment of the controls across cities, and a final
-   pooled fit with the selected controls. Every city keeps its own level (the scale factor), fitted on its own units; controls enter
-   standardised within each city (pooled standardisation lets wealth, which differs most between the cities, stand for the city itself).
-   `fit_tests.py report` writes `flex/FIT_RESULTS.md`.
+4. `flex/fit_cities.py` (model: `SmoothModel` in `tools/studytools/flexfit.py`): each fitted city on its own, the curves shared by the cities
+   (pools of donor cities and sensitivity variants), the ranking of the cities from the shared score, and the service each city has;
+   `fit_cities.py report` writes `flex/FIT_RESULTS.md`. The score is computed per H3 res-11 cell and a unit takes the population-weighted mean of
+   its cells' scores; modes are in order (rail >= tram >= bus); the curves are smooth with bounded steepness; speed is fitted first, then the modes.
+   `flex/fit_tests.py` supplies the data loading and the scoring helpers (and the earlier, unsmoothed tests).

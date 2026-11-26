@@ -98,9 +98,11 @@ API_KEYS = {
     "transitland": ("Transitland (transit feeds)", "https://www.transit.land (create an account, then an API key)", "TRANSITLAND_API_KEY"),
     "nap_es": ("Spain's National Access Point (transit feeds)", "https://nap.transportes.gob.es (register, then the API key in your profile)",
                "NAP_API_KEY"),
+    "mobility_database": ("the Mobility Database (transit feeds)", "https://mobilitydatabase.org/sign-up (create an account, then copy your refresh token from the account page)",
+                          "MOBILITY_DATABASE_REFRESH_TOKEN"),
     "us_census": ("the US Census Bureau API (US census data)", "https://api.census.gov/data/key_signup.html (a free key, sent by email)",
                   "US_CENSUS_API_KEY"),
-    "destatis_genesis": ("the German census (Destatis GENESIS-Online)", "https://www-genesis.destatis.de (register, then create a token)",
+    "destatis_genesis": ("the German census (Destatis GENESIS-Online)", "https://www.destatis.de/EN/Service/OpenData/api-webservice.html (register a free GENESIS-Online account, then create a token)",
                          "DESTATIS_GENESIS_TOKEN"),
 }
 
@@ -216,6 +218,63 @@ def check_census_api(country: str) -> None:
             f"arrives by email). In Colab add it as a Secret named US_CENSUS_API_KEY (key icon in the left bar, allow notebook access) and run "
             f"this step again; on your own machine set the environment variable US_CENSUS_API_KEY or save it in ~/.config/ptlos/api_keys.json "
             f"as \"us_census\".") from None
+
+
+#: the keys each census source needs: (source key, country or None for any) -> key names of `API_KEYS`
+SOURCE_KEYS = {("acs5", None): ["us_census"], ("dhc", None): ["us_census"], ("census", "DEU"): ["destatis_genesis"]}
+
+
+def keys_needed(aoi: gpd.GeoDataFrame, sources: Sequence[str]) -> list:
+    """The API keys the ticked census `sources` need, and whether each is already there: `[{name, what, url, env, have, sources}]`. The sources
+    are the keys of `census_sources(aoi)`; the notebook asks for the missing ones."""
+    from pycensus.api_keys import resolve_api_key
+
+    iso3 = place_codes(aoi)["iso3"]
+    need: dict = {}
+    for (src, country), names in SOURCE_KEYS.items():
+        if src in sources and country in (None, iso3):
+            for n in names:
+                need.setdefault(n, []).append(src)
+    return [{"name": n, "what": API_KEYS[n][0], "url": API_KEYS[n][1].split(" ")[0], "help": API_KEYS[n][1], "env": API_KEYS[n][2],
+             "have": bool(resolve_api_key(n, API_KEYS[n][2])), "sources": src} for n, src in need.items()]
+
+
+#: the key each feed source needs, and whether it is optional (the source then still works from its public catalog)
+FEED_KEYS = {"nap": ("nap_es", False), "transitland": ("transitland", False), "mobility_database": ("mobility_database", True)}
+
+
+def feed_keys_needed(aoi: gpd.GeoDataFrame, sources: Optional[Sequence[str]] = None) -> list:
+    """The API keys of the transit-feed sources that will be searched for the area (`sources`, or those of `FEED_SOURCES_BY_PLACE`), and whether
+    each is there: `[{name, what, url, help, env, have, sources, optional}]`. The notebook asks for the missing ones before the feeds are searched."""
+    from pycensus.api_keys import resolve_api_key
+
+    names = list(sources) if sources else [x for tier in by_place(FEED_SOURCES_BY_PLACE, place_codes(aoi)) for x in tier]
+    out = []
+    for src in dict.fromkeys(names):
+        if src in FEED_KEYS:
+            n, optional = FEED_KEYS[src]
+            out.append({"name": n, "what": API_KEYS[n][0], "url": API_KEYS[n][1].split(" ")[0], "help": API_KEYS[n][1], "env": API_KEYS[n][2],
+                        "have": bool(resolve_api_key(n, API_KEYS[n][2])), "sources": [src], "optional": optional})
+    return out
+
+
+def save_key(name: str, key: str) -> dict:
+    """Save a key the user typed in the notebook (`~/.config/ptlos/api_keys.json`, read by every package) after a quick check where one exists:
+    `{ok, message}`."""
+    from pycensus.api_keys import save_api_key
+
+    key = key.strip()
+    if not key:
+        return {"ok": False, "message": "No key typed."}
+    if name == "us_census":
+        import requests
+
+        try:
+            requests.get("https://api.census.gov/data/2023/acs/acs5", params={"get": "NAME", "for": "state:25", "key": key}, timeout=60).json()
+        except Exception:  # noqa: BLE001
+            return {"ok": False, "message": "The Census Bureau did not accept this key (check it was copied whole and activated from the email)."}
+    save_api_key(name, key)
+    return {"ok": True, "message": "Saved."}
 
 
 def place_codes(aoi: gpd.GeoDataFrame, samples: int = 9) -> dict:
@@ -435,6 +494,36 @@ def _area_names(aoi: gpd.GeoDataFrame) -> set:
     return {n for n in names if n}
 
 
+FEED_DATABASES = {
+    "ntd": ("US National Transit Database", "Official list of US transit agencies' feeds, by state.", "US"),
+    "nap": ("Spain's National Access Point", "Official feeds of Spanish operators, by province (needs a free key).", "ES"),
+    "mobility_database": ("Mobility Database", "Worldwide catalog of GTFS feeds (global).", None),
+    "transitland": ("Transitland", "Worldwide catalog of GTFS feeds (global; needs a free key).", None),
+}
+
+
+def feed_databases(aoi: gpd.GeoDataFrame) -> list:
+    """The feed databases to search, to choose BEFORE the search: the global ones and those of the area's country, all ticked by default, the
+    country's first (most local first: a later one only adds the feeds the earlier ones miss). `[{key, title, description, scope, default}]`."""
+    place = place_codes(aoi)
+    local = [x for tier in by_place(FEED_SOURCES_BY_PLACE, place) for x in tier if FEED_DATABASES[x][2]]
+    glob = [k for k, v in FEED_DATABASES.items() if v[2] is None]
+    return [{"key": k, "title": FEED_DATABASES[k][0], "description": FEED_DATABASES[k][1], "scope": FEED_DATABASES[k][2] or "global", "default": True}
+            for k in dict.fromkeys(local + glob)]
+
+
+def _stop_time_rows(raw: dict) -> dict:
+    """Row counts of the feed's files when the source's metadata lists them (Transitland does): `{stops, routes, stop_times, frequencies}` (missing
+    = not listed). stop_times is trips x stops only for a feed without frequencies.txt: with one, a trip's rows stand for many departures, so the
+    stop_times count is not used then (`service` shows the stops and routes)."""
+    files = _dig(raw, "feed_state.feed_version.files") or _dig(raw, "feed_version.files") or []
+    rows = {}
+    for f in files if isinstance(files, list) else []:
+        if isinstance(f, dict) and f.get("rows") is not None:
+            rows[str(f.get("name", "")).lower().removesuffix(".txt")] = int(f["rows"])
+    return {k: rows[k] for k in ("stops", "routes", "stop_times", "frequencies") if k in rows}
+
+
 def find_feeds(aoi: gpd.GeoDataFrame, feeds: Union[str, Path, Sequence] = "download", sources: Optional[Sequence[str]] = FEED_SOURCES) -> list:
     """The feeds the sources list for the area, from their metadata only: nothing is downloaded, so you can choose before downloading.
 
@@ -506,13 +595,15 @@ def find_feeds(aoi: gpd.GeoDataFrame, feeds: Union[str, Path, Sequence] = "downl
                 "name": str(f.name or "") if str(f.name) not in ("None", "") else "", "location": location,
                 "modes": [ntd["mode_name"]] if ntd.get("mode_name") else [], "url": url,
                 "updated": str(ntd.get("new_modified_date") or _dig(raw, "feed_state.feed_version.fetched_at") or "")[:10],
-                "likely": bool(likely), "why": why}
+                "likely": bool(likely), "why": why, "stop_times": _stop_time_rows(raw)}
     out = []
     for e in entries.values():
         e["provider"] = e["provider"] or e["name"] or e["key"].split(":", 1)[1]
         if e["provider"].startswith("f-"):   # a Transitland feed id (f-drt3-middlesex~ma~us): made readable
             e["provider"] = e["provider"][2:].replace("~", " ")
         e["modes"] = ", ".join(e["modes"])
+        c = e.pop("stop_times")   # row counts of the files listed by the catalog: only stops and routes are shown (stop_times rows miss frequency-based service)
+        e["service"] = ", ".join(x for x in (f"{c['stops']:,} stops" if c.get("stops") else "", f"{c['routes']:,} routes" if c.get("routes") else "") if x)
         e["source"] = ", ".join(dict.fromkeys([e["source"], *e.pop("also")]))
         out.append(e)
     return sorted(out, key=lambda e: (not e["likely"], e["provider"].lower()))
@@ -751,16 +842,18 @@ SOURCES = {
     "census": ("National census", "The country's own census columns.", ()),
     "derived": ("Derived indicators", "Shares, rates and harmonised names made by this study from the sources above.", ()),
 }
-#: the USA sources that can be left out of the download (the decennial census blocks and the buildings are always needed)
-_OPTIONAL_USA = ("acs5", "lodes", "religion", "housing_history", "elections")
+#: the USA sources that can be left out of the download (the buildings are used whenever needed)
+_OPTIONAL_USA = ("dhc", "acs5", "lodes", "religion", "housing_history", "elections")
 
 
 def census_sources(aoi: gpd.GeoDataFrame) -> list:
     """The census data sources for the area, to choose from BEFORE the run downloads them (unticked ones are never downloaded).
 
-    Returns one dict per source: `key`, `title`, `description`, `required` (always used), `default` (ticked at the start) and `note`. For the
-    USA the optional ones are ACS, jobs, religion, housing history, elections and the two WorldPop groups; the decennial census blocks and the
-    buildings are required. Another country with a census has one national group (required); without one, WorldPop is required.
+    Returns one dict per source: `key`, `title`, `description`, `default` (ticked at the start), `note`, and `forced` (a rule, never a lock: the
+    source is ticked and cannot be unticked while the rule holds). Nothing is locked: the census population (decennial blocks in the USA, the
+    national census elsewhere) is ticked by default where the census is sub-municipal, and when it is unticked WorldPop's population grid is
+    ticked automatically (`replaces`); where the country has no census, WorldPop's grid is the only population source and stays ticked.
+    The buildings (GlobalBuildingAtlas) are not listed: they are used whenever the run needs them (the built-surface population, resampling).
     """
     from studytools.config import _census_supported
 
@@ -768,22 +861,22 @@ def census_sources(aoi: gpd.GeoDataFrame) -> list:
     census_module = next(iter(by_place(CENSUS_BY_PLACE, place_codes(aoi))), None)
     has_census = _census_supported(iso3, census_module)
 
-    def row(key, required=False, default=True, note=""):
-        return {"key": key, "title": SOURCES[key][0], "description": SOURCES[key][1], "required": required, "default": default or required, "note": note}
+    def row(key, default=True, note="", **kw):
+        return {"key": key, "title": SOURCES[key][0], "description": SOURCES[key][1], "default": default, "note": note, "required": False, **kw}
 
+    rows = []
     if iso3 == "USA" and has_census:
-        rows = [row("dhc", required=True), row("acs5"), row("lodes"), row("religion"), row("housing_history"), row("elections")]
+        rows = [row("dhc"), row("acs5"), row("lodes"), row("religion"), row("housing_history"), row("elections")]
     elif has_census:
-        rows = [row("census", required=True)]
-    else:
-        rows = []
-    rows.append(row("buildings", required=True))
+        rows = [row("census")]
     if has_census:
-        rows.append(row("worldpop_grid", default=False, note="only needed where the census areas are large; otherwise the census gives the population (about 1.5 GB for the USA)"))
+        pop = rows[0]["key"]
+        rows.append(row("worldpop_grid", default=False, replaces=pop,
+                        note="used for the population when the census population is unticked, and where the census areas are large (about 1.5 GB for the USA)"))
         rows.append(row("worldpop_layers", default=False, note="a one-time download of tens of GB for the USA"))
     else:
-        rows.append(row("worldpop_grid", required=True, note="the country has no census here: WorldPop gives the population"))
-        rows.append(row("worldpop_layers", required=True, note="no census here: WorldPop's layers give age, sex and urban share"))
+        rows.append(row("worldpop_grid", forced=True, note="the country has no census here: WorldPop is the population source"))
+        rows.append(row("worldpop_layers", forced=True, note="no census here: WorldPop's layers give age, sex and urban share"))
     return rows
 
 
@@ -940,7 +1033,11 @@ def run(aoi: gpd.GeoDataFrame, name: Optional[str] = None, day: str = DAY, start
 
     config, place = area_config(aoi, name, study_cache.osm_dir(cache))
     print(f"[example] population: {census_used(config)}", flush=True)
-    chosen = {r["key"] for r in census_sources(aoi) if r["default"]} if census_sources is None else set(census_sources)
+    catalog = census_sources(aoi)
+    chosen = {r["key"] for r in catalog if r["default"]} if census_sources is None else set(census_sources)
+    for r in catalog:   # the rules: census population unticked -> WorldPop's grid; no census -> WorldPop is the only source
+        if r.get("forced") or (r.get("replaces") and r["replaces"] not in chosen):
+            chosen.add(r["key"])
     config = dataclasses.replace(
         config, worldpop_layers="worldpop_layers" in chosen or not config.uses_census,
         census_skip=tuple(k for k in _OPTIONAL_USA if k not in chosen) if config.country == "USA" else ())   # unchosen sources are never downloaded

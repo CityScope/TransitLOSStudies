@@ -22,6 +22,7 @@ import numpy as np
 import pandas as pd
 
 HERE = Path(__file__).resolve().parents[1]
+CITY_PRESET = Path(__file__).resolve().parent / "presets" / "city_score.json"   # flex/export_preset.py
 TOOLS = HERE.parent / "tools" / "flex_web"
 #: res-11 table column -> label (the first present of each group; population first: the tab weights the coarser cells by it)
 COUNTS = [(("census_residents", "population"), "Population"), (("workplaceJobs", "ba_jobsTotal", "lodes_wac_jobsTotal"), "Jobs"),
@@ -116,7 +117,9 @@ def build(city: str) -> Path:
     pts = pd.read_parquet(src / "stops_by_id.parquet") if (src / "stops_by_id.parquet").is_file() else None
     if pts is not None:
         pts = raw_stop_names(city, pts)
-    meta = export_for_browser(web, st.lat.to_numpy(), st.lon.to_numpy(), prof, res, sc.DEFAULT, counts=counts,
+    city_preset = json.loads(CITY_PRESET.read_text())[0] if CITY_PRESET.is_file() else None   # the city science score: the page's default
+    scoring = sc.ScoreParams.from_json(json.dumps(city_preset["params"])) if city_preset else sc.DEFAULT
+    meta = export_for_browser(web, st.lat.to_numpy(), st.lon.to_numpy(), prof, res, scoring, counts=counts,
                               count_labels={c: c for c in counts.columns}, extra_meta={"name": city, "cell_res": int(meta_run.get("resolution", 11))},
                               points=pts)
     from run_city_flex import route_parts
@@ -134,19 +137,25 @@ def build(city: str) -> Path:
     js.mkdir(exist_ok=True)
     for f in ("score.js", "editor.js", "edit.js"):
         shutil.copy2(FRONTEND / f, js / f)
-    for f in ("flex_tab.js", "flex_edit.js"):
+    for f in ("flex_tab.js", "flex_edit.js", "flex_3d.js"):
         shutil.copy2(TOOLS / f, js / f)
     page = (HERE / city / "map.html").read_text(encoding="utf-8")
+    bld = ', buildings: "map_tiles/buildings"' if (HERE / city / "map_tiles" / "buildings" / "buildings.pmtiles").is_file() else ''
+    if (HERE / city / "map_tiles" / "terrain").is_dir():
+        bld += ', terrain: "map_tiles/terrain", terrainMaxZoom: 11'
     inject = ('<script src="https://cdn.jsdelivr.net/npm/h3-js@4.1.0/dist/h3-js.umd.js"></script>\n'
-              '<script>window.FLEX_CFG = {base: "flex_web/", presets: "flex_presets.json", maxStates: 1, minZoom: 8};</script>\n'
+              '<script>window.FLEX_CFG = {base: "flex_web/", presets: "flex_presets.json", maxStates: 1, minZoom: 8' + bld + '};</script>\n'
               '<script src="flex_js/score.js"></script><script src="flex_js/editor.js"></script><script src="flex_js/flex_tab.js"></script>\n'
-              '<script src="flex_js/edit.js"></script><script src="flex_js/flex_edit.js"></script>\n')
+              '<script src="flex_js/edit.js"></script><script src="flex_js/flex_edit.js"></script><script src="flex_js/flex_3d.js"></script>\n')
     page = page.replace("</body>", inject + "</body>", 1).replace("<title>", "<title>Flexible scoring · ", 1)
     out = HERE / city / "flex.html"
     out.write_text(page, encoding="utf-8")
     # the scoring presets of the US fits (built by usa_flex/build_flex_page.py; the final form first) -- data, not code
     us = HERE.parent / "usa_study" / "data" / "_usa" / "flex_presets.json"
-    (HERE / city / "flex_presets.json").write_text(us.read_text(encoding="utf-8") if us.is_file() else "[]", encoding="utf-8")
+    presets = json.loads(us.read_text(encoding="utf-8")) if us.is_file() else []
+    if city_preset:   # the city science score first (it is also the page's default scoring), then the US fits
+        presets = [city_preset] + presets
+    (HERE / city / "flex_presets.json").write_text(json.dumps(presets), encoding="utf-8")
     print(f"{city}: {meta['S']} stations x {meta['P']} profiles, {meta['nc']} res-{meta['cell_res']} cells, K {meta['K']} -> {out}", flush=True)
     return out
 
