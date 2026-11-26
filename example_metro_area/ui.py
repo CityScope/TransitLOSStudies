@@ -218,7 +218,7 @@ def select_sources(catalog: list):
     for r in catalog:
         cb = widgets.Checkbox(value=bool(r["default"] or r.get("forced")), disabled=bool(r.get("forced")), description=r["title"], indent=False, layout=L(width="300px", flex="0 0 auto", margin="0"))
         text = r["description"] + (f" <i>{r['note']}.</i>" if r["note"] else "") + (" <i>Needed here.</i>" if r.get("forced") else "")
-        rows.append(widgets.HBox([cb, widgets.HTML(f"<div style='{grey};line-height:1.25'>{text}</div>", layout=L(margin="0"))], layout=L(align_items="center", margin="0 0 2px 0")))
+        rows.append(widgets.HBox([cb, widgets.HTML(f"<div style='{grey};line-height:1.25'>{text}</div>", layout=L(margin="0", flex="1 1 280px", min_width="0"))], layout=L(align_items="center", margin="0 0 2px 0", flex_flow="row wrap", max_width="100%")))
         boxes.append((cb, r["key"]))
     count = widgets.HTML()
     by_key = {k: b for b, k in boxes}
@@ -261,7 +261,7 @@ def select_databases(catalog: list):
     for r in catalog:
         cb = widgets.Checkbox(value=bool(r["default"]), description=r["title"], indent=False, layout=L(width="300px", flex="0 0 auto", margin="0"))
         tag = "global" if r["scope"] == "global" else f"{r['scope']} only"
-        rows.append(widgets.HBox([cb, widgets.HTML(f"<div style='{grey}'>{r['description']} <i>({tag})</i></div>")], layout=L(align_items="center", margin="0 0 2px 0")))
+        rows.append(widgets.HBox([cb, widgets.HTML(f"<div style='{grey}'>{r['description']} <i>({tag})</i></div>", layout=L(flex="1 1 280px", min_width="0"))], layout=L(align_items="center", margin="0 0 2px 0", flex_flow="row wrap", max_width="100%")))
         boxes.append((cb, r["key"]))
 
     class DatabaseChoice(widgets.VBox):
@@ -287,7 +287,7 @@ def ask_keys(study, aoi, source_choice=None, feeds=None):
     box = widgets.VBox(layout=L(margin="6px 0 0 0"))
 
     def row(k):
-        field = widgets.Password(placeholder="paste the key", layout=L(width="320px"))
+        field = widgets.Password(placeholder="paste the key", layout=L(flex="1 1 200px", min_width="0", max_width="320px"))
         btn = widgets.Button(description="Save key", button_style="primary", layout=L(width="90px"))
         msg = widgets.HTML()
 
@@ -301,8 +301,8 @@ def ask_keys(study, aoi, source_choice=None, feeds=None):
         btn.on_click(save)
         info = widgets.HTML(f"<b>{'Key (optional)' if k.get('optional') else 'Key needed'}:</b> {k['what']} (for {', '.join(k['sources'])}).<br>"
                             f"Get one at <a href='{k['url']}' target='_blank'>{k['url']}</a> <span style='{grey}'>({k['help'].split(' ', 1)[-1].strip('()')})</span>")
-        return widgets.VBox([info, widgets.HBox([field, btn, msg], layout=L(align_items="center"))],
-                            layout=L(border="1px solid #e0b000", padding="6px 10px", margin="0 0 6px 0"))
+        return widgets.VBox([info, widgets.HBox([field, btn, msg], layout=L(align_items="center", flex_flow="row wrap", max_width="100%"))],
+                            layout=L(border="1px solid #e0b000", padding="6px 10px", margin="0 0 6px 0", max_width="100%", box_sizing="border-box"))
 
     def refresh(*_):
         chosen = feeds.value if hasattr(feeds, "value") else feeds
@@ -334,7 +334,7 @@ def select_candidates(candidates: list):
         facts = " · ".join(x for x in (e["source"], e["location"], e["modes"], f"updated {e['updated']}" if e["updated"] else "") if x)
         info = widgets.HTML(f"<b>{html.escape(e['provider'])}</b><br><span style='{small}'>{html.escape(facts)}</span><br>"
                             f"<span style='{small};font-style:italic'>{html.escape(e['why'])}</span>"
-                            + (f"<br><span style='{small}'>Service: {html.escape(e['service'])}</span>" if e.get("service") else ""), layout=L(flex="1 1 auto"))
+                            + (f"<br><span style='{small}'>Service: {html.escape(e['service'])}</span>" if e.get("service") else ""), layout=L(flex="1 1 auto", min_width="0"))
         rows.append(widgets.HBox([cb, info], layout=L(margin="2px 0 8px 0", align_items="flex-start", flex="0 0 auto")))
         boxes.append((cb, e))
     tick, untick = widgets.Button(description="Tick all", layout=L(width="90px")), widgets.Button(description="Untick all", layout=L(width="90px"))
@@ -363,7 +363,7 @@ def select_candidates(candidates: list):
             return keys
 
     return CandidateChoice([widgets.HBox([tick, untick, count], layout=L(align_items="center", margin="0 0 8px 0")),
-                            widgets.VBox(rows, layout=L(max_height="460px", overflow_y="auto", border="1px solid #ddd", padding="6px"))])
+                            widgets.VBox(rows, layout=L(max_height="460px", overflow_y="auto", border="1px solid #ddd", padding="6px", max_width="100%", box_sizing="border-box"))])
 
 
 def select_feeds(feeds: list):
@@ -374,9 +374,9 @@ def select_feeds(feeds: list):
     for f in feeds:
         span = f" · calendar {f['first_date']} to {f['last_date']}" if f["first_date"] else ""
         info = f"{f['source']} · {f['stops']:,} stops in the area · {f['trips']:,} trips on a typical day{span}"
-        box = widgets.Checkbox(value=True, description=f["agency"] or f["name"], indent=False, layout=widgets.Layout(width="320px"))
+        box = widgets.Checkbox(value=True, description=f["agency"] or f["name"], indent=False, layout=widgets.Layout(width="320px", max_width="100%"))
         box.feed = f["name"]
-        rows.append(widgets.HBox([box, widgets.HTML(f"<span style='color:#666;font-size:90%'>{info}</span>")]))
+        rows.append(widgets.HBox([box, widgets.HTML(f"<span style='color:#666;font-size:90%'>{info}</span>", layout=widgets.Layout(flex="1 1 240px", min_width="0"))], layout=widgets.Layout(flex_flow="row wrap", max_width="100%")))
 
     class FeedChoice(widgets.VBox):
         @property

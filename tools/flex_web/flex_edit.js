@@ -490,7 +490,7 @@
     panel.innerHTML = '<div id="feStatus">…</div>';
     D = await api.load();
     if (!D) { status(''); return exit(btn); }
-    E = D.edit || (D.edit = FlexEdit.create(D, D.path, api.defaults()));
+    E = D.edit || (D.edit = FlexEdit.create(D, D.path, (D.meta && D.meta.build_params) || api.defaults()));
     await E.load();
     if (api.colour() === 'map') api.setColour('score');
     on = true; tool = 'select'; sel = null;

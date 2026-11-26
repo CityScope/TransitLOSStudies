@@ -120,7 +120,8 @@ def build(city: str) -> Path:
     city_preset = json.loads(CITY_PRESET.read_text())[0] if CITY_PRESET.is_file() else None   # the city science score: the page's default
     scoring = sc.ScoreParams.from_json(json.dumps(city_preset["params"])) if city_preset else sc.DEFAULT
     meta = export_for_browser(web, st.lat.to_numpy(), st.lon.to_numpy(), prof, res, scoring, counts=counts,
-                              count_labels={c: c for c in counts.columns}, extra_meta={"name": city, "cell_res": int(meta_run.get("resolution", 11))},
+                              count_labels={c: c for c in counts.columns}, extra_meta={"name": city, "cell_res": int(meta_run.get("resolution", 11)), "build_params": json.loads(sc.DEFAULT.to_json())},   # build_params: the scoring the stations' profiles were selected with (the editor rebuilds them with it, whatever the page shows)
+                              
                               points=pts)
     from run_city_flex import route_parts
     from transitlos.flex.profiles import END, START

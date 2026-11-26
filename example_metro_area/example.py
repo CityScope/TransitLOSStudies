@@ -880,6 +880,9 @@ def census_sources(aoi: gpd.GeoDataFrame) -> list:
     return rows
 
 
+_census_catalog = census_sources   # the function under a name `run()` can still reach
+
+
 def column_group(column: str, bare: dict) -> Optional[str]:
     """The source group (a key of `SOURCES`) of a result column, None when it is always kept (ids, geometry, population, level of service,
     densities). A column takes the source of its name's prefix; a bare name (`medianAge`) the source the run recorded for it (`bare`);
@@ -1033,7 +1036,7 @@ def run(aoi: gpd.GeoDataFrame, name: Optional[str] = None, day: str = DAY, start
 
     config, place = area_config(aoi, name, study_cache.osm_dir(cache))
     print(f"[example] population: {census_used(config)}", flush=True)
-    catalog = census_sources(aoi)
+    catalog = _census_catalog(aoi)   # (the parameter `census_sources` hides the function of that name)
     chosen = {r["key"] for r in catalog if r["default"]} if census_sources is None else set(census_sources)
     for r in catalog:   # the rules: census population unticked -> WorldPop's grid; no census -> WorldPop is the only source
         if r.get("forced") or (r.get("replaces") and r["replaces"] not in chosen):
