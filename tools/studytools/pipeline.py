@@ -3739,12 +3739,29 @@ def _us_precinct_elections_loader(aoi, states, level, cache_dir):
     city = "boston" if "25" in fips else "san_francisco" if "06" in fips else None
     if city is None:
         return tracts
+    # the city precinct files (Boston, San Francisco) describe the people INSIDE that city: a tract takes their results only when most of it lies in
+    # the city, so a neighbouring city's map (Cambridge) never shows Boston's mayoral or state result
+    from pycensus.census.countries.usa.elections_precinct.loader import city_footprint
+
+    try:
+        foot = city_footprint(city, cache_dir=str(cache_dir)).to_crs(tracts.crs)
+        a = tracts.geometry.area
+        in_city = (tracts.geometry.intersection(foot.geometry.iloc[0]).area / a.where(a > 0)).fillna(0.0).to_numpy() >= 0.5
+    except Exception as exc:  # pragma: no cover - footprint unavailable: keep the old behaviour
+        print(f"[pipeline] city precinct footprint unavailable ({exc}); using the city files for every tract")
+        in_city = np.ones(len(tracts), bool)
+    if not in_city.any():
+        city = None
+    if city is None:
+        return tracts
     for scope in ("national", "state", "municipal"):
         try:
             t = load_prec(city, scope, level="tract", census_geometry={"tract": tracts, "blockgroup": tracts})
             cols = _election_columns(t, US_PRECINCT_ELECTION_KEEP)
             _RATE_COLUMNS.update(c for c in cols if not c.endswith("_total_votes"))
-            tracts = tracts.merge(t.reset_index()[["GEOID", *cols]] if "GEOID" not in t.columns else t[["GEOID", *cols]], on="GEOID", how="left")
+            keep = set(tracts.loc[in_city, "GEOID"].astype(str))
+            tt = t.reset_index()[["GEOID", *cols]] if "GEOID" not in t.columns else t[["GEOID", *cols]]
+            tracts = tracts.merge(tt[tt["GEOID"].astype(str).isin(keep)], on="GEOID", how="left")
         except Exception as exc:  # pragma: no cover - network/data availability varies
             print(f"[pipeline] skipping US precinct election {scope}: {exc}")
     # 2026-11-21: the city precinct files cover only Boston / San Francisco; the rest of the metro takes the 2024 presidential result of the
@@ -4275,7 +4292,7 @@ def _join_polygon_stats(
             src = pd.to_numeric(census_gdf[pop_src], errors="coerce").to_numpy(dtype=float)[p_row]
             if "_source_population" not in h3_grid.columns:
                 h3_grid["_source_population"] = np.nan
-            cur = h3_grid["_source_population"].to_numpy(dtype=float)
+            cur = h3_grid["_source_population"].to_numpy(dtype=float).copy()
             fill = np.isnan(cur[h3_row])
             cur[h3_row[fill]] = src[fill]
             h3_grid["_source_population"] = cur
