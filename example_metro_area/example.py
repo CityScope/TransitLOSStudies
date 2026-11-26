@@ -292,7 +292,7 @@ def place_codes(aoi: gpd.GeoDataFrame, samples: int = 9) -> dict:
     inside = contains_xy(geom, xs.ravel(), ys.ravel())
     from shapely.geometry import Point
     pts += [Point(x, y) for x, y in zip(xs.ravel()[inside], ys.ravel()[inside])]
-    out = {"iso2": None, "iso3": None, "regions": [], "provinces": []}
+    out = {"iso2": None, "iso3": None, "regions": [], "provinces": [], "municipalities": []}
     for pt in pts:
         a = reverse_geocode(pt.y, pt.x)
         if not a.get("country_code"):
@@ -302,6 +302,9 @@ def place_codes(aoi: gpd.GeoDataFrame, samples: int = 9) -> dict:
             v = a.get(key)
             if v and v not in out[k]:
                 out[k].append(v)
+        town = next((a[x] for x in ("city", "town", "village", "municipality") if a.get(x)), None)   # the municipality of the point
+        if town and town not in out["municipalities"]:
+            out["municipalities"].append(town)
     if out["iso2"]:
         import pycountry
 
@@ -399,6 +402,29 @@ def get_feeds(aoi: gpd.GeoDataFrame, gtfs_dir: Path, feeds: Union[str, Path, Seq
     return kept
 
 
+#: NAP transport types that carry the feeds of urban transit (aerial and maritime datasets are not)
+NAP_TRANSPORT = ("autobus", "ferroviario")
+
+
+def _nap_feeds(client, place: dict) -> list:
+    """The NAP feeds for the area: those of the municipalities (and urban areas) the area lies in, then the province-wide ones of its provinces, bus and
+    rail only, and from each dataset the newest file valid today (a dataset bundles the versions of a feed). Each feed's `raw["aoi_match"]` says which ("municipality" or "province"); NAP lists no geometry, so the feeds are checked against the
+    area's stops after they are downloaded (`_keep_feeds_in_area`)."""
+    feeds, seen = [], set()
+    for names, kind, level in ((place.get("municipalities", []), "municipality", 3), (place.get("municipalities", []), "municipality", 2),
+                               (place.get("provinces", []), "province", 0)):
+        if not names:
+            continue
+        for f in client.search_feeds(region=names, region_type=level, transport_type=list(NAP_TRANSPORT), start_date="today", end_date="today", keep="newest"):
+            if f.id in seen:
+                continue
+            seen.add(f.id)
+            if isinstance(f.raw, dict):
+                f.raw["aoi_match"] = kind
+            feeds.append(f)
+    return feeds
+
+
 def _search_source(source: str, aoi: gpd.GeoDataFrame, place: dict, states: Optional[Sequence[str]]):
     """`(client, found)` of one feed source: its downloader and the feeds it lists for the area (metadata only, nothing downloaded), or None
     when it needs an API key that is missing."""
@@ -416,7 +442,7 @@ def _search_source(source: str, aoi: gpd.GeoDataFrame, place: dict, states: Opti
         if not key:
             return None
         client = NAPDownloader(api_key=key)
-        return client, client.search_feeds(region=place.get("provinces", []), region_type=0)   # 0 = province
+        return client, _nap_feeds(client, place)
     if source == "mobility_database":
         client = MobilityDatabaseCatalog()
         return client, client.search_feeds(aoi=aoi)
@@ -425,7 +451,7 @@ def _search_source(source: str, aoi: gpd.GeoDataFrame, place: dict, states: Opti
         if not key:
             return None
         client = TransitLandDownloader(api_key=key)
-        return client, client.search_feeds(aoi=aoi)
+        return client, client.search_feeds(aoi=aoi, limit=None)   # every page of the area's bounding box, not the first 1,000 feeds
     raise ValueError(f"unknown feed source {source!r}: use 'ntd', 'nap', 'mobility_database' or 'transitland'")
 
 
@@ -480,16 +506,28 @@ def _dig(record: dict, dotted: str, default=None):
     return node
 
 
-def _area_names(aoi: gpd.GeoDataFrame) -> set:
-    """Lower-case names that identify the area: its place name and the name of the UN urban centre it lies in."""
+def _area_names(aoi: gpd.GeoDataFrame, nearby_km: float = 40.0) -> set:
+    """Lower-case names that identify the area, to match an agency's city against: its place name, the municipalities it lies in, the UN urban centre
+    and functional urban area (metro area) it lies in, and the biggest metro area within `nearby_km` of it (a small city is served by the agencies of the
+    big one next to it: Cambridge by Boston's)."""
     names = {str(aoi["name"].iloc[0]).split(",")[0].split("(")[0].strip().lower()}
+    try:
+        names.update(m.lower() for m in place_codes(aoi).get("municipalities", []))
+    except Exception:  # noqa: BLE001 -- geocoding unavailable: the names below still work
+        pass
     try:
         from pycensus.census.worldwide import un_metro_areas
 
         point = aoi.to_crs(4326).union_all().representative_point()
-        found = un_metro_areas.find(point=(point.x, point.y), kind="urban_centre")
-        if not found.empty:
-            names.add(str(found["name"].iloc[0]).lower())
+        for kind in ("urban_centre", "functional_urban_area"):
+            found = un_metro_areas.find(point=(point.x, point.y), kind=kind)
+            if not found.empty:
+                names.add(str(found["name"].iloc[0]).lower())
+        near = aoi.to_crs(aoi.estimate_utm_crs()).buffer(nearby_km * 1000).to_crs(4326)   # metro areas touching the area widened by `nearby_km`
+        around = un_metro_areas.for_aoi(gpd.GeoDataFrame(geometry=near, crs=4326), kind="functional_urban_area")
+        if len(around):
+            big = around.sort_values("population", ascending=False).iloc[0]
+            names.add(str(big["name"]).lower())
     except Exception:  # noqa: BLE001
         pass
     return {n for n in names if n}
@@ -558,6 +596,10 @@ def find_feeds(aoi: gpd.GeoDataFrame, feeds: Union[str, Path, Sequence] = "downl
             location = ", ".join(str(x) for x in (ntd.get("city"), ntd.get("state"), _dig(raw, "location.municipality"),
                                                   _dig(raw, "location.subdivision_name")) if x)
             likely, why = True, f"listed by {s} for the area"
+            if s == "nap":
+                m = raw.get("aoi_match")
+                likely = m == "municipality"
+                why = ("lists a municipality of the area" if likely else "province-wide: may not serve the area") if m else why
             if s == "ntd":
                 uza, city = str(ntd.get("uza_name", "")), str(ntd.get("city", ""))
                 likely = city.lower() in names
@@ -579,6 +621,8 @@ def find_feeds(aoi: gpd.GeoDataFrame, feeds: Union[str, Path, Sequence] = "downl
                     span = ((x1 - x0) * 111.3 * math.cos(math.radians((y0 + y1) / 2))) ** 2
                     span = (span + ((y1 - y0) * 111.3) ** 2) ** 0.5
                     inside = shape_.intersects(aoi.to_crs(4326).union_all())
+                    if not inside:   # the feed's own coverage does not touch the area: not listed at all (a bounding-box search can return it)
+                        continue
                     likely = inside and span <= COVERAGE_MAX_KM
                     why = (f"its coverage ({span:,.0f} km across) " + ("includes the area" if inside else "does not include the area")
                            + (" but is regional or intercity in size" if inside and not likely else ""))
