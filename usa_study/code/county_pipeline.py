@@ -348,7 +348,10 @@ def _disaggregate_elections_onto(
     target_gdf: gpd.GeoDataFrame, county_election_row: Optional[pd.Series], pop_col: str = "population",
     county_geoid: Optional[str] = None, cache_dir: Optional[str] = None,
 ) -> gpd.GeoDataFrame:
-    """Resample county-native election columns DOWN onto a finer level (block/blockgroup/tract/h3).
+    """DISABLED: county-native election columns are NOT copied down onto finer levels any more (they were broadcast: every block group of a county
+    got the county's share, which is not data at that resolution). Kept as a no-op so the callers stay as they are.
+
+    The earlier behaviour was: resample county-native election columns DOWN onto a finer level (block/blockgroup/tract/h3).
 
     Elections are only ever fetched natively at county (see `_add_elections`
     -- MEDSL's real published granularity for the offices/years this
@@ -377,6 +380,9 @@ def _disaggregate_elections_onto(
     Returns:
         `target_gdf` with every `{year}_{office}_...` column added.
     """
+    # Rule of 2026-11-27 (pyCensus `elections/README.local.md`, rule 1): votes of a finer level are never taken from county totals. County
+    # results stay on the county rows; finer levels get elections only from sub-county sources (voting districts, `add_precinct_elections.py`).
+    return target_gdf
     if county_election_row is None or pop_col not in target_gdf.columns:
         return target_gdf
 

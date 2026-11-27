@@ -361,21 +361,43 @@ def select_candidates(candidates: list):
     rows, boxes = [], []
     for e in candidates:
         cb = widgets.Checkbox(value=bool(e["likely"]), description="", indent=False, layout=L(width="26px", flex="0 0 auto"))
-        facts = " · ".join(x for x in (e["source"], e["location"], e["modes"], f"updated {e['updated']}" if e["updated"] else "") if x)
+        facts = " · ".join(x for x in (e["source"], e["location"], e["modes"], f"valid {e['valid']}" if e.get("valid") else "", f"updated {e['updated']}" if e["updated"] else "") if x)
         info = widgets.HTML(f"<b>{html.escape(e['provider'])}</b><br><span style='{small}'>{html.escape(facts)}</span><br>"
                             f"<span style='{small};font-style:italic'>{html.escape(e['why'])}</span>"
                             + (f"<br><span style='{small}'>Service: {html.escape(e['service'])}</span>" if e.get("service") else ""), layout=L(flex="1 1 auto", min_width="0"))
-        rows.append(widgets.HBox([cb, info], layout=L(margin="2px 0 8px 0", align_items="flex-start", flex="0 0 auto")))
+        row = widgets.HBox([cb, info], layout=L(margin="2px 0 8px 0", align_items="flex-start", flex="0 0 auto"))
+        row.search = " ".join([e["provider"], e["name"], facts, e["why"], e.get("service", "")]).lower()
+        rows.append(row)
         boxes.append((cb, e))
+    if not any(b.value for b, _ in boxes):   # nothing looks specific to the area: say what to do, since Run all would then find no feed
+        rows.insert(0, widgets.HTML("<div style='color:#8a5a00;font-size:90%;padding:2px 0 6px 0'>No feed looks specific to this area. Tick the ones you want "
+                                    "(a national or regional feed that covers it works too), or give your own feeds in <code>FEEDS</code> in the settings.</div>"))
     tick, untick = widgets.Button(description="Tick all", layout=L(width="90px")), widgets.Button(description="Untick all", layout=L(width="90px"))
     count = widgets.HTML()
 
-    def update(*_):
-        count.value = f"<span style='{small}'>{sum(b.value for b, _ in boxes)} of {len(boxes)} feeds ticked</span>"
+    search = widgets.Text(placeholder="Search the feeds (name, place, mode, dates...)", layout=L(width="340px"))
+    feed_rows = [r for r in rows if hasattr(r, "search")]
 
-    def set_all(value):
-        for b, _ in boxes:
-            b.value = value
+    def shown(r):
+        return r.layout.display != "none"
+
+    def update(*_):
+        n_shown = sum(shown(r) for r in feed_rows)
+        count.value = (f"<span style='{small}'>{sum(b.value for b, _ in boxes)} of {len(boxes)} feeds ticked"
+                       + (f" ({n_shown} shown)" if n_shown != len(feed_rows) else "") + "</span>")
+
+    def set_all(value):   # the feeds shown (all, when the search is empty)
+        for (b, _), r in zip(boxes, feed_rows):
+            if shown(r):
+                b.value = value
+
+    def filter_rows(*_):
+        words = search.value.lower().split()
+        for r in feed_rows:
+            r.layout.display = "" if all(w in r.search for w in words) else "none"
+        update()
+
+    search.observe(filter_rows, "value")
 
     for b, _ in boxes:
         b.observe(update, "value")
@@ -392,7 +414,7 @@ def select_candidates(candidates: list):
                     keys += [k for k in e["keys"] if k.split(":")[0] == e["key"].split(":")[0]]
             return keys
 
-    return CandidateChoice([widgets.HBox([tick, untick, count], layout=L(align_items="center", margin="0 0 8px 0")),
+    return CandidateChoice([widgets.HBox([tick, untick] + ([search] if len(boxes) > 8 else []) + [count], layout=L(align_items="center", margin="0 0 8px 0", flex_flow="row wrap", gap="6px")),
                             widgets.VBox(rows, layout=L(max_height="460px", overflow_y="auto", border="1px solid #ddd", padding="6px", max_width="100%", box_sizing="border-box"))])
 
 
@@ -406,14 +428,26 @@ def select_feeds(feeds: list):
         info = f"{f['source']} · {f['stops']:,} stops in the area · {f['trips']:,} trips on a typical day{span}"
         box = widgets.Checkbox(value=True, description=f["agency"] or f["name"], indent=False, layout=widgets.Layout(width="320px", max_width="100%"))
         box.feed = f["name"]
-        rows.append(widgets.HBox([box, widgets.HTML(f"<span style='color:#666;font-size:90%'>{info}</span>", layout=widgets.Layout(flex="1 1 240px", min_width="0"))], layout=widgets.Layout(flex_flow="row wrap", max_width="100%")))
+        row = widgets.HBox([box, widgets.HTML(f"<span style='color:#666;font-size:90%'>{info}</span>", layout=widgets.Layout(flex="1 1 240px", min_width="0"))], layout=widgets.Layout(flex_flow="row wrap", max_width="100%"))
+        row.search = f"{f['agency']} {f['name']} {info}".lower()
+        rows.append(row)
 
     class FeedChoice(widgets.VBox):
         @property
-        def value(self) -> list:
-            return [r.children[0].feed for r in self.children if r.children[0].value]
+        def value(self) -> list:   # the ticked feeds, also those a search has hidden
+            return [r.children[0].feed for r in rows if r.children[0].value]
 
-    return FeedChoice(rows)
+    if len(rows) <= 8:
+        return FeedChoice(rows)
+    search = widgets.Text(placeholder="Search the feeds (agency, source, dates...)", layout=widgets.Layout(width="340px"))
+
+    def filter_rows(*_):
+        words = search.value.lower().split()
+        for r in rows:
+            r.layout.display = "" if all(w in r.search for w in words) else "none"
+
+    search.observe(filter_rows, "value")
+    return FeedChoice([search] + rows)
 
 
 def pick_date(info: dict):
@@ -438,6 +472,9 @@ def pick_date(info: dict):
     paint = [colours.get(k, "#c0392b") for k in kind]
     strong = [k == info["day"] for k in kind]
     suggested = datetime.date.fromisoformat(info["suggested"])
+    # the plot shows the suggested date and 6 months before and after it, never more (calendars can last for years); every date stays pickable
+    plo, phi = (datetime.date.fromisoformat(x) for x in info.get("plot", (info["dates"][0]["date"], info["dates"][-1]["date"])))
+    view = [i for i, d in enumerate(dates) if plo <= d <= phi]
     box = widgets.DatePicker(description="Service date", value=suggested, style={"description_width": "initial"})
     out = widgets.Output()
 
@@ -445,14 +482,15 @@ def pick_date(info: dict):
         with out:
             out.clear_output(wait=True)
             fig, ax = plt.subplots(figsize=(11, 3.8))
-            for d, e, c, k, s in zip(dates, events, paint, kind, strong):
+            vd, ve, vc, vk, vs, vh = ([x[i] for i in view] for x in (dates, events, paint, kind, strong, holiday))
+            for d, e, c, k, s in zip(vd, ve, vc, vk, vs):
                 ax.bar(d, e, width=1.0, color=c, alpha=1.0 if s else 0.55, hatch="////" if k == "holiday" else None,
                        edgecolor="white" if k != "holiday" else "#7b241c", linewidth=0.8 if k != "holiday" else 0.4)
-            top = max(events) if events else 1
-            real = [d for d, e in zip(dates, events) if e >= 0.05 * top]   # where there is real service (tiny feeds can run for years)
-            lo, hi = (min(real) - datetime.timedelta(days=7), max(real) + datetime.timedelta(days=7)) if real else (dates[0], dates[-1])
+            top = max(ve) if ve else 1
+            real = [d for d, e in zip(vd, ve) if e >= 0.05 * top]   # where there is real service (tiny feeds can run for years)
+            lo, hi = (min(real) - datetime.timedelta(days=7), max(real) + datetime.timedelta(days=7)) if real else (plo, phi)
             ax.set_xlim(lo, hi)
-            for d, e, h in zip(dates, events, holiday):
+            for d, e, h in zip(vd, ve, vh):
                 if h and lo + datetime.timedelta(days=2) <= d <= hi:
                     ax.text(d, e + top * 0.02, h, rotation=90, ha="center", va="bottom", fontsize=7, color="#7b241c")
             ax.set_ylim(0, top * 1.4)

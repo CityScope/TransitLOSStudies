@@ -109,7 +109,7 @@
     if (order.length) status('Recomputed: ' + order.join(', ') + ' · ' + painted.size + ' cells recoloured');   // every repaint (tiles arrive after the data)
     return n;
   }
-  window.__flexCellColour = (id, r) => { if (mode === 'map') return null; const v = valueOf(String(id), r); return v ? colour(v[0], v[1]) : null; };   // the cell's colour, for the buildings
+  window.__flexCellColour = (id, r) => { if (mode === 'map') return null; let v = valueOf(String(id), r); for (let q = r - 1; !v && q >= 8; q--) v = valueOf(h3.cellToParent(String(id), q), q); return v ? colour(v[0], v[1]) : null; };   // a cell without a value takes its parent's   // the cell's colour, for the buildings
   async function ensureStates() {
     const m = window.__mainMap || window.__map; if (!m || !INDEX || busy) return;
     if (m.getZoom() < CFG.minZoom) { status('Zoom in (zoom ' + CFG.minZoom + '+) to recompute the cells.'); return; }

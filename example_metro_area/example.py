@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import json
 import os
+from datetime import timedelta as _timedelta
 import math
 import re
 import shutil
@@ -91,8 +92,8 @@ MUNICIPALITY_BY_PLACE = [
     ("*", "openstreetmap"),                            # OpenStreetMap administrative boundary
 ]
 
-#: a feed whose coverage is wider than this (km across) is regional or intercity: not ticked by default in `find_feeds`
-COVERAGE_MAX_KM = 250
+#: the service-date PLOT shows the suggested date and this many months before and after it (calendars can last for years); the dates stay pickable
+PLOT_MONTHS = 6
 
 #: API keys this study may ask for: (what needs it, where to sign up, environment variable)
 API_KEYS = {
@@ -222,7 +223,7 @@ def check_census_api(country: str) -> None:
 
 
 #: the keys each census source needs: (source key, country or None for any) -> key names of `API_KEYS`
-SOURCE_KEYS = {("acs5", None): ["us_census"], ("dhc", None): ["us_census"], ("census", "DEU"): ["destatis_genesis"]}
+SOURCE_KEYS = {("acs5", None): ["us_census"], ("dhc", None): ["us_census"], ("destatis", "DEU"): ["destatis_genesis"]}
 
 
 def keys_needed(aoi: gpd.GeoDataFrame, sources: Sequence[str]) -> list:
@@ -278,25 +279,24 @@ def save_key(name: str, key: str) -> dict:
     return {"ok": True, "message": "Saved."}
 
 
-def place_codes(aoi: gpd.GeoDataFrame, samples: int = 9) -> dict:
-    """Where the area is: `{"iso2", "iso3", "regions": ISO 3166-2 codes, "provinces": names}` from points spread over it."""
-    import numpy as np
-    from geohierarchy.geocoding import reverse_geocode
-    from shapely import contains_xy
+def place_codes(aoi: gpd.GeoDataFrame) -> dict:
+    """Where the area is: `{"iso2", "iso3", "regions": ISO 3166-2 codes, "provinces": names, "municipalities": names}`.
 
-    geom = aoi.union_all()
-    pts = [geom.representative_point()]
-    minx, miny, maxx, maxy = geom.bounds
-    n = int(np.ceil(np.sqrt(samples)))
-    xs, ys = np.meshgrid(np.linspace(minx, maxx, n + 2)[1:-1], np.linspace(miny, maxy, n + 2)[1:-1])
-    inside = contains_xy(geom, xs.ravel(), ys.ravel())
+    As few place lookups as possible (the public geocoder allows one request per second and blocks heavy use; each is cached on disk): one for the
+    area's representative point, and for areas outside Spain two more at opposite ends of the area (a large area can reach into other regions). In Spain
+    the municipalities come from the municipality boundaries (offline), so that one lookup is all."""
+    from geohierarchy.geocoding import reverse_geocode
     from shapely.geometry import Point
-    pts += [Point(x, y) for x, y in zip(xs.ravel()[inside], ys.ravel()[inside])]
+    from shapely.ops import nearest_points
+
+    geom = aoi.to_crs(4326).union_all()
+    first = geom.representative_point()
     out = {"iso2": None, "iso3": None, "regions": [], "provinces": [], "municipalities": []}
-    for pt in pts:
+
+    def add(pt) -> None:
         a = reverse_geocode(pt.y, pt.x)
         if not a.get("country_code"):
-            continue
+            return
         out["iso2"] = out["iso2"] or a["country_code"].upper()
         for k, key in (("regions", "ISO3166-2-lvl4"), ("provinces", "province")):
             v = a.get(key)
@@ -305,6 +305,21 @@ def place_codes(aoi: gpd.GeoDataFrame, samples: int = 9) -> dict:
         town = next((a[x] for x in ("city", "town", "village", "municipality") if a.get(x)), None)   # the municipality of the point
         if town and town not in out["municipalities"]:
             out["municipalities"].append(town)
+
+    add(first)
+    if out["iso2"] == "ES":
+        try:
+            from pycensus.census.countries.spain.geography import municipalities_in
+
+            out["municipalities"] = list(dict.fromkeys(municipalities_in(aoi)["LAU_NAME"].tolist() + out["municipalities"]))
+        except Exception:  # noqa: BLE001 -- no boundaries: the one point's municipality is all there is
+            pass
+    else:
+        minx, miny, maxx, maxy = geom.bounds
+        for corner in (Point(minx, miny), Point(maxx, maxy)):   # the two ends of the area, nearest points of the area itself
+            pt = nearest_points(corner, geom.buffer(-0.02 * max(maxx - minx, maxy - miny)) if not geom.buffer(-0.02 * max(maxx - minx, maxy - miny)).is_empty else geom)[1]
+            if pt.distance(first) > 0.02:   # (about 2 km) only when it is a different place
+                add(pt)
     if out["iso2"]:
         import pycountry
 
@@ -402,27 +417,89 @@ def get_feeds(aoi: gpd.GeoDataFrame, gtfs_dir: Path, feeds: Union[str, Path, Seq
     return kept
 
 
+#: a NAP dataset listing at least this many autonomous communities is national (the regional networks of one community list 1 to 3, with the neighbours their lines reach)
+NAP_REGIONAL_COMMUNITIES = 5
 #: NAP transport types that carry the feeds of urban transit (aerial and maritime datasets are not)
 NAP_TRANSPORT = ("autobus", "ferroviario")
 
 
-def _nap_feeds(client, place: dict) -> list:
+def _nap_feeds(client, place: dict, aoi=None) -> list:
     """The NAP feeds for the area: those of the municipalities (and urban areas) the area lies in, then the province-wide ones of its provinces, bus and
-    rail only, and from each dataset the newest file valid today (a dataset bundles the versions of a feed). Each feed's `raw["aoi_match"]` says which ("municipality" or "province"); NAP lists no geometry, so the feeds are checked against the
-    area's stops after they are downloaded (`_keep_feeds_in_area`)."""
+    rail only, and from each dataset the newest file valid today (a dataset bundles the versions of a feed). The municipalities and provinces come from
+    the area's geometry against the Spanish municipality boundaries (NAP names them in Spanish, the geocoder in Basque, Catalan ...): NAP's province id
+    is the national province code, and a municipality is found by its boundary's name. Each feed's `raw["aoi_match"]` says which ("municipality" or
+    "province"); NAP lists no geometry, so the feeds are checked against the area's stops after they are downloaded (`_keep_feeds_in_area`)."""
+    towns, provinces = list(place.get("municipalities", [])), []
+    if aoi is not None:
+        try:
+            from pycensus.census.countries.spain.geography import municipalities_in
+
+            found = municipalities_in(aoi)
+            towns = list(dict.fromkeys(found["LAU_NAME"].tolist() + towns))
+            provinces = [int(p) for p in dict.fromkeys(found["province"].tolist())]   # NAP province id = INE province code
+        except Exception as exc:  # noqa: BLE001 -- no boundaries: the geocoder's names are all there is
+            print(f"[gtfs] nap: municipalities of the area not found from boundaries ({exc}); using the geocoder's names", flush=True)
+    communities = []   # the autonomous communities of those provinces (a metro or a regional operator is often listed for the whole community only)
+    try:
+        from pycensus.census.countries.spain import constants as _K
+
+        for code, provs in _K.AUTONOMOUS_COMMUNITY_PROVINCES.items():
+            if any(f"{p:02d}" in provs for p in provinces):
+                label = _K.AUTONOMOUS_COMMUNITY_CODES[code]
+                communities += [x.strip(" )") for x in label.replace(")", "").split("(")]   # "Baleares (Islas Baleares)": both names
+    except Exception:  # noqa: BLE001
+        pass
     feeds, seen = [], set()
-    for names, kind, level in ((place.get("municipalities", []), "municipality", 3), (place.get("municipalities", []), "municipality", 2),
-                               (place.get("provinces", []), "province", 0)):
+    for names, kind, level in ((towns, "municipality", 3), (towns, "municipality", 2), (provinces or place.get("provinces", []), "province", 0),
+                               (communities, "community", 1)):
         if not names:
             continue
-        for f in client.search_feeds(region=names, region_type=level, transport_type=list(NAP_TRANSPORT), start_date="today", end_date="today", keep="newest"):
+        found = client.find_datasets(region=names, region_type=level, transport_type=list(NAP_TRANSPORT))
+        if provinces and level in (2, 3):   # a municipality name can exist in several provinces (and match the wrong one): the dataset must also list a province of the area
+            found = [d for d in found if any(x.get("tipoNombre") == "Provincia" and x.get("regionId") in provinces for x in d.get("regiones", []))]
+        datasets = [client.current_file(d) for d in found]
+        for f in client.datasets_to_feeds(datasets):
             if f.id in seen:
                 continue
             seen.add(f.id)
+            old = (f.raw.get("file") or {}).get("expired_on") if isinstance(f.raw, dict) else None
+            if old and old < (_date.today() - _timedelta(days=365)).isoformat():
+                continue   # a calendar that ended over a year ago is of no use
             if isinstance(f.raw, dict):
-                f.raw["aoi_match"] = kind
+                modes = {normalize for normalize in (t.get("nombre", "") for t in f.raw.get("dataset", {}).get("tiposTransporte", []))}
+                f.raw["aoi_match"] = "community_rail" if kind == "community" and "Ferroviario" in modes else kind
+                n_com = sum(1 for x in f.raw.get("dataset", {}).get("regiones", []) if x.get("tipoNombre") == "ComunidadAutonoma")
+                f.raw["n_communities"] = n_com
+                if n_com >= NAP_REGIONAL_COMMUNITIES:   # a dataset listing many autonomous communities is a national network (intercity coaches, AVE, Cercanias of the whole country)
+                    f.raw["aoi_match"] = "regional"
             feeds.append(f)
     return feeds
+
+
+def _plausible_feeds(feeds: list, aoi: gpd.GeoDataFrame, place: dict, max_span_km: float = 150.0) -> list:
+    """Catalog feeds that can really serve the area. The catalog's bounding boxes are sometimes wrong (a nationwide German feed, a Chilean one and
+    others with boxes spanning continents overlap any big city's box): a feed of the area's own country stays, a feed of another country only when its
+    box is tight (at most `max_span_km` across: a cross-border network) and touches the area itself."""
+    from shapely.geometry import box as _box
+
+    iso2 = (place.get("iso2") or "").upper()
+    geom = aoi.to_crs(4326).union_all()
+    keys = [f"location.bounding_box.{k}" for k in ("minimum_longitude", "minimum_latitude", "maximum_longitude", "maximum_latitude")]
+    out = []
+    for f in feeds:
+        raw = f.raw if isinstance(f.raw, dict) else {}
+        cc = str(f.country_code or "").upper()
+        if not iso2 or not cc or cc == iso2:   # the area's own country, or no country given (the feed's own polygon is checked later)
+            out.append(f)
+            continue
+        try:
+            x0, y0, x1, y1 = (float(raw[k]) for k in keys)
+        except (KeyError, TypeError, ValueError):
+            continue   # another country and no box to judge it by
+        span = (((x1 - x0) * 111.3 * math.cos(math.radians((y0 + y1) / 2))) ** 2 + ((y1 - y0) * 111.3) ** 2) ** 0.5
+        if span <= max_span_km and _box(x0, y0, x1, y1).intersects(geom):
+            out.append(f)
+    return out
 
 
 def _search_source(source: str, aoi: gpd.GeoDataFrame, place: dict, states: Optional[Sequence[str]]):
@@ -442,16 +519,16 @@ def _search_source(source: str, aoi: gpd.GeoDataFrame, place: dict, states: Opti
         if not key:
             return None
         client = NAPDownloader(api_key=key)
-        return client, _nap_feeds(client, place)
+        return client, _nap_feeds(client, place, aoi)
     if source == "mobility_database":
         client = MobilityDatabaseCatalog()
-        return client, client.search_feeds(aoi=aoi)
+        return client, _plausible_feeds(client.search_feeds(aoi=aoi), aoi, place)
     if source == "transitland":
         key = api_key("transitland")
         if not key:
             return None
         client = TransitLandDownloader(api_key=key)
-        return client, client.search_feeds(aoi=aoi, limit=None)   # every page of the area's bounding box, not the first 1,000 feeds
+        return client, _plausible_feeds(client.search_feeds(aoi=aoi, limit=None), aoi, place)   # every page of the area's bounding box, not the first 1,000 feeds
     raise ValueError(f"unknown feed source {source!r}: use 'ntd', 'nap', 'mobility_database' or 'transitland'")
 
 
@@ -563,6 +640,31 @@ def _stop_time_rows(raw: dict) -> dict:
     return {k: rows[k] for k in ("stops", "routes", "stop_times", "frequencies") if k in rows}
 
 
+def _valid_range(raw: dict) -> str:
+    """The dates a feed's catalog entry says its service is valid ("2026-01-01 to 2026-12-31", or one end), or "" when the catalog does not say:
+    the Mobility Database's service date range, NAP's validity interval (fechaDesde / fechaHasta), Transitland's calendar dates."""
+    def find(d, names):
+        if isinstance(d, dict):
+            for k, v in d.items():
+                if str(k).lower() in names and v not in (None, ""):
+                    return v
+            for v in d.values():
+                r = find(v, names)
+                if r:
+                    return r
+        elif isinstance(d, list):
+            for v in d[:5]:
+                r = find(v, names)
+                if r:
+                    return r
+        return None
+
+    a = find(raw, {"service_date_range_start", "fechadesde", "earliest_calendar_date", "calendar_start_date"})
+    b = find(raw, {"service_date_range_end", "fechahasta", "latest_calendar_date", "calendar_end_date"})
+    a, b = (str(a)[:10] if a else ""), (str(b)[:10] if b else "")
+    return f"{a} to {b}" if a and b else (f"from {a}" if a else (f"until {b}" if b else ""))
+
+
 def find_feeds(aoi: gpd.GeoDataFrame, feeds: Union[str, Path, Sequence] = "download", sources: Optional[Sequence[str]] = FEED_SOURCES) -> list:
     """The feeds the sources list for the area, from their metadata only: nothing is downloaded, so you can choose before downloading.
 
@@ -598,8 +700,13 @@ def find_feeds(aoi: gpd.GeoDataFrame, feeds: Union[str, Path, Sequence] = "downl
             likely, why = True, f"listed by {s} for the area"
             if s == "nap":
                 m = raw.get("aoi_match")
-                likely = m == "municipality"
-                why = ("lists a municipality of the area" if likely else "province-wide: may not serve the area") if m else why
+                gone = (raw.get("file") or {}).get("expired_on")   # the newest file's calendar has ended
+                likely = m in ("municipality", "community_rail")   # an ended calendar does not untick it: the run scores such a feed on its own typical day
+                why = {"municipality": "lists a municipality of the area", "community_rail": "rail or metro of the whole community: may serve the area",
+                       "province": "province-wide: may not serve the area", "community": "community-wide bus: may not serve the area",
+                       "regional": f"serves {raw.get('n_communities', 'many')} autonomous communities: national or intercity"}.get(m, why)
+                if gone:
+                    why += f"; its calendar ended on {gone}: scored on its own typical day"
             if s == "ntd":
                 uza, city = str(ntd.get("uza_name", "")), str(ntd.get("city", ""))
                 likely = city.lower() in names
@@ -617,15 +724,11 @@ def find_feeds(aoi: gpd.GeoDataFrame, feeds: Union[str, Path, Sequence] = "downl
 
                     shape_ = _shape(_dig(raw, "feed_state.feed_version.geometry"))
                 if shape_ is not None:
-                    x0, y0, x1, y1 = shape_.bounds
-                    span = ((x1 - x0) * 111.3 * math.cos(math.radians((y0 + y1) / 2))) ** 2
-                    span = (span + ((y1 - y0) * 111.3) ** 2) ** 0.5
                     inside = shape_.intersects(aoi.to_crs(4326).union_all())
                     if not inside:   # the feed's own coverage does not touch the area: not listed at all (a bounding-box search can return it)
                         continue
-                    likely = inside and span <= COVERAGE_MAX_KM
-                    why = (f"its coverage ({span:,.0f} km across) " + ("includes the area" if inside else "does not include the area")
-                           + (" but is regional or intercity in size" if inside and not likely else ""))
+                    km2 = float(gpd.GeoSeries([shape_], crs=4326).to_crs(6933).area.iloc[0]) / 1e6
+                    why = f"its coverage ({km2:,.0f} km2) includes the area"   # no limit on how large a feed's coverage is: any feed that covers the area is ticked
             url = str(_dig(raw, "urls.direct_download") or f.download_url or "").strip()   # the agency's own link: the same feed from other sources matches
             key = f"{s}:{f.id}"
             entry = entries.get(url.lower()) if url else None
@@ -640,6 +743,7 @@ def find_feeds(aoi: gpd.GeoDataFrame, feeds: Union[str, Path, Sequence] = "downl
                 "name": str(f.name or "") if str(f.name) not in ("None", "") else "", "location": location,
                 "modes": [ntd["mode_name"]] if ntd.get("mode_name") else [], "url": url,
                 "updated": str(ntd.get("new_modified_date") or _dig(raw, "feed_state.feed_version.fetched_at") or "")[:10],
+                "valid": _valid_range(raw),
                 "likely": bool(likely), "why": why, "stop_times": _stop_time_rows(raw)}
     out = []
     for e in entries.values():
@@ -745,19 +849,25 @@ def _service_days(folder: Path):
     import polars as pl
 
     days = []
+    names = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
     cal = folder / "calendar.txt"
     if cal.is_file():
-        c = pl.read_csv(cal, infer_schema_length=0).with_columns(pl.col("start_date", "end_date").str.strip_chars().str.to_date("%Y%m%d"))
-        names = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
-        c = c.with_columns(date=pl.date_ranges("start_date", "end_date")).explode("date").with_columns(dow=pl.col("date").dt.weekday() - 1)
-        flags = pl.concat_list([pl.col(n) == "1" for n in names])
-        days.append(c.filter(flags.list.get(pl.col("dow"))).select("service_id", "date"))
+        c = pl.read_csv(cal, infer_schema_length=0)
+        c.columns = [x.strip() for x in c.columns]
+        if {"service_id", "start_date", "end_date", *names} <= set(c.columns) and c.height:   # a feed may ship an empty or partial calendar.txt
+            c = c.with_columns(pl.col("start_date", "end_date").str.strip_chars().str.to_date("%Y%m%d", strict=False)).drop_nulls(["start_date", "end_date"])
+            c = c.with_columns(date=pl.date_ranges("start_date", "end_date")).explode("date").with_columns(dow=pl.col("date").dt.weekday() - 1)
+            flags = pl.concat_list([pl.col(n) == "1" for n in names])
+            days.append(c.filter(flags.list.get(pl.col("dow"))).select("service_id", "date"))
     exc = folder / "calendar_dates.txt"
     base = pl.concat(days) if days else pl.DataFrame(schema={"service_id": pl.Utf8, "date": pl.Date})
     if exc.is_file():
-        e = pl.read_csv(exc, infer_schema_length=0).with_columns(pl.col("date").str.strip_chars().str.to_date("%Y%m%d"))
-        base = pl.concat([base.join(e.filter(pl.col("exception_type") == "2").select("service_id", "date"), on=["service_id", "date"], how="anti"),
-                          e.filter(pl.col("exception_type") == "1").select("service_id", "date")]).unique()
+        e = pl.read_csv(exc, infer_schema_length=0)
+        e.columns = [x.strip() for x in e.columns]
+        if {"service_id", "date", "exception_type"} <= set(e.columns) and e.height:
+            e = e.with_columns(pl.col("date").str.strip_chars().str.to_date("%Y%m%d", strict=False)).drop_nulls("date")
+            base = pl.concat([base.join(e.filter(pl.col("exception_type") == "2").select("service_id", "date"), on=["service_id", "date"], how="anti"),
+                              e.filter(pl.col("exception_type") == "1").select("service_id", "date")]).unique()
     return base
 
 
@@ -828,7 +938,8 @@ def service_dates(aoi: gpd.GeoDataFrame, feed_names: Sequence[str], day: str = D
 
     Returns `{"dates": [{"date", "weekday", "trips", "events"}...], "suggested", "day"}`: `trips` = trips that call at a stop of the
     area, `events` = stop calls in the area (stops x trips), summed over the feeds, for every date of their calendars within a year of
-    today (or the last year of the calendar when it ended earlier), with the name of the public holiday on it, if any. `suggested`: like the
+    today (or the last year of the calendar when it ended earlier), with the name of the public holiday on it, if any. `plot`: the two dates the plot
+    shows, the suggested date `PLOT_MONTHS` (6) months before and after, never more however long the calendars are. `suggested`: like the
     automatic choice, the middle date of the `day` type (weekday, saturday, sunday), holidays excluded, with at least 95% of the busiest
     such date's `events`, within 60 days of today.
     """
@@ -864,7 +975,8 @@ def service_dates(aoi: gpd.GeoDataFrame, feed_names: Sequence[str], day: str = D
     top = pool.filter(pl.col("events") >= 0.95 * pool["events"].max()).sort("date")
     suggested = top["date"][top.height // 2]
     names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-    return {"dates": [{"date": str(d), "weekday": names[w], "trips": int(t), "events": int(e), "holiday": holidays.get(str(d), "")}
+    window = timedelta(days=round(PLOT_MONTHS * 30.44))   # the PLOT only shows the suggested date and PLOT_MONTHS months before and after it; every date stays pickable
+    return {"plot": [str(suggested - window), str(suggested + window)], "dates": [{"date": str(d), "weekday": names[w], "trips": int(t), "events": int(e), "holiday": holidays.get(str(d), "")}
                       for d, t, e, w in table.iter_rows()], "suggested": str(suggested), "day": day}
 
 
@@ -887,19 +999,18 @@ SOURCES = {
     "census": ("National census", "The country's own census columns.", ()),
     "derived": ("Derived indicators", "Shares, rates and harmonised names made by this study from the sources above.", ()),
 }
-#: the USA sources that can be left out of the download (the buildings are used whenever needed)
-_OPTIONAL_USA = ("dhc", "acs5", "lodes", "religion", "housing_history", "elections")
 
 
 def census_sources(aoi: gpd.GeoDataFrame) -> list:
     """The census data sources for the area, to choose from BEFORE the run downloads them (unticked ones are never downloaded).
 
-    Returns one dict per source: `key`, `title`, `description`, `default` (ticked at the start), `note`, and `forced` (a rule, never a lock: the
-    source is ticked and cannot be unticked while the rule holds). Nothing is locked: the census population (decennial blocks in the USA, the
-    national census elsewhere) is ticked by default where the census is sub-municipal, and when it is unticked WorldPop's population grid is
-    ticked automatically (`replaces`); where the country has no census, WorldPop's grid is the only population source and stays ticked.
-    The buildings (GlobalBuildingAtlas) are not listed: they are used whenever the run needs them (the built-surface population, resampling).
+    One row per dataset that is downloaded separately (`pycensus.census.sources`: an agency that publishes several datasets has several rows) for the
+    area's country, the city or region specific ones only where the area touches their coverage, then WorldPop's two groups. Returns dicts with `key`,
+    `title`, `description` (with the detail level), `default` (ticked at the start), `note`, `replaces` (the population base: unticking it ticks WorldPop's
+    grid) and `forced` (a rule, never a lock). Where the country has no census here, WorldPop's grid and layers are the only sources and stay ticked.
+    The buildings (GlobalBuildingAtlas, or the country's own building data) are not listed: they are used whenever the run needs them.
     """
+    from pycensus.census import sources as registry
     from studytools.config import _census_supported
 
     iso3 = place_codes(aoi)["iso3"]
@@ -907,22 +1018,36 @@ def census_sources(aoi: gpd.GeoDataFrame) -> list:
     has_census = _census_supported(iso3, census_module)
 
     def row(key, default=True, note="", **kw):
-        return {"key": key, "title": SOURCES[key][0], "description": SOURCES[key][1], "default": default, "note": note, "required": False, **kw}
+        return {"key": key, "title": SOURCES[key][0], "description": SOURCES[key][1], "required": False, "default": default, "note": note, **kw}
 
     rows = []
-    if iso3 == "USA" and has_census:
-        rows = [row("dhc"), row("acs5"), row("lodes"), row("religion"), row("housing_history"), row("elections")]
-    elif has_census:
-        rows = [row("census")]
     if has_census:
-        pop = rows[0]["key"]
-        rows.append(row("worldpop_grid", default=False, replaces=pop,
+        country = "EUSKADI" if census_module == "euskadi" else iso3
+        for r in registry.for_area(country, aoi):
+            rows.append({"key": r["key"], "title": r["title"], "description": f"{r['description']} Published by {r['detail']}.", "default": True, "note": "", "required": False})
+        base = registry.base_key(country) or (rows[0]["key"] if rows else None)
+        if base is None:   # a country with a census module but no registry entry: one group, as before
+            rows = [row("census")]
+            base = "census"
+        rows.append(row("worldpop_grid", default=False, replaces=base,
                         note="used for the population when the census population is unticked, and where the census areas are large (about 1.5 GB for the USA)"))
-        rows.append(row("worldpop_layers", default=False, note="a one-time download of tens of GB for the USA"))
+        rows.append(row("worldpop_layers", default=False, note="a one-time download of tens of GB for a country"))
     else:
         rows.append(row("worldpop_grid", forced=True, note="the country has no census here: WorldPop is the population source"))
         rows.append(row("worldpop_layers", forced=True, note="no census here: WorldPop's layers give age, sex and urban share"))
     return rows
+
+
+def _census_skip(config, catalog: list, chosen: set) -> tuple:
+    """The census sources of the country that are not ticked (keys of `pycensus.census.sources`). The population base of a country other than the USA is never
+    skipped (its places would have no population); unticking it makes WorldPop's grid the base (`census_sources`). In the USA an unticked decennial census only
+    drops its race and ethnicity join."""
+    from pycensus.census import sources as registry
+
+    country = "EUSKADI" if config.census_module == "euskadi" else config.country
+    offered = {r["key"] for r in catalog}
+    base = registry.base_key(country)
+    return tuple(k for k in registry.keys(country) if k in offered and k not in chosen and (k != base or config.country == "USA"))
 
 
 _census_catalog = census_sources   # the function under a name `run()` can still reach
@@ -1088,7 +1213,7 @@ def run(aoi: gpd.GeoDataFrame, name: Optional[str] = None, day: str = DAY, start
             chosen.add(r["key"])
     config = dataclasses.replace(
         config, worldpop_layers="worldpop_layers" in chosen or not config.uses_census,
-        census_skip=tuple(k for k in _OPTIONAL_USA if k not in chosen) if config.country == "USA" else ())   # unchosen sources are never downloaded
+        census_skip=_census_skip(config, catalog, chosen))   # unchosen sources are never downloaded
     if config.census_skip:
         print(f"[example] census sources left out: {', '.join(config.census_skip)}", flush=True)
     if config.uses_census:

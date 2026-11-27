@@ -36,7 +36,7 @@ Notes on the measures:
   city keeps its own level and is compared on its own, not pooled with the commuters.
 * Guadalajara has about 16 to 23 surveyed commuters per AGEB (about 280 per centralidad): `outcomes.py` therefore takes the centralidad, the
   coarsest survey level with enough units; a unit weighs the people it stands for (`n_tc`, expanded) and the likelihood counts its surveyed sample (`n_sample_tc`). The left vote is an extra control for Guadalajara only
-  (`CITY_EXTRA` in `fit_tests.py`) and units with a default score under 5 (no feed reaches them) are left out (`NO_FEED_BELOW`).
+  (`CITY_EXTRA` in `fit_cities.py`) and units with a default score under 5 (no feed reaches them) are left out (`NO_FEED_BELOW`).
   Its AGEBs are the survey's own 2020 urban AGEBs, then INEGI's urban and rural AGEB layers.
 * Finer data exist only on request: MobiHam 2022 microdata with the Stadtteil of residence (Hamburg, 104 Stadtteile), the MOTC survey
   microdata with the district (Taipei, later years than 2018), the EM CAPV microdata (Gipuzkoa, municipalities above 10,000
@@ -59,8 +59,8 @@ The fits use transit against the car only (`share_tc` = transit / (transit + car
 2. `flex/outcomes.py`: the outcome table per city (above).
 3. `flex/build_fit_data.py`: per city the outcome units, their populated res-11 cells (the cell centre in the unit; within 100 m for units
    drawn without the streets), the cells' service items and the units' controls (population-weighted over the cells) -> `<city>/flex/fit/`.
-4. `flex/fit_cities.py` (model: `SmoothModel` in `tools/studytools/flexfit.py`): each fitted city on its own, the curves shared by the cities
+4. `flex/fit_cities.py` (on the library `transitlos.flex.fit`, run with `TORCH_PYTHON`; `run_fits_all.sh` runs everything that is reported): each fitted city on its own, the curves shared by the cities
    (pools of donor cities and sensitivity variants), the ranking of the cities from the shared score, and the service each city has;
    `fit_cities.py report` writes `flex/FIT_RESULTS.md`. The score is computed per H3 res-11 cell and a unit takes the population-weighted mean of
    its cells' scores; modes are in order (rail >= tram >= bus); the curves are smooth with bounded steepness; speed is fitted first, then the modes.
-   `flex/fit_tests.py` supplies the data loading and the scoring helpers (and the earlier, unsmoothed tests).
+   The fit library also gives error bounds, scenarios and model comparison for any area (`transitLOS/src/transitlos/flex/fit`).

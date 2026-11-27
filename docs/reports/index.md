@@ -42,4 +42,4 @@ report the R² of the held-out transit share), but their curves are:
 | | Code | Data |
 |---|---|---|
 | US fit | `usa_flex/fit/torch_fit4.py`, studies in `usa_flex/fit/score_study/` | `usa_flex/fit/data_buf/` |
-| City fits | `city_science_network/flex/fit_tests.py`, model `tools/studytools/flexfit.py` | `city_science_network/flex/results/`, `FIT_RESULTS.md` |
+| City fits | `city_science_network/flex/fit_cities.py`, model `transitlos.flex.fit` | `city_science_network/flex/results/`, `FIT_RESULTS.md` |

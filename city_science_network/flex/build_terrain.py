@@ -8,6 +8,7 @@ Cities are done one after another with a pause: the server must never see a burs
 """
 from __future__ import annotations
 
+import json
 import shutil
 import sys
 import time
@@ -28,7 +29,9 @@ def build(city: str, zmin: int = 7, zmax: int = 11, margin: float = 0.15) -> dic
     dx, dy = (e - w) * margin, (n - s) * margin
     out = HERE / city / "map_tiles" / "terrain"
     shutil.rmtree(out, ignore_errors=True)
-    return {"city": city, "dem_mb": round(dem.stat().st_size / 1e6, 1), **pdem.write_terrarium_tiles(dem, out, (w - dx, s - dy, e + dx, n + dy), zmin, zmax)}
+    res = pdem.write_terrarium_tiles(dem, out, (w - dx, s - dy, e + dx, n + dy), zmin, zmax)
+    (out / "meta.json").write_text(json.dumps({"bounds": [round(w - dx, 5), round(s - dy, 5), round(e + dx, 5), round(n + dy, 5)], "minzoom": zmin, "maxzoom": zmax}))   # the page asks only for tiles inside
+    return {"city": city, "dem_mb": round(dem.stat().st_size / 1e6, 1), **res}
 
 
 if __name__ == "__main__":

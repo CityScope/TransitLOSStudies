@@ -1,4 +1,4 @@
-"""Fit data of one city science map for the flex fits (`fit_tests.py`): outcome units, their populated res-11 cells and the cells' service items.
+"""Fit data of one city science map for the flex fits (`fit_cities.py`): outcome units, their populated res-11 cells and the cells' service items.
 
     python flex/build_fit_data.py [city ...]          # every city with an outcome table by default
 

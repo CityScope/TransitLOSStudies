@@ -54,6 +54,59 @@ def _route_modes(dirs: Sequence[Path]) -> pl.DataFrame:
     return pl.concat(frames, how="diagonal_relaxed").unique(["route_id", "file_id"], keep="first")
 
 
+_HOLIDAYS: dict = {}   # (country, region, year) -> {iso date: name}, looked up once per area
+
+
+def _holiday_name(day: date, aoi) -> Optional[str]:
+    """The public holiday the date falls on in the area's country and region (None when it is none, or the holiday service is unreachable)."""
+    try:
+        from datetime import timedelta
+
+        from pyGTFSHandler.utils import date_parsing, geocoding
+
+        c = aoi.to_crs(4326).union_all().centroid
+        key = (round(c.y, 1), round(c.x, 1), day.year)
+        if key not in _HOLIDAYS:
+            country, region = geocoding.get_country_region(c.y, c.x)
+            _HOLIDAYS[key] = {str(date(1970, 1, 1) + timedelta(days=int(n))): name
+                              for n, name in date_parsing.get_holidays(day.year, country, region).select("date", "name").iter_rows()}
+        return _HOLIDAYS[key].get(day.isoformat())
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def day_label(day: date, aoi=None) -> str:
+    """`Tuesday 2026-12-01` plus `, public holiday: <name>` when it is one."""
+    h = _holiday_name(day, aoi) if aoi is not None else None
+    return f"{day:%A} {day.isoformat()}" + (f", public holiday: {h}" if h else "")
+
+
+def _service_check(d: Path, day: date, aoi, group_m: float, strict: bool = False) -> tuple:
+    """`(fits, why not)`: whether the feed can be scored on `day`, and if not what is wrong with the date for it."""
+    from pyGTFSHandler.feed import Feed
+
+    none = "it has no service that day (outside its calendar, or no trips that day of the week)"
+    try:
+        feed = Feed(gtfs_dirs=[str(d)], aoi=aoi, start_date=day, end_date=day, stop_group_distance=group_m)
+        if feed.trips.lf.limit(1).collect().height == 0:
+            return False, none
+    except Exception as exc:  # noqa: BLE001 -- the feed library raises when a date has no trips at all
+        if "no trips found" in str(exc).lower():
+            return False, none
+        raise
+    if strict:   # the date was chosen by the user: used as it is
+        return True, ""
+    from transitlos.day_check import day_volume_ratio
+
+    try:
+        r = day_volume_ratio(d, day)
+    except Exception:  # noqa: BLE001
+        r = None
+    if r is not None and not (0.8 <= r <= 1.25):
+        return False, f"it runs {r:.0%} of its usual trips for that day of the week"
+    return True, ""
+
+
 def _has_service_on(d: Path, day: date, aoi, group_m: float, strict: bool = False) -> bool:
     from pyGTFSHandler.feed import Feed
 
@@ -121,9 +174,10 @@ def score_city_stops(
 
     frames = []
 
-    def alone(d: Path):
+    def alone(d: Path, requested: Optional[date] = None, reason: str = ""):
         try:
             day = pinned(d)
+            requested = requested or day
             feed = Feed(gtfs_dirs=[str(d)], aoi=aoi, stop_group_distance=stop_group_distance)
             if day is None:
                 day = pick_analysis_date(feed)
@@ -152,6 +206,9 @@ def score_city_stops(
             logger.warning(f"feed {d.name}: skipped ({type(exc).__name__}: {str(exc)[:100]})")
             print(f"[stop-scoring] feed {d.name}: skipped ({type(exc).__name__}: {str(exc)[:100]})", flush=True)
             return
+        if requested is not None and day != requested:   # the date asked for (chosen or shared) did not fit this feed: say which date it got
+            print(f"[stop-scoring] WARNING feed {d.name}: the date {day_label(requested, aoi)} does not fit it ({reason or 'no service or an unusual day for this feed'}); "
+                  f"scored on its own typical day {day_label(day, aoi)}", flush=True)
         if out is not None:
             out["source_feed"] = d.name
             frames.append(out)
@@ -163,13 +220,16 @@ def score_city_stops(
         shared = next((pinned(d) for d in dirs if pinned(d) is not None), None)
         if shared is None:
             shared = pick_analysis_date(Feed(gtfs_dirs=[str(d) for d in dirs], aoi=aoi, stop_group_distance=stop_group_distance))
-        in_window, expired = [], []
+        in_window, expired, reasons = [], [], {}
         for d in dirs:
             try:
-                (in_window if _has_service_on(d, shared, aoi, stop_group_distance, strict_date) else expired).append(d)
+                ok, why = _service_check(d, shared, aoi, stop_group_distance, strict_date)
+                (in_window if ok else expired).append(d)
+                reasons[d.name] = why
             except Exception as exc:  # noqa: BLE001
                 logger.warning(f"feed {d.name}: could not check service on {shared}: {exc}")
                 expired.append(d)
+                reasons[d.name] = f"its service on that date could not be checked ({str(exc)[:60]})"
         print(f"[stop-scoring] shared analysis date {shared}: {len(in_window)} feeds with service, {len(expired)} scored on their own dates", flush=True)
         if in_window:
             try:
@@ -188,7 +248,7 @@ def score_city_stops(
                         out["source_feed"] = d.name
                         frames.append(out)
         for d in expired:
-            alone(d)
+            alone(d, requested=shared, reason=reasons.get(d.name, ""))
 
     if not frames:
         raise ValueError(f"score_city_stops: no feed produced any scored stop inside the AOI ({[d.name for d in dirs][:5]}...)")

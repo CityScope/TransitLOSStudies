@@ -836,6 +836,7 @@ AREA_OUTLINES_JS = r"""
   function clip() {
     raf = 0;
     var map = window.__map, rs = rings[curGroup]; if (!ov || !map || !rs) return;
+    if (map.getPitch() > 0.5) { ovDiv.style.visibility = 'hidden'; return; }   // tilted (3D): the flat mask of the outside would cover the data
     var c = map.getCanvas(), W = c.clientWidth, H = c.clientHeight, b = map.getBounds();
     var w = b.getWest(), e = b.getEast(), s = b.getSouth(), n = b.getNorth(), d = 'M0 0H' + W + 'V' + H + 'H0Z';
     rs.forEach(function(r) {
@@ -3260,7 +3261,8 @@ def _usa_map_census_loader(aoi, states, level, cache_dir):
     """
     from pycensus.census.countries.usa import acs5, dhc
 
-    if level == "block":
+    from_dhc = level == "block" or "acs5" in _CENSUS_SKIP   # the ACS left out (not chosen): the decennial census gives every level its polygons and population
+    if from_dhc:
         gdf = dhc.load(aoi=aoi, states=states, level=level, cache_dir=str(cache_dir))
     else:
         gdf = acs5.load(aoi=aoi, states=states, level=level, cache_dir=str(cache_dir))
@@ -3276,7 +3278,7 @@ def _usa_map_census_loader(aoi, states, level, cache_dir):
         f"USA map census loader fetched '{level}' from a non-native source -- "
         "this should always be a level that source natively publishes."
     )
-    gdf = _restore_population_prefix(gdf, "dhc" if level == "block" else "acs5")
+    gdf = _restore_population_prefix(gdf, "dhc" if from_dhc else "acs5")
     return gdf
 
 
@@ -3988,6 +3990,13 @@ _FALLBACK_MAX_M = 600.0   # a census polygon with no cell centroid inside is att
 _GRID_RESCALE_WARN = 0.05   # = transitlos.grid_rules.GridRules.rescale_warn_share
 #: built floor area per H3 cell of the current city (`_set_floor_area`): {"resolution", "cells" (sorted uint64), "res", "non" (m2)}
 _FLOOR_AREA: dict = {}
+#: the census sources the run leaves out (`CityConfig.census_skip`), read by the country loaders that bundle several sources (Spain)
+_CENSUS_SKIP: set = set()
+
+
+def _remember_skip(config) -> None:
+    _CENSUS_SKIP.clear()
+    _CENSUS_SKIP.update(getattr(config, "census_skip", ()) or ())
 #: the population raster of the current run (`_prune_cells_without_people` reads its pixel under each cell when there is no census unit)
 _POP_RASTER: dict = {}
 
@@ -4161,7 +4170,46 @@ def _log_census_roadless(census_gdf, source, prefix, keep_columns, inside_frac, 
         log_roadless(source, keep_col, float(v.sum()), roadless, roadless - dropped, dropped, _FALLBACK_MAX_M)
 
 
-def _join_polygon_stats(
+#: the loader of each census source -> its key in `pycensus.census.sources` (the keys the notebook ticks; unticked ones are in `_CENSUS_SKIP`)
+LOADER_SOURCE = {
+    "_acs_interpolated_census_loader": "acs5", "_us_religion_loader": "religion", "_us_housing_loader": "housing_history",
+    "_us_precinct_elections_loader": "elections_precinct", "_us_last_election_loader": "elections_county",
+    "_imeplan_eod_loader": "imeplan_eod", "_eustat_municipal_loader": "eustat_municipal", "_donostia_pmus_loader": "donostia_pmus",
+    "_em_capv_loader": "em_capv", "_israel_commute_loader": "cbs_commute", "_toronto_profile_loader": "toronto_profiles",
+    "_taipei_mode_use_loader": "taipei_mode", "_chile_manzana_loader": "ine_manzana", "_chile_casen_census_loader": "casen",
+    "_chile_sii_census_loader": "sii", "_hamburg_elections_loader": "hamburg_elections", "_mid_hamburg_loader": "mid_hamburg",
+    "_germany_census_loader": "destatis",
+}
+
+
+def _source_left_out(loader) -> Optional[str]:
+    """The key of the census source of `loader` when the run leaves it out (never downloaded), else None. The old key `elections` leaves out every
+    election source of the country."""
+    key = LOADER_SOURCE.get(getattr(loader, "__name__", ""))
+    if key and (key in _CENSUS_SKIP or (key.startswith("elections") and "elections" in _CENSUS_SKIP)):
+        return key
+    return None
+
+
+def _join_polygon_stats(h3_grid, aoi, states, levels, cache_dir, loader, keep_columns, prefix):
+    """`_join_polygon_stats_impl`, unless the run was told to leave this census source out: then nothing is downloaded and the grid is unchanged."""
+    left = _source_left_out(loader)
+    if left:
+        print(f"[pipeline] census source {left}: left out (not chosen), not downloaded", flush=True)
+        return h3_grid
+    return _join_polygon_stats_impl(h3_grid, aoi, states, levels, cache_dir, loader, keep_columns, prefix)
+
+
+def _join_survey_units(h3_grid, aoi, states, cache_dir, levels, loader, keep, prefix, label):
+    """`_join_survey_units_impl`, unless the run was told to leave this survey out."""
+    left = _source_left_out(loader)
+    if left:
+        print(f"[pipeline] census source {left}: left out (not chosen), not downloaded", flush=True)
+        return h3_grid
+    return _join_survey_units_impl(h3_grid, aoi, states, cache_dir, levels, loader, keep, prefix, label)
+
+
+def _join_polygon_stats_impl(
     h3_grid: gpd.GeoDataFrame,
     aoi: gpd.GeoDataFrame,
     states: tuple[str, ...],
@@ -4432,7 +4480,7 @@ def _mexico_census_loader(aoi, states, level, cache_dir):
         aoi=aoi, states=states, level=level, cache_dir=str(cache_dir), data_dir=str(Path(cache_dir) / "mexico")
     )
     gdf = _restore_population_prefix(gdf, "inegi")
-    if level in ("ageb", "municipality") and len(gdf):   # 2024 presidential result (casilla -> seccion -> H3 -> AGEB / municipality)
+    if level in ("ageb", "municipality") and len(gdf) and "mx_elections" not in _CENSUS_SKIP and "elections" not in _CENSUS_SKIP:   # 2024 presidential result (casilla -> seccion -> H3 -> AGEB / municipality)
         # municipality: the fallback for the cells outside the urban AGEBs (rural areas had no election value, 2026-11-20)
         try:
             from pycensus.census.countries.mexico import elections as el
@@ -4538,13 +4586,15 @@ def _spain_census_loader(aoi, states, level, cache_dir):
         ine.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=data_dir), "ine"
     )
     try:
+        if "censo2021" in _CENSUS_SKIP:
+            raise RuntimeError("left out (not chosen)")
         extra = censo2021.load(aoi=aoi, level=level, cache_dir=str(cache_dir), data_dir=data_dir)
         extra_cols = [c for c in extra.columns if c not in ("geometry",)]
         result = result.merge(extra[extra_cols], on="GEOID", how="left")
     except Exception as exc:  # pragma: no cover - network/data availability varies
         print(f"[pipeline] skipping Spain censo2021 join, keeping Padron population only: {exc}")
     # INE income atlas (ADRH): income, Gini, relative poverty, age/household/nationality indicators per section and municipality.
-    if level in ("section", "municipality") and len(result):
+    if level in ("section", "municipality") and len(result) and "adrh" not in _CENSUS_SKIP:
         try:
             from pycensus.census.countries.spain import adrh
 
@@ -4581,6 +4631,9 @@ def _spain_housing_extras(result, level, data_dir):
 
     if not len(result) or level not in ("section", "municipality"):
         return result
+    rent, value, tables, basque_on = ("housing_rent" not in _CENSUS_SKIP, "housing_value" not in _CENSUS_SKIP, "ine_tables" not in _CENSUS_SKIP,
+                                      "eustat_housing" not in _CENSUS_SKIP)   # the sources the run was told to leave out
+    censo, elect = "censo2021" not in _CENSUS_SKIP, "elections" not in _CENSUS_SKIP
     provinces = sorted({str(g)[:2] for g in result["GEOID"]})
     mun_key = result["GEOID"].astype(str).str[:5]
     new_cols: list = []
@@ -4596,6 +4649,8 @@ def _spain_housing_extras(result, level, data_dir):
         new_cols.extend(c for c in mapping.values() if c in result.columns)
 
     try:  # SERPAVI rent
+        if not rent:
+            raise RuntimeError("left out (not chosen)")
         sp = serpavi.load_attributes(provinces, level, data_dir)
         mapping = {}
         for y in (2024, 2016, 2011):
@@ -4607,16 +4662,23 @@ def _spain_housing_extras(result, level, data_dir):
         attach(sp, mapping)
     except Exception as exc:  # pragma: no cover
         print(f"[pipeline] skipping SERPAVI rent join: {exc}")
-    try:  # tourist dwellings, net migration, appraised value (municipality natives)
+    try:  # tourist dwellings and net migration (INE tables, municipality)
+        if not tables:
+            raise RuntimeError("left out (not chosen)")
         tour = load_tourist_dwellings(provinces, data_dir)
         attach(tour, {f"ine_tourist_{k}_{t}": f"ine_tourist_{k}_{t}" for k in ("dwellings", "places", "dwellings_share") for t in ("2020M08", "2026M05")}, on_mun=True)
         mig = load_migration_balance(provinces, data_dir)
         attach(mig, {f"ine_netmig_{k}_2024": f"ine_netmig_{k}_2024" for k in ("total", "exterior", "interior")}, on_mun=True)
+    except Exception as exc:  # pragma: no cover
+        print(f"[pipeline] skipping Spain tourism / migration joins: {exc}")
+    try:  # appraised value (municipality natives, over 25,000 people)
+        if not value:
+            raise RuntimeError("left out (not chosen)")
         vt = valor_tasado.load_attributes(data_dir)
         attach(vt, {f"valor_tasado_{k}_T2A{y}": f"ine_valor_tasado_{k}_eur_m2_{y}" for k in ("total", "new", "old") for y in (2026, 2016)}, on_mun=True)
     except Exception as exc:  # pragma: no cover
-        print(f"[pipeline] skipping Spain municipal housing/tourism joins: {exc}")
-    if level == "section":
+        print(f"[pipeline] skipping Spain appraised value join: {exc}")
+    if level == "section" and censo:
         try:  # Census 2021 dwelling use + district-level tenure / year built / floor area / building type
             from pycensus.census.countries.spain.censo2021.housing import load_section_housing
 
@@ -4625,7 +4687,7 @@ def _spain_housing_extras(result, level, data_dir):
         except Exception as exc:  # pragma: no cover
             print(f"[pipeline] skipping Census 2021 dwelling tenure join: {exc}")
     basque = [p for p in provinces if p in ("01", "20", "48")]
-    if basque:
+    if basque and basque_on:
         try:
             from pycensus.census.countries.euskadi.eustat import housing_income as hi
 
@@ -4642,7 +4704,7 @@ def _spain_housing_extras(result, level, data_dir):
                     attach(dw, {c: f"ine_eustat_{c[:-3]}Share" if c.endswith("Pct") else f"ine_eustat_{c}" for c in dw.columns if c.startswith("dwelling")})
         except Exception as exc:  # pragma: no cover
             print(f"[pipeline] skipping Basque housing / income join: {exc}")
-    if level == "section":   # latest national (Congreso 2023), municipal (2023) and regional (Parlamento Vasco 2024) elections per section
+    if level == "section" and elect:   # latest national (Congreso 2023), municipal (2023) and regional (Parlamento Vasco 2024) elections per section
         try:
             from pycensus.census.countries.spain import elections as el
 
@@ -4885,7 +4947,7 @@ def _mid_hamburg_loader(aoi, states, level, cache_dir):
     return g[["GEOID", "geometry", *keep]].rename(columns={c: "midhh_" + c for c in keep}).reset_index(drop=True)
 
 
-def _join_survey_units(h3_grid, aoi, states, cache_dir, levels, loader, keep, prefix, label):
+def _join_survey_units_impl(h3_grid, aoi, states, cache_dir, levels, loader, keep, prefix, label):
     """One travel-survey source on its own zoning (``levels``: one level or a finest-first tuple); skipped (map unchanged) when it fails or
     has no unit in the AOI."""
     try:
@@ -5821,6 +5883,8 @@ def _join_census(
         # WorldPop-driven guess) instead of just reproducing WorldPop's own
         # density pattern rescaled to Destatis's total.
         try:
+            if "zensus_grid" in _CENSUS_SKIP:
+                raise RuntimeError("left out (not chosen)")
             h3_grid = _join_zensus_grid_population(h3_grid, aoi, cache_dir)
         except Exception as exc:  # pragma: no cover - network/data availability varies
             print(f"[pipeline] skipping Zensus grid population replacement: {exc}")
@@ -5952,9 +6016,10 @@ def _join_jobs(
                 aoi=aoi, regions=states, level=level, cache_dir=cache_dir, data_dir=str(Path(cache_dir) / "germany")
             )
 
-        h3_grid = _join_polygon_stats(
-            h3_grid, aoi, states, GERMANY_BA_LEVELS, cache_dir, _loader, GERMANY_BA_KEEP_COLUMNS, "ba_"
-        )
+        if "ba_jobs" not in _CENSUS_SKIP:
+            h3_grid = _join_polygon_stats(
+                h3_grid, aoi, states, GERMANY_BA_LEVELS, cache_dir, _loader, GERMANY_BA_KEEP_COLUMNS, "ba_"
+            )
 
         # 2026-08-25 audit: real BA Pendlerstatistik (Einpendler/Auspendler/
         # same-Gemeinde workers), see `GERMANY_BA_PENDLER_KEEP_COLUMNS` above
@@ -5967,6 +6032,8 @@ def _join_jobs(
             )
 
         try:
+            if "ba_pendler" in _CENSUS_SKIP:
+                raise RuntimeError("left out (not chosen)")
             h3_grid = _join_polygon_stats(
                 h3_grid, aoi, states, GERMANY_BA_LEVELS, cache_dir, _pendler_loader,
                 GERMANY_BA_PENDLER_KEEP_COLUMNS, "ba_pendler_",
@@ -7486,6 +7553,8 @@ def _census_geometries_with_score(
         # Germany (BA's AMK, see `_join_jobs`) are the only two countries
         # wired here with a workplace-jobs-flow source.
         try:
+            if (country == "USA" and "lodes" in _CENSUS_SKIP) or (country == "DEU" and "ba_jobs" in _CENSUS_SKIP):
+                raise RuntimeError("left out (not chosen)")
             if country == "USA":
                 from pycensus.census.countries.usa import lodes_wac as lodes
 
@@ -7509,7 +7578,7 @@ def _census_geometries_with_score(
         # "census geometries" shape option as the jobs merge just above --
         # see `GERMANY_BA_PENDLER_KEEP_COLUMNS`/`_join_jobs`. Germany-only,
         # joined by GEOID (no apportionment needed, same as BA's AMK).
-        if country == "DEU":
+        if country == "DEU" and "ba_pendler" not in _CENSUS_SKIP:
             try:
                 from pycensus.census.countries.germany import ba_pendler
 
@@ -7538,6 +7607,8 @@ def _census_geometries_with_score(
         try:
             if country != "USA":
                 raise ValueError(f"no race/ethnicity census source for country={country!r}")
+            if "dhc" in _CENSUS_SKIP:
+                raise RuntimeError("left out (not chosen)")
             from pycensus.census.countries.usa import dhc
 
             dhc_gdf = dhc.load(aoi=aoi, states=states_arg, level=level, cache_dir=str(cache_dir))
@@ -9335,6 +9406,7 @@ def refresh_census_only(
     # this study (isochrones and the census-geometry map aggregation were,
     # both separately and correctly chunked) -- always run it unchunked to
     # avoid this real correctness bug, regardless of `isochrone_chunk_h3_resolution`.
+    _remember_skip(config)
     _set_floor_area(config, aoi_gdf, params.h3_resolution, _gba_cache_root(census_dir))
     h3_grid = _join_polygon_stats_lightweight(
         _join_census, h3_grid, aoi_gdf, config.census_states, params.census_levels, census_dir,
@@ -9894,6 +9966,7 @@ def run_city_study(
     if config.uses_census:
         h3_grid = _add_h3_grid(pop_access_h3)
         # built floor area per native cell (cadaster, GBA where none): the census counts are spread by it (`_join_polygon_stats`)
+        _remember_skip(config)
         _set_floor_area(config, aoi_gdf, params.h3_resolution, _gba_cache_root(census_dir))
         _lap("building floor areas")
         print(f"[pipeline:{config.key}] joining census attributes for country={config.country!r} ({len(params.census_levels)} levels)")

@@ -143,7 +143,7 @@ def build(city: str) -> Path:
     page = (HERE / city / "map.html").read_text(encoding="utf-8")
     bld = ', buildings: "map_tiles/buildings"' if (HERE / city / "map_tiles" / "buildings" / "buildings.pmtiles").is_file() else ''
     if (HERE / city / "map_tiles" / "terrain").is_dir():
-        bld += ', terrain: "map_tiles/terrain", terrainMaxZoom: 11'
+        bld += ', terrain: "map_tiles/terrain", terrainMeta: ' + (HERE / city / "map_tiles" / "terrain" / "meta.json").read_text()
     inject = ('<script src="https://cdn.jsdelivr.net/npm/h3-js@4.1.0/dist/h3-js.umd.js"></script>\n'
               '<script>window.FLEX_CFG = {base: "flex_web/", presets: "flex_presets.json", maxStates: 1, minZoom: 8' + bld + '};</script>\n'
               '<script src="flex_js/score.js"></script><script src="flex_js/editor.js"></script><script src="flex_js/flex_tab.js"></script>\n'

@@ -177,7 +177,7 @@ To add a city:
    `flex/build_city_flex_web.py <city>` (the map with its editor, from `tools/flex_web/`). Read `flex/README.md`.
 7. **Observed transit use** (only to fit and test scores): add a loader to `flex/outcomes.py` that returns one row per unit of the finest
    published geography with the transit share, the commuters or trips behind it and the survey sample; then `flex/build_fit_data.py`
-   and `flex/fit_tests.py` (the model is `tools/studytools/flexfit.py`). Use units coarse enough for the survey (a few dozen surveyed
+   and `flex/fit_cities.py` (the model is the library `transitlos.flex.fit`). Use units coarse enough for the survey (a few dozen surveyed
    people per unit at least): `flex/FIT_RESULTS.md` shows how much a score can be fitted at each unit size.
 
 For a **different list of cities** that should not be mixed with these, copy `city_science_network/` to a new study folder, empty its

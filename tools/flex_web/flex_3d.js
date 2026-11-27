@@ -34,8 +34,10 @@
     refreshBuildings();
   }
   let tm = 0;
-  function colourBuildings() {
+  async function colourBuildings() {
     if (!building || !m.getLayer('bld-2d') || !window.__flexCellColour) return;
+    if (window.__flexApi && window.__flexApi.load) await window.__flexApi.load();   // the scores of the cells under the buildings (the Scoring tab loads them only when it is open)
+    if (!building) return;
     const cells = new Set();
     for (const f of m.queryRenderedFeatures({ layers: [on3d ? 'bld-3d' : 'bld-2d'] })) if (f.properties && f.properties.h3_11) cells.add(f.properties.h3_11);
     const expr = ['match', ['get', 'h3_11']];
@@ -52,17 +54,25 @@
     m.setLayoutProperty('bld-3d', 'visibility', building && on3d ? 'visible' : 'none');
     schedule();
   }
+  let prevGeom = null;   // the geometry chosen before 3D switched to the buildings
+  function chooseGeometry(v) {
+    const sel = document.getElementById('baseGroupSelect');
+    if (sel) { sel.value = v; sel.dispatchEvent(new Event('change', { bubbles: true })); return; }
+    const r = document.querySelector(GROUP + '[value="' + v + '"]'); if (r && !r.checked) { r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); }
+  }
   function set3d(flag) {
     on3d = flag;
+    if (flag && !building && CFG.buildings) { const sel = document.getElementById('baseGroupSelect'); const c = document.querySelector(GROUP + ':checked'); prevGeom = sel ? sel.value : (c && c.value); chooseGeometry('building'); }   // 3D shows the buildings extruded
+    else if (!flag && prevGeom) { const p = prevGeom; prevGeom = null; if (building) chooseGeometry(p); }
     if (flag) {
       m.setTerrain({ source: 'flex-dem', exaggeration: 1.3 });
-      m.easeTo({ pitch: 62, bearing: m.getBearing() || -20, duration: 900 });
+      m.jumpTo({ pitch: 60 });   // an instant tilt (an animated one left only the basemap drawn in tests)
     } else {
       m.setTerrain(null);
-      m.easeTo({ pitch: 0, bearing: 0, duration: 700 });
+      m.jumpTo({ pitch: 0 });
     }
     refreshBuildings();
-    const b = document.getElementById('flex3dButton'); if (b) b.style.background = flag ? '#2b6cb0' : '#fff', b.style.color = flag ? '#fff' : '#222';
+    const b = document.getElementById('flex3dButton'); if (b) { b.style.background = flag ? '#2b6cb0' : '#fff'; b.style.color = flag ? '#fff' : '#222'; }
   }
   function init() {
     m = window.__mainMap || window.__map; if (!m) return setTimeout(init, 300);
@@ -73,22 +83,44 @@
       m.addLayer({ id: 'bld-2d', type: 'fill', source: 'buildings', 'source-layer': 'buildings', minzoom: 14, layout: { visibility: 'none' }, paint: { 'fill-color': col, 'fill-opacity': 0.9 } });
       m.addLayer({ id: 'bld-3d', type: 'fill-extrusion', source: 'buildings', 'source-layer': 'buildings', minzoom: 14, layout: { visibility: 'none' },
                   paint: { 'fill-extrusion-color': col, 'fill-extrusion-height': ['get', 'height_m'], 'fill-extrusion-base': 0, 'fill-extrusion-opacity': 0.92 } });
-      m.addSource('flex-dem', { type: 'raster-dem', tiles: [CFG.terrain ? CFG.terrain + '/{z}/{x}/{y}.png' : 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], encoding: 'terrarium', tileSize: 256, maxzoom: CFG.terrain ? CFG.terrainMaxZoom || 12 : 14 });
+      const tm = CFG.terrainMeta;   // {bounds, minzoom, maxzoom} of the city's own elevation tiles: the page asks for none outside them
+      m.addSource('flex-dem', Object.assign({ type: 'raster-dem', tiles: [CFG.terrain ? CFG.terrain + '/{z}/{x}/{y}.png' : 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],
+                                              encoding: 'terrarium', tileSize: 256, maxzoom: tm ? tm.maxzoom : 14 }, tm ? { bounds: tm.bounds, minzoom: tm.minzoom } : {}));
       // the radio besides the other geometries
-      const census = document.querySelector(GROUP + '[value="census"]');
+      const census = document.querySelector(GROUP + '[value="census"]') || document.querySelector(GROUP);   // (a city without census geometry has the other radios)
       if (census) {
-        const lab = census.closest('label'), nl = document.createElement('label'); nl.style.cursor = 'pointer';
-        nl.innerHTML = '<input type="radio" name="__base_group" value="building"> 🏢 buildings';
-        lab.parentNode.insertBefore(nl, lab.nextSibling); lab.parentNode.insertBefore(document.createElement('br'), nl.nextSibling);
+        const lab = census.closest('label'), nl = document.createElement('label'); nl.style.display = 'none';   // the radio stays hidden and drives the map; the page's dropdown gets the entry
+        nl.innerHTML = '<input type="radio" name="__base_group" value="building"> buildings';
+        lab.parentNode.insertBefore(nl, lab.nextSibling);
+        const addOption = () => {   // the page turns its radios into one dropdown (baseGroupSelect): the new geometry is an option of it
+          const sel = document.getElementById('baseGroupSelect');
+          if (!sel) return false;
+          if (!sel.dataset.flexBuilding) {   // the page's own handler only knows the radios it was built with: this one drives the buildings radio
+            sel.dataset.flexBuilding = '1';
+            sel.addEventListener('change', () => {
+              const r = document.querySelector(GROUP + '[value="building"]');
+              if (sel.value === 'building' && r && !r.checked) { r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); }
+            });
+          }
+          if (![...sel.options].some((o) => o.value === 'building')) { const o = document.createElement('option'); o.value = 'building'; o.textContent = '🏢 buildings'; sel.insertBefore(o, sel.querySelector('option[value="none"]')); }
+          return true;
+        };
+        let tries = 0; const t = setInterval(() => { if (addOption() || ++tries > 400) clearInterval(t); }, 500);
       }
-      m.on('zoom', applyLevel); m.on('moveend', schedule); m.on('sourcedata', (e) => { if (e.sourceId === 'buildings' && e.isSourceLoaded) schedule(); });
       document.querySelectorAll(GROUP).forEach((el) => el.addEventListener('change', () => setTimeout(() => { const c = document.querySelector(GROUP + ':checked'); setBuilding(!!c && c.value === 'building'); }, 0)));
-      const btn = document.createElement('button'); btn.id = 'flex3dButton'; btn.textContent = '3D'; btn.title = '3D view';
-      btn.style.cssText = 'position:absolute;top:150px;right:10px;z-index:7;border:0;border-radius:4px;padding:6px 10px;font:600 12px sans-serif;box-shadow:0 1px 4px rgba(0,0,0,.35);cursor:pointer;background:#fff;color:#222';
+      m.on('zoom', applyLevel); m.on('moveend', schedule); m.on('sourcedata', (e) => { if (e.sourceId === 'buildings' && e.isSourceLoaded) schedule(); });
+      const btn = document.createElement('button'); btn.id = 'flex3dButton'; btn.type = 'button'; btn.textContent = '3D'; btn.title = '3D view';
+      btn.style.cssText = 'border:1px solid #c9ced6;background:#fff;color:#222;border-radius:6px;cursor:pointer;font:600 12px sans-serif;padding:0 6px;margin-right:4px;height:22px;line-height:20px;';
       btn.onclick = () => set3d(!on3d);
-      (document.getElementById('map') || document.body).appendChild(btn);
+      // beside the dark-mode button, in the legend's header (the dark button is placed by the page a moment later)
+      const place = () => {
+        const head = document.getElementById('layer-switcher-head'); if (!head) return false;
+        const ref = document.getElementById('mapDarkBtn') || head.querySelector('#layer-switcher-toggle');
+        head.insertBefore(btn, ref || null); return !!document.getElementById('mapDarkBtn');
+      };
+      let pt = 0; const pti = setInterval(() => { if (place() || ++pt > 40) clearInterval(pti); }, 500); place();
     };
-    if (m.isStyleLoaded()) go(); else m.once('load', go);
+    if (m.isStyleLoaded()) go(); else { const t = setInterval(() => { if (m.isStyleLoaded()) { clearInterval(t); go(); } }, 500); }   // (the map's `load` may already have fired)
   }
   init();
 })();

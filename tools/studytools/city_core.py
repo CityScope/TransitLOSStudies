@@ -63,8 +63,9 @@ def _overpass_admin_polygon(query: str):
 
 def _overpass_admin_polygon_once(query: str):
     try:
-        hit = requests.get("https://nominatim.openstreetmap.org/search", params={"q": query, "format": "jsonv2", "limit": 1},
-                           headers={"User-Agent": "transitLOS"}, timeout=30).json()
+        from geohierarchy.geocoding import _nominatim_get   # throttled: one request per second, and none while the service is limiting us
+
+        hit = _nominatim_get("search", {"q": query, "format": "jsonv2", "limit": 1}).json()
         if not hit:
             return None
         lat, lon, name = float(hit[0]["lat"]), float(hit[0]["lon"]), hit[0]["display_name"].split(",")[0].strip().lower()
